@@ -3,27 +3,32 @@ package com.example.cltcontrol.historialmedico.models;
 import java.util.Date;
 
 public class Usuario extends Persona {
-    private String nombreUsuario, contrasenia, correo;
-    public Usuario(String cedula, String nombre, String apellido, String direccion,
-                   Date fechaIngreso) {
-        super(cedula, nombre, apellido, direccion, fechaIngreso);
+    private String usuario, contrasenia, correo;
+
+    public Usuario(){
+        super();
     }
 
     public Usuario(String cedula, String nombre, String apellido, String direccion,
-                   Date fechaIngreso, String usuario,
+                   Date fecha_ingreso) {
+        super(cedula, nombre, apellido, direccion, fecha_ingreso);
+    }
+
+    public Usuario(String cedula, String nombre, String apellido, String direccion,
+                   Date fecha_ingreso, String usuario,
                    String contrasenia, String correo) {
-        super(cedula, nombre, apellido, direccion, fechaIngreso);
-        this.nombreUsuario = usuario;
+        super(cedula, nombre, apellido, direccion, fecha_ingreso);
+        this.usuario = usuario;
         this.contrasenia = contrasenia;
         this.correo = correo;
     }
 
-    public String getNombreUsuario() {
-        return nombreUsuario;
+    public String getUsuario() {
+        return usuario;
     }
 
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public String getContrasenia() {

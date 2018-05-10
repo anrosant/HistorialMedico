@@ -24,10 +24,10 @@
             android:inputType="textPassword" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnIngresar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="ingresar"
-            android:text="Ingresar" />
+            android:text="INGRESAR" />
 
 </LinearLayout>

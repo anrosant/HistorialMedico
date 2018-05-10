@@ -6,14 +6,15 @@ import java.util.Date;
 
 public class Persona extends SugarRecord {
     private String cedula, nombre, apellido, direccion;
-    private Date fechaIngreso;
+    private Date fecha_ingreso;
 
-    public Persona(String cedula, String nombre, String apellido, String direccion, Date fechaIngreso) {
+    public Persona(){}
+    public Persona(String cedula, String nombre, String apellido, String direccion, Date fecha_ingreso) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
-        this.fechaIngreso = fechaIngreso;
+        this.fecha_ingreso = fecha_ingreso;
     }
 
     public String getCedula() {
@@ -48,11 +49,11 @@ public class Persona extends SugarRecord {
         this.direccion = direccion;
     }
 
-    public Date getFechaIngreso() {
-        return fechaIngreso;
+    public Date getFecha_ingreso() {
+        return fecha_ingreso;
     }
 
-    public void setFechaIngreso(Date fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
+    public void setFecha_ingreso(Date fecha_ingreso) {
+        this.fecha_ingreso = fecha_ingreso;
     }
 }

@@ -12,6 +12,8 @@ public class Persona extends SugarRecord {
 
     }
 
+    public Persona(String nombre){ this.nombre = nombre; }
+
     public Persona(String cedula, String nombre, String apellido, String direccion, Date fecha_ingreso) {
         this.cedula = cedula;
         this.nombre = nombre;

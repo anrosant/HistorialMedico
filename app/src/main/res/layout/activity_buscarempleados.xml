@@ -9,7 +9,7 @@
 
     <android.support.v4.widget.Space
         android:layout_width="match_parent"
-        android:layout_height="20dp" />
+        android:layout_height="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +28,17 @@
             android:queryHint="Buscar empleados"
             android:singleLine="true" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="seleccionado"
+            android:onClick="seleccionarEmpleado"/>
+
     </LinearLayout>
+    
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <LinearLayout
         android:layout_width="300dp"
@@ -36,6 +46,15 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_weight="2">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvlistaempleados"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF">
+
+        </android.support.v7.widget.RecyclerView>
+
     </LinearLayout>
 
 </LinearLayout>

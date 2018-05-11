@@ -78,7 +78,7 @@
                     android:id="@+id/btnIngresar"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:onClick="ingresar"
+                    android:onClick="ingresoSistema"
                     android:text="INGRESAR"
                     android:textColor="#FFFFFF"
                     android:background="@color/colorPrimary"/>

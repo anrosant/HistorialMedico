@@ -1,11 +1,10 @@
 package com.example.cltcontrol.historialmedico.models;
 
-import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
 import java.util.Date;
 
-public class Empleado extends SugarRecord{
+public class Empleado extends Persona{
     @Unique
     private String cedula;
     private String profesion, estadoCivil, sexo, lugarNacimiento, cargoProfesional;
@@ -13,10 +12,10 @@ public class Empleado extends SugarRecord{
     private Date fechaNacimiento;
 
     public Empleado() {
+        super();
     }
 
-    public Empleado(String cedula, String profesion, String estadoCivil, String sexo, String lugarNacimiento, String cargoProfesional, Date fechaNacimiento) {
-        this.cedula = cedula;
+    public Empleado(String profesion, String estadoCivil, String sexo, String lugarNacimiento, String cargoProfesional, Date fechaNacimiento) {
         this.profesion = profesion;
         this.estadoCivil = estadoCivil;
         this.sexo = sexo;

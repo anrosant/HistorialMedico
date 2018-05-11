@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,16 +30,19 @@ public class MainActivity extends AppCompatActivity {
 
         Date fecha = new Date(2018,5,25);
 
-        Usuario userTemp = new Usuario("095363","Anni","Santacruz","sauces",fecha,"anrosant","anni","hjhsdfj");
-        userTemp.save();
+        Usuario userTemp = new Usuario("095363","Anni","Santacruz","sauces", fecha,"anrosant","anni","hjhsdfj");
+        //userTemp.save();
     }
 
     public void ingresar(View v){
-        String nombreUsuario = etUsuario.getText().toString();
+        Intent inbuscarempleado = new Intent(this, BuscarEmpleadoActivity.class);
+        startActivity(inbuscarempleado);
+    }
+/*      String nombreUsuario = etUsuario.getText().toString();
         String contrasenia = etContrasenia.getText().toString();
         Usuario usuario;
 
-        List<Usuario> usuarios = Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?",nombreUsuario,contrasenia);
+        //List<Usuario> usuarios = Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?",nombreUsuario,contrasenia);
 
         if(!usuarios.isEmpty()){
             usuario = usuarios.get(0);
@@ -52,4 +56,5 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No se encuentra el usuario",Toast.LENGTH_SHORT).show();
         }
     }
+*/
 }

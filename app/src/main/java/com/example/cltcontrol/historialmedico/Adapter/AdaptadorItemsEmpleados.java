@@ -48,4 +48,10 @@ public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItems
             ivfotoitems = (ImageView) itemView.findViewById(R.id.ivfotoitems);
         }
     }
+
+    public void setFilter(ArrayList<Empleado> newList){
+        listaEmpleados = new ArrayList<>();
+        listaEmpleados.addAll(newList);
+        notifyDataSetChanged();
+    }
 }

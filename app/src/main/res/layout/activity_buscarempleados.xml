@@ -13,13 +13,13 @@
         android:background="@color/colorPrimary" >
 
         <EditText
-            android:id="@+id/svBusquedatUsuario"
+            android:id="@+id/etBusquedaUsuario"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:background="#FFFFFF"
-            android:hint="Buscar empleados"
             android:drawableLeft="@android:drawable/ic_menu_search"
+            android:hint="Buscar empleados"
             android:queryHint="Buscar empleados"
             android:singleLine="true" />
     </LinearLayout>

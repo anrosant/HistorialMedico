@@ -1,42 +1,38 @@
 package com.example.cltcontrol.historialmedico.models;
 
 import com.orm.dsl.Unique;
-
 import java.util.Date;
 
 public class Empleado extends Persona{
+
+    // ATRIBUTOS DE CLASE
     @Unique
     private String cedula;
-    private String profesion, estadoCivil, sexo, lugarNacimiento, cargoProfesional;
-    private int edad;
+    private String profesion, estadoCivil, sexo, lugarNacimiento, areaTrabajo;
     private Date fechaNacimiento;
+    private int edad,foto;
 
-    //adicion nuevos campos
-    private int foto;
-    private String area;
-
+    // CONSTRUCTORES DE CLASE
     public Empleado() {
         super();
     }
 
-    public Empleado(String profesion, String estadoCivil, String sexo, String lugarNacimiento, String cargoProfesional, Date fechaNacimiento) {
+    public Empleado(String nombre, String areaTrabajo, int foto){
+        super(nombre);
+        this.areaTrabajo = areaTrabajo;
+        this.foto = foto;
+    }
+    
+    public Empleado(String profesion, String estadoCivil, String sexo, String lugarNacimiento, String areaTrabajo, Date fechaNacimiento) {
         this.profesion = profesion;
         this.estadoCivil = estadoCivil;
         this.sexo = sexo;
         this.lugarNacimiento = lugarNacimiento;
-        this.cargoProfesional = cargoProfesional;
+        this.areaTrabajo = areaTrabajo;
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Empleado(String nombre, String area, int foto){
-        super(nombre);
-        //this.nombres = nombres;
-        this.area = area;
-        this.foto = foto;
-
-    }
-
-
+    // METODOS GETTER Y SETTER DE CLASE
     public String getCedula() {
         return cedula;
     }
@@ -78,11 +74,11 @@ public class Empleado extends Persona{
     }
 
     public String getCargoProfesional() {
-        return cargoProfesional;
+        return areaTrabajo;
     }
 
-    public void setCargoProfesional(String cargoProfesional) {
-        this.cargoProfesional = cargoProfesional;
+    public void setCargoProfesional(String areaTrabajo) {
+        this.areaTrabajo = areaTrabajo;
     }
 
     public Date getFechaNacimiento() {
@@ -109,19 +105,8 @@ public class Empleado extends Persona{
         this.foto = foto;
     }
 
-    /*public String getNombres() {
-        return nombres;
-    }
+    public String getAreaTrabajo() { return areaTrabajo; }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }*/
+    public void setAreaTrabajo(String areaTrabajo) { this.areaTrabajo = areaTrabajo; }
 
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
 }

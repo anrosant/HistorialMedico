@@ -5,9 +5,12 @@ import com.orm.SugarRecord;
 import java.util.Date;
 
 public class Persona extends SugarRecord {
+
+    // ATRIBUTOS DE CLASE
     private String cedula, nombre, apellido, direccion;
     private Date fecha_ingreso;
 
+    // CONSTRUCTORES
     public Persona(){
 
     }
@@ -22,6 +25,7 @@ public class Persona extends SugarRecord {
         this.fecha_ingreso = fecha_ingreso;
     }
 
+    // METODOS GETTER Y SETTER DE CLASE
     public String getCedula() {
         return cedula;
     }

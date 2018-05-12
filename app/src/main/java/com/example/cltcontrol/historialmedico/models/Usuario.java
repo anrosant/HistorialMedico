@@ -3,8 +3,11 @@ package com.example.cltcontrol.historialmedico.models;
 import java.util.Date;
 
 public class Usuario extends Persona {
+
+    // ATRIBUTOS DE CLASE
     private String usuario, contrasenia, correo;
 
+    // CONSTRUCTORES DE CLASE
     public Usuario() {
         super();
     }
@@ -23,6 +26,7 @@ public class Usuario extends Persona {
         this.correo = correo;
     }
 
+    // METODOS GETTER Y SETTER DE CLASE
     public String getUsuario() {
         return usuario;
     }

@@ -1,60 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="2"
     android:gravity="center_horizontal">
 
-    <android.support.v4.widget.Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/colorPrimary"
-        android:layout_marginHorizontal="30dp"
-        android:paddingHorizontal="10dp">
+        android:background="@color/colorPrimary" >
 
-        <SearchView
+        <EditText
             android:id="@+id/svBusquedatUsuario"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
             android:background="#FFFFFF"
+            android:hint="Buscar empleados"
+            android:drawableLeft="@android:drawable/ic_menu_search"
             android:queryHint="Buscar empleados"
             android:singleLine="true" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="seleccionado"
-            android:onClick="seleccionarEmpleado"/>
-
     </LinearLayout>
-    
-    <android.support.v4.widget.Space
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="10dp" />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_weight="2">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvlistaempleados"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFFFFF">
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_weight="2">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvlistaempleados"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF">
+            </android.support.v7.widget.RecyclerView>
 
-    </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

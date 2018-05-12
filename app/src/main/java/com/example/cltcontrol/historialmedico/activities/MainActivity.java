@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         Date fecha = new Date(2018,5,25);
 
-        Usuario userTemp = new Usuario("095363","Anni","Santacruz","sauces", fecha,"anrosant","anni","hjhsdfj");
+        Usuario userTemp = new Usuario("095363","Anni","Santacruz","sauces", fecha,"a","a","hjhsdfj");
         userTemp.save();
     }
 

@@ -1,17 +1,14 @@
 package com.example.cltcontrol.historialmedico.Adapter;
 
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.activities.BuscarEmpleadoActivity;
 import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.R;
 
 import java.util.ArrayList;
 
@@ -31,11 +28,8 @@ public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItems
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if(holder == null){
-            Log.d("NULL", "LISTA NULA");
-        }
         holder.tvnombresitems.setText(listaEmpleados.get(position).getNombre());
-        holder.tvareatrabajoitems.setText(listaEmpleados.get(position).getArea());
+        holder.tvareatrabajoitems.setText(listaEmpleados.get(position).getAreaTrabajo());
         holder.ivfotoitems.setImageResource(listaEmpleados.get(position).getFoto());
     }
 

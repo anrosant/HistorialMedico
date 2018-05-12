@@ -13,7 +13,7 @@ public class Empleado extends Persona{
 
     //adicion nuevos campos
     private int foto;
-    private String nombres,area;
+    private String area;
 
     public Empleado() {
         super();
@@ -28,8 +28,9 @@ public class Empleado extends Persona{
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Empleado(String nombres, String area, int foto){
-        this.nombres = nombres;
+    public Empleado(String nombre, String area, int foto){
+        super(nombre);
+        //this.nombres = nombres;
         this.area = area;
         this.foto = foto;
 
@@ -108,13 +109,13 @@ public class Empleado extends Persona{
         this.foto = foto;
     }
 
-    public String getNombres() {
+    /*public String getNombres() {
         return nombres;
     }
 
     public void setNombres(String nombres) {
         this.nombres = nombres;
-    }
+    }*/
 
     public String getArea() {
         return area;

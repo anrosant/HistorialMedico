@@ -3,20 +3,20 @@ package com.example.cltcontrol.historialmedico.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.activities.Adapter.AdaptadorItemsEmpleados;
+import com.example.cltcontrol.historialmedico.Adapter.AdaptadorItemsEmpleados;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
 import java.util.ArrayList;
 
 public class BuscarEmpleadoActivity extends Activity {
 
-    ArrayList<Empleado> listaEmpleados;
+    public static ArrayList<Empleado> listaEmpleados;
     RecyclerView recyclerEmpleados;
 
     @Override
@@ -25,10 +25,9 @@ public class BuscarEmpleadoActivity extends Activity {
         setContentView(R.layout.activity_buscarempleados);
 
         listaEmpleados = new ArrayList<>();
+        llenarEmpleados();
         recyclerEmpleados = (RecyclerView) findViewById(R.id.rvlistaempleados);
         recyclerEmpleados.setLayoutManager(new LinearLayoutManager(this));
-
-        llenarEmpleados();
 
         AdaptadorItemsEmpleados adaptadorEmpleados = new AdaptadorItemsEmpleados(listaEmpleados);
         recyclerEmpleados.setAdapter(adaptadorEmpleados);
@@ -39,6 +38,7 @@ public class BuscarEmpleadoActivity extends Activity {
         listaEmpleados.add(new Empleado("Anni","Sistemas",R.drawable.usuario));
         listaEmpleados.add(new Empleado("Jorge","Sistemas",R.drawable.usuario));
         listaEmpleados.add(new Empleado("Daniel","Sistemas",R.drawable.usuario));
+        Log.d("LISTA", String.valueOf(listaEmpleados.size()));
     }
 
     public void seleccionarEmpleado(View v){

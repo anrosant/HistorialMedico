@@ -1,6 +1,8 @@
-package com.example.cltcontrol.historialmedico.activities.Adapter;
+package com.example.cltcontrol.historialmedico.Adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.activities.BuscarEmpleadoActivity;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
 import java.util.ArrayList;
 
-public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItemsEmpleados.ViewHolderEmpleados> {
+public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItemsEmpleados.ViewHolder> {
 
     ArrayList<Empleado> listaEmpleados;
 
@@ -21,13 +24,16 @@ public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItems
     }
 
     @Override
-    public ViewHolderEmpleados onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_buscarempleados_recyclerview, null, false);
-        return new ViewHolderEmpleados(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolderEmpleados holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        if(holder == null){
+            Log.d("NULL", "LISTA NULA");
+        }
         holder.tvnombresitems.setText(listaEmpleados.get(position).getNombre());
         holder.tvareatrabajoitems.setText(listaEmpleados.get(position).getArea());
         holder.ivfotoitems.setImageResource(listaEmpleados.get(position).getFoto());
@@ -35,15 +41,15 @@ public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItems
 
     @Override
     public int getItemCount() {
-        return 0;
+        return listaEmpleados.size();
     }
 
-    public class ViewHolderEmpleados extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivfotoitems;
         TextView tvnombresitems, tvareatrabajoitems;
-        public ViewHolderEmpleados(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
-            tvnombresitems = (TextView) itemView.findViewById(R.id.tvnombresempleado);
+            tvnombresitems = (TextView) itemView.findViewById(R.id.tvnombresitems);
             tvareatrabajoitems = (TextView) itemView.findViewById(R.id.tvareatrabajoitems);
             ivfotoitems = (ImageView) itemView.findViewById(R.id.ivfotoitems);
         }

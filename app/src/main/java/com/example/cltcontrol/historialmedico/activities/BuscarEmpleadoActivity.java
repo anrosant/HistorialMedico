@@ -5,21 +5,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.Adapter.AdaptadorItemsEmpleados;
-import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.models.Usuario;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BuscarEmpleadoActivity extends Activity {
 
-    public static ArrayList<Empleado> listaEmpleados;
+    public static List<Usuario> empleadosList;
     RecyclerView recyclerEmpleados;
     AdaptadorItemsEmpleados adaptadorEmpleados;
     EditText buscar;
@@ -29,8 +30,7 @@ public class BuscarEmpleadoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscarempleados);
 
-        listaEmpleados = new ArrayList<>();
-        llenarEmpleados();
+        readEmpleadosAll();
         recyclerEmpleados = (RecyclerView) findViewById(R.id.rvlistaempleados);
         recyclerEmpleados.setLayoutManager(new LinearLayoutManager(this));
         buscar = (EditText) findViewById(R.id.etBusquedaUsuario);
@@ -52,10 +52,10 @@ public class BuscarEmpleadoActivity extends Activity {
                 String newText;
                 if(s.length() != 0){
                     newText = buscar.getText().toString().toLowerCase();
-                    ArrayList<Empleado> newList = new ArrayList<>();
-                    for(Empleado empleado:listaEmpleados){
+                    List<Usuario> newList = new ArrayList<>();
+                    for(Usuario empleado:empleadosList){
                         String nombre = empleado.getNombre().toLowerCase();
-                        String area = empleado.getAreaTrabajo().toLowerCase();
+                        String area = empleado.getArea_trabajo().toLowerCase();
                         if(nombre.contains(newText)){
                             newList.add(empleado);
                         }
@@ -64,25 +64,26 @@ public class BuscarEmpleadoActivity extends Activity {
                         }
                     }
 
-                    adaptadorEmpleados.setFilter(newList);
+                    adaptadorEmpleados.setFilter((ArrayList<Usuario>) newList);
                 }else{
-                    adaptadorEmpleados.setFilter(listaEmpleados);
+                    adaptadorEmpleados.setFilter((ArrayList<Usuario>) empleadosList);
                 }
             }
         });
 
 
 
-        adaptadorEmpleados = new AdaptadorItemsEmpleados(listaEmpleados);
+        adaptadorEmpleados = new AdaptadorItemsEmpleados((ArrayList<Usuario>)empleadosList);
         recyclerEmpleados.setAdapter(adaptadorEmpleados);
     }
 
-    public void llenarEmpleados(){
-        listaEmpleados.add(new Empleado("Renato","Sistemas",R.drawable.modelo));
-        listaEmpleados.add(new Empleado("Anni","Finanzas",R.drawable.modelo));
-        listaEmpleados.add(new Empleado("Jorge","Marketing",R.drawable.modelo));
-        listaEmpleados.add(new Empleado("Daniel","Ingenieria",R.drawable.modelo));
-        //Log.d("LISTA", String.valueOf(listaEmpleados.size()));
+    public void readEmpleadosAll(){
+        String rol = "Empleado";
+        try{
+            empleadosList = Usuario.findWithQuery(Usuario.class,"Select * from Usuario where rol = ?;",rol);
+        }catch (Exception e){
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
     }
 
 

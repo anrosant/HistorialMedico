@@ -7,16 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.models.Usuario;
 
 import java.util.ArrayList;
 
 public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItemsEmpleados.ViewHolder> {
 
-    ArrayList<Empleado> listaEmpleados;
+    ArrayList<Usuario> listaEmpleados;
 
-    public AdaptadorItemsEmpleados(ArrayList<Empleado> listaEmpleados) {
+    public AdaptadorItemsEmpleados(ArrayList<Usuario> listaEmpleados) {
         this.listaEmpleados = listaEmpleados;
     }
 
@@ -29,7 +29,7 @@ public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItems
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvnombresitems.setText(listaEmpleados.get(position).getNombre());
-        holder.tvareatrabajoitems.setText(listaEmpleados.get(position).getAreaTrabajo());
+        holder.tvareatrabajoitems.setText(listaEmpleados.get(position).getArea_trabajo());
         holder.ivfotoitems.setImageResource(listaEmpleados.get(position).getFoto());
     }
 
@@ -49,7 +49,7 @@ public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItems
         }
     }
 
-    public void setFilter(ArrayList<Empleado> newList){
+    public void setFilter(ArrayList<Usuario> newList){
         listaEmpleados = new ArrayList<>();
         listaEmpleados.addAll(newList);
         notifyDataSetChanged();

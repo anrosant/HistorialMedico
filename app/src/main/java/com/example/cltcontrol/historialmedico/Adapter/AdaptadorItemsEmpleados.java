@@ -8,15 +8,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Usuario;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItemsEmpleados.ViewHolder> {
 
-    ArrayList<Usuario> listaEmpleados;
+    List<Empleado> listaEmpleados;
 
-    public AdaptadorItemsEmpleados(ArrayList<Usuario> listaEmpleados) {
+    public AdaptadorItemsEmpleados(List<Empleado> listaEmpleados) {
         this.listaEmpleados = listaEmpleados;
     }
 
@@ -49,7 +51,7 @@ public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItems
         }
     }
 
-    public void setFilter(ArrayList<Usuario> newList){
+    public void setFilter(List<Empleado> newList){
         listaEmpleados = new ArrayList<>();
         listaEmpleados.addAll(newList);
         notifyDataSetChanged();

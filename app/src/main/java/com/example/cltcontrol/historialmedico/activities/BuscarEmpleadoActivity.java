@@ -13,14 +13,13 @@ import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.Adapter.AdaptadorItemsEmpleados;
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.models.Usuario;
-
+import com.example.cltcontrol.historialmedico.models.Empleado;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BuscarEmpleadoActivity extends Activity {
 
-    public static List<Usuario> empleadosList;
+    public static List<Empleado> empleadosList;
     RecyclerView recyclerEmpleados;
     AdaptadorItemsEmpleados adaptadorEmpleados;
     EditText buscar;
@@ -52,8 +51,8 @@ public class BuscarEmpleadoActivity extends Activity {
                 String newText;
                 if(s.length() != 0){
                     newText = buscar.getText().toString().toLowerCase();
-                    List<Usuario> newList = new ArrayList<>();
-                    for(Usuario empleado:empleadosList){
+                    List<Empleado> newList = new ArrayList<>();
+                    for(Empleado empleado:empleadosList){
                         String nombre = empleado.getNombre().toLowerCase();
                         String area = empleado.getArea_trabajo().toLowerCase();
                         if(nombre.contains(newText)){
@@ -64,23 +63,23 @@ public class BuscarEmpleadoActivity extends Activity {
                         }
                     }
 
-                    adaptadorEmpleados.setFilter((ArrayList<Usuario>) newList);
+                    adaptadorEmpleados.setFilter((List<Empleado>) newList);
                 }else{
-                    adaptadorEmpleados.setFilter((ArrayList<Usuario>) empleadosList);
+                    adaptadorEmpleados.setFilter((List<Empleado>) empleadosList);
                 }
             }
         });
 
 
 
-        adaptadorEmpleados = new AdaptadorItemsEmpleados((ArrayList<Usuario>)empleadosList);
+        adaptadorEmpleados = new AdaptadorItemsEmpleados(empleadosList);
         recyclerEmpleados.setAdapter(adaptadorEmpleados);
     }
 
     public void readEmpleadosAll(){
         String rol = "Empleado";
         try{
-            empleadosList = Usuario.findWithQuery(Usuario.class,"Select * from Usuario where rol = ?;",rol);
+            empleadosList = Empleado.listAll(Empleado.class);
         }catch (Exception e){
             Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
         }

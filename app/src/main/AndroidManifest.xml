@@ -17,18 +17,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.BuscarEmpleadoActivity"></activity>
+        <activity android:name=".activities.HistorialConsultaMedica"></activity>
+        <activity android:name=".activities.MenuEmpleadoActivity"></activity>
 
-        <activity android:name=".activities.BuscarEmpleadoActivity">
-        </activity>
+        <meta-data
+            android:name="DATABASE"
+            android:value="historialmedico" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.example.cltcontrol.historialmedico" />
 
-        <activity android:name=".activities.MenuEmpleadoActivity">
-        </activity>
-
-        <meta-data android:name="DATABASE" android:value="historialmedico" />
-        <meta-data android:name="VERSION" android:value="1" />
-        <meta-data android:name="QUERY_LOG" android:value="true" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.example.cltcontrol.historialmedico" />
-
+        <activity android:name=".activities.EmpleadoInformacionActivity"></activity>
     </application>
 
 </manifest>

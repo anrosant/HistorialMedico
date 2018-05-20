@@ -7,11 +7,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.Adapter.AdaptadorItemsEmpleados;
+import com.example.cltcontrol.historialmedico.Adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import java.util.ArrayList;
@@ -74,6 +77,28 @@ public class BuscarEmpleadoActivity extends Activity {
 
         adaptadorEmpleados = new AdaptadorItemsEmpleados(empleadosList);
         recyclerEmpleados.setAdapter(adaptadorEmpleados);
+        /*recyclerEmpleados.setOnClickListener(new AdapterView.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), HistorialConsultaMedica.class);
+                startActivity(i);
+            }
+        });*/
+
+        recyclerEmpleados.addOnItemTouchListener(
+                new RecyclerItemClickListener(getApplicationContext(), recyclerEmpleados ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Intent i = new Intent(getApplicationContext(), EmpleadoInformacionActivity.class);
+                        i.putExtra("ID",String.valueOf(empleadosList.get(position).getId()));
+                        startActivity(i);
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
+
     }
 
     public void readEmpleadosAll(){

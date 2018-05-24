@@ -32,7 +32,7 @@ public class MenuEmpleadoActivity extends Activity {
         Intent inCedula = getIntent();
         idEmpleado= inCedula.getStringExtra("ID");
         List<Empleado> empleado = Empleado.find(Empleado.class, "ID = ?", idEmpleado);
-        tvNombresEmpleado.setText(""+empleado.get(0).getNombre()+" "+empleado.get(0).getApellido());
+        tvNombresEmpleado.setText(""+empleado.get(0).getApellido()+" "+empleado.get(0).getNombre());
 
     }
 
@@ -40,5 +40,11 @@ public class MenuEmpleadoActivity extends Activity {
         Intent inHistorialConsultaMedica = new Intent(getApplicationContext(), HistorialConsultaMedica.class);
         inHistorialConsultaMedica.putExtra("ID_EMPLEADO", idEmpleado);
         startActivity(inHistorialConsultaMedica);
+    }
+
+    public void aperturaHistorialAtencionEnfermeria(View v){
+        Intent inHistorialAtencionEnfermeria = new Intent(getApplicationContext(), HistorialAtencionEnfermeria.class);
+        inHistorialAtencionEnfermeria.putExtra("ID_EMPLEADO",idEmpleado);
+        startActivity(inHistorialAtencionEnfermeria);
     }
 }

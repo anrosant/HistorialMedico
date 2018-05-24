@@ -32,7 +32,7 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/tvnombresitems"
+                android:id="@+id/tvnombresempleado"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nombres"
@@ -50,12 +50,6 @@
                 android:layout_marginTop="8dp" />
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="300dp"
-            android:layout_height="1dp"
-            android:background="#BDBDBD"/>
-
     </LinearLayout>
 
 </LinearLayout>

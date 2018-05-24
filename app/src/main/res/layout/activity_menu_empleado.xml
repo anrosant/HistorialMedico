@@ -77,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:background="#FFFFFF"
                 android:layout_weight="1"
+                android:onClick="aperturaHistorialAtencionEnfermeria"
                 android:src="@drawable/consultaenfermeria"/>
             <TextView
                 android:layout_width="wrap_content"

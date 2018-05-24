@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 
-public class EmpleadoInformacionActivity extends AppCompatActivity{
+public class EmpleadoInformacionActivity extends AppCompatActivity {
     TextView tvId;
     String idEmpleado;
 
@@ -25,11 +25,11 @@ public class EmpleadoInformacionActivity extends AppCompatActivity{
         tvId.setText(idEmpleado);
 
     }
+
 /*
     public void verHistorialConsultaMedia(View v ){
         Intent inHistorialConsultaMedica = new Intent(getApplicationContext(), HistorialConsultaMedica.class);
         inHistorialConsultaMedica.putExtra("ID_EMPLEADO",idEmpleado);
         startActivity(inHistorialConsultaMedica);
     }*/
-
 }

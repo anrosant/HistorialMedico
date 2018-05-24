@@ -30,6 +30,7 @@ public class BuscarEmpleadoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar_empleados);
 
+
         readEmpleadosAll();
         recyclerEmpleados = (RecyclerView) findViewById(R.id.rvlistaempleados);
         recyclerEmpleados.setLayoutManager(new LinearLayoutManager(this));
@@ -71,7 +72,6 @@ public class BuscarEmpleadoActivity extends Activity {
             }
         });
 
-
         adaptadorEmpleados = new AdaptadorItemsEmpleados(empleadosList);
         recyclerEmpleados.setAdapter(adaptadorEmpleados);
         /*recyclerEmpleados.setOnClickListener(new AdapterView.OnClickListener(){
@@ -86,6 +86,7 @@ public class BuscarEmpleadoActivity extends Activity {
                 new RecyclerItemClickListener(getApplicationContext(), recyclerEmpleados ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         Intent i = new Intent(getApplicationContext(), MenuEmpleadoActivity.class);
+
                         i.putExtra("ID",String.valueOf(empleadosList.get(position).getId()));
                         startActivity(i);
                     }

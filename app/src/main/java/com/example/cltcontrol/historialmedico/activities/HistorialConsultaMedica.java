@@ -30,6 +30,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         ListView lv = (ListView) findViewById(R.id.lvConsultasMedicas);
 
         AdapterItemsConsultaMedica adapter = new AdapterItemsConsultaMedica(this, historialConsultasMedicas);
+
         lv.setAdapter(adapter);
     }
 

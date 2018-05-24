@@ -1,6 +1,7 @@
 package com.example.cltcontrol.historialmedico.activities;
 
 import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -35,9 +36,9 @@ public class MenuEmpleadoActivity extends Activity {
 
     }
 
-    public void aperturaHistorialConsultaMedica(View v){
+    public void aperturaHistorialConsultaMedica(View v) {
         Intent inHistorialConsultaMedica = new Intent(getApplicationContext(), HistorialConsultaMedica.class);
-        inHistorialConsultaMedica.putExtra("ID_EMPLEADO",idEmpleado);
+        inHistorialConsultaMedica.putExtra("ID_EMPLEADO", idEmpleado);
         startActivity(inHistorialConsultaMedica);
     }
 }

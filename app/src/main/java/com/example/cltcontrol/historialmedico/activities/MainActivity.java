@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 .build());
         inicializarVariablesTemp();
 
+
     }
 
     public void ingresoSistema(View v){

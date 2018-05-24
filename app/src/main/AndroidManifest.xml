@@ -21,7 +21,6 @@
         <activity android:name=".activities.HistorialConsultaMedica"></activity>
         <activity android:name=".activities.MenuEmpleadoActivity"></activity>
         <activity android:name=".activities.ConsultaMedicaActivity"></activity>
-
         <meta-data
             android:name="DATABASE"
             android:value="historialmedico" />

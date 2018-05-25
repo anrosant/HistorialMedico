@@ -1,14 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.DatosEmpleadoFragment">
+    android:orientation="vertical"
+    tools:context=".fragments.DatosEmpleadoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="78dp"
+        android:layout_margin="10dp"
+        android:orientation="horizontal" >
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="78dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal" >
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civFotoEmpleado"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/modelo"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:layout_marginLeft="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="77dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvNombresEmpleado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombres"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:textColor="#000000"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:id="@+id/tvareatrabajoitems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="informacion de salud del empleado"
+                    android:textSize="14dp"
+                    android:textColor="#BDBDBD"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

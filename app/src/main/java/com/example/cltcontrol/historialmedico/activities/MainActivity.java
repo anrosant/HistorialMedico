@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     public EditText etUsuario, etContrasenia;
     public Button btnIngresar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
         inicializarVariablesTemp();
-
 
     }
 

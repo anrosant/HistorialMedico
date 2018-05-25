@@ -1,18 +1,25 @@
 package com.example.cltcontrol.historialmedico.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.fragments.PreescripcionFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
+import com.example.cltcontrol.historialmedico.models.Empleado;
 
+import java.util.List;
 
 public class ConsultaMedicaActivity extends FragmentActivity implements ComunicadorMenu{
 
     Fragment[] misFragmentos;
+    TextView tvNombresEmpleado;
+    String idEmpleado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +44,15 @@ public class ConsultaMedicaActivity extends FragmentActivity implements Comunica
         misFragmentos[1] = new PreescripcionFragment();
         //misFragmentos[9] = new ;
 
-        Bundle extras = getIntent().getExtras();
+        Bundle extras = this.getIntent().getExtras();
         menuPulsado(extras.getInt("BOTONPULSADO"));
+        idEmpleado = extras.getString("ID");
+//        Toast.makeText(getApplicationContext(), ""+idEmpleado,Toast.LENGTH_SHORT).show();
+
+
+        tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+
+
     }
 
     @Override
@@ -46,7 +60,7 @@ public class ConsultaMedicaActivity extends FragmentActivity implements Comunica
         Bundle datos = new Bundle();
         datos.putInt("BOTONPULSADO",opcionMenu);
         misFragmentos[opcionMenu].setArguments(getIntent().getExtras());
-        getSupportFragmentManager().beginTransaction().replace(R.id.contenedorConsultaMedica,misFragmentos[opcionMenu]).commit();
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenedorConsultaMedica,misFragmentos[opcionMenu]).commit();
     }
 }

@@ -1,8 +1,8 @@
 package com.example.cltcontrol.historialmedico.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -18,7 +18,7 @@ import com.example.cltcontrol.historialmedico.models.Empleado;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuscarEmpleadoActivity extends Activity {
+public class BuscarEmpleadoActivity extends FragmentActivity {
 
     public static List<Empleado> empleadosList;
     RecyclerView recyclerEmpleados;
@@ -85,12 +85,13 @@ public class BuscarEmpleadoActivity extends Activity {
         recyclerEmpleados.addOnItemTouchListener(
                 new RecyclerItemClickListener(getApplicationContext(), recyclerEmpleados ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Intent i = new Intent(getApplicationContext(), MenuEmpleadoActivity.class);
 
+                        Intent i = new Intent(getApplicationContext(), MenuEmpleadoActivity.class);
+                        //se cambia ID por ID_EMPLEADO
                         i.putExtra("ID",String.valueOf(empleadosList.get(position).getId()));
                         startActivity(i);
-                    }
 
+                    }
                     @Override public void onLongItemClick(View view, int position) {
                         // do whatever
                     }

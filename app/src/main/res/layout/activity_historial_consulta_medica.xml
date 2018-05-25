@@ -7,6 +7,14 @@
     android:orientation="vertical"
     tools:context=".activities.HistorialConsultaMedica">
 
+    <fragment
+        android:id="@+id/frDatosEmpleado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.example.cltcontrol.historialmedico.fragments.DatosEmpleadoFragment"
+        tools:layout="@layout/fragment_datos_empleado">
+    </fragment>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

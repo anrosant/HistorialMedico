@@ -1,38 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:weightSum="3" >
+    android:weightSum="4"
+    android:orientation="vertical" >
 
-    <LinearLayout
+    <fragment
+        android:id="@+id/frDatosEmpleado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:layout_weight="1"
-        android:weightSum="2">
+        android:name="com.example.cltcontrol.historialmedico.fragments.DatosEmpleadoFragment"
+        tools:layout="@layout/fragment_datos_empleado">
+    </fragment>
 
-        <ImageView
-            android:id="@+id/tvfotoempleado"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/usuario"/>
-
-        <TextView
-            android:id="@+id/tvnombresempleado"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginHorizontal="20dp"
-            android:text="Nombre"
-            android:textSize="24dp"
-            android:layout_weight="1"/>
-    </LinearLayout>
     <LinearLayout
+        android:id="@+id/menuEmpleado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

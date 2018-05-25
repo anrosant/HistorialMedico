@@ -2,26 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:gravity="center"
     android:weightSum="4">
 
-    <fragment
-        android:id="@+id/menuConsultaMedica"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2.8"
-        android:name="com.example.cltcontrol.historialmedico.fragments.MenuConsultaMedicaFragment"
-        tools:layout="@layout/fragment_menu_consulta_medica">
-    </fragment>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <RelativeLayout
-        android:id="@+id/contenedorConsultaMedica"
+        <fragment
+            android:id="@+id/frDatosEmpleado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.example.cltcontrol.historialmedico.fragments.DatosEmpleadoFragment"
+            tools:layout="@layout/fragment_datos_empleado">
+        </fragment>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1.2">
-    </RelativeLayout>
+        android:orientation="horizontal">
+
+        <fragment
+            android:id="@+id/menuConsultaMedica"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2.8"
+            android:name="com.example.cltcontrol.historialmedico.fragments.MenuConsultaMedicaFragment"
+            tools:layout="@layout/fragment_menu_consulta_medica">
+        </fragment>
+
+        <RelativeLayout
+            android:id="@+id/contenedorConsultaMedica"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2">
+        </RelativeLayout>
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

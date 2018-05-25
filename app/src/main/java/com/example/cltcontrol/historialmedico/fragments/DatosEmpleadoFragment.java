@@ -1,4 +1,4 @@
-package com.example.cltcontrol.historialmedico.activities;
+package com.example.cltcontrol.historialmedico.fragments;
 
 
 import android.os.Bundle;

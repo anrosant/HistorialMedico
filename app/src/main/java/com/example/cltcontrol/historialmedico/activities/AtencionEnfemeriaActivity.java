@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.fragments.PreescripcionFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 
@@ -16,7 +15,7 @@ public class AtencionEnfemeriaActivity extends FragmentActivity implements Comun
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal_atencion_enfermeria);
+        setContentView(R.layout.activity_nueva_atencion_enfermeria);
 
         misFragmentos = new Fragment[1];
 

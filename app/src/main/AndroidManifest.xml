@@ -10,19 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activities.BuscarEmpleadoActivity"></activity>
-        <activity android:name=".activities.HistorialConsultaMedica"></activity>
-        <activity android:name=".activities.HistorialAtencionEnfermeria"></activity>
-        <activity android:name=".activities.MenuEmpleadoActivity"></activity>
-        <activity android:name=".activities.ConsultaMedicaActivity"></activity>
-        <activity android:name=".activities.AtencionEnfemeriaActivity"></activity>
         <meta-data
             android:name="DATABASE"
             android:value="historialmedico" />
@@ -35,6 +23,34 @@
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.example.cltcontrol.historialmedico" />
+
+        <activity android:name=".activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.BuscarEmpleadoActivity"
+            android:label="@string/buscar_empleado"/>
+        <activity
+            android:name=".activities.HistorialConsultaMedica"
+            android:label="@string/historial_consulta_medica"/>
+        <activity
+            android:name=".activities.HistorialAtencionEnfermeria"
+            android:label="@string/historial_atencion_enfermeria"/>
+        <activity
+            android:name=".activities.MenuEmpleadoActivity"
+            android:label="@string/menu_empleado"/>
+        <activity
+            android:name=".activities.ConsultaMedicaNuevoActivity"
+            android:label="@string/consulta_medica_nuevo"/>
+        <activity
+            android:name=".activities.AtencionEnfemeriaActivity"
+            android:label="@string/consulta_medica_nuevo"/>
+        <activity
+            android:name=".activities.ConsultaMedicaActivity"
+            android:label="@string/consulta_medica"/>
     </application>
 
 </manifest>

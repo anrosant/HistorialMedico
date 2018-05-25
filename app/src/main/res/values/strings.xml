@@ -1,5 +1,26 @@
 <resources>
-    <string name="app_name">Sistema Medico Ocupacional</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string
+        name="app_name">Sistema Médico Ocupacional
+    </string>
+    <string
+        name="buscar_empleado">Buscar empleado
+    </string>
+    <string
+        name="historial_consulta_medica">Historial de consulta médica
+    </string>
+    <string
+        name="historial_atencion_enfermeria">Historial de atención de enfermería
+    </string>
+    <string
+        name="menu_empleado">Lista de empleados
+    </string>
+    <string
+        name="consulta_medica_nuevo">Nueva consulta médica
+    </string>
+    <string
+        name="atencion_enfermeria">Atención de enfermería
+    </string>
+    <string
+        name="consulta_medica">Consulta médica
+    </string>
 </resources>

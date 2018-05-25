@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.Adapter.AdapterItemsConsultaMedica;
 import com.example.cltcontrol.historialmedico.R;
@@ -39,14 +39,20 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         ArrayList<ConsultaMedica> historialConsultasMedicas = new ArrayList<>();
         historialConsultasMedicas = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class, "empleado = ?", idEmpleado);
 
-        ListView lv = (ListView) findViewById(R.id.lvConsultasMedicas);
+        ListView lvConsultasMedicas = (ListView) findViewById(R.id.lvConsultasMedicas);
         AdapterItemsConsultaMedica adapter = new AdapterItemsConsultaMedica(this, historialConsultasMedicas);
-        lv.setAdapter(adapter);
+        lvConsultasMedicas.setAdapter(adapter);
+        lvConsultasMedicas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ConsultaMedica consultaMedicaItem= (ConsultaMedica) parent.getItemAtPosition(position);
+            }
+        });
     }
 
     @Override
     public void menuPulsado(int opcionMenu) {
-        Intent inMenu = new Intent(getApplicationContext(),ConsultaMedicaActivity.class);
+        Intent inMenu = new Intent(getApplicationContext(),ConsultaMedicaNuevoActivity.class);
         inMenu.putExtra("BOTONPULSADO",opcionMenu);
         inMenu.putExtra("ID",idEmpleado);
         //Toast.makeText(this, ""+idEmpleado,Toast.LENGTH_SHORT).show();

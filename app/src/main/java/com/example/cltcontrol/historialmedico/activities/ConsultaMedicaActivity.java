@@ -49,8 +49,9 @@ public class ConsultaMedicaActivity extends FragmentActivity implements Comunica
         idEmpleado = extras.getString("ID");
 //        Toast.makeText(getApplicationContext(), ""+idEmpleado,Toast.LENGTH_SHORT).show();
 
-
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+        List<Empleado> empleado = Empleado.find(Empleado.class, "ID = ?", idEmpleado);
+        tvNombresEmpleado.setText(empleado.get(0).getApellido()+" "+empleado.get(0).getNombre());
 
 
     }

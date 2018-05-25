@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.Adapter.AdapterItemsAtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.R;
@@ -15,13 +16,15 @@ import java.util.ArrayList;
 
 public class HistorialAtencionEnfermeria extends FragmentActivity implements ComunicadorMenu {
 
+    String idEmpleado;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial_atencion_enfermeria);
 
         Intent inEmpleado = getIntent();
-        String id = inEmpleado.getStringExtra("ID_EMPLEADO");
+        String id = inEmpleado.getStringExtra("ID");
 
         ArrayList<AtencionEnfermeria> historialAtencionEnfermeria = new ArrayList<>();
         historialAtencionEnfermeria = (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class, "empleado = ?", id);
@@ -35,7 +38,7 @@ public class HistorialAtencionEnfermeria extends FragmentActivity implements Com
 
     @Override
     public void menuPulsado(int opcionMenu) {
-        Intent inMenu = new Intent(this,AtencionEnfemeriaActivity.class);
+        Intent inMenu = new Intent(getApplicationContext(),AtencionEnfemeriaActivity.class);
         inMenu.putExtra("BOTONPULSADO",opcionMenu);
         startActivity(inMenu);
     }

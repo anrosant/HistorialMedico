@@ -97,7 +97,6 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                     }
                 })
         );
-
     }
 
     public void readEmpleadosAll(){

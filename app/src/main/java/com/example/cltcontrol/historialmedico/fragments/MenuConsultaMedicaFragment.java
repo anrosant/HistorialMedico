@@ -4,6 +4,7 @@ package com.example.cltcontrol.historialmedico.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class MenuConsultaMedicaFragment extends Fragment {
             botonMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Activity estaActividad = getActivity();
+                    FragmentActivity estaActividad = getActivity();
                     ((ComunicadorMenu)estaActividad).menuPulsado(queBoton);
                 }
             });

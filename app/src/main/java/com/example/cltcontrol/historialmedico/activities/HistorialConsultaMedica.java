@@ -30,7 +30,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
 
         Intent inEmpleado = getIntent();
-        String idEmpleado = inEmpleado.getStringExtra("ID");
+        idEmpleado = inEmpleado.getStringExtra("ID");
 
         //anadido estas 2 lineas
         List<Empleado> empleado = Empleado.find(Empleado.class, "ID = ?", idEmpleado);
@@ -49,7 +49,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         Intent inMenu = new Intent(getApplicationContext(),ConsultaMedicaActivity.class);
         inMenu.putExtra("BOTONPULSADO",opcionMenu);
         inMenu.putExtra("ID",idEmpleado);
-        Toast.makeText(this, ""+idEmpleado,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, ""+idEmpleado,Toast.LENGTH_SHORT).show();
         startActivity(inMenu);
     }
 

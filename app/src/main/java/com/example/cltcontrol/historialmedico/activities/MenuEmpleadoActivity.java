@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Empleado;
@@ -25,6 +26,7 @@ public class MenuEmpleadoActivity extends FragmentActivity {
 
         Intent inCedula = getIntent();
         idEmpleado= inCedula.getStringExtra("ID");
+        //Toast.makeText(this, ""+idEmpleado,Toast.LENGTH_SHORT).show();
 
         List<Empleado> empleado = Empleado.find(Empleado.class, "ID = ?", idEmpleado);
         tvNombresEmpleado.setText(empleado.get(0).getApellido()+" "+empleado.get(0).getNombre());
@@ -39,6 +41,7 @@ public class MenuEmpleadoActivity extends FragmentActivity {
     public void aperturaHistorialAtencionEnfermeria(View v){
         Intent inHistorialAtencionEnfermeria = new Intent(getApplicationContext(), HistorialAtencionEnfermeria.class);
         inHistorialAtencionEnfermeria.putExtra("ID",idEmpleado);
+        //Toast.makeText(this, ""+idEmpleado,Toast.LENGTH_SHORT).show();
         startActivity(inHistorialAtencionEnfermeria);
     }
 }

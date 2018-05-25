@@ -1,4 +1,4 @@
-package com.example.cltcontrol.historialmedico.fragments;
+package com.example.cltcontrol.historialmedico.activities;
 
 
 import android.os.Bundle;
@@ -12,18 +12,19 @@ import com.example.cltcontrol.historialmedico.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PerfilEmpleadoFragment extends Fragment {
+public class DatosEmpleadoFragment extends Fragment {
 
 
-    public PerfilEmpleadoFragment() {
+    public DatosEmpleadoFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perfil_empleado, container, false);
+        return inflater.inflate(R.layout.fragment_datos_empleado, container, false);
     }
 
 }

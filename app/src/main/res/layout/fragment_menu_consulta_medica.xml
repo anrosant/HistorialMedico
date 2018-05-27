@@ -17,21 +17,21 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/btnsignosvitales"
+                android:id="@+id/btnSignosVitales"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
                 android:text="Signos Vitales" />
 
             <Button
-                android:id="@+id/btnantecedentespatologicospersonales"
+                android:id="@+id/btnAntecedentesPatologicosPersonales"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
                 android:text="Patologias Personales" />
 
             <Button
-                android:id="@+id/btnantecedentespatologicosfamiliares"
+                android:id="@+id/btnAntecedentesPatologicosFamiliares"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"

@@ -29,11 +29,12 @@ public class HistorialAtencionEnfermeria extends FragmentActivity implements Com
         idEmpleado = inEmpleado.getStringExtra("CEDULA");
         ListView lv = (ListView) findViewById(R.id.lvAtencionEnfermeria);
 
-
         atencionEnfermeriaList = AtencionEnfermeria.find(AtencionEnfermeria.class,"cedula_empleado = ?", idEmpleado);
 
         AdapterItemsAtencionEnfermeria adapter = new AdapterItemsAtencionEnfermeria(this, (ArrayList<AtencionEnfermeria>) atencionEnfermeriaList);
         lv.setAdapter(adapter);
+
+
     }
 
 

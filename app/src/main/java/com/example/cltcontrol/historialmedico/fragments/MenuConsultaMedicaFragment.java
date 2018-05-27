@@ -18,7 +18,8 @@ import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
  */
 public class MenuConsultaMedicaFragment extends Fragment {
 
-    private final int[] BOTONES_MENU={R.id.btnsignosvitales, R.id.btnprescripcion};
+    private final int[] BOTONES_MENU={R.id.btnSignosVitales, R.id.btnAntecedentesPatologicosPersonales,
+            R.id.btnAntecedentesPatologicosFamiliares,R.id.btnprescripcion};
     private int boton;
 
     public MenuConsultaMedicaFragment() {

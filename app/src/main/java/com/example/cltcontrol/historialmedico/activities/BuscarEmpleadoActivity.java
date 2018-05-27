@@ -56,11 +56,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                     List<Empleado> newList = new ArrayList<>();
                     for(Empleado empleado:empleadosList){
                         String nombre = empleado.getNombre().toLowerCase();
-                        String area = empleado.getAreaTrabajo().toLowerCase();
                         if(nombre.contains(newText)){
-                            newList.add(empleado);
-                        }
-                        if(area.contains(newText)){
                             newList.add(empleado);
                         }
                     }

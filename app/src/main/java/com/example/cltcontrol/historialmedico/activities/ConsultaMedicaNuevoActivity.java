@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.fragments.PatologiasFamiliaresFragment;
+import com.example.cltcontrol.historialmedico.fragments.PatologiasPersonalesFragment;
 import com.example.cltcontrol.historialmedico.fragments.PreescripcionFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
@@ -29,17 +31,17 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         getSupportFragmentManager().beginTransaction().add(R.id.contenedorConsultaMedica,contenidoSignosVitales).commit();
         */
 
-        misFragmentos = new Fragment[2];
+        misFragmentos = new Fragment[4];
 
         misFragmentos[0] = new SignosVitalesFragment();
-        //misFragmentos[1] = new ();
-        //misFragmentos[2] = new ;
+        misFragmentos[1] = new PatologiasPersonalesFragment();
+        misFragmentos[2] = new PatologiasFamiliaresFragment();
         //misFragmentos[3] = new ;
         //misFragmentos[4] = new ;
         //misFragmentos[5] = new ;
         //misFragmentos[6] = new ;
         //misFragmentos[7] = new ;
-        misFragmentos[1] = new PreescripcionFragment();
+        misFragmentos[3] = new PreescripcionFragment();
         //misFragmentos[9] = new ;
 
         Bundle extras = this.getIntent().getExtras();

@@ -39,7 +39,6 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         //List<Empleado> empleado = Empleado.find(Empleado.class, "CEDULA = ?", idEmpleado);
         //tvNombresEmpleado.setText(empleado.get(0).getApellido()+" "+empleado.get(0).getNombre());
 
-
         consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class,"cedula_empleado = ?", idEmpleado);
 
         AdapterItemsConsultaMedica adapter = new AdapterItemsConsultaMedica(this, (ArrayList<ConsultaMedica>) consultaMedicaList);

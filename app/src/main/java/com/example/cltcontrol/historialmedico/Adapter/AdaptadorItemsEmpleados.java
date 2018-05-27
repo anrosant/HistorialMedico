@@ -31,7 +31,7 @@ public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItems
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvnombresitems.setText(listaEmpleados.get(position).getNombre());
-        holder.tvareatrabajoitems.setText(listaEmpleados.get(position).getArea_trabajo());
+        holder.tvareatrabajoitems.setText(listaEmpleados.get(position).getAreaTrabajo());
         holder.ivfotoitems.setImageResource(listaEmpleados.get(position).getFoto());
     }
 

@@ -8,19 +8,21 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.cltcontrol.historialmedico.Adapter.AdapterItemsAtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.Adapter.AdapterItemsConsultaMedica;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
+import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
-import com.example.cltcontrol.historialmedico.models.Empleado;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistorialConsultaMedica extends FragmentActivity implements ComunicadorMenu {
+public class HistorialConsultaMedica extends FragmentActivity implements ComunicadorMenu{
 
     TextView tvNombresEmpleado;
     String idEmpleado;
+    public List<ConsultaMedica> consultaMedicaList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,36 +30,38 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         setContentView(R.layout.activity_historial_consulta_medica);
 
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+        ListView lvConsultasMedicas = (ListView) findViewById(R.id.lvConsultasMedicas);
 
         Intent inEmpleado = getIntent();
-        idEmpleado = inEmpleado.getStringExtra("ID");
+        idEmpleado = inEmpleado.getStringExtra("CEDULA");
 
         //anadido estas 2 lineas
-        List<Empleado> empleado = Empleado.find(Empleado.class, "ID = ?", idEmpleado);
-        tvNombresEmpleado.setText(empleado.get(0).getApellido()+" "+empleado.get(0).getNombre());
+        //List<Empleado> empleado = Empleado.find(Empleado.class, "CEDULA = ?", idEmpleado);
+        //tvNombresEmpleado.setText(empleado.get(0).getApellido()+" "+empleado.get(0).getNombre());
 
-        ArrayList<ConsultaMedica> historialConsultasMedicas = new ArrayList<>();
-        historialConsultasMedicas = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class, "empleado = ?", idEmpleado);
 
-        ListView lvConsultasMedicas = (ListView) findViewById(R.id.lvConsultasMedicas);
-        AdapterItemsConsultaMedica adapter = new AdapterItemsConsultaMedica(this, historialConsultasMedicas);
+        consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class,"cedula_empleado = ?", idEmpleado);
+
+        AdapterItemsConsultaMedica adapter = new AdapterItemsConsultaMedica(this, (ArrayList<ConsultaMedica>) consultaMedicaList);
         lvConsultasMedicas.setAdapter(adapter);
-        lvConsultasMedicas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*lvConsultasMedicas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ConsultaMedica consultaMedicaItem= (ConsultaMedica) parent.getItemAtPosition(position);
             }
-        });
+        });*/
     }
+
+
 
     @Override
     public void menuPulsado(int opcionMenu) {
         Intent inMenu = new Intent(getApplicationContext(),ConsultaMedicaNuevoActivity.class);
         inMenu.putExtra("BOTONPULSADO",opcionMenu);
-        inMenu.putExtra("ID",idEmpleado);
-        //Toast.makeText(this, ""+idEmpleado,Toast.LENGTH_SHORT).show();
+        inMenu.putExtra("CEDULA",idEmpleado);
         startActivity(inMenu);
     }
+
 
     public void aperturaConsultaMedica(View v){
         menuPulsado(0);

@@ -49,7 +49,7 @@ public class AdapterItemsConsultaMedica extends BaseAdapter{
         ConsultaMedica consultaMedica = items.get(position);
 
         TextView fechaConsulta = (TextView) v.findViewById(R.id.tvFechaConsulta);
-        fechaConsulta.setText(consultaMedica.getFecha_consulta().toString());
+        fechaConsulta.setText(consultaMedica.getFechaConsulta().toString());
 
         return v;
     }

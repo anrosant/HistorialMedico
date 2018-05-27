@@ -18,9 +18,9 @@ public class AdapterItemsAtencionEnfermeria extends BaseAdapter {
     protected Activity activity;
     protected ArrayList<AtencionEnfermeria> items;
 
-    public AdapterItemsAtencionEnfermeria(Activity activity, ArrayList<AtencionEnfermeria> listaAtencionEnfermeria) {
+    public AdapterItemsAtencionEnfermeria(Activity activity, ArrayList<AtencionEnfermeria> atencionEnfermeriaArrayList) {
         this.activity = activity;
-        items = listaAtencionEnfermeria;
+        items = atencionEnfermeriaArrayList;
     }
 
     @Override
@@ -49,8 +49,11 @@ public class AdapterItemsAtencionEnfermeria extends BaseAdapter {
 
         AtencionEnfermeria atencionEnfermeria = items.get(position);
 
-        TextView fechaConsulta = (TextView) v.findViewById(R.id.tvFechaAtencion);
-        fechaConsulta.setText(atencionEnfermeria.getFecha_atencion().toString());
+        TextView fechaAtencion = (TextView) v.findViewById(R.id.tvFechaAtencion);
+        TextView motivoAtencion = (TextView) v.findViewById(R.id.tvMotivo);
+
+        fechaAtencion.setText(atencionEnfermeria.getFecha_atencion().toString());
+        motivoAtencion.setText(atencionEnfermeria.getMotivoAtencion());
 
         return v;
     }

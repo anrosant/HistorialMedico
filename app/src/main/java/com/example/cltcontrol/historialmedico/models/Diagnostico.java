@@ -4,14 +4,14 @@ import com.orm.SugarRecord;
 
 public class Diagnostico extends SugarRecord{
     private String descripcion;
-    private ConsultaMedica consulta_medica;
+    private ConsultaMedica consultaMedica;
 
     public Diagnostico() {
     }
 
-    public Diagnostico(String descripcion, ConsultaMedica consulta_medica) {
+    public Diagnostico(String descripcion, ConsultaMedica consultaMedica) {
         this.descripcion = descripcion;
-        this.consulta_medica = consulta_medica;
+        this.consultaMedica = consultaMedica;
     }
 
     public String getDescripcion() {
@@ -22,11 +22,11 @@ public class Diagnostico extends SugarRecord{
         this.descripcion = descripcion;
     }
 
-    public ConsultaMedica getConsulta_medica() {
-        return consulta_medica;
+    public ConsultaMedica getConsultaMedica() {
+        return consultaMedica;
     }
 
-    public void setConsulta_medica(ConsultaMedica consulta_medica) {
-        this.consulta_medica = consulta_medica;
+    public void setConsultaMedica(ConsultaMedica consultaMedica) {
+        this.consultaMedica = consultaMedica;
     }
 }

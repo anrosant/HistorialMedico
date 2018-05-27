@@ -21,6 +21,6 @@
         name="atencion_enfermeria">Atención de enfermería
     </string>
     <string
-        name="consulta_medica">Consulta médica
+        name="consultaMedica">Consulta médica
     </string>
 </resources>

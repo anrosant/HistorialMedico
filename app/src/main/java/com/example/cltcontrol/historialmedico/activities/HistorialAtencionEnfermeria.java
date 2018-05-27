@@ -13,10 +13,12 @@ import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HistorialAtencionEnfermeria extends FragmentActivity implements ComunicadorMenu {
 
     String idEmpleado;
+    public List<AtencionEnfermeria> atencionEnfermeriaList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +26,13 @@ public class HistorialAtencionEnfermeria extends FragmentActivity implements Com
         setContentView(R.layout.activity_historial_atencion_enfermeria);
 
         Intent inEmpleado = getIntent();
-        String id = inEmpleado.getStringExtra("ID");
-
-        ArrayList<AtencionEnfermeria> historialAtencionEnfermeria = new ArrayList<>();
-        historialAtencionEnfermeria = (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class, "empleado = ?", id);
-
+        idEmpleado = inEmpleado.getStringExtra("CEDULA");
         ListView lv = (ListView) findViewById(R.id.lvAtencionEnfermeria);
 
-        AdapterItemsAtencionEnfermeria adapter = new AdapterItemsAtencionEnfermeria(this, historialAtencionEnfermeria);
+
+        atencionEnfermeriaList = AtencionEnfermeria.find(AtencionEnfermeria.class,"cedula_empleado = ?", idEmpleado);
+
+        AdapterItemsAtencionEnfermeria adapter = new AdapterItemsAtencionEnfermeria(this, (ArrayList<AtencionEnfermeria>) atencionEnfermeriaList);
         lv.setAdapter(adapter);
     }
 

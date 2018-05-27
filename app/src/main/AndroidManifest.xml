@@ -50,7 +50,7 @@
             android:label="@string/consulta_medica_nuevo"/>
         <activity
             android:name=".activities.ConsultaMedicaActivity"
-            android:label="@string/consulta_medica"/>
+            android:label="@string/consultaMedica"/>
     </application>
 
 </manifest>

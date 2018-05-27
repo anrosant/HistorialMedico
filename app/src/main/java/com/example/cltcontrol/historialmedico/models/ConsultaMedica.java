@@ -5,58 +5,58 @@ import com.orm.SugarRecord;
 import java.util.Date;
 
 public class ConsultaMedica extends SugarRecord{
-    private Empleado empleado;
-    private Date fecha_consulta;
-    private String prob_actual, rev_aparatos, preescripcion;
+    private String cedulaEmpleado;
+    private Date fechaConsulta;
+    private String probActual, revAparatos, prescripcion;
 
     public ConsultaMedica() {
     }
 
-    public ConsultaMedica(Empleado empleado, Date fecha_consulta, String prob_actual, String rev_aparatos, String preescripcion) {
-        this.empleado = empleado;
-        this.fecha_consulta = fecha_consulta;
-        this.prob_actual = prob_actual;
-        this.rev_aparatos = rev_aparatos;
-        this.preescripcion = preescripcion;
+    public ConsultaMedica(String cedulaEmpleado, Date fechaConsulta, String probActual, String revAparatos, String prescripcion) {
+        this.cedulaEmpleado = cedulaEmpleado;
+        this.fechaConsulta = fechaConsulta;
+        this.probActual = probActual;
+        this.revAparatos = revAparatos;
+        this.prescripcion = prescripcion;
     }
 
-    public Empleado getEmpleado() {
-        return empleado;
+    public String getCedulaEmpleado() {
+        return cedulaEmpleado;
     }
 
-    public void setEmpleado(Empleado empleado) {
-        this.empleado = empleado;
+    public void setCedulaEmpleado(String cedulaEmpleado) {
+        this.cedulaEmpleado = cedulaEmpleado;
     }
 
-    public Date getFecha_consulta() {
-        return fecha_consulta;
+    public Date getFechaConsulta() {
+        return fechaConsulta;
     }
 
-    public void setFecha_consulta(Date fecha_consulta) {
-        this.fecha_consulta = fecha_consulta;
+    public void setFechaConsulta(Date fechaConsulta) {
+        this.fechaConsulta = fechaConsulta;
     }
 
-    public String getProb_actual() {
-        return prob_actual;
+    public String getProbActual() {
+        return probActual;
     }
 
-    public void setProb_actual(String prob_actual) {
-        this.prob_actual = prob_actual;
+    public void setProbActual(String probActual) {
+        this.probActual = probActual;
     }
 
-    public String getRev_aparatos() {
-        return rev_aparatos;
+    public String getRevAparatos() {
+        return revAparatos;
     }
 
-    public void setRev_aparatos(String rev_aparatos) {
-        this.rev_aparatos = rev_aparatos;
+    public void setRevAparatos(String revAparatos) {
+        this.revAparatos = revAparatos;
     }
 
-    public String getPreescripcion() {
-        return preescripcion;
+    public String getPrescripcion() {
+        return prescripcion;
     }
 
-    public void setPreescripcion(String preescripcion) {
-        this.preescripcion = preescripcion;
+    public void setPrescripcion(String prescripcion) {
+        this.prescripcion = prescripcion;
     }
 }

@@ -11,6 +11,7 @@ public class Usuario extends SugarRecord {
     @Unique
     private String usuario;
     private String contrasenia;
+    //pensar si se necesita tener atributo tipo de usuario (medico o enfermera)
 
     // CONSTRUCTORES DE CLASE
     public Usuario() {

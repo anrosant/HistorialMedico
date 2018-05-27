@@ -8,9 +8,9 @@ import java.util.Date;
 public class Empleado extends SugarRecord {
     @Unique
     private String cedula;
-    private String nombre, apellido, correo, direccion,profesion, estado_civil, sexo,
-            lugar_nacimiento, area_trabajo;
-    private Date fecha_nacimiento, fecha_registro;
+    private String nombre, apellido, correo, direccion,profesion, estadoCivil, sexo,
+            lugarNacimiento, areaTrabajo;
+    private Date fechaNacimiento, fechaRegistro;
     private int edad,foto;
     private Usuario usuario;
 
@@ -19,42 +19,42 @@ public class Empleado extends SugarRecord {
 
     //Constructor sin foreignkey Usuario
     public Empleado(String cedula, String nombre, String apellido, String correo,
-                    String direccion, String profesion, String estado_civil, String sexo,
-                    String lugar_nacimiento, String area_trabajo, Date fecha_nacimiento,
-                    Date fecha_registro, int edad, int foto) {
+                    String direccion, String profesion, String estadoCivil, String sexo,
+                    String lugarNacimiento, String areaTrabajo, Date fechaNacimiento,
+                    Date fechaRegistro, int edad, int foto) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.direccion = direccion;
         this.profesion = profesion;
-        this.estado_civil = estado_civil;
+        this.estadoCivil = estadoCivil;
         this.sexo = sexo;
-        this.lugar_nacimiento = lugar_nacimiento;
-        this.area_trabajo = area_trabajo;
-        this.fecha_nacimiento = fecha_nacimiento;
-        this.fecha_registro = fecha_registro;
+        this.lugarNacimiento = lugarNacimiento;
+        this.areaTrabajo = areaTrabajo;
+        this.fechaNacimiento = fechaNacimiento;
+        this.fechaRegistro = fechaRegistro;
         this.edad = edad;
         this.foto = foto;
     }
 
     //Constructor con foreignkey Usuario
     public Empleado(String cedula, String nombre, String apellido, String correo,
-                    String direccion, String profesion, String estado_civil, String sexo,
-                    String lugar_nacimiento, String area_trabajo, Date fecha_nacimiento,
-                    Date fecha_registro, int edad, int foto, Usuario usuario) {
+                    String direccion, String profesion, String estadoCivil, String sexo,
+                    String lugarNacimiento, String areaTrabajo, Date fechaNacimiento,
+                    Date fechaRegistro, int edad, int foto, Usuario usuario) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.direccion = direccion;
         this.profesion = profesion;
-        this.estado_civil = estado_civil;
+        this.estadoCivil = estadoCivil;
         this.sexo = sexo;
-        this.lugar_nacimiento = lugar_nacimiento;
-        this.area_trabajo = area_trabajo;
-        this.fecha_nacimiento = fecha_nacimiento;
-        this.fecha_registro = fecha_registro;
+        this.lugarNacimiento = lugarNacimiento;
+        this.areaTrabajo = areaTrabajo;
+        this.fechaNacimiento = fechaNacimiento;
+        this.fechaRegistro = fechaRegistro;
         this.edad = edad;
         this.foto = foto;
         this.usuario=usuario;
@@ -116,12 +116,12 @@ public class Empleado extends SugarRecord {
         this.profesion = profesion;
     }
 
-    public String getEstado_civil() {
-        return estado_civil;
+    public String getEstadoCivil() {
+        return estadoCivil;
     }
 
-    public void setEstado_civil(String estado_civil) {
-        this.estado_civil = estado_civil;
+    public void setEstadoCivil(String estadoCivil) {
+        this.estadoCivil = estadoCivil;
     }
 
     public String getSexo() {
@@ -132,36 +132,36 @@ public class Empleado extends SugarRecord {
         this.sexo = sexo;
     }
 
-    public String getLugar_nacimiento() {
-        return lugar_nacimiento;
+    public String getLugarNacimiento() {
+        return lugarNacimiento;
     }
 
-    public void setLugar_nacimiento(String lugar_nacimiento) {
-        this.lugar_nacimiento = lugar_nacimiento;
+    public void setLugarNacimiento(String lugarNacimiento) {
+        this.lugarNacimiento = lugarNacimiento;
     }
 
-    public String getArea_trabajo() {
-        return area_trabajo;
+    public String getAreaTrabajo() {
+        return areaTrabajo;
     }
 
-    public void setArea_trabajo(String area_trabajo) {
-        this.area_trabajo = area_trabajo;
+    public void setAreaTrabajo(String areaTrabajo) {
+        this.areaTrabajo = areaTrabajo;
     }
 
-    public Date getFecha_nacimiento() {
-        return fecha_nacimiento;
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
     }
 
-    public void setFecha_nacimiento(Date fecha_nacimiento) {
-        this.fecha_nacimiento = fecha_nacimiento;
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Date getFecha_registro() {
-        return fecha_registro;
+    public Date getFechaRegistro() {
+        return fechaRegistro;
     }
 
-    public void setFecha_registro(Date fecha_registro) {
-        this.fecha_registro = fecha_registro;
+    public void setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 
     public int getEdad() {

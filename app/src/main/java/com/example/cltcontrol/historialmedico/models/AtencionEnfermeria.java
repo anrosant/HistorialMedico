@@ -5,58 +5,58 @@ import com.orm.SugarRecord;
 import java.util.Date;
 
 public class AtencionEnfermeria extends SugarRecord {
-    private Empleado empleado;
-    private Date fecha_atencion;
-    private String motivo_atencion, diagnostico_enfermeria, plan_cuidados;
+    private Date fechaAtencion;
+    private String cedulaEmpleado;
+    private String motivoAtencion, diagnosticoEnfermeria, planCuidados;
 
     public AtencionEnfermeria() {
     }
 
-    public AtencionEnfermeria(Empleado empleado, Date fecha_atencion, String motivo_atencion, String diagnostico_enfermeria, String plan_cuidados) {
-        this.empleado = empleado;
-        this.fecha_atencion = fecha_atencion;
-        this.motivo_atencion = motivo_atencion;
-        this.diagnostico_enfermeria = diagnostico_enfermeria;
-        this.plan_cuidados = plan_cuidados;
+    public AtencionEnfermeria(Date fecha_atencion, String cedula_empleado, String motivoAtencion, String diagnosticoEnfermeria, String planCuidados) {
+        this.fechaAtencion = fecha_atencion;
+        this.cedulaEmpleado = cedula_empleado;
+        this.motivoAtencion = motivoAtencion;
+        this.diagnosticoEnfermeria = diagnosticoEnfermeria;
+        this.planCuidados = planCuidados;
     }
 
-    public Empleado getEmpleado() {
-        return empleado;
+    public String getCedula_empleado() {
+        return cedulaEmpleado;
     }
 
-    public void setEmpleado(Empleado empleado) {
-        this.empleado = empleado;
+    public void setCedula_empleado(String cedula_empleado) {
+        this.cedulaEmpleado = cedula_empleado;
     }
 
     public Date getFecha_atencion() {
-        return fecha_atencion;
+        return fechaAtencion;
     }
 
     public void setFecha_atencion(Date fecha_atencion) {
-        this.fecha_atencion = fecha_atencion;
+        this.fechaAtencion = fecha_atencion;
     }
 
-    public String getMotivo_atencion() {
-        return motivo_atencion;
+    public String getMotivoAtencion() {
+        return motivoAtencion;
     }
 
-    public void setMotivo_atencion(String motivo_atencion) {
-        this.motivo_atencion = motivo_atencion;
+    public void setMotivoAtencion(String motivoAtencion) {
+        this.motivoAtencion = motivoAtencion;
     }
 
-    public String getDiagnostico_enfermeria() {
-        return diagnostico_enfermeria;
+    public String getDiagnosticoEnfermeria() {
+        return diagnosticoEnfermeria;
     }
 
-    public void setDiagnostico_enfermeria(String diagnostico_enfermeria) {
-        this.diagnostico_enfermeria = diagnostico_enfermeria;
+    public void setDiagnosticoEnfermeria(String diagnosticoEnfermeria) {
+        this.diagnosticoEnfermeria = diagnosticoEnfermeria;
     }
 
-    public String getPlan_cuidados() {
-        return plan_cuidados;
+    public String getPlanCuidados() {
+        return planCuidados;
     }
 
-    public void setPlan_cuidados(String plan_cuidados) {
-        this.plan_cuidados = plan_cuidados;
+    public void setPlanCuidados(String planCuidados) {
+        this.planCuidados = planCuidados;
     }
 }

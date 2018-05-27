@@ -44,11 +44,11 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
 
         Bundle extras = this.getIntent().getExtras();
         menuPulsado(extras.getInt("BOTONPULSADO"));
-        idEmpleado = extras.getString("ID");
+        idEmpleado = extras.getString("CEDULA");
 //        Toast.makeText(getApplicationContext(), ""+idEmpleado,Toast.LENGTH_SHORT).show();
 
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
-        List<Empleado> empleado = Empleado.find(Empleado.class, "ID = ?", idEmpleado);
+        List<Empleado> empleado = Empleado.find(Empleado.class, "CEDULA = ?", idEmpleado);
         tvNombresEmpleado.setText(empleado.get(0).getApellido()+" "+empleado.get(0).getNombre());
 
 

@@ -56,7 +56,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                     List<Empleado> newList = new ArrayList<>();
                     for(Empleado empleado:empleadosList){
                         String nombre = empleado.getNombre().toLowerCase();
-                        String area = empleado.getArea_trabajo().toLowerCase();
+                        String area = empleado.getAreaTrabajo().toLowerCase();
                         if(nombre.contains(newText)){
                             newList.add(empleado);
                         }
@@ -88,7 +88,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
 
                         Intent i = new Intent(getApplicationContext(), MenuEmpleadoActivity.class);
                         //se cambia ID por ID_EMPLEADO
-                        i.putExtra("ID",String.valueOf(empleadosList.get(position).getId()));
+                        i.putExtra("CEDULA",String.valueOf(empleadosList.get(position).getCedula()));
                         startActivity(i);
 
                     }
@@ -100,7 +100,6 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
     }
 
     public void readEmpleadosAll(){
-        String rol = "Empleado";
         try{
             empleadosList = Empleado.listAll(Empleado.class);
         }catch (Exception e){

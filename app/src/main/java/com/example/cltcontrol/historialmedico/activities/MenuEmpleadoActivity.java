@@ -25,23 +25,22 @@ public class MenuEmpleadoActivity extends FragmentActivity {
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
 
         Intent inCedula = getIntent();
-        idEmpleado= inCedula.getStringExtra("ID");
+        idEmpleado= inCedula.getStringExtra("CEDULA");
         //Toast.makeText(this, ""+idEmpleado,Toast.LENGTH_SHORT).show();
 
-        List<Empleado> empleado = Empleado.find(Empleado.class, "ID = ?", idEmpleado);
+        List<Empleado> empleado = Empleado.find(Empleado.class, "CEDULA = ?", idEmpleado);
         tvNombresEmpleado.setText(empleado.get(0).getApellido()+" "+empleado.get(0).getNombre());
     }
 
     public void aperturaHistorialConsultaMedica(View v) {
         Intent inHistorialConsultaMedica = new Intent(getApplicationContext(), HistorialConsultaMedica.class);
-        inHistorialConsultaMedica.putExtra("ID", idEmpleado);
+        inHistorialConsultaMedica.putExtra("CEDULA", idEmpleado);
         startActivity(inHistorialConsultaMedica);
     }
 
     public void aperturaHistorialAtencionEnfermeria(View v){
         Intent inHistorialAtencionEnfermeria = new Intent(getApplicationContext(), HistorialAtencionEnfermeria.class);
-        inHistorialAtencionEnfermeria.putExtra("ID",idEmpleado);
-        //Toast.makeText(this, ""+idEmpleado,Toast.LENGTH_SHORT).show();
+        inHistorialAtencionEnfermeria.putExtra("CEDULA",idEmpleado);
         startActivity(inHistorialAtencionEnfermeria);
     }
 }

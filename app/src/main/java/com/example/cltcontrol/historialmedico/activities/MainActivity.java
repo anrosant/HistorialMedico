@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.DiagnosticoEnfermedad;
@@ -90,11 +91,20 @@ public class MainActivity extends AppCompatActivity {
                 "enfermera",fecha_actual,fecha_actual,20,R.drawable.modelo,userTemp);
         empTemp2.save();
 
-        ConsultaMedica consultaMedica1 = new ConsultaMedica(empTemp,fecha_actual,"prov1","rev1","pres1");
+        Date fecha = new Date();
+
+        AtencionEnfermeria atencion1 = new AtencionEnfermeria(fecha,"0967547365","Dolor de estomago",
+                "Tiene un dolor en la boca del estomago","Tomar mucha agua, con paracetamol, y descanso");
+        atencion1.save();
+        AtencionEnfermeria atencion2 = new AtencionEnfermeria(fecha,"0967547365","Dolor",
+                "Tiene un dolor","Tomar mucha agua, con paracetamol");
+        atencion2.save();
+
+        ConsultaMedica consultaMedica1 = new ConsultaMedica(empTemp.getCedula(),fecha_actual,"prov1","rev1","pres1");
         consultaMedica1.save();
-        ConsultaMedica consultaMedica2 = new ConsultaMedica(empTemp,fecha_actual,"prov2","rev2","pres2");
+        ConsultaMedica consultaMedica2 = new ConsultaMedica(empTemp.getCedula(),fecha_actual,"prov2","rev2","pres2");
         consultaMedica2.save();
-        ConsultaMedica consultaMedica3 = new ConsultaMedica(empTemp2,fecha_actual,"prov3","rev3","pres3");
+        ConsultaMedica consultaMedica3 = new ConsultaMedica(empTemp2.getCedula(),fecha_actual,"prov3","rev3","pres3");
         consultaMedica3.save();
         Enfermedad enf1=new Enfermedad("111","enf1");
         enf1.save();

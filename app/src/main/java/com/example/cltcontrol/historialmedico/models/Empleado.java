@@ -9,7 +9,7 @@ public class Empleado extends SugarRecord {
     @Unique
     private String cedula;
     private String nombre, apellido, correo, direccion,profesion, estadoCivil, sexo,
-            lugarNacimiento, areaTrabajo;
+            lugarNacimiento, ocupacion;
     private Date fechaNacimiento, fechaRegistro;
     private int edad,foto;
     private Usuario usuario;
@@ -20,7 +20,7 @@ public class Empleado extends SugarRecord {
     //Constructor sin foreignkey Usuario
     public Empleado(String cedula, String nombre, String apellido, String correo,
                     String direccion, String profesion, String estadoCivil, String sexo,
-                    String lugarNacimiento, String areaTrabajo, Date fechaNacimiento,
+                    String lugarNacimiento, String ocupacion, Date fechaNacimiento,
                     Date fechaRegistro, int edad, int foto) {
         this.cedula = cedula;
         this.nombre = nombre;
@@ -31,7 +31,7 @@ public class Empleado extends SugarRecord {
         this.estadoCivil = estadoCivil;
         this.sexo = sexo;
         this.lugarNacimiento = lugarNacimiento;
-        this.areaTrabajo = areaTrabajo;
+        this.ocupacion = ocupacion;
         this.fechaNacimiento = fechaNacimiento;
         this.fechaRegistro = fechaRegistro;
         this.edad = edad;
@@ -41,7 +41,7 @@ public class Empleado extends SugarRecord {
     //Constructor con foreignkey Usuario
     public Empleado(String cedula, String nombre, String apellido, String correo,
                     String direccion, String profesion, String estadoCivil, String sexo,
-                    String lugarNacimiento, String areaTrabajo, Date fechaNacimiento,
+                    String lugarNacimiento, String ocupacion, Date fechaNacimiento,
                     Date fechaRegistro, int edad, int foto, Usuario usuario) {
         this.cedula = cedula;
         this.nombre = nombre;
@@ -52,7 +52,7 @@ public class Empleado extends SugarRecord {
         this.estadoCivil = estadoCivil;
         this.sexo = sexo;
         this.lugarNacimiento = lugarNacimiento;
-        this.areaTrabajo = areaTrabajo;
+        this.ocupacion = ocupacion;
         this.fechaNacimiento = fechaNacimiento;
         this.fechaRegistro = fechaRegistro;
         this.edad = edad;
@@ -140,12 +140,12 @@ public class Empleado extends SugarRecord {
         this.lugarNacimiento = lugarNacimiento;
     }
 
-    public String getAreaTrabajo() {
-        return areaTrabajo;
+    public String getOcupacion() {
+        return ocupacion;
     }
 
-    public void setAreaTrabajo(String areaTrabajo) {
-        this.areaTrabajo = areaTrabajo;
+    public void setOcupacion(String ocupacion) {
+        this.ocupacion = ocupacion;
     }
 
     public Date getFechaNacimiento() {

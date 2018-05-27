@@ -106,13 +106,13 @@ public class MainActivity extends AppCompatActivity {
         consultaMedica2.save();
         ConsultaMedica consultaMedica3 = new ConsultaMedica(empTemp2.getCedula(),fecha_actual,"prov3","rev3","pres3");
         consultaMedica3.save();
-        Enfermedad enf1=new Enfermedad("111","enf1");
+        Enfermedad enf1=new Enfermedad("111","enf1","a");
         enf1.save();
-        Enfermedad enf2=new Enfermedad("121","enf2");
+        Enfermedad enf2=new Enfermedad("121","enf2","a");
         enf2.save();
-        Enfermedad enf3=new Enfermedad("131","enf3");
+        Enfermedad enf3=new Enfermedad("131","enf3","a");
         enf3.save();
-        Enfermedad enf4=new Enfermedad("141","enf4");
+        Enfermedad enf4=new Enfermedad("141","enf4","a");
         enf4.save();
 
         Diagnostico diagn1=new Diagnostico("desc1", consultaMedica1);

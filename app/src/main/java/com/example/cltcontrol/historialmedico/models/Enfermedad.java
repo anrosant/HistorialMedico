@@ -4,32 +4,41 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
 public class Enfermedad extends SugarRecord{
-    @Unique
-    private String codigo_cie10;
 
-    private String nombre_cie10;
+    String codigo;
+    String nombre;
+    String grupo;
 
-    public Enfermedad() {
+    public Enfermedad(){
     }
 
-    public Enfermedad(String codigo_cie10, String nombre_cie10) {
-        this.codigo_cie10 = codigo_cie10;
-        this.nombre_cie10 = nombre_cie10;
+    public Enfermedad(String codigo, String nombre, String grupo) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.grupo = grupo;
     }
 
-    public String getCodigo_cie10() {
-        return codigo_cie10;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setCodigo_cie10(String codigo_cie10) {
-        this.codigo_cie10 = codigo_cie10;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
-    public String getNombre_cie10() {
-        return nombre_cie10;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setNombre_cie10(String nombre_cie10) {
-        this.nombre_cie10 = nombre_cie10;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(String grupo) {
+        this.grupo = grupo;
     }
 }

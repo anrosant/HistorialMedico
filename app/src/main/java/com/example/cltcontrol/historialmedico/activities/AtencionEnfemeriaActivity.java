@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.fragments.DiagnosticoEnfermeriaFragment;
+import com.example.cltcontrol.historialmedico.fragments.MotivoAtencionFragment;
+import com.example.cltcontrol.historialmedico.fragments.Plan_Cuidados_Fragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 
@@ -17,18 +20,12 @@ public class AtencionEnfemeriaActivity extends FragmentActivity implements Comun
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_atencion_enfermeria);
 
-        misFragmentos = new Fragment[1];
+        misFragmentos = new Fragment[4];
 
         misFragmentos[0] = new SignosVitalesFragment();
-        //misFragmentos[1] = new ();
-        //misFragmentos[2] = new ;
-        //misFragmentos[3] = new ;
-        //misFragmentos[4] = new ;
-        //misFragmentos[5] = new ;
-        //misFragmentos[6] = new ;
-        //misFragmentos[7] = new ;
-        //misFragmentos[1] = new PreescripcionFragment();
-        //misFragmentos[9] = new ;
+        misFragmentos[1] = new MotivoAtencionFragment();
+        misFragmentos[2] = new DiagnosticoEnfermeriaFragment();
+        misFragmentos[3] = new Plan_Cuidados_Fragment();
 
         Bundle extras = getIntent().getExtras();
         menuPulsado(extras.getInt("BOTONPULSADO"));

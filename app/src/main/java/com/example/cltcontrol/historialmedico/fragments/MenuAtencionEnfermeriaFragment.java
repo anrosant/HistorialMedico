@@ -17,7 +17,8 @@ import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
  */
 public class MenuAtencionEnfermeriaFragment extends Fragment {
 
-    private final int[] BOTONES_MENU={R.id.btnSignosVitales};
+    private final int[] BOTONES_MENU={R.id.btnSignosVitales, R.id.btnMotivoAtencion, R.id.btnDiagnosticoEnfermeria,
+            R.id.btnPlanCuidados};
     private int boton;
 
     public MenuAtencionEnfermeriaFragment() {
@@ -30,7 +31,6 @@ public class MenuAtencionEnfermeriaFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_atencion_enfermeria, container, false);
-
 
         boton = -1;
         if(getArguments()!= null){

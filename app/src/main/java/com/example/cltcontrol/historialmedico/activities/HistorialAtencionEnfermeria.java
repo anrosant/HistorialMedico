@@ -34,7 +34,6 @@ public class HistorialAtencionEnfermeria extends FragmentActivity implements Com
         AdapterItemsAtencionEnfermeria adapter = new AdapterItemsAtencionEnfermeria(this, (ArrayList<AtencionEnfermeria>) atencionEnfermeriaList);
         lv.setAdapter(adapter);
 
-
     }
 
 

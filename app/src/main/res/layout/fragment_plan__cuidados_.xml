@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.SignosVitalesFragment">
+    tools:context=".fragments.Plan_Cuidados_Fragment">
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
                     android:padding="5dp"
-                    android:text="PREESCRIPCION"
+                    android:text="PLAN CUIDADOS"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp" />
 

@@ -48,9 +48,6 @@
         <activity
             android:name=".activities.AtencionEnfemeriaActivity"
             android:label="@string/consulta_medica_nuevo"/>
-        <activity
-            android:name=".activities.ConsultaMedicaActivity"
-            android:label="@string/consultaMedica"/>
     </application>
 
 </manifest>

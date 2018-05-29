@@ -5,27 +5,28 @@ import com.orm.SugarRecord;
 import java.util.Date;
 
 public class ConsultaMedica extends SugarRecord{
-    private String cedulaEmpleado;
+    private Empleado empleado;
+    //private String cedulaEmpleado;
     private Date fechaConsulta;
     private String probActual, revAparatos, prescripcion;
 
     public ConsultaMedica() {
     }
 
-    public ConsultaMedica(String cedulaEmpleado, Date fechaConsulta, String probActual, String revAparatos, String prescripcion) {
-        this.cedulaEmpleado = cedulaEmpleado;
+    public ConsultaMedica(Empleado empleado, Date fechaConsulta, String probActual, String revAparatos, String prescripcion) {
+        this.empleado = empleado;
         this.fechaConsulta = fechaConsulta;
         this.probActual = probActual;
         this.revAparatos = revAparatos;
         this.prescripcion = prescripcion;
     }
 
-    public String getCedulaEmpleado() {
-        return cedulaEmpleado;
+    public Empleado getCedulaEmpleado() {
+        return empleado;
     }
 
-    public void setCedulaEmpleado(String cedulaEmpleado) {
-        this.cedulaEmpleado = cedulaEmpleado;
+    public void setCedulaEmpleado(Empleado empleado) {
+        this.empleado = empleado;
     }
 
     public Date getFechaConsulta() {

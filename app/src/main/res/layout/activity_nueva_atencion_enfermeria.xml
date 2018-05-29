@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center"
-    android:weightSum="4">
+    android:weightSum="4"
+    android:baselineAligned="false">
 
     <fragment
         android:id="@+id/menuAtencionEnfermeria"

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Sistema Médico Ocupacional
     </string>
     <string name="buscar_empleado">Buscar empleado
@@ -11,11 +11,8 @@
     </string>
     <string name="consulta_medica_nuevo">Nueva consulta médica
     </string>
-    <string name="atencion_enfermeria">Atención de enfermería
-    </string>
-    <string name="consultaMedica">Consulta médica
+    <string name="consultaMedica" tools:keep="@string/consultaMedica">Consulta médica
     </string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

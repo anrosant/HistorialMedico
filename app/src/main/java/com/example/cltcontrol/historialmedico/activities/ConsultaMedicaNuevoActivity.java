@@ -14,44 +14,31 @@ import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ComunicadorMenu{
 
-    Fragment[] misFragmentos;
-    TextView tvNombresEmpleado;
-    String idEmpleado;
+    private Fragment[] misFragmentos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_consulta_medica);
 
-        //Opcion a cargar por defecto SignosVitales
-        /*SignosVitalesFragment contenidoSignosVitales = new SignosVitalesFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.contenedorConsultaMedica,contenidoSignosVitales).commit();
-        */
-
         misFragmentos = new Fragment[4];
 
         misFragmentos[0] = new SignosVitalesFragment();
         misFragmentos[1] = new PatologiasPersonalesFragment();
         misFragmentos[2] = new PatologiasFamiliaresFragment();
-        //misFragmentos[3] = new ;
-        //misFragmentos[4] = new ;
-        //misFragmentos[5] = new ;
-        //misFragmentos[6] = new ;
-        //misFragmentos[7] = new ;
         misFragmentos[3] = new PreescripcionFragment();
-        //misFragmentos[9] = new ;
 
         Bundle extras = this.getIntent().getExtras();
-        menuPulsado(extras.getInt("BOTONPULSADO"));
-        idEmpleado = extras.getString("CEDULA");
-//        Toast.makeText(getApplicationContext(), ""+idEmpleado,Toast.LENGTH_SHORT).show();
-
-        tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
-        List<Empleado> empleado = Empleado.find(Empleado.class, "CEDULA = ?", idEmpleado);
-        tvNombresEmpleado.setText(empleado.get(0).getApellido()+" "+empleado.get(0).getNombre());
+        menuPulsado(Objects.requireNonNull(extras).getInt("BOTONPULSADO"));
+        //String idEmpleado = extras.getString("CEDULA");
+        String idEmpleado = extras.getString("ID");
+        TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+        Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
+        tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
 
 
     }

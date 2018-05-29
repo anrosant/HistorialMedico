@@ -3,8 +3,6 @@ package com.example.cltcontrol.historialmedico.models;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
-import java.util.Date;
-
 public class Usuario extends SugarRecord {
 
     // ATRIBUTOS DE CLASE

@@ -2,6 +2,7 @@ package com.example.cltcontrol.historialmedico.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,11 @@ import java.util.ArrayList;
  * Created by jorge on 7/1/2018.
  */
 
-public class DiagnosticosAdapter extends ArrayAdapter<Diagnostico> {
+class DiagnosticosAdapter extends ArrayAdapter<Diagnostico> {
 
-    Context context;
-    int layoutResourceId;
-    ArrayList<Diagnostico> data=null;
+    private Context context;
+    private int layoutResourceId;
+    private ArrayList<Diagnostico> data=null;
 
     public DiagnosticosAdapter(Context context, int layaoutResouceId, ArrayList<Diagnostico> data) {
         super(context,layaoutResouceId,data);
@@ -31,7 +32,8 @@ public class DiagnosticosAdapter extends ArrayAdapter<Diagnostico> {
         this.data=data;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent){
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent){
         View row =convertView;
         DiagnosticoHolder holder = null;
 
@@ -39,9 +41,9 @@ public class DiagnosticosAdapter extends ArrayAdapter<Diagnostico> {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row=inflater.inflate(layoutResourceId,parent,false);
             holder = new DiagnosticoHolder();
-            holder.enfermedad = (TextView)row.findViewById(R.id.tvEnfermedad);
-            holder.codigo = (TextView)row.findViewById(R.id.tvCodigo);
-            holder.tipoEnfermedad = (TextView)row.findViewById(R.id.tvTipoEnfermedad);
+            holder.enfermedad = row.findViewById(R.id.tvEnfermedad);
+            holder.codigo = row.findViewById(R.id.tvCodigo);
+            holder.tipoEnfermedad = row.findViewById(R.id.tvTipoEnfermedad);
             row.setTag(holder);
 
 

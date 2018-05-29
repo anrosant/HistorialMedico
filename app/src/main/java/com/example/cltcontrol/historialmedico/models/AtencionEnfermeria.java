@@ -6,26 +6,27 @@ import java.util.Date;
 
 public class AtencionEnfermeria extends SugarRecord {
     private Date fechaAtencion;
-    private String cedulaEmpleado;
+    //private String cedulaEmpleado;
+    private Empleado empleado;
     private String motivoAtencion, diagnosticoEnfermeria, planCuidados;
 
     public AtencionEnfermeria() {
     }
 
-    public AtencionEnfermeria(Date fecha_atencion, String cedula_empleado, String motivoAtencion, String diagnosticoEnfermeria, String planCuidados) {
+    public AtencionEnfermeria(Date fecha_atencion, Empleado empleado, String motivoAtencion, String diagnosticoEnfermeria, String planCuidados) {
         this.fechaAtencion = fecha_atencion;
-        this.cedulaEmpleado = cedula_empleado;
+        this.empleado = empleado;
         this.motivoAtencion = motivoAtencion;
         this.diagnosticoEnfermeria = diagnosticoEnfermeria;
         this.planCuidados = planCuidados;
     }
 
-    public String getCedula_empleado() {
-        return cedulaEmpleado;
+    public Empleado getEmpleado() {
+        return empleado;
     }
 
-    public void setCedula_empleado(String cedula_empleado) {
-        this.cedulaEmpleado = cedula_empleado;
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
     }
 
     public Date getFecha_atencion() {

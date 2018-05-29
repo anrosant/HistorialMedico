@@ -12,11 +12,12 @@ import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AdapterItemsAtencionEnfermeria extends BaseAdapter {
 
-    protected Activity activity;
-    protected ArrayList<AtencionEnfermeria> items;
+    private Activity activity;
+    private ArrayList<AtencionEnfermeria> items;
 
     public AdapterItemsAtencionEnfermeria(Activity activity, ArrayList<AtencionEnfermeria> atencionEnfermeriaArrayList) {
         this.activity = activity;
@@ -44,13 +45,13 @@ public class AdapterItemsAtencionEnfermeria extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inf = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inf.inflate(R.layout.item_atencion_enfermeria, null);
+            v = Objects.requireNonNull(inf).inflate(R.layout.item_atencion_enfermeria, null);
         }
 
         AtencionEnfermeria atencionEnfermeria = items.get(position);
 
-        TextView fechaAtencion = (TextView) v.findViewById(R.id.tvFechaAtencion);
-        TextView motivoAtencion = (TextView) v.findViewById(R.id.tvMotivo);
+        TextView fechaAtencion = v.findViewById(R.id.tvFechaAtencion);
+        TextView motivoAtencion = v.findViewById(R.id.tvMotivo);
 
         fechaAtencion.setText(atencionEnfermeria.getFecha_atencion().toString());
         motivoAtencion.setText(atencionEnfermeria.getMotivoAtencion());

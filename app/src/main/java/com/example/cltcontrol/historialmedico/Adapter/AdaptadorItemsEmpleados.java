@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItemsEmpleados.ViewHolder> {
 
-    List<Empleado> listaEmpleados;
+    private List<Empleado> listaEmpleados;
 
     public AdaptadorItemsEmpleados(List<Empleado> listaEmpleados) {
         this.listaEmpleados = listaEmpleados;
@@ -43,11 +43,11 @@ public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItems
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivfotoitems;
         TextView tvnombresitems, tvareatrabajoitems;
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-            tvnombresitems = (TextView) itemView.findViewById(R.id.tvnombresitems);
-            tvareatrabajoitems = (TextView) itemView.findViewById(R.id.tvareatrabajoitems);
-            ivfotoitems = (ImageView) itemView.findViewById(R.id.ivfotoitems);
+            tvnombresitems = itemView.findViewById(R.id.tvnombresitems);
+            tvareatrabajoitems = itemView.findViewById(R.id.tvareatrabajoitems);
+            ivfotoitems = itemView.findViewById(R.id.ivfotoitems);
         }
     }
 

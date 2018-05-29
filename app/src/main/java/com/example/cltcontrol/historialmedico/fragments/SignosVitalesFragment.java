@@ -15,11 +15,6 @@ import com.example.cltcontrol.historialmedico.R;
  */
 public class SignosVitalesFragment extends Fragment {
 
-    EditText pSistolica;
-    EditText pDistolica;
-    EditText temperatura;
-    EditText pulso;
-
     public SignosVitalesFragment() {
         // Required empty public constructor
     }
@@ -29,15 +24,12 @@ public class SignosVitalesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_signos_vitales, container, false);
-        pSistolica = view.findViewById(R.id.etPresionSistolica);
-        pDistolica = view.findViewById(R.id.etPresionDistolica);
-        temperatura = view.findViewById(R.id.etTemperatura);
-        pulso = view.findViewById(R.id.etPulso);
+        EditText pSistolica = view.findViewById(R.id.etPresionSistolica);
+        EditText pDistolica = view.findViewById(R.id.etPresionDistolica);
+        EditText temperatura = view.findViewById(R.id.etTemperatura);
+        EditText pulso = view.findViewById(R.id.etPulso);
 
         return view;
-    }
-
-    public void grabarSignos(){
     }
 
 }

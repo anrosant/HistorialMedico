@@ -20,10 +20,9 @@ import java.util.List;
 
 public class BuscarEmpleadoActivity extends FragmentActivity {
 
-    public static List<Empleado> empleadosList;
-    RecyclerView recyclerEmpleados;
-    AdaptadorItemsEmpleados adaptadorEmpleados;
-    EditText buscar;
+    private static List<Empleado> empleadosList;
+    private AdaptadorItemsEmpleados adaptadorEmpleados;
+    private EditText buscar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +31,9 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
 
 
         readEmpleadosAll();
-        recyclerEmpleados = (RecyclerView) findViewById(R.id.rvlistaempleados);
+        RecyclerView recyclerEmpleados = findViewById(R.id.rvlistaempleados);
         recyclerEmpleados.setLayoutManager(new LinearLayoutManager(this));
-        buscar = (EditText) findViewById(R.id.etBusquedaUsuario);
+        buscar = findViewById(R.id.etBusquedaUsuario);
 
         buscar.addTextChangedListener(new TextWatcher() {
 
@@ -61,29 +60,22 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                         }
                     }
 
-                    adaptadorEmpleados.setFilter((List<Empleado>) newList);
+                    adaptadorEmpleados.setFilter(newList);
                 }else{
-                    adaptadorEmpleados.setFilter((List<Empleado>) empleadosList);
+                    adaptadorEmpleados.setFilter(empleadosList);
                 }
             }
         });
 
         adaptadorEmpleados = new AdaptadorItemsEmpleados(empleadosList);
         recyclerEmpleados.setAdapter(adaptadorEmpleados);
-        /*recyclerEmpleados.setOnClickListener(new AdapterView.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), HistorialConsultaMedica.class);
-                startActivity(i);
-            }
-        });*/
 
         recyclerEmpleados.addOnItemTouchListener(
-                new RecyclerItemClickListener(getApplicationContext(), recyclerEmpleados ,new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(getApplicationContext(), recyclerEmpleados,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
 
                         Intent i = new Intent(getApplicationContext(), MenuEmpleadoActivity.class);
-                        //se cambia ID por ID_EMPLEADO
+                        i.putExtra("ID", String.valueOf(empleadosList.get(position).getId()));
                         i.putExtra("CEDULA",String.valueOf(empleadosList.get(position).getCedula()));
                         startActivity(i);
 
@@ -95,7 +87,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
         );
     }
 
-    public void readEmpleadosAll(){
+    private void readEmpleadosAll(){
         try{
             empleadosList = Empleado.listAll(Empleado.class);
         }catch (Exception e){

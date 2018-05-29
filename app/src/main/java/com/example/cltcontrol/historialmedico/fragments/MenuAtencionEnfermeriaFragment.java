@@ -12,6 +12,8 @@ import android.widget.Button;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 
+import java.util.Objects;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -19,7 +21,6 @@ public class MenuAtencionEnfermeriaFragment extends Fragment {
 
     private final int[] BOTONES_MENU={R.id.btnSignosVitales, R.id.btnMotivoAtencion, R.id.btnDiagnosticoEnfermeria,
             R.id.btnPlanCuidados};
-    private int boton;
 
     public MenuAtencionEnfermeriaFragment() {
         // Required empty public constructor
@@ -32,9 +33,9 @@ public class MenuAtencionEnfermeriaFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_atencion_enfermeria, container, false);
 
-        boton = -1;
+        int boton = -1;
         if(getArguments()!= null){
-            boton=getArguments().getInt("BOTONPULSADO");
+            boton =getArguments().getInt("BOTONPULSADO");
         }
 
         Button botonMenu;
@@ -46,7 +47,7 @@ public class MenuAtencionEnfermeriaFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Activity estaActividad = getActivity();
-                    ((ComunicadorMenu)estaActividad).menuPulsado(queBoton);
+                    ((ComunicadorMenu) Objects.requireNonNull(estaActividad)).menuPulsado(queBoton);
                 }
             });
         }

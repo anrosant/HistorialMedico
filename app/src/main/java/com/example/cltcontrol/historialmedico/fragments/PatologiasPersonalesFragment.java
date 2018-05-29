@@ -3,7 +3,6 @@ package com.example.cltcontrol.historialmedico.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,12 @@ import android.widget.Spinner;
 
 import com.example.cltcontrol.historialmedico.R;
 
+import java.util.Objects;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PatologiasPersonalesFragment extends Fragment {
-
-    Spinner spPatologias;
 
     public PatologiasPersonalesFragment() {
         // Required empty public constructor
@@ -29,8 +28,8 @@ public class PatologiasPersonalesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_patologias_personales, container, false);
 
-        spPatologias =  view.findViewById(R.id.spPatologia);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity().getBaseContext(), R.array.patologias, android.R.layout.simple_spinner_dropdown_item);
+        Spinner spPatologias = view.findViewById(R.id.spPatologia);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()).getBaseContext(), R.array.patologias, android.R.layout.simple_spinner_dropdown_item);
         spPatologias.setAdapter(adapter);
 
         return view;

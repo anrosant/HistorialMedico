@@ -12,10 +12,11 @@ import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AdapterItemsConsultaMedica extends BaseAdapter{
-    protected Activity activity;
-    protected ArrayList<ConsultaMedica> items;
+    private Activity activity;
+    private ArrayList<ConsultaMedica> items;
 
     public AdapterItemsConsultaMedica(Activity activity, ArrayList<ConsultaMedica> listaConsultaMedica) {
         this.activity = activity;
@@ -43,12 +44,12 @@ public class AdapterItemsConsultaMedica extends BaseAdapter{
 
         if (convertView == null) {
             LayoutInflater inf = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inf.inflate(R.layout.item_consulta_medica, null);
+            v = Objects.requireNonNull(inf).inflate(R.layout.item_consulta_medica, null);
         }
 
         ConsultaMedica consultaMedica = items.get(position);
 
-        TextView fechaConsulta = (TextView) v.findViewById(R.id.tvFechaConsulta);
+        TextView fechaConsulta = v.findViewById(R.id.tvFechaConsulta);
         fechaConsulta.setText(consultaMedica.getFechaConsulta().toString());
 
         return v;

@@ -11,8 +11,6 @@ import android.widget.Toast;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
-import com.example.cltcontrol.historialmedico.models.Diagnostico;
-import com.example.cltcontrol.historialmedico.models.DiagnosticoEnfermedad;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.models.Usuario;
@@ -22,8 +20,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public EditText etUsuario, etContrasenia;
-    public Button btnIngresar;
+    private EditText etUsuario;
+    private EditText etContrasenia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         etUsuario = findViewById(R.id.etUsuario);
         etContrasenia = findViewById(R.id.etContrasenia);
-        btnIngresar = findViewById(R.id.btnIngresar);
+        Button btnIngresar = findViewById(R.id.btnIngresar);
 
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
@@ -63,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void aperturaBusqueda(){
+    private void aperturaBusqueda(){
         Intent inbuscarempleado = new Intent(this, BuscarEmpleadoActivity.class);
         startActivity(inbuscarempleado);
     }
 
-    public void inicializarVariablesTemp(){
+    private void inicializarVariablesTemp(){
         Date fecha_actual = new Date();
 
         Usuario userTemp = new Usuario();
@@ -93,18 +91,18 @@ public class MainActivity extends AppCompatActivity {
 
         Date fecha = new Date();
 
-        AtencionEnfermeria atencion1 = new AtencionEnfermeria(fecha,"0967547365","Dolor de estomago",
+        AtencionEnfermeria atencion1 = new AtencionEnfermeria(fecha,empTemp,"Dolor de estomago",
                 "Tiene un dolor en la boca del estomago","Tomar mucha agua, con paracetamol, y descanso");
         atencion1.save();
-        AtencionEnfermeria atencion2 = new AtencionEnfermeria(fecha,"0967547365","Dolor",
+        AtencionEnfermeria atencion2 = new AtencionEnfermeria(fecha,empTemp,"Dolor",
                 "Tiene un dolor","Tomar mucha agua, con paracetamol");
         atencion2.save();
 
-        ConsultaMedica consultaMedica1 = new ConsultaMedica(empTemp.getCedula(),fecha_actual,"prov1","rev1","pres1");
+        ConsultaMedica consultaMedica1 = new ConsultaMedica(empTemp,fecha_actual,"prov1","rev1","pres1");
         consultaMedica1.save();
-        ConsultaMedica consultaMedica2 = new ConsultaMedica(empTemp.getCedula(),fecha_actual,"prov2","rev2","pres2");
+        ConsultaMedica consultaMedica2 = new ConsultaMedica(empTemp,fecha_actual,"prov2","rev2","pres2");
         consultaMedica2.save();
-        ConsultaMedica consultaMedica3 = new ConsultaMedica(empTemp2.getCedula(),fecha_actual,"prov3","rev3","pres3");
+        ConsultaMedica consultaMedica3 = new ConsultaMedica(empTemp,fecha_actual,"prov3","rev3","pres3");
         consultaMedica3.save();
         Enfermedad enf1=new Enfermedad("111","enf1","a");
         enf1.save();
@@ -114,20 +112,6 @@ public class MainActivity extends AppCompatActivity {
         enf3.save();
         Enfermedad enf4=new Enfermedad("141","enf4","a");
         enf4.save();
-
-        Diagnostico diagn1=new Diagnostico("desc1", consultaMedica1);
-        diagn1.save();
-        Diagnostico diagn2=new Diagnostico("desc2", consultaMedica1);
-        diagn1.save();
-        Diagnostico diagn3=new Diagnostico("desc3", consultaMedica2);
-        diagn3.save();
-
-        DiagnosticoEnfermedad diagnosticoEnfermedad = new DiagnosticoEnfermedad(diagn1, enf1);
-        diagnosticoEnfermedad.save();
-        DiagnosticoEnfermedad diagnosticoEnfermedad2 = new DiagnosticoEnfermedad(diagn2, enf1);
-        diagnosticoEnfermedad2.save();
-        DiagnosticoEnfermedad diagnosticoEnfermedad3 = new DiagnosticoEnfermedad(diagn2, enf2);
-        diagnosticoEnfermedad3.save();
 
     }
 

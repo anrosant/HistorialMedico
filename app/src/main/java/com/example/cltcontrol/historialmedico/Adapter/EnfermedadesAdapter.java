@@ -15,11 +15,11 @@ import java.util.ArrayList;
  * Created by jorge on 7/1/2018.
  */
 
-public class EnfermedadesAdapter extends ArrayAdapter<Enfermedad> {
+class EnfermedadesAdapter extends ArrayAdapter<Enfermedad> {
 
-    Context context;
-    int layoutResourceId;
-    ArrayList<Enfermedad> data=null;
+    private Context context;
+    private int layoutResourceId;
+    private ArrayList<Enfermedad> data=null;
 
     public EnfermedadesAdapter(Context context, int layaoutResouceId, ArrayList<Enfermedad> data) {
         super(context,layaoutResouceId,data);
@@ -37,8 +37,8 @@ public class EnfermedadesAdapter extends ArrayAdapter<Enfermedad> {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row=inflater.inflate(layoutResourceId,parent,false);
             holder = new EnfermedadHolder();
-            holder.nombre = (TextView)row.findViewById(R.id.tvNombre);
-            holder.codigo = (TextView)row.findViewById(R.id.tvCodigo);
+            holder.nombre = row.findViewById(R.id.tvNombre);
+            holder.codigo = row.findViewById(R.id.tvCodigo);
             row.setTag(holder);
 
 

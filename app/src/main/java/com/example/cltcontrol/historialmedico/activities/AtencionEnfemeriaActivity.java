@@ -11,9 +11,11 @@ import com.example.cltcontrol.historialmedico.fragments.Plan_Cuidados_Fragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 
+import java.util.Objects;
+
 public class AtencionEnfemeriaActivity extends FragmentActivity implements ComunicadorMenu {
 
-    Fragment[] misFragmentos;
+    private Fragment[] misFragmentos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,7 @@ public class AtencionEnfemeriaActivity extends FragmentActivity implements Comun
         misFragmentos[3] = new Plan_Cuidados_Fragment();
 
         Bundle extras = getIntent().getExtras();
-        menuPulsado(extras.getInt("BOTONPULSADO"));
+        menuPulsado(Objects.requireNonNull(extras).getInt("BOTONPULSADO"));
     }
 
     @Override

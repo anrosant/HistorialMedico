@@ -1,13 +1,12 @@
 package com.example.cltcontrol.historialmedico.models;
 
 import com.orm.SugarRecord;
-import com.orm.dsl.Unique;
 
 public class Enfermedad extends SugarRecord{
 
-    String codigo;
-    String nombre;
-    String grupo;
+    private String codigo;
+    private String nombre;
+    private String grupo;
 
     public Enfermedad(){
     }

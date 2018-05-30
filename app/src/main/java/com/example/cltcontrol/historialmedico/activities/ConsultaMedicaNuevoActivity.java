@@ -11,14 +11,17 @@ import com.example.cltcontrol.historialmedico.fragments.PatologiasPersonalesFrag
 import com.example.cltcontrol.historialmedico.fragments.PreescripcionFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
+import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ComunicadorMenu{
 
     private Fragment[] misFragmentos;
+    Empleado empleado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +39,11 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         menuPulsado(Objects.requireNonNull(extras).getInt("BOTONPULSADO"));
         //String idEmpleado = extras.getString("CEDULA");
         String idEmpleado = extras.getString("ID");
+        Long idConsultaMedica = extras.getLong("ID_CONSULTA_MEDICA");
         TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
-        Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
+        empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
+
 
 
     }
@@ -51,4 +56,6 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorConsultaMedica,misFragmentos[opcionMenu]).commit();
     }
+
+
 }

@@ -24,6 +24,13 @@
                 android:text="Signos Vitales" />
 
             <Button
+                android:id="@+id/btnMotivoAtencion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="10sp"
+                android:text="Motivo Consulta"/>
+
+            <Button
                 android:id="@+id/btnAntecedentesPatologicosPersonales"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,42 +45,49 @@
                 android:text="Patologias Familiares "/>
 
             <Button
-                android:id="@+id/btnrevisionmedica"
+                android:id="@+id/btnProblemaActual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="Problema Actual" />
+
+            <Button
+                android:id="@+id/btnRevisionMedica"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
                 android:text="Revision Medica" />
 
             <Button
-                android:id="@+id/btnexamenfisico"
+                android:id="@+id/btnExamenFisico"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
                 android:text="Examen Fisico" />
 
             <Button
-                android:id="@+id/btnanexarexamenes"
+                android:id="@+id/btnAnexarExamenes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
                 android:text="Anexar Examenes" />
 
             <Button
-                android:id="@+id/btndiagnostico"
+                android:id="@+id/btnDiagnostico"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
                 android:text="Diagnosticos" />
 
             <Button
-                android:id="@+id/btnprescripcion"
+                android:id="@+id/btnPrescripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
                 android:text="Prescripcion" />
 
             <Button
-                android:id="@+id/btnpermisosmedicos"
+                android:id="@+id/btnPermisosMedicos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
@@ -82,9 +96,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-
-
-
 
 </LinearLayout>

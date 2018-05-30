@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context=".fragments.PermisosMedicosFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8sp">
+
+            <Switch
+                android:id="@+id/switchGenerarPermiso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:padding="5sp"
+                android:text="Generar un permiso médico"
+                android:textColor="#FFFFFF"
+                android:textOff="No"
+                android:textOn="Yes"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/txt_fecha_desde"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:textSize="16sp"
+                android:drawableStart="@android:drawable/ic_menu_my_calendar"
+                android:clickable="true"
+                android:enabled="false"
+                android:focusable="false"
+                android:hint="Desde"
+                android:inputType="date" />
+
+            <EditText
+                android:id="@+id/txt_fecha_hasta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:textSize="16sp"
+                android:drawableStart="@android:drawable/ic_menu_my_calendar"
+                android:clickable="true"
+                android:enabled="false"
+                android:focusable="false"
+                android:hint="Hasta"
+                android:inputType="date" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20sp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvDias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="días" />
+
+                <TextView
+                    android:id="@+id/tvNumeroDias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="" />
+            </LinearLayout>
+
+            <AutoCompleteTextView
+                android:id="@+id/ac_nombre_cie10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:completionThreshold="1"
+                android:dropDownHeight="wrap_content"
+                android:enabled="false"
+                android:hint="Enfermedad" />
+
+            <AutoCompleteTextView
+                android:id="@+id/ac_codigo_cie10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:hint="Código CIE10"
+                android:dropDownHeight="wrap_content"
+                android:completionThreshold="1"
+                android:enabled="false" />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:padding="5dp"
+                android:text="Observaciones"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/txt_observacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:inputType="textMultiLine"
+                android:singleLine="false"
+                android:textSize="16sp"
+                android:hint="Agregar observación"/>
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guardar" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

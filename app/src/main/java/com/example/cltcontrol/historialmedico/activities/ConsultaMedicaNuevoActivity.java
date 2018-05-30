@@ -6,9 +6,15 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.fragments.DiagnosticoFragment;
+import com.example.cltcontrol.historialmedico.fragments.ExamenFisicoFragment;
+import com.example.cltcontrol.historialmedico.fragments.MotivoAtencionFragment;
 import com.example.cltcontrol.historialmedico.fragments.PatologiasFamiliaresFragment;
 import com.example.cltcontrol.historialmedico.fragments.PatologiasPersonalesFragment;
+import com.example.cltcontrol.historialmedico.fragments.PermisosMedicosFragment;
 import com.example.cltcontrol.historialmedico.fragments.PreescripcionFragment;
+import com.example.cltcontrol.historialmedico.fragments.ProblemaActualFragment;
+import com.example.cltcontrol.historialmedico.fragments.RevisionMedicaFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.Empleado;
@@ -25,12 +31,20 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_consulta_medica);
 
-        misFragmentos = new Fragment[4];
+
+        misFragmentos = new Fragment[10];
 
         misFragmentos[0] = new SignosVitalesFragment();
-        misFragmentos[1] = new PatologiasPersonalesFragment();
-        misFragmentos[2] = new PatologiasFamiliaresFragment();
-        misFragmentos[3] = new PreescripcionFragment();
+        misFragmentos[1] = new MotivoAtencionFragment();
+        misFragmentos[2] = new PatologiasPersonalesFragment();
+        misFragmentos[3] = new PatologiasFamiliaresFragment();
+        misFragmentos[4] = new ProblemaActualFragment();
+        misFragmentos[5] = new RevisionMedicaFragment();
+        misFragmentos[6] = new ExamenFisicoFragment();
+        //misFragmentos[8] = new anexa examenes
+        misFragmentos[7] = new DiagnosticoFragment();
+        misFragmentos[8] = new PreescripcionFragment();
+        misFragmentos[9] = new PermisosMedicosFragment();
 
         Bundle extras = this.getIntent().getExtras();
         menuPulsado(Objects.requireNonNull(extras).getInt("BOTONPULSADO"));

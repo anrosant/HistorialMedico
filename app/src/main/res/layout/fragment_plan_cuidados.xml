@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    tools:context=".fragments.SignosVitalesFragment">
+    tools:context=".fragments.Plan_Cuidados_Fragment">
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -31,18 +30,18 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
                     android:padding="5dp"
-                    android:text="PREESCRIPCION"
+                    android:text="PLAN CUIDADOS"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp" />
 
             </LinearLayout>
 
             <EditText
-                android:id="@+id/etPrescripcion"
+                android:id="@+id/etPlanCuidados"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
-                android:hint="No refiere prescripcion"
+                android:hint="No refiere plan de cuidados"
                 android:inputType="textMultiLine"
                 android:textSize="16sp" />
 
@@ -63,4 +62,4 @@
 
     </ScrollView>
 
-</LinearLayout>
+</FrameLayout>

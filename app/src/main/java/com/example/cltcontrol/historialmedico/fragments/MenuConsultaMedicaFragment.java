@@ -19,9 +19,17 @@ import java.util.Objects;
  */
 public class MenuConsultaMedicaFragment extends Fragment {
 
-    private final int[] BOTONES_MENU={R.id.btnSignosVitales, R.id.btnAntecedentesPatologicosPersonales,
-            R.id.btnAntecedentesPatologicosFamiliares,R.id.btnprescripcion};
-
+    private final int[] BOTONES_MENU={R.id.btnSignosVitales,
+            R.id.btnMotivoAtencion,
+            R.id.btnAntecedentesPatologicosPersonales,
+            R.id.btnAntecedentesPatologicosFamiliares,
+            R.id.btnProblemaActual,
+            R.id.btnRevisionMedica,
+            R.id.btnExamenFisico,
+            //R.id.btnAnexarExamenes,
+            R.id.btnDiagnostico,
+            R.id.btnPrescripcion,
+            R.id.btnPermisosMedicos};
     public MenuConsultaMedicaFragment() {
         // Required empty public constructor
     }

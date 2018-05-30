@@ -11,6 +11,11 @@ public class Enfermedad extends SugarRecord{
     public Enfermedad(){
     }
 
+    public Enfermedad(String nombre, String codigo) {
+        this.nombre = nombre;
+        this.codigo = codigo;
+    }
+
     public Enfermedad(String codigo, String nombre, String grupo) {
         this.codigo = codigo;
         this.nombre = nombre;

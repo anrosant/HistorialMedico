@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Plan_Cuidados_Fragment">
-
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context=".fragments.ProblemaActualFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,7 +17,6 @@
             android:orientation="vertical"
             android:gravity="center"
             android:layout_margin="5dp">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,18 +30,18 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
                     android:padding="5dp"
-                    android:text="PLAN CUIDADOS"
+                    android:text="ENFERMEDAD PROBLEMA ACTUAL"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp" />
 
             </LinearLayout>
 
             <EditText
-                android:id="@+id/txt_prescripcion"
+                android:id="@+id/etProblemActual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
-                android:hint="No refiere prescripcion"
+                android:hint="No refiere problema actual"
                 android:inputType="textMultiLine"
                 android:textSize="16sp" />
 
@@ -56,10 +56,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Guardar" />
+
             </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
 
-</FrameLayout>
+</LinearLayout>

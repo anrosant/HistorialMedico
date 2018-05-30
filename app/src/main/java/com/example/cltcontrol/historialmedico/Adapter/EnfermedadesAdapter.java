@@ -1,60 +1,60 @@
 package com.example.cltcontrol.historialmedico.Adapter;
 
-import android.app.Activity;
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
+
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created by jorge on 7/1/2018.
- */
+public class EnfermedadesAdapter extends RecyclerView.Adapter<EnfermedadesAdapter.ViewHolder> {
 
-class EnfermedadesAdapter extends ArrayAdapter<Enfermedad> {
+    List<Enfermedad> listaEnfermedades;
 
-    private Context context;
-    private int layoutResourceId;
-    private ArrayList<Enfermedad> data=null;
-
-    public EnfermedadesAdapter(Context context, int layaoutResouceId, ArrayList<Enfermedad> data) {
-        super(context,layaoutResouceId,data);
-
-        this.context=context;
-        this.layoutResourceId=layaoutResouceId;
-        this.data=data;
+    public EnfermedadesAdapter(List<Enfermedad> listaEnfermedades) {
+        this.listaEnfermedades = listaEnfermedades;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent){
-        View row =convertView;
-        EnfermedadHolder holder = null;
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_enfermedades,null,false);
 
-        if (row==null){
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            row=inflater.inflate(layoutResourceId,parent,false);
-            holder = new EnfermedadHolder();
-            holder.nombre = row.findViewById(R.id.tvNombre);
-            holder.codigo = row.findViewById(R.id.tvCodigo);
-            row.setTag(holder);
+        return new ViewHolder(view);
+    }
 
+    @Override
+    public void onBindViewHolder(EnfermedadesAdapter.ViewHolder holder, int position) {
+        holder.tvNombreCie10items.setText(listaEnfermedades.get(position).getNombre());
+        holder.tvCodigoCie10items.setText(listaEnfermedades.get(position).getCodigo());
 
-        }else{
-            holder=(EnfermedadHolder)row.getTag();
+    }
+
+    @Override
+    public int getItemCount() {
+        return listaEnfermedades.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvNombreCie10items, tvCodigoCie10items;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            tvNombreCie10items = itemView.findViewById(R.id.tvNombreCie10items);
+            tvCodigoCie10items = itemView.findViewById(R.id.tvCodigoCie10items);
+
         }
-
-        Enfermedad enfermedades = data.get(position);
-        holder.nombre.setText(enfermedades.getNombre());
-        holder.codigo.setText(enfermedades.getCodigo());
-
-        return row;
     }
 
-    static class EnfermedadHolder{
-        TextView nombre;
-        TextView codigo;
+    public void setFilter(List<Enfermedad> newList){
+        listaEnfermedades = new ArrayList<>();
+        listaEnfermedades.addAll(newList);
+        notifyDataSetChanged();
     }
 }
+

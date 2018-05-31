@@ -16,11 +16,14 @@
             android:id="@+id/etBusquedaUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/ic_menu_search"
+            android:drawableStart="@android:drawable/ic_menu_search"
             android:textColor="#FFFFFF"
             android:hint="Buscar empleados"
-            android:paddingLeft="15dp"
-            android:textSize="18dp"
+            android:inputType="text"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXYZ"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:textSize="18sp"
             android:singleLine="true" />
     </LinearLayout>
 

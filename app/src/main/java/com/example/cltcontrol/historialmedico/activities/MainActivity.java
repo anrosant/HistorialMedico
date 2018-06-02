@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
         if(!usuarios.isEmpty()){
             //usuario = usuarios.get(0);
             aperturaBusqueda();
-            Toast.makeText(getApplicationContext(), "Ingreso exitoso",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Ingreso exitoso",Toast.LENGTH_SHORT).show();
         }else{
             etContrasenia.setText("");
-            Toast.makeText(getApplicationContext(), "No se encuentra el usuario",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Usuario y/o contraseña incorrecto",Toast.LENGTH_SHORT).show();
         }
     }
 

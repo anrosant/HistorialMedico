@@ -12,16 +12,13 @@ import com.example.cltcontrol.historialmedico.fragments.MotivoAtencionFragment;
 import com.example.cltcontrol.historialmedico.fragments.PatologiasFamiliaresFragment;
 import com.example.cltcontrol.historialmedico.fragments.PatologiasPersonalesFragment;
 import com.example.cltcontrol.historialmedico.fragments.PermisosMedicosFragment;
-import com.example.cltcontrol.historialmedico.fragments.PreescripcionFragment;
+import com.example.cltcontrol.historialmedico.fragments.PrescripcionFragment;
 import com.example.cltcontrol.historialmedico.fragments.ProblemaActualFragment;
 import com.example.cltcontrol.historialmedico.fragments.RevisionMedicaFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
-import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ComunicadorMenu{
@@ -46,7 +43,7 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         misFragmentos[6] = new ExamenFisicoFragment();
         //misFragmentos[8] = new anexa examenes
         misFragmentos[7] = new DiagnosticoFragment();
-        misFragmentos[8] = new PreescripcionFragment();
+        misFragmentos[8] = new PrescripcionFragment();
         misFragmentos[9] = new PermisosMedicosFragment();
 
         Bundle extras = this.getIntent().getExtras();

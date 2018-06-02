@@ -74,9 +74,9 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                 new RecyclerItemClickListener(getApplicationContext(), recyclerEmpleados,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
 
+                        //Envia el id del empleado a MenuEmpleadoActivity
                         Intent i = new Intent(getApplicationContext(), MenuEmpleadoActivity.class);
                         i.putExtra("ID", String.valueOf(empleadosList.get(position).getId()));
-                        i.putExtra("CEDULA",String.valueOf(empleadosList.get(position).getCedula()));
                         startActivity(i);
 
                     }

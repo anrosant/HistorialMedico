@@ -21,11 +21,11 @@ public class ConsultaMedica extends SugarRecord{
         this.prescripcion = prescripcion;
     }
 
-    public Empleado getCedulaEmpleado() {
+    public Empleado getEmpleado() {
         return empleado;
     }
 
-    public void setCedulaEmpleado(Empleado empleado) {
+    public void setEmpleado(Empleado empleado) {
         this.empleado = empleado;
     }
 

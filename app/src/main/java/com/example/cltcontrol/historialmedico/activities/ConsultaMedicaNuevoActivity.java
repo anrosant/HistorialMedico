@@ -51,9 +51,11 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
 
         Bundle extras = this.getIntent().getExtras();
         menuPulsado(Objects.requireNonNull(extras).getInt("BOTONPULSADO"));
-        //String idEmpleado = extras.getString("CEDULA");
-        String idEmpleado = extras.getString("ID");
-        Long idConsultaMedica = extras.getLong("ID_CONSULTA_MEDICA");
+
+        //Recibe el id del empleado desde el HistorialConsultaMedica
+        String idEmpleado = extras.getString("ID_EMPLEADO");
+
+        //Coloca los datos del empleado en el fragment de informacion
         TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());

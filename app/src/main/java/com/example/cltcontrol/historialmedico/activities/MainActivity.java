@@ -30,37 +30,38 @@ public class MainActivity extends AppCompatActivity {
 
         etUsuario = findViewById(R.id.etUsuario);
         etContrasenia = findViewById(R.id.etContrasenia);
-        Button btnIngresar = findViewById(R.id.btnIngresar);
 
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
-        inicializarVariablesTemp();
+
+        //Almacena datos temporales
+        //inicializarVariablesTemp();
 
     }
-
+    /*
+    * Verifica si el usuario y contrasenia son correctos
+    * si lo son, va a la funcion aperturarBusqeuda
+    * Caso contrario, imprime un mensaje de error*/
     public void ingresoSistema(View v){
         String nombreUsuario = etUsuario.getText().toString();
         String contrasenia = etContrasenia.getText().toString();
-        Usuario usuario;
+        //Usuario usuario;
 
-        List<Usuario> usuarios = Usuario.find(Usuario.class, "usuario = ?",nombreUsuario);
+        List<Usuario> usuarios = Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?",nombreUsuario, contrasenia);
 
         if(!usuarios.isEmpty()){
-            usuario = usuarios.get(0);
-            if(usuario.getContrasenia().equals(contrasenia)){
-                Toast.makeText(getApplicationContext(), "Ingreso exitoso",Toast.LENGTH_SHORT).show();
-                aperturaBusqueda();
-            }else{
-                Toast.makeText(getApplicationContext(), "Contraseña incorrecta",Toast.LENGTH_SHORT).show();
-                etContrasenia.setText("");
-            }
+            //usuario = usuarios.get(0);
+            aperturaBusqueda();
+            Toast.makeText(getApplicationContext(), "Ingreso exitoso",Toast.LENGTH_SHORT).show();
         }else{
+            etContrasenia.setText("");
             Toast.makeText(getApplicationContext(), "No se encuentra el usuario",Toast.LENGTH_SHORT).show();
         }
     }
 
+    //Ingresa a BuscarEmpleadoActivity
     private void aperturaBusqueda(){
         Intent inbuscarempleado = new Intent(this, BuscarEmpleadoActivity.class);
         startActivity(inbuscarempleado);

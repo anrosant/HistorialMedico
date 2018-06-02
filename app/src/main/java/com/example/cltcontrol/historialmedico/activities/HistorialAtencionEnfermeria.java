@@ -26,15 +26,19 @@ public class HistorialAtencionEnfermeria extends FragmentActivity implements Com
 
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
 
+        //Recibe el id del empleado desde MenuEmpleadoActivity
         Intent inMenuEmpleado = getIntent();
         idEmpleado = inMenuEmpleado.getStringExtra("ID");
         ListView lv = findViewById(R.id.lvAtencionEnfermeria);
 
+        //Obtiene las atenciones de enfermeria de un empleado
         List<AtencionEnfermeria> atencionEnfermeriaList = AtencionEnfermeria.find(AtencionEnfermeria.class, "empleado = ?", idEmpleado);
 
+        //Crea un adapter de dicha lista y la muestra en un listview
         AdapterItemsAtencionEnfermeria adapter = new AdapterItemsAtencionEnfermeria(this, (ArrayList<AtencionEnfermeria>) atencionEnfermeriaList);
         lv.setAdapter(adapter);
 
+        //Busca al empleado con el id y muestra la informacion en el frgagment de informacion
         Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
     }

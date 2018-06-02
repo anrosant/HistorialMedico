@@ -31,11 +31,14 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
         lvConsultasMedicas = findViewById(R.id.lvConsultasMedicas);
 
+        //Recibe el id del empleado desde MenuEmpleadoActivity
         Intent inMenuEmpleado = getIntent();
         idEmpleado = inMenuEmpleado.getStringExtra("ID");
 
+        //Busca las consultas medica de un empleado
         List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "empleado = ?", idEmpleado);
 
+        //Muestra los datos de las consultas medica en el listview
         AdapterItemsConsultaMedica adapter = new AdapterItemsConsultaMedica(this, (ArrayList<ConsultaMedica>) consultaMedicaList);
         lvConsultasMedicas.setAdapter(adapter);
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
@@ -46,22 +49,22 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
 
     @Override
     public void menuPulsado(int opcionMenu) {
-        //Se crea una consulta medica
-        Date fecha_actual = new Date();
-        //Sacar los tres ultimos valores de la ficha medica (WEB)
-        ConsultaMedica consultaMedica = new ConsultaMedica(empleado, fecha_actual,
-                "Problema act", "Rev aparatos", "Preescripcion");
+        //Se crea una consulta medica vacia
+        /*ConsultaMedica consultaMedica = new ConsultaMedica(empleado, fecha_actual,
+                "Problema act", "Rev aparatos", "Preescripcion");*/
+        ConsultaMedica consultaMedica=new ConsultaMedica();
         consultaMedica.save();
 
-        Intent inMenu = new Intent(getApplicationContext(),ConsultaMedicaNuevoActivity.class);
-        inMenu.putExtra("BOTONPULSADO",opcionMenu);
-        inMenu.putExtra("ID",idEmpleado);
-        inMenu.putExtra("ID_CONSULTA_MEDICA",consultaMedica.getId());
+        //Envia el id del empleado y de la nueva consulta medica a ConsultaMedicaNuevoActivity
+        Intent inConsultaMedicaNuevoAct = new Intent(getApplicationContext(),ConsultaMedicaNuevoActivity.class);
+        inConsultaMedicaNuevoAct.putExtra("BOTONPULSADO",opcionMenu);
+        inConsultaMedicaNuevoAct.putExtra("ID_EMPLEADO",idEmpleado);
+        inConsultaMedicaNuevoAct.putExtra("ID_CONSULTA_MEDICA",String.valueOf(consultaMedica.getId()));
 
 
         Bundle datos = new Bundle();
         datos.putInt("BOTONPULSADO",opcionMenu);
-        startActivity(inMenu);
+        startActivity(inConsultaMedicaNuevoAct);
     }
 
 

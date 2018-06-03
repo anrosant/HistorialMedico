@@ -4,8 +4,8 @@ import com.orm.SugarRecord;
 
 public class SignosVitales extends SugarRecord {
     private int presion_sistolica, presion_distolica, pulso, temperatura;
-    private ConsultaMedica consultaMedica;
-    private AtencionEnfermeria atencionEnfermeria;
+    private ConsultaMedica consulta_medica;
+    private AtencionEnfermeria atencion_enfermeria;
 
     public SignosVitales() {
     }
@@ -15,14 +15,14 @@ public class SignosVitales extends SugarRecord {
         this.presion_distolica = presion_distolica;
         this.pulso = pulso;
         this.temperatura = temperatura;
-        this.consultaMedica = consultaMedica;
+        this.consulta_medica = consultaMedica;
     }
-    public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, int temperatura, AtencionEnfermeria atencionEnfermeria) {
+    public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, int temperatura, AtencionEnfermeria atencion_enfermeria) {
         this.presion_sistolica = presion_sistolica;
         this.presion_distolica = presion_distolica;
         this.pulso = pulso;
         this.temperatura = temperatura;
-        this.atencionEnfermeria = atencionEnfermeria;
+        this.atencion_enfermeria = atencion_enfermeria;
     }
     public int getPresion_sistolica() {
         return presion_sistolica;
@@ -57,18 +57,18 @@ public class SignosVitales extends SugarRecord {
     }
 
     public ConsultaMedica getConsultaMedica() {
-        return consultaMedica;
+        return consulta_medica;
     }
 
     public void setConsultaMedica(ConsultaMedica consultaMedica) {
-        this.consultaMedica = consultaMedica;
+        this.consulta_medica = consultaMedica;
     }
 
-    public AtencionEnfermeria getAtencionEnfermeria() {
-        return atencionEnfermeria;
+    public AtencionEnfermeria getAtencion_enfermeria() {
+        return atencion_enfermeria;
     }
 
-    public void setAtencionEnfermeria(AtencionEnfermeria atencionEnfermeria) {
-        this.atencionEnfermeria = atencionEnfermeria;
+    public void setAtencion_enfermeria(AtencionEnfermeria atencion_enfermeria) {
+        this.atencion_enfermeria = atencion_enfermeria;
     }
 }

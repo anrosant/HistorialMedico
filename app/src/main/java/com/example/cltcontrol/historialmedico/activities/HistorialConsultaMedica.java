@@ -3,6 +3,7 @@ package com.example.cltcontrol.historialmedico.activities;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,10 +38,11 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
 
         //Busca las consultas medica de un empleado
         List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "empleado = ?", idEmpleado);
-
+        Log.d("size consultamedicalist", String.valueOf(consultaMedicaList.size()));
         //Muestra los datos de las consultas medica en el listview
         AdapterItemsConsultaMedica adapter = new AdapterItemsConsultaMedica(this, (ArrayList<ConsultaMedica>) consultaMedicaList);
         lvConsultasMedicas.setAdapter(adapter);
+
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
     }

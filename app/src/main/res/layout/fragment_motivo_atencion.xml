@@ -36,7 +36,7 @@
             </LinearLayout>
 
             <EditText
-                android:id="@+id/txt_prescripcion"
+                android:id="@+id/txt_motivo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"

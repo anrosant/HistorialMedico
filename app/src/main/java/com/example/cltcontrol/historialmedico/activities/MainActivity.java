@@ -99,11 +99,11 @@ public class MainActivity extends AppCompatActivity {
                 "Tiene un dolor","Tomar mucha agua, con paracetamol");
         atencion2.save();
 
-        ConsultaMedica consultaMedica1 = new ConsultaMedica(empTemp,fecha_actual,"prov1","rev1","pres1");
+        ConsultaMedica consultaMedica1 = new ConsultaMedica(empTemp,fecha_actual,"prov1","rev1","pres1", "ex1","motivo1");
         consultaMedica1.save();
-        ConsultaMedica consultaMedica2 = new ConsultaMedica(empTemp,fecha_actual,"prov2","rev2","pres2");
+        ConsultaMedica consultaMedica2 = new ConsultaMedica(empTemp,fecha_actual,"prov2","rev2","pres2","ex2", "motivo2");
         consultaMedica2.save();
-        ConsultaMedica consultaMedica3 = new ConsultaMedica(empTemp,fecha_actual,"prov3","rev3","pres3");
+        ConsultaMedica consultaMedica3 = new ConsultaMedica(empTemp,fecha_actual,"prov3","rev3","pres3", "ex3","motivo3");
         consultaMedica3.save();
         Enfermedad enf1=new Enfermedad("enf1","111");
         enf1.save();

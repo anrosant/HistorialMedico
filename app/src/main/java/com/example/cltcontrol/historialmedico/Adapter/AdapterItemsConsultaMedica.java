@@ -2,6 +2,7 @@ package com.example.cltcontrol.historialmedico.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,6 @@ public class AdapterItemsConsultaMedica extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-
         if (convertView == null) {
             LayoutInflater inf = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = Objects.requireNonNull(inf).inflate(R.layout.item_consulta_medica, null);

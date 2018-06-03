@@ -4,21 +4,25 @@ import com.orm.SugarRecord;
 
 import java.util.Date;
 
-public class ConsultaMedica extends SugarRecord{
+public class ConsultaMedica extends SugarRecord {
     private Empleado empleado;
     //private String cedulaEmpleado;
     private Date fechaConsulta;
-    private String probActual, revAparatos, prescripcion;
+    private String probActual, prescripcion, motivo, revision_medica, examen_fisico;
 
     public ConsultaMedica() {
     }
 
-    public ConsultaMedica(Empleado empleado, Date fechaConsulta, String probActual, String revAparatos, String prescripcion) {
+    public ConsultaMedica(Empleado empleado, Date fechaConsulta, String probActual,
+                          String revisionMedica, String prescripcion, String examen_fisico,
+                          String motivo) {
         this.empleado = empleado;
         this.fechaConsulta = fechaConsulta;
         this.probActual = probActual;
-        this.revAparatos = revAparatos;
+        this.revision_medica = revisionMedica;
         this.prescripcion = prescripcion;
+        this.examen_fisico = examen_fisico;
+        this.motivo = motivo;
     }
 
     public Empleado getEmpleado() {
@@ -45,19 +49,35 @@ public class ConsultaMedica extends SugarRecord{
         this.probActual = probActual;
     }
 
-    public String getRevAparatos() {
-        return revAparatos;
-    }
-
-    public void setRevAparatos(String revAparatos) {
-        this.revAparatos = revAparatos;
-    }
-
     public String getPrescripcion() {
         return prescripcion;
     }
 
     public void setPrescripcion(String prescripcion) {
         this.prescripcion = prescripcion;
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+    public String getRevision_medica() {
+        return revision_medica;
+    }
+
+    public void setRevision_medica(String revision_medica) {
+        this.revision_medica = revision_medica;
+    }
+
+    public String getExamen_fisico() {
+        return examen_fisico;
+    }
+
+    public void setExamen_fisico(String examen_fisico) {
+        this.examen_fisico = examen_fisico;
     }
 }

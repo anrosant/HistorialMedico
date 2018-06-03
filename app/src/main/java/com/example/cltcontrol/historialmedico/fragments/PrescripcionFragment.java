@@ -33,7 +33,7 @@ public class PrescripcionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_preescripcion, container, false);
+        View view = inflater.inflate(R.layout.fragment_prescripcion, container, false);
         etPrescripcion = view.findViewById(R.id.etPrescripcion);
         btn_guardar = view.findViewById(R.id.btnGuardar);
 

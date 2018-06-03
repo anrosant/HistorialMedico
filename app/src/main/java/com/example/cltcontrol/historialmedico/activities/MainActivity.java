@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 .build());
 
         //Almacena datos temporales
-        //inicializarVariablesTemp();
+        inicializarVariablesTemp();
 
     }
     /*

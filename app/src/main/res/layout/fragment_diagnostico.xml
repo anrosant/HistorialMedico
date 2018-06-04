@@ -83,6 +83,7 @@
                 android:gravity="center_horizontal">
 
                 <RadioGroup
+                    android:id="@+id/rgTipoEnfer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -92,13 +93,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10sp"
-                        android:text="Presuntorio"/>
+                        android:text="Presuntorio"
+                        android:checked="true"/>
 
                     <RadioButton
                         android:id="@+id/rbDefinitorio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Definitorio"/>
+                        android:text="Definitorio" />
 
                 </RadioGroup>
 
@@ -114,7 +116,31 @@
                     android:id="@+id/btnGuardar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Guardar" />
+                    android:text="Agregar" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:padding="5dp"
+                    android:text="REGISTRO DE DIAGNOSTICO"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+                <ListView
+                    android:id="@+id/lvDiagnostico"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </ListView>
+
             </LinearLayout>
 
         </LinearLayout>

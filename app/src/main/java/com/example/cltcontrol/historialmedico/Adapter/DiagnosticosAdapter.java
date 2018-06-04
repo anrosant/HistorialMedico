@@ -52,8 +52,8 @@ class DiagnosticosAdapter extends ArrayAdapter<Diagnostico> {
         }
 
         Diagnostico diagnosticos = data.get(position);
-        holder.enfermedad.setText(diagnosticos.getEnfermedad());
-        holder.codigo.setText(diagnosticos.getCodigo());
+        holder.enfermedad.setText(diagnosticos.getEnfermedad().getNombre());
+        holder.codigo.setText(diagnosticos.getEnfermedad().getCodigo());
         holder.tipoEnfermedad.setText(diagnosticos.getTipoEnfermedad());
 
         return row;

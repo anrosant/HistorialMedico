@@ -89,10 +89,13 @@ public class SignosVitalesFragment extends Fragment {
     }
 
     public void guardarSignosVitales(){
-        //Guarda el id del empleado en la consulta y la fecha de consulta
-        consultaMedica.setEmpleado(empleado);
-        consultaMedica.setFechaConsulta(new Date());
-        consultaMedica.save();
+        //Si es la primera vez que crea la consulta medica
+        if(consultaMedica.getEmpleado()==null){
+            //Guarda el id del empleado en la consulta y la fecha de consulta
+            consultaMedica.setEmpleado(empleado);
+            consultaMedica.setFechaConsulta(new Date());
+            consultaMedica.save();
+        }
 
         //Recibe los datos de signos vitales
         String presionSistolicaText = etPSistolica.getText().toString();
@@ -122,10 +125,8 @@ public class SignosVitalesFragment extends Fragment {
         SignosVitales signosVitales = new SignosVitales(presionSistolica,presionDistolica,pulso,temp,consultaMedica);
         signosVitales.save();
 
-        //adapterSignosVitales.notifyDataSetChanged();
         ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class, "consultamedica = ?", String.valueOf(consultaMedica.getId()));
         adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
-        //lvSignosVitales.setAdapter(adapterSignosVitales);
         Toast.makeText(getContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();
 
     }

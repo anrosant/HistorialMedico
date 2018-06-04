@@ -155,7 +155,7 @@ public class DiagnosticoFragment extends Fragment {
     }
 
     private void guardarDiagnostico() {
-        if(enfermedad == null){
+        if(enfermedad == null || tipo_enfermedad==null){
             Toast.makeText(getContext(),"No ha seleccionado ninguna enfermedad",Toast.LENGTH_SHORT).show();
         }else {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
@@ -185,7 +185,6 @@ public class DiagnosticoFragment extends Fragment {
             Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_LONG).show();
         }
     }
-
 
 
 }

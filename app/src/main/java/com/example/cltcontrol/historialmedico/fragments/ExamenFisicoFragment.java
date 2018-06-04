@@ -62,8 +62,12 @@ public class ExamenFisicoFragment extends Fragment {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             consultaMedica.setExamen_fisico(examen_fisico);
             consultaMedica.save();
+            limpiarCampos();
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void limpiarCampos(){
+        etExamenFisico.setText("");
     }
 
 

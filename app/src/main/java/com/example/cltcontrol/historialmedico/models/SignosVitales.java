@@ -3,21 +3,22 @@ package com.example.cltcontrol.historialmedico.models;
 import com.orm.SugarRecord;
 
 public class SignosVitales extends SugarRecord {
-    private int presion_sistolica, presion_distolica, pulso, temperatura;
+    private int presion_sistolica, presion_distolica, pulso;
+    private float temperatura;
     private ConsultaMedica consulta_medica;
     private AtencionEnfermeria atencion_enfermeria;
 
     public SignosVitales() {
     }
 
-    public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, int temperatura, ConsultaMedica consultaMedica) {
+    public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, float temperatura, ConsultaMedica consultaMedica) {
         this.presion_sistolica = presion_sistolica;
         this.presion_distolica = presion_distolica;
         this.pulso = pulso;
         this.temperatura = temperatura;
         this.consulta_medica = consultaMedica;
     }
-    public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, int temperatura, AtencionEnfermeria atencion_enfermeria) {
+    public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, float temperatura, AtencionEnfermeria atencion_enfermeria) {
         this.presion_sistolica = presion_sistolica;
         this.presion_distolica = presion_distolica;
         this.pulso = pulso;
@@ -48,11 +49,11 @@ public class SignosVitales extends SugarRecord {
         this.pulso = pulso;
     }
 
-    public int getTemperatura() {
+    public float getTemperatura() {
         return temperatura;
     }
 
-    public void setTemperatura(int temperatura) {
+    public void setTemperatura(float temperatura) {
         this.temperatura = temperatura;
     }
 

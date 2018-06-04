@@ -1,10 +1,7 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.example.cltcontrol.historialmedico.Adapter.AdapterSignosVitales;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,9 +30,8 @@ public class SignosVitalesFragment extends Fragment {
     ListView lvSignosVitales;
     AdapterSignosVitales adapterSignosVitales;
     Empleado empleado;
-    public SignosVitalesFragment() {
-        // Required empty public constructor
-    }
+
+    public SignosVitalesFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,9 +44,7 @@ public class SignosVitalesFragment extends Fragment {
         etTemperatura = view.findViewById(R.id.etTemperatura);
         etPulso = view.findViewById(R.id.etPulso);
         lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
-
-
-        btn_guardar=view.findViewById(R.id.btnGuardar);
+        btn_guardar = view.findViewById(R.id.btnGuardar);
 
         //
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
@@ -71,9 +63,7 @@ public class SignosVitalesFragment extends Fragment {
             //Crea un adapter de dicha lista y la muestra en un listview
             adapterSignosVitales = new AdapterSignosVitales(getContext(), (ArrayList<SignosVitales>) signosVitalesList);
             lvSignosVitales.setAdapter(adapterSignosVitales);
-
         }
-
 
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,10 +72,6 @@ public class SignosVitalesFragment extends Fragment {
             }
         });
         return view;
-
-
-
-
     }
 
     public void guardarSignosVitales(){
@@ -103,32 +89,41 @@ public class SignosVitalesFragment extends Fragment {
         String temperaturatext = etTemperatura.getText().toString();
         String pulsoText = etPulso.getText().toString();
 
-        int presionSistolica=0, presionDistolica=0, temp=0, pulso=0;
-
-        if(!presionDistolicaText.equals("")) {
-            presionSistolica = Integer.parseInt(presionSistolicaText);
+        if(presionDistolicaText.equals("") || presionSistolicaText.equals("") ||
+                temperaturatext.equals("") || pulsoText.equals("")){
+            Toast.makeText(getContext(),"No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        if(!presionSistolicaText.equals("")) {
-            presionSistolica = Integer.parseInt(presionSistolicaText);
-        }
-
-        if(!temperaturatext.equals("")) {
-            temp = Integer.parseInt(temperaturatext);
-        }
-
-        if(!pulsoText.equals("")) {
-            pulso = Integer.parseInt(pulsoText);
+        int presionSistolica = Integer.parseInt(presionSistolicaText);
+        int presionDistolica = Integer.parseInt(presionDistolicaText);
+        float temp = Float.parseFloat(temperaturatext);
+        int pulso = Integer.parseInt(pulsoText);
+        if(presionSistolica < 100 || presionSistolica > 135 || presionDistolica < 70 || presionDistolica > 90 ||
+                pulso < 60 || pulso > 100 || temp < 34.0 || temp > 43.0){
+            Toast.makeText(getContext(),"Los valores están fuera de rango", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         //Guarda los datos y el id de la consulta medica
         SignosVitales signosVitales = new SignosVitales(presionSistolica,presionDistolica,pulso,temp,consultaMedica);
         signosVitales.save();
 
-        ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class, "consultamedica = ?", String.valueOf(consultaMedica.getId()));
+        //adapterSignosVitales.notifyDataSetChanged();
+        ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
+                "consultamedica = ?", String.valueOf(consultaMedica.getId()));
+
         adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
         Toast.makeText(getContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();
+        limpiarCampos();
+    }
 
+    private void limpiarCampos(){
+        etPSistolica.setText("");
+        etPDistolica.setText("");
+        etTemperatura.setText("");
+        etPulso.setText("");
+        etPSistolica.requestFocus();
     }
 
 }

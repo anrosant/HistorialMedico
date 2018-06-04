@@ -63,8 +63,12 @@ public class ProblemaActualFragment extends Fragment {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             consultaMedica.setProbActual(problema_actual);
             consultaMedica.save();
+            limpiarCampos();
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void limpiarCampos(){
+        etProblemActual.setText("");
     }
 
 }

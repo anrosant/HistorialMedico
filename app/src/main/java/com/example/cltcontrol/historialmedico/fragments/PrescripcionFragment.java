@@ -33,7 +33,7 @@ public class PrescripcionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_preescripcion, container, false);
+        View view = inflater.inflate(R.layout.fragment_prescripcion, container, false);
         etPrescripcion = view.findViewById(R.id.etPrescripcion);
         btn_guardar = view.findViewById(R.id.btnGuardar);
 
@@ -62,8 +62,13 @@ public class PrescripcionFragment extends Fragment {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             consultaMedica.setPrescripcion(preescripcion);
             consultaMedica.save();
+            limpiarCampos();
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void limpiarCampos(){
+        etPrescripcion.setText("");
     }
 
 }

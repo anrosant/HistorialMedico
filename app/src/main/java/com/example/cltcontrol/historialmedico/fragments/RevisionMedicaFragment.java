@@ -62,8 +62,12 @@ public class RevisionMedicaFragment extends Fragment {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             consultaMedica.setRevision_medica(revision_medica);
             consultaMedica.save();
+            limpiarCampos();
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void limpiarCampos(){
+        etRevisionMedica.setText("");
     }
 
 }

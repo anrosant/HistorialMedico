@@ -44,7 +44,8 @@
             android:label="@string/menu_empleado"/>
         <activity
             android:name=".activities.ConsultaMedicaNuevoActivity"
-            android:label="@string/consulta_medica_nuevo"/>
+            android:label="@string/consulta_medica_nuevo"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activities.AtencionEnfemeriaActivity"
             android:label="@string/consulta_medica_nuevo"/>

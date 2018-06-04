@@ -63,8 +63,12 @@ public class MotivoAtencionFragment extends Fragment {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             consultaMedica.setMotivo(motivo);
             consultaMedica.save();
+            limpiarCampos();
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void limpiarCampos(){
+        etMotivoAtencion.setText("");
     }
 
 }

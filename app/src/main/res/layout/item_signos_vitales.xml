@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Presion" />
+                android:text="Presión" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,7 +59,7 @@
                     android:singleLine="true"
                     android:maxLength="3"
                     android:textAlignment="center"
-                    android:hint="Diast"
+                    android:hint="Dist"
                     android:textColor="@android:color/black" />
 
                 <TextView
@@ -70,6 +70,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,9 +96,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ppm"
-                android:textSize="18dp"/>
+                android:textSize="18sp"/>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -112,9 +114,9 @@
                 android:id="@+id/etTemperatura"
                 android:layout_width="55dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:singleLine="true"
-                android:maxLength="2"
+                android:maxLength="4"
                 android:textAlignment="center"
                 android:hint="Temp"
                 android:textColor="@android:color/black" />
@@ -123,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="°C"
-                android:textSize="18dp"/>
+                android:textSize="18sp"/>
 
         </LinearLayout>
 

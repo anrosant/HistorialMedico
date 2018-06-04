@@ -27,8 +27,6 @@ public class AdapterSignosVitales extends ArrayAdapter<SignosVitales> {
     private List<SignosVitales> signosVitalesList;
     private SignosVitalesFragment activity;
 
-
-
     public AdapterSignosVitales(Context context, List<SignosVitales> signosVitalesList) {
             super(context, 0, signosVitalesList);
             this.context = context;

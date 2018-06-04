@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.cltcontrol.historialmedico.Adapter.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 .build());
 
         //Almacena datos temporales
-        inicializarVariablesTemp();
+        //inicializarVariablesTemp();
 
     }
     /*
@@ -49,37 +49,41 @@ public class MainActivity extends AppCompatActivity {
         String contrasenia = etContrasenia.getText().toString();
         //Usuario usuario;
 
-        List<Usuario> usuarios = Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?",nombreUsuario, contrasenia);
+        List<Usuario> usuarios = Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?", nombreUsuario, contrasenia);
 
         if(!usuarios.isEmpty()){
-            //usuario = usuarios.get(0);
-            aperturaBusqueda();
-            //Toast.makeText(getApplicationContext(), "Ingreso exitoso",Toast.LENGTH_SHORT).show();
-        }else{
+            aperturaBusqueda(usuarios.get(0).getId());
+        } else {
+            etUsuario.setText("");
             etContrasenia.setText("");
             Toast.makeText(getApplicationContext(), "Usuario y/o contraseña incorrecto",Toast.LENGTH_SHORT).show();
         }
     }
 
     //Ingresa a BuscarEmpleadoActivity
-    private void aperturaBusqueda(){
+    private void aperturaBusqueda(Long usu_id){
+        SessionManager sesion = new SessionManager(getApplicationContext());
+        sesion.crearSesion(usu_id);
         Intent inbuscarempleado = new Intent(this, BuscarEmpleadoActivity.class);
         startActivity(inbuscarempleado);
     }
 
     private void inicializarVariablesTemp(){
         Date fecha_actual = new Date();
-
-        Usuario userTemp = new Usuario();
-        userTemp.setUsuario("a");
-        userTemp.setContrasenia("a");
-        userTemp.save();
+        Usuario usu_doctor = new Usuario();
+        Usuario usu_enfermera = new Usuario();
+        usu_doctor.setUsuario("j");
+        usu_doctor.setContrasenia("j");
+        usu_doctor.save();
+        usu_enfermera.setUsuario("a");
+        usu_enfermera.setContrasenia("a");
+        usu_enfermera.save();
 
         Empleado empTemp=new Empleado("03214567323","Jorge","García",
                 "jorergar@espol.edu.ec","FAE",
                 "Ingeniero en Ciencias Computacionales","Soltero",
                 "Masculino","Guayaquil",
-                "Sistemas",fecha_actual,fecha_actual,30,R.drawable.modelo);
+                "Doctor",fecha_actual,fecha_actual,30,R.drawable.modelo, usu_doctor);
         empTemp.save();
 
 
@@ -87,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 "anrosant@espol.edu.ec","Sauces",
                 "Ingeniera en Ciencias Computacionales","Soltera",
                 "Femenino","Guayaquil",
-                "enfermera",fecha_actual,fecha_actual,20,R.drawable.modelo,userTemp);
+                "Enfermera",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_enfermera);
         empTemp2.save();
 
         Date fecha = new Date();

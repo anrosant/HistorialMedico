@@ -6,8 +6,10 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.Adapter.AdapterItemsAtencionEnfermeria;
+import com.example.cltcontrol.historialmedico.Adapter.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
@@ -25,6 +27,10 @@ public class HistorialAtencionEnfermeria extends FragmentActivity implements Com
         setContentView(R.layout.activity_historial_atencion_enfermeria);
 
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+
+        //Obtener el cargo del usuario que inició sesión
+        SessionManager sesion = new SessionManager(getApplicationContext());
+        String cargo = sesion.obtenerInfoUsuario().get("cargo");
 
         //Recibe el id del empleado desde MenuEmpleadoActivity
         Intent inMenuEmpleado = getIntent();

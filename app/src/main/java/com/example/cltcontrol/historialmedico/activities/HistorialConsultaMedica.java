@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.Adapter.AdapterItemsConsultaMedica;
+import com.example.cltcontrol.historialmedico.Adapter.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
@@ -32,6 +34,10 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
         lvConsultasMedicas = findViewById(R.id.lvConsultasMedicas);
 
+        //Obtener el cargo del usuario que inició sesión
+        SessionManager sesion = new SessionManager(getApplicationContext());
+        String cargo = sesion.obtenerInfoUsuario().get("cargo");
+
         //Recibe el id del empleado desde MenuEmpleadoActivity
         Intent inMenuEmpleado = getIntent();
         idEmpleado = inMenuEmpleado.getStringExtra("ID");
@@ -47,8 +53,6 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
     }
 
-
-
     @Override
     public void menuPulsado(int opcionMenu) {
         //Se crea una consulta medica vacia
@@ -63,12 +67,10 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         inConsultaMedicaNuevoAct.putExtra("ID_EMPLEADO",idEmpleado);
         inConsultaMedicaNuevoAct.putExtra("ID_CONSULTA_MEDICA",String.valueOf(consultaMedica.getId()));
 
-
         Bundle datos = new Bundle();
         datos.putInt("BOTONPULSADO",opcionMenu);
         startActivity(inConsultaMedicaNuevoAct);
     }
-
 
     public void aperturaConsultaMedica(View v){
         menuPulsado(0);

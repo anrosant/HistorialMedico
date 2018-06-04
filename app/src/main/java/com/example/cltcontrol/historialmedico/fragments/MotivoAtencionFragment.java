@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 
 import java.util.Objects;
@@ -21,8 +22,9 @@ import java.util.Objects;
 public class MotivoAtencionFragment extends Fragment {
     EditText etMotivoAtencion;
     Button btn_guardar;
-    String id_consulta_medica;
+    String id_consulta_medica, id_atencion_enfermeria;
     ConsultaMedica consultaMedica;
+    AtencionEnfermeria atencionEnfermeria;
     public MotivoAtencionFragment() {
         // Required empty public constructor
     }
@@ -40,6 +42,7 @@ public class MotivoAtencionFragment extends Fragment {
         //Recibe el id de consulta medica desde Historial de consulta medica
         if (extras != null) {
             id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+            id_atencion_enfermeria = extras.getString("ID_ATENCION_ENFERMERIA");
             //consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
         }
@@ -59,16 +62,17 @@ public class MotivoAtencionFragment extends Fragment {
         String motivo = etMotivoAtencion.getText().toString();
         if(motivo.equals("")){
             Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
-        }else {
+        }else if(consultaMedica!=null) {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             consultaMedica.setMotivo(motivo);
             consultaMedica.save();
-            limpiarCampos();
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
+        }else{
+            atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Long.valueOf(id_atencion_enfermeria));
+            atencionEnfermeria.setMotivoAtencion(motivo);
+            atencionEnfermeria.save();
+            Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
+
         }
     }
-    private void limpiarCampos(){
-        etMotivoAtencion.setText("");
-    }
-
 }

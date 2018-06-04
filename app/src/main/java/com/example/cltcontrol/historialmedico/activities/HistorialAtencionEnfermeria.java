@@ -59,9 +59,19 @@ public class HistorialAtencionEnfermeria extends FragmentActivity implements Com
 
     @Override
     public void menuPulsado(int opcionMenu) {
-        Intent inMenu = new Intent(getApplicationContext(),AtencionEnfemeriaActivity.class);
-        inMenu.putExtra("BOTONPULSADO",opcionMenu);
-        startActivity(inMenu);
+        //Se crea una atencion enfermeria vacia
+        AtencionEnfermeria atencionEnfermeria=new AtencionEnfermeria();
+        atencionEnfermeria.save();
+
+        //Envia los datos a AtencionEnfermeriaActivity
+        Intent inAtencionEnfermeriaActivity = new Intent(getApplicationContext(),AtencionEnfemeriaActivity.class);
+        inAtencionEnfermeriaActivity.putExtra("BOTONPULSADO",opcionMenu);
+        inAtencionEnfermeriaActivity.putExtra("ID_EMPLEADO",idEmpleado);
+        inAtencionEnfermeriaActivity.putExtra("ID_ATENCION_ENFERMERIA",String.valueOf(atencionEnfermeria.getId()));
+
+        Bundle datos = new Bundle();
+        datos.putInt("BOTONPULSADO",opcionMenu);
+        startActivity(inAtencionEnfermeriaActivity);
     }
 
     public void aperturaAtencionMedica(View v){

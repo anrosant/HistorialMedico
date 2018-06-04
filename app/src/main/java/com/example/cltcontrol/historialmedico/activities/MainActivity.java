@@ -14,7 +14,7 @@ import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.models.Usuario;
-import com.facebook.stetho.Stetho;
+//import com.facebook.stetho.Stetho;
 import java.util.Date;
 import java.util.List;
 
@@ -31,13 +31,13 @@ public class MainActivity extends AppCompatActivity {
         etUsuario = findViewById(R.id.etUsuario);
         etContrasenia = findViewById(R.id.etContrasenia);
 
-        Stetho.initialize(Stetho.newInitializerBuilder(this)
+        /*Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
-                .build());
+                .build());*/
 
         //Almacena datos temporales
-        //inicializarVariablesTemp();
+        inicializarVariablesTemp();
 
     }
     /*

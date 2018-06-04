@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,12 +22,14 @@ import java.util.List;
 public class HistorialAtencionEnfermeria extends FragmentActivity implements ComunicadorMenu {
     private String idEmpleado;
     private TextView tvNombresEmpleado;
+    private Button btnAgregarAtencionEnfermeria;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial_atencion_enfermeria);
 
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+        btnAgregarAtencionEnfermeria = findViewById(R.id.btnAgregarAtencionEnfermeria);
 
         //Obtener el cargo del usuario que inició sesión
         SessionManager sesion = new SessionManager(getApplicationContext());
@@ -47,6 +50,10 @@ public class HistorialAtencionEnfermeria extends FragmentActivity implements Com
         //Busca al empleado con el id y muestra la informacion en el frgagment de informacion
         Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
+
+        if(cargo.equals("Doctor")){
+            btnAgregarAtencionEnfermeria.setVisibility(View.GONE);
+        }
     }
 
 

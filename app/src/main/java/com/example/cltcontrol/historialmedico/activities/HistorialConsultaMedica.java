@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
     private TextView tvNombresEmpleado;
     private ListView lvConsultasMedicas;
     private Empleado empleado;
+    private Button btnAgregarConsultaMedica;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +35,14 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
 
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
         lvConsultasMedicas = findViewById(R.id.lvConsultasMedicas);
+        btnAgregarConsultaMedica = findViewById(R.id.btnAgregarConsultaMedica);
 
         //Obtener el cargo del usuario que inició sesión
         SessionManager sesion = new SessionManager(getApplicationContext());
         String cargo = sesion.obtenerInfoUsuario().get("cargo");
-
+        if(cargo.equals("Enfermera")){
+            btnAgregarConsultaMedica.setVisibility(View.GONE);
+        }
         //Recibe el id del empleado desde MenuEmpleadoActivity
         Intent inMenuEmpleado = getIntent();
         idEmpleado = inMenuEmpleado.getStringExtra("ID");

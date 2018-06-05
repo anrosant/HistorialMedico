@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.example.cltcontrol.historialmedico.Adapter.AdapterSignosVitales;
 import com.example.cltcontrol.historialmedico.R;
@@ -27,14 +28,17 @@ public class SignosVitalesFragment extends Fragment {
     private EditText etPSistolica, etPDistolica, etTemperatura, etPulso;
     private String id_consulta_medica, id_empleado, id_atencion_enfermeria;
     private ConsultaMedica consultaMedica;
-    private Button btn_guardar;
     private ListView lvSignosVitales;
     private AdapterSignosVitales adapterSignosVitales;
     private Empleado empleado;
     private AtencionEnfermeria atencionEnfermeria;
     List<SignosVitales> signosVitalesList;
+    Button btn_guardar,btn_agregar;
+    LinearLayout ly;
 
-    public SignosVitalesFragment() {}
+    public SignosVitalesFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,13 +46,14 @@ public class SignosVitalesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_signos_vitales, container, false);
-        etPSistolica = view.findViewById(R.id.etPresionSistolica);
-        etPDistolica = view.findViewById(R.id.etPresionDistolica);
+        etPSistolica = view.findViewById(R.id.etPSistolica);
+        etPDistolica = view.findViewById(R.id.etPDistolica);
         etTemperatura = view.findViewById(R.id.etTemperatura);
         etPulso = view.findViewById(R.id.etPulso);
         lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
         btn_guardar = view.findViewById(R.id.btnGuardar);
-
+        btn_agregar =  view.findViewById(R.id.btnAgregar);
+        ly = view.findViewById(R.id.lySignosVitales);
 
         //
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
@@ -77,8 +82,6 @@ public class SignosVitalesFragment extends Fragment {
                 //Obtiene los signos vitales de un empleado
                 signosVitalesList = SignosVitales.find(SignosVitales.class, "atencionenfermeria = ?", String.valueOf(id_atencion_enfermeria));
 
-
-
             }
             //Crea un adapter de dicha lista y la muestra en un listview
             adapterSignosVitales = new AdapterSignosVitales(getContext(), (ArrayList<SignosVitales>) signosVitalesList);
@@ -91,6 +94,17 @@ public class SignosVitalesFragment extends Fragment {
                 guardarSignosVitales();
             }
         });
+
+        btn_agregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!ly.isShown())
+                    ly.setVisibility(view.VISIBLE);
+                else
+                    ly.setVisibility(view.GONE);
+            }
+        });
+
         return view;
     }
 

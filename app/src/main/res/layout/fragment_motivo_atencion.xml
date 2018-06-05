@@ -16,11 +16,10 @@
             android:gravity="center"
             android:layout_margin="5dp">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:gravity="center">
 
                 <TextView
@@ -30,9 +29,7 @@
                     android:background="@color/colorPrimary"
                     android:padding="5dp"
                     android:text="MOTIVO DE ATENCION"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
-
+                    android:textColor="#FFFFFF" />
             </LinearLayout>
 
             <EditText
@@ -40,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
-                android:hint="No refiere prescripcion"
+                android:hint="No refiere motivo de atención"
                 android:inputType="textMultiLine"
                 android:textSize="16sp" />
 
@@ -55,6 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Guardar" />
+
             </LinearLayout>
 
         </LinearLayout>

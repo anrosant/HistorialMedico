@@ -1,9 +1,14 @@
 package com.example.cltcontrol.historialmedico.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.fragments.DiagnosticoFragment;
@@ -24,13 +29,12 @@ import java.util.Objects;
 public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ComunicadorMenu{
 
     private Fragment[] misFragmentos;
-    Empleado empleado;
+    private Empleado empleado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_consulta_medica);
-
 
         misFragmentos = new Fragment[10];
 
@@ -57,9 +61,8 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
 
-
-
     }
+
 
     @Override
     public void menuPulsado(int opcionMenu) {
@@ -69,6 +72,5 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
 
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorConsultaMedica,misFragmentos[opcionMenu]).commit();
     }
-
 
 }

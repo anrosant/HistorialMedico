@@ -9,7 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="78dp"
-        android:layout_margin="10dp"
+
+        android:background="@color/colorPrimary"
         android:orientation="horizontal" >
 
         <LinearLayout
@@ -54,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:text="informacion de salud del empleado"
                     android:textSize="14dp"
-                    android:textColor="#BDBDBD"
+                    android:textColor="#FFFFFF"
                     android:layout_marginTop="4dp" />
 
             </LinearLayout>

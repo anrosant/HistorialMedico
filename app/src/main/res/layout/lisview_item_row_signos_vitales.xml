@@ -19,11 +19,6 @@
             android:layout_gravity="center"
             android:layout_weight="1">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Presión" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -31,14 +26,13 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/flechas"/>
+                    android:layout_height="match_parent"
+                    android:src="@drawable/flechas_visto"/>
 
-                <EditText
+                <TextView
                     android:id="@+id/etPresionSistolica"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:singleLine="true"
                     android:maxLength="3"
                     android:textAlignment="center"
@@ -51,11 +45,10 @@
                     android:textSize="30sp"
                     android:text="/" />
 
-                <EditText
+                <TextView
                     android:id="@+id/etPresionDistolica"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:singleLine="true"
                     android:maxLength="3"
                     android:textAlignment="center"
@@ -78,14 +71,13 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/corazon"/>
+                android:layout_height="match_parent"
+                android:src="@drawable/corazon_visto"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/etPulso"
                 android:layout_width="55dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:singleLine="true"
                 android:maxLength="3"
                 android:textAlignment="center"
@@ -107,14 +99,13 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/temperatura"/>
+                android:layout_height="match_parent"
+                android:src="@drawable/temperatura_visto"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/etTemperatura"
                 android:layout_width="55dp"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
                 android:singleLine="true"
                 android:maxLength="4"
                 android:textAlignment="center"

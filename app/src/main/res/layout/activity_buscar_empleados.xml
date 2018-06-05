@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@android:drawable/ic_menu_search"
+            android:textCursorDrawable="@drawable/text_color"
             android:textColor="#FFFFFF"
             android:hint="Buscar empleados"
             android:inputType="text"
@@ -27,6 +28,7 @@
             android:paddingEnd="15dp"
             android:textSize="18sp"
             android:singleLine="true" />
+
     </LinearLayout>
 
     <ScrollView
@@ -36,7 +38,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal">
 

@@ -23,11 +23,10 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:padding="5sp"
-                android:text="Generar un permiso médico"
+                android:text="GENERAR PERMISO MEDICO"
                 android:textColor="#FFFFFF"
                 android:textOff="No"
-                android:textOn="Yes"
-                android:textSize="18sp" />
+                android:textOn="Yes" />
 
             <EditText
                 android:id="@+id/txt_fecha_desde"
@@ -102,9 +101,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:padding="5dp"
-                android:text="Observaciones"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:text="OBSERVACIONES"
+                android:textColor="#FFFFFF" />
 
             <EditText
                 android:id="@+id/txt_observacion"
@@ -120,6 +118,7 @@
                 android:id="@+id/btnGuardar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="Guardar" />
 
         </LinearLayout>

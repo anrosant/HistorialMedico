@@ -24,11 +24,11 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
     private AdaptadorItemsEmpleados adaptadorEmpleados;
     private EditText buscar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar_empleados);
-
 
         readEmpleadosAll();
         RecyclerView recyclerEmpleados = findViewById(R.id.rvlistaempleados);

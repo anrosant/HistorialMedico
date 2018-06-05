@@ -27,8 +27,7 @@
                     android:background="@color/colorPrimary"
                     android:padding="5dp"
                     android:text="PATOLOGIAS FAMILIARES"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textColor="#FFFFFF" />
 
                 <ListView
                     android:layout_width="match_parent"

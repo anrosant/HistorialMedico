@@ -30,8 +30,7 @@
                     android:background="@color/colorPrimary"
                     android:padding="5dp"
                     android:text="DIAGNOSTICO ENFERMERIA"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textColor="#FFFFFF" />
 
             </LinearLayout>
 

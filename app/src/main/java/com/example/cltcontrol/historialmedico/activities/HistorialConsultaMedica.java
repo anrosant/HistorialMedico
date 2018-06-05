@@ -28,6 +28,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
     private ListView lvConsultasMedicas;
     private Empleado empleado;
     private Button btnAgregarConsultaMedica;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,15 +67,17 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         ConsultaMedica consultaMedica=new ConsultaMedica();
         consultaMedica.save();
 
-        //Envia el id del empleado y de la nueva consulta medica a ConsultaMedicaNuevoActivity
-        Intent inConsultaMedicaNuevoAct = new Intent(getApplicationContext(),ConsultaMedicaNuevoActivity.class);
-        inConsultaMedicaNuevoAct.putExtra("BOTONPULSADO",opcionMenu);
-        inConsultaMedicaNuevoAct.putExtra("ID_EMPLEADO",idEmpleado);
-        inConsultaMedicaNuevoAct.putExtra("ID_CONSULTA_MEDICA",String.valueOf(consultaMedica.getId()));
+        Intent inMenu = new Intent(getApplicationContext(),ConsultaMedicaNuevoActivity.class);
+        inMenu.putExtra("BOTONPULSADO",opcionMenu);
+        inMenu.putExtra("ID",idEmpleado);
+        inMenu.putExtra("ID_CONSULTA_MEDICA",consultaMedica.getId());
 
+        startActivity(inMenu);
+
+/*
         Bundle datos = new Bundle();
         datos.putInt("BOTONPULSADO",opcionMenu);
-        startActivity(inConsultaMedicaNuevoAct);
+ */
     }
 
     public void aperturaConsultaMedica(View v){

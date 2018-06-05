@@ -26,7 +26,7 @@
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:layout_gravity="right"
-            android:onClick="aperturaAtencionMedica"
+            android:onClick="irNuevaAtencion"
             android:text="+" />
 
         <ListView

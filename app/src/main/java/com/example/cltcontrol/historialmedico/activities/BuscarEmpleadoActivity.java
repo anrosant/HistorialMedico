@@ -24,7 +24,6 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
     private AdaptadorItemsEmpleados adaptadorEmpleados;
     private EditText buscar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +75,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
 
                         //Envia el id del empleado a MenuEmpleadoActivity
                         Intent i = new Intent(getApplicationContext(), MenuEmpleadoActivity.class);
-                        i.putExtra("ID", String.valueOf(empleadosList.get(position).getId()));
+                        i.putExtra("ID_EMPLEADO", String.valueOf(empleadosList.get(position).getId()));
                         startActivity(i);
 
                     }

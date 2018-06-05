@@ -2,6 +2,7 @@ package com.example.cltcontrol.historialmedico.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,7 @@ public class SignosVitalesFragment extends Fragment {
                 consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
                 id_empleado = extras.getString("ID_EMPLEADO");
+                Log.d("ID EMPL: ", id_empleado);
                 empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
                 //Historial de Signos vitales

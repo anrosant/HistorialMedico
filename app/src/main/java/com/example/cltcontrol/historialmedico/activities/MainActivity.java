@@ -102,6 +102,18 @@ public class MainActivity extends AppCompatActivity {
         AtencionEnfermeria atencion2 = new AtencionEnfermeria(fecha,empTemp,"Dolor",
                 "Tiene un dolor","Tomar mucha agua, con paracetamol");
         atencion2.save();
+        AtencionEnfermeria atencion3 = new AtencionEnfermeria(fecha,empTemp,"Dolor de estomago",
+                "Tiene un dolor en la boca del estomago","Tomar mucha agua, con paracetamol, y descanso");
+        atencion3.save();
+        AtencionEnfermeria atencion4 = new AtencionEnfermeria(fecha,empTemp,"Dolor",
+                "Tiene un dolor","Tomar mucha agua, con paracetamol");
+        atencion4.save();
+        AtencionEnfermeria atencion5 = new AtencionEnfermeria(fecha,empTemp,"Dolor de estomago",
+                "Tiene un dolor en la boca del estomago","Tomar mucha agua, con paracetamol, y descanso");
+        atencion5.save();
+        AtencionEnfermeria atencion6 = new AtencionEnfermeria(fecha,empTemp,"Dolor",
+                "Tiene un dolor","Tomar mucha agua, con paracetamol");
+        atencion6.save();
 
         ConsultaMedica consultaMedica1 = new ConsultaMedica(empTemp,fecha_actual,"prov1","rev1","pres1", "ex1","motivo1");
         consultaMedica1.save();
@@ -109,6 +121,12 @@ public class MainActivity extends AppCompatActivity {
         consultaMedica2.save();
         ConsultaMedica consultaMedica3 = new ConsultaMedica(empTemp,fecha_actual,"prov3","rev3","pres3", "ex3","motivo3");
         consultaMedica3.save();
+        ConsultaMedica consultaMedica4 = new ConsultaMedica(empTemp,fecha_actual,"prov4","rev4","pres4", "ex4","motivo4");
+        consultaMedica4.save();
+        ConsultaMedica consultaMedica5 = new ConsultaMedica(empTemp,fecha_actual,"prov5","rev5","pres5","ex5", "motivo5");
+        consultaMedica5.save();
+        ConsultaMedica consultaMedica6 = new ConsultaMedica(empTemp,fecha_actual,"prov6","rev6","pres6", "ex6","motivo6");
+        consultaMedica6.save();
         Enfermedad enf1=new Enfermedad("enf1","111");
         enf1.save();
         Enfermedad enf2=new Enfermedad("enf2","121");

@@ -166,7 +166,6 @@ public class PermisosMedicosFragment extends Fragment {
                     e.printStackTrace();
                 }
                 fecha_desde.setText(simpleDateFormat.format(date));
-
                 calcNumDias();
             }
         };
@@ -175,9 +174,7 @@ public class PermisosMedicosFragment extends Fragment {
         if(!fecha_hasta.getText().toString().equals("")){
             Calendar c = Calendar.getInstance();
             String fecha[] = fecha_hasta.getText().toString().split("/");
-            c.set(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[1]) - 1
-                    , Integer.parseInt(fecha[0]));
-            //Toast.makeText(getContext(), , Toast.LENGTH_SHORT).show();
+            c.set(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[1]) - 1, Integer.parseInt(fecha[0]));
             dpDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
         }
         dpDialog.show();
@@ -195,7 +192,6 @@ public class PermisosMedicosFragment extends Fragment {
                     e.printStackTrace();
                 }
                 fecha_hasta.setText(simpleDateFormat.format(date));
-
                 calcNumDias();
             }
         };
@@ -206,34 +202,27 @@ public class PermisosMedicosFragment extends Fragment {
             Calendar c = Calendar.getInstance();
             String fecha[] = fecha_desde.getText().toString().split("/");
             c.set(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[1]) - 1, Integer.parseInt(fecha[0]));
-            Toast.makeText(getContext(), c.toString(), Toast.LENGTH_SHORT).show();
             dpDialog.getDatePicker().setMinDate(c.getTimeInMillis());
         }
         dpDialog.show();
     }
 
     private void calcNumDias() {
-
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
         String string_fecha_ini = fecha_desde.getText().toString();
         String string_fecha_fin = fecha_hasta.getText().toString();
 
         if (!string_fecha_ini.equals("") && !string_fecha_fin.equals("")) {
-
             try {
                 fecha_ini = simpleDateFormat.parse(string_fecha_ini);
                 fecha_fin = simpleDateFormat.parse(string_fecha_fin);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
             long dias_mili = Math.abs(fecha_fin.getTime() - fecha_ini.getTime());
             long numDias = TimeUnit.DAYS.convert(dias_mili, TimeUnit.MILLISECONDS);
-
             numero_dias.setText(Long.toString(numDias + 1));
         }
-
     }
 
     @Override

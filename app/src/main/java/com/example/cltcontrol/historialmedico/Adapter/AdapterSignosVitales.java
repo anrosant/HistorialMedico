@@ -54,7 +54,7 @@ public class AdapterSignosVitales extends ArrayAdapter<SignosVitales> {
         View v = convertView;
 
         if (v == null) {
-            v = LayoutInflater.from(getContext()).inflate(R.layout.item_signos_vitales, parent, false);
+            v = LayoutInflater.from(getContext()).inflate(R.layout.listview_item_row_signos_vitales, parent, false);
 
             /*LayoutInflater inf = (LayoutInflater) Objects.requireNonNull(activity.getActivity()).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = Objects.requireNonNull(inf).inflate(R.layout.item_signos_vitales, null);*/

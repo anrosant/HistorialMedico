@@ -25,11 +25,12 @@
                 <TextView
                     android:id="@+id/text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:background="@color/colorPrimary"
                     android:padding="5dp"
                     android:text="MOTIVO DE ATENCION"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    android:layout_weight="1"/>
             </LinearLayout>
 
             <EditText

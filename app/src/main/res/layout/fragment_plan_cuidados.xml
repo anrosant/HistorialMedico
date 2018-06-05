@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".fragments.PlanCuidadosFragment">
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,7 +16,6 @@
             android:gravity="center"
             android:layout_margin="5dp">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -26,13 +24,13 @@
 
                 <TextView
                     android:id="@+id/text"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
                     android:padding="5dp"
                     android:text="PLAN CUIDADOS"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 

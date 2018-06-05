@@ -25,7 +25,7 @@ public class MenuEmpleadoActivity extends FragmentActivity {
 
         //Recibe la cedula del empleado desde BuscarEmpleadoActivity
         Intent inBuscarEmpleadoActivity = getIntent();
-        idEmpleado = inBuscarEmpleadoActivity.getStringExtra("ID");
+        idEmpleado = inBuscarEmpleadoActivity.getStringExtra("ID_EMPLEADO");
 
         //Busca al empleado por su cedula y muestra en un fragment los datos
         empleado = Empleado.findById(Empleado.class,Long.parseLong(idEmpleado));
@@ -37,7 +37,7 @@ public class MenuEmpleadoActivity extends FragmentActivity {
         //Envia el id del empleado a HistorialConsultaMedica
         Intent inHistorialConsultaMedica = new Intent(getApplicationContext(), HistorialConsultaMedica.class);
         //inHistorialConsultaMedica.putExtra("CEDULA", cedulaEmpleado);
-        inHistorialConsultaMedica.putExtra("ID", idEmpleado);
+        inHistorialConsultaMedica.putExtra("ID_EMPLEADO", idEmpleado);
         startActivity(inHistorialConsultaMedica);
     }
 
@@ -45,7 +45,7 @@ public class MenuEmpleadoActivity extends FragmentActivity {
         //Envia el id del empleado a HistorialAtencionEnfermeria
         Intent inHistorialAtencionEnfermeria = new Intent(getApplicationContext(), HistorialAtencionEnfermeria.class);
         //inHistorialAtencionEnfermeria.putExtra("CEDULA", cedulaEmpleado);
-        inHistorialAtencionEnfermeria.putExtra("ID", idEmpleado);
+        inHistorialAtencionEnfermeria.putExtra("ID_EMPLEADO", idEmpleado);
         startActivity(inHistorialAtencionEnfermeria);
     }
 }

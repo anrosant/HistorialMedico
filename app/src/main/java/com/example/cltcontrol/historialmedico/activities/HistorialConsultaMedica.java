@@ -1,6 +1,7 @@
 package com.example.cltcontrol.historialmedico.activities;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +28,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
     private TextView tvNombresEmpleado;
     private ListView lvConsultasMedicas;
     private Empleado empleado;
-    private Button btnAgregarConsultaMedica;
+    private FloatingActionButton btnAgregarConsultaMedica;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         }
         //Recibe el id del empleado desde MenuEmpleadoActivity
         Intent inMenuEmpleado = getIntent();
-        idEmpleado = inMenuEmpleado.getStringExtra("ID");
+        idEmpleado = inMenuEmpleado.getStringExtra("ID_EMPLEADO");
 
         //Busca las consultas medica de un empleado
         List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "empleado = ?", idEmpleado);
@@ -54,7 +55,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         //Muestra los datos de las consultas medica en el listview
         AdapterItemsConsultaMedica adapter = new AdapterItemsConsultaMedica(this, (ArrayList<ConsultaMedica>) consultaMedicaList);
         lvConsultasMedicas.setAdapter(adapter);
-
+        Log.d("ID EMPL: ", idEmpleado);
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
     }
@@ -69,15 +70,14 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
 
         Intent inMenu = new Intent(getApplicationContext(),ConsultaMedicaNuevoActivity.class);
         inMenu.putExtra("BOTONPULSADO",opcionMenu);
-        inMenu.putExtra("ID",idEmpleado);
-        inMenu.putExtra("ID_CONSULTA_MEDICA",consultaMedica.getId());
+        inMenu.putExtra("ID_EMPLEADO",idEmpleado);
+        inMenu.putExtra("ID_CONSULTA_MEDICA", consultaMedica.getId().toString());
 
         startActivity(inMenu);
 
-/*
-        Bundle datos = new Bundle();
-        datos.putInt("BOTONPULSADO",opcionMenu);
- */
+        /*Bundle datos = new Bundle();
+        datos.putInt("BOTONPULSADO",opcionMenu);*/
+
     }
 
     public void aperturaConsultaMedica(View v){

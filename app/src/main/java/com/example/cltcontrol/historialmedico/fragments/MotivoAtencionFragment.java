@@ -30,8 +30,7 @@ public class MotivoAtencionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_motivo_atencion, container, false);
 
@@ -44,7 +43,6 @@ public class MotivoAtencionFragment extends Fragment {
             id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
             id_atencion_enfermeria = extras.getString("ID_ATENCION_ENFERMERIA");
             //consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
-
         }
             btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,26 +51,25 @@ public class MotivoAtencionFragment extends Fragment {
             }
         });
         return view;
-
-
     }
 
     //Verifica si ha ingresado texto y guarda en consulta medica, caso contrario imprime un mensaje
     private void guardarMotivo() {
         String motivo = etMotivoAtencion.getText().toString();
-        if(motivo.equals("")){
-            Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
-        }else if(consultaMedica!=null) {
+        if(motivo.equals("")) {
+            Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(consultaMedica!=null) {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             consultaMedica.setMotivo(motivo);
             consultaMedica.save();
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Long.valueOf(id_atencion_enfermeria));
             atencionEnfermeria.setMotivoAtencion(motivo);
             atencionEnfermeria.save();
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
-
         }
     }
 }

@@ -14,19 +14,35 @@
         tools:layout="@layout/fragment_datos_empleado">
     </fragment>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="5dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:padding="10dp"
+        android:background="@drawable/my_style_title"
+        android:text="Historial Atención Enfermería"/>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_marginTop="-3dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/my_style_content">
 
         <ListView
             android:id="@+id/lvAtencionEnfermeria"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:divider="@null">
         </ListView>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
+            android:id="@+id/btnAgregarAtencionEnfermeria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"

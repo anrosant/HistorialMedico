@@ -38,6 +38,7 @@
                         android:background="@color/colorPrimary"
                         android:padding="5dp"
                         android:clickable="true"
+                        android:focusable="true"
                         android:text="SIGNOS VITALES"
                         android:textColor="#FFFFFF"
                         android:layout_weight="1"/>

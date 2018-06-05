@@ -2,6 +2,7 @@ package com.example.cltcontrol.historialmedico.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,7 @@ import java.util.List;
 public class HistorialAtencionEnfermeria extends FragmentActivity implements ComunicadorMenu {
     private String idEmpleado;
     private TextView tvNombresEmpleado;
-    private Button btnAgregarAtencionEnfermeria;
+    private FloatingActionButton btnAgregarAtencionEnfermeria;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,7 @@ public class HistorialAtencionEnfermeria extends FragmentActivity implements Com
 
         //Recibe el id del empleado desde MenuEmpleadoActivity
         Intent inMenuEmpleado = getIntent();
-        idEmpleado = inMenuEmpleado.getStringExtra("ID");
+        idEmpleado = inMenuEmpleado.getStringExtra("ID_EMPLEADO");
         ListView lv = findViewById(R.id.lvAtencionEnfermeria);
 
         //Obtiene las atenciones de enfermeria de un empleado

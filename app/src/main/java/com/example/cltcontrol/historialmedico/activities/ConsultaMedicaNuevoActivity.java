@@ -1,5 +1,7 @@
 package com.example.cltcontrol.historialmedico.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -62,6 +64,34 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
 
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+        //seleccionamos la cadena a mostrar
+        alertbox.setMessage("No se guardara la consulta. Desea salir?");
+        //elegimos un positivo SI
+        alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            //Funcion llamada cuando se pulsa el boton Si
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(getApplicationContext(),"Pulsaste SI",Toast.LENGTH_LONG).show();
+                ConsultaMedicaNuevoActivity.super.onBackPressed();
+            }
+        });
+
+        //elegimos un positivo NO
+        alertbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            //Funcion llamada cuando se pulsa el boton No
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(getApplicationContext(),"Pulsaste NO",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        //mostramos el alertbox
+        alertbox.show();
+        //Toast.makeText(this,"Desea salir",Toast.LENGTH_LONG).show();
     }
 
 

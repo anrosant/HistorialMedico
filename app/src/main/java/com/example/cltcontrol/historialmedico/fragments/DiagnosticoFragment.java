@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -45,6 +47,8 @@ public class DiagnosticoFragment extends Fragment {
     private RadioButton radioButton;
     private Empleado empleado;
     private ListView lvDiagnostico;
+    private LinearLayout ly_diagnostico;
+    private ImageButton ib_mostrar_ocultar_contendido;
     public List<Diagnostico> diagnosticoList;
 
     public DiagnosticoFragment() {
@@ -57,9 +61,11 @@ public class DiagnosticoFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_diagnostico, container, false);
 
-        btn_guardar = view.findViewById(R.id.btnGuardar);
+        btn_guardar = view.findViewById(R.id.btn_guardar);
         rg_tipo_enfermedad = view.findViewById(R.id.rgTipoEnfer);
         lvDiagnostico = view.findViewById(R.id.lvDiagnostico);
+        ib_mostrar_ocultar_contendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
+        ly_diagnostico = view.findViewById(R.id.ly_diagnostico);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         if (extras != null) {
@@ -151,8 +157,22 @@ public class DiagnosticoFragment extends Fragment {
             }
         });
 
+        ib_mostrar_ocultar_contendido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!ly_diagnostico.isShown()){
+                    ly_diagnostico.setVisibility(view.VISIBLE);
+                    ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_arriba);
+                }else {
+                    ly_diagnostico.setVisibility(view.GONE);
+                    ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_abajo);
+                }
+            }
+        });
+
         return  view;
     }
+
 
     private void guardarDiagnostico() {
         if(enfermedad == null || tipo_enfermedad==null){

@@ -3,79 +3,105 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragments.PatologiasPersonalesFragment">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_margin="5dp">
-                <TextView
-                    android:id="@+id/textViewSignos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:padding="5dp"
-                    android:text="PATOLOGIAS PERSONALES"
-                    android:textColor="#FFFFFF" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <Spinner
-                        android:id="@+id/spPatologia"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
 
-                        android:textColor="@android:color/black" />
-                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <EditText
-                        android:id="@+id/editText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="textMultiLine" />
-                    <EditText
-                        android:id="@+id/etDetalleEnfermedad"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorPrimary"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:text="PATOLOGIAS PERSONALES"
+                        android:paddingRight="10dp"
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="0.3"/>
+
+                    <ImageButton
+                        android:id="@+id/ib_mostrar_ocultar_contendido"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:inputType="textMultiLine"
-                        android:hint="Detalles de Enfermedad"
-                        android:textColor="@android:color/black" />
+                        android:background="@color/colorPrimary"
+                        android:layout_weight="1.7"
+                        android:src="@drawable/flecha_arriba"/>
                 </LinearLayout>
+
                 <LinearLayout
+                    android:id="@+id/ly_patologias_personales"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <Spinner
+                            android:id="@+id/spPatologia"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:textColor="@android:color/black" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <EditText
+                            android:id="@+id/editText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="textMultiLine" />
+                        <EditText
+                            android:id="@+id/etDetalleEnfermedad"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:inputType="textMultiLine"
+                            android:hint="Detalles de Enfermedad"
+                            android:textColor="@android:color/black" />
+                    </LinearLayout>
 
                     <Button
                         android:id="@+id/btnGuardar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Guardar" />
+
                 </LinearLayout>
 
-        </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_margin="5dp">
@@ -96,8 +122,7 @@
 
             </LinearLayout>
 
+
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

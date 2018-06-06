@@ -20,10 +20,10 @@ import java.util.Objects;
  */
 public class RevisionMedicaFragment extends Fragment {
 
-    EditText etRevisionMedica;
-    Button btn_guardar;
-    String id_consulta_medica;
-    ConsultaMedica consultaMedica;
+    private EditText et_revision_medica;
+    private Button btn_guardar;
+    private String id_consulta_medica;
+    private ConsultaMedica consultaMedica;
 
     public RevisionMedicaFragment() {
         // Required empty public constructor
@@ -35,8 +35,8 @@ public class RevisionMedicaFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_revision_medica, container, false);
-        etRevisionMedica = view.findViewById(R.id.etRevisionMedica);
-        btn_guardar = view.findViewById(R.id.btnGuardar);
+        et_revision_medica = view.findViewById(R.id.et_revision_medica);
+        btn_guardar = view.findViewById(R.id.btn_guardar);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
@@ -55,19 +55,16 @@ public class RevisionMedicaFragment extends Fragment {
         return view;
     }
     private void guardarRevisionMedica() {
-        String revision_medica = etRevisionMedica.getText().toString();
+        String revision_medica = et_revision_medica.getText().toString();
         if(revision_medica.equals("")){
             Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
         }else {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             consultaMedica.setRevision_medica(revision_medica);
             consultaMedica.save();
-            limpiarCampos();
+
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
         }
-    }
-    private void limpiarCampos(){
-        etRevisionMedica.setText("");
     }
 
 }

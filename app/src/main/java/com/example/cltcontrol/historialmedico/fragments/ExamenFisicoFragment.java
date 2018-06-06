@@ -20,10 +20,10 @@ import java.util.Objects;
  */
 public class ExamenFisicoFragment extends Fragment {
 
-    EditText etExamenFisico;
-    Button btn_guardar;
-    String id_consulta_medica;
-    ConsultaMedica consultaMedica;
+    private EditText et_examen_fisico;
+    private Button btn_guardar;
+    private String id_consulta_medica;
+    private ConsultaMedica consultaMedica;
 
     public ExamenFisicoFragment() {
         // Required empty public constructor
@@ -35,8 +35,8 @@ public class ExamenFisicoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_examen_fisico, container, false);
-        etExamenFisico = view.findViewById(R.id.etExamenFisico);
-        btn_guardar = view.findViewById(R.id.btnGuardar);
+        et_examen_fisico = view.findViewById(R.id.et_examen_fisico);
+        btn_guardar = view.findViewById(R.id.btn_guardar);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
@@ -55,20 +55,16 @@ public class ExamenFisicoFragment extends Fragment {
         return view;
     }
     private void guardarExamenFisico() {
-        String examen_fisico = etExamenFisico.getText().toString();
+        String examen_fisico = et_examen_fisico.getText().toString();
         if(examen_fisico.equals("")){
             Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
         }else {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             consultaMedica.setExamen_fisico(examen_fisico);
             consultaMedica.save();
-            limpiarCampos();
+
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
         }
     }
-    private void limpiarCampos(){
-        etExamenFisico.setText("");
-    }
-
 
 }

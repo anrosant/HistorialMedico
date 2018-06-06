@@ -20,7 +20,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_margin="5dp">
 
@@ -45,7 +44,6 @@
                         android:id="@+id/ib_mostrar_ocultar_contendido"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:background="@color/colorPrimary"
                         android:layout_weight="1.7"
                         android:src="@drawable/flecha_arriba"/>
@@ -61,7 +59,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:layout_gravity="center"
                         android:layout_weight="1">
@@ -169,17 +167,14 @@
                             android:textSize="18sp"/>
                     </LinearLayout>
 
+                    <Button
+                        android:id="@+id/btnGuardar"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Guardar" />
+
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
 
             </LinearLayout>
 
@@ -191,12 +186,6 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_margin="5dp">
-                <Button
-                    android:id="@+id/btnGuardar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Guardar" />
-
 
                 <ListView
                     android:id="@+id/lvSignosVitales"

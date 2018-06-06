@@ -19,10 +19,10 @@ import java.util.Objects;
  * A simple {@link Fragment} subclass.
  */
 public class ProblemaActualFragment extends Fragment {
-    EditText etProblemActual;
-    Button btn_guardar;
-    String id_consulta_medica;
-    ConsultaMedica consultaMedica;
+    private EditText et_problema_actual;
+    private Button btn_guardar;
+    private String id_consulta_medica;
+    private ConsultaMedica consultaMedica;
 
     public ProblemaActualFragment() {
         // Required empty public constructor
@@ -35,8 +35,8 @@ public class ProblemaActualFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_problema_actual, container, false);
 
-        etProblemActual = view.findViewById(R.id.etProblemActual);
-        btn_guardar = view.findViewById(R.id.btnGuardar);
+        et_problema_actual = view.findViewById(R.id.et_problema_actual);
+        btn_guardar = view.findViewById(R.id.btn_guardar);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
@@ -56,19 +56,15 @@ public class ProblemaActualFragment extends Fragment {
     }
 
     private void guardarProblemaActual() {
-        String problema_actual = etProblemActual.getText().toString();
+        String problema_actual = et_problema_actual.getText().toString();
         if(problema_actual.equals("")){
             Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
         }else {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             consultaMedica.setProbActual(problema_actual);
             consultaMedica.save();
-            limpiarCampos();
+
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
         }
     }
-    private void limpiarCampos(){
-        etProblemActual.setText("");
-    }
-
 }

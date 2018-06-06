@@ -8,25 +8,23 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:layout_margin="5dp">
 
                 <LinearLayout
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -34,26 +32,28 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="@color/colorPrimary"
+                        android:gravity="center_vertical"
                         android:padding="5dp"
-                        android:clickable="true"
-                        android:focusable="true"
                         android:text="SIGNOS VITALES"
+                        android:paddingRight="10dp"
                         android:textColor="#FFFFFF"
-                        android:layout_weight="1"/>
+                        android:layout_weight="0.3"/>
 
-                    <ImageView
-                        android:id="@+id/prueba"
-                        android:layout_width="wrap_content"
+                    <ImageButton
+                        android:id="@+id/ib_mostrar_ocultar_contendido"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/corazon_visto"/>
+
+                        android:background="@color/colorPrimary"
+                        android:layout_weight="1.7"
+                        android:src="@drawable/flecha_arriba"/>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/lySignosVitales"
+                    android:id="@+id/ly_signos_vitales"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -73,7 +73,7 @@
 
                             <ImageView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:src="@drawable/flechas"/>
 
                             <EditText
@@ -120,7 +120,7 @@
 
                         <ImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:src="@drawable/corazon"/>
 
                         <EditText
@@ -143,12 +143,12 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:src="@drawable/temperatura"/>
 
                         <EditText
@@ -177,16 +177,9 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center">
-
-                <Button
-                    android:id="@+id/btnAgregar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Agregar"
-                    android:textSize="18sp"/>
 
             </LinearLayout>
 
@@ -194,27 +187,25 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_margin="5dp">
-
-                <ListView
-                    android:id="@+id/lvSignosVitales"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </ListView>
-
                 <Button
                     android:id="@+id/btnGuardar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Guardar" />
 
+
+                <ListView
+                    android:id="@+id/lvSignosVitales"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                </ListView>
+
             </LinearLayout>
 
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

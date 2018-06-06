@@ -13,9 +13,6 @@ import com.example.cltcontrol.historialmedico.R;
 
 import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class PatologiasPersonalesFragment extends Fragment {
 
     public PatologiasPersonalesFragment() {

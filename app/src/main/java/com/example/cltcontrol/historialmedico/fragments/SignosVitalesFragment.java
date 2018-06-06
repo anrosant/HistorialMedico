@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -33,9 +34,10 @@ public class SignosVitalesFragment extends Fragment {
     private AdapterSignosVitales adapterSignosVitales;
     private Empleado empleado;
     private AtencionEnfermeria atencionEnfermeria;
-    List<SignosVitales> signosVitalesList;
-    Button btn_guardar,btn_agregar;
-    LinearLayout ly;
+    private List<SignosVitales> signosVitalesList;
+    private Button btn_guardar;
+    private ImageButton ib_mostrar_ocultar_contendido;
+    LinearLayout ly_signos_vitales;
 
     public SignosVitalesFragment() {
         // Required empty public constructor
@@ -53,8 +55,8 @@ public class SignosVitalesFragment extends Fragment {
         etPulso = view.findViewById(R.id.etPulso);
         lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
         btn_guardar = view.findViewById(R.id.btnGuardar);
-        btn_agregar =  view.findViewById(R.id.btnAgregar);
-        ly = view.findViewById(R.id.lySignosVitales);
+        ib_mostrar_ocultar_contendido =  view.findViewById(R.id.ib_mostrar_ocultar_contendido);
+        ly_signos_vitales = view.findViewById(R.id.ly_signos_vitales);
 
         //
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
@@ -97,13 +99,16 @@ public class SignosVitalesFragment extends Fragment {
             }
         });
 
-        btn_agregar.setOnClickListener(new View.OnClickListener() {
+        ib_mostrar_ocultar_contendido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!ly.isShown())
-                    ly.setVisibility(view.VISIBLE);
-                else
-                    ly.setVisibility(view.GONE);
+                if (!ly_signos_vitales.isShown()){
+                    ly_signos_vitales.setVisibility(view.VISIBLE);
+                    ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_arriba);
+                }else {
+                    ly_signos_vitales.setVisibility(view.GONE);
+                    ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_abajo);
+                }
             }
         });
 

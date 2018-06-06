@@ -16,15 +16,13 @@ import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 
 import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class MotivoAtencionFragment extends Fragment {
-    EditText etMotivoAtencion;
-    Button btn_guardar;
-    String id_consulta_medica, id_atencion_enfermeria;
-    ConsultaMedica consultaMedica;
-    AtencionEnfermeria atencionEnfermeria;
+    private EditText etMotivoAtencion;
+    private Button btn_guardar;
+    private String id_consulta_medica, id_atencion_enfermeria;
+    private ConsultaMedica consultaMedica;
+    private AtencionEnfermeria atencionEnfermeria;
+
     public MotivoAtencionFragment() {
         // Required empty public constructor
     }
@@ -44,7 +42,7 @@ public class MotivoAtencionFragment extends Fragment {
             id_atencion_enfermeria = extras.getString("ID_ATENCION_ENFERMERIA");
             //consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
         }
-            btn_guardar.setOnClickListener(new View.OnClickListener() {
+        btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 guardarMotivo();
@@ -60,7 +58,7 @@ public class MotivoAtencionFragment extends Fragment {
             Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(consultaMedica!=null) {
+        if(id_consulta_medica!=null) {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             consultaMedica.setMotivo(motivo);
             consultaMedica.save();

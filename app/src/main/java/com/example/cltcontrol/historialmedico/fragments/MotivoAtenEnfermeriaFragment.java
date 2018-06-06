@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
@@ -18,29 +19,26 @@ import java.util.Objects;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlanCuidadosFragment extends Fragment {
-
+public class MotivoAtenEnfermeriaFragment extends Fragment {
 
     private String idAtencion=null;
     private String idAtencion2=null;
     private String presedencia;
     private Bundle bun;
     private Button boton;
-    private EditText etPlan;
-
-    public PlanCuidadosFragment() {
+    private EditText etMotivo;
+    public MotivoAtenEnfermeriaFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Inflate y vinculaciones de las variables globales
-        View view = inflater.inflate(R.layout.fragment_plan_cuidados, container, false);
+        View view = inflater.inflate(R.layout.fragment_motivo_atencion, container, false);
         boton = view.findViewById(R.id.btnGuardar);
-        etPlan = view.findViewById(R.id.etPlanCuidados);
+        etMotivo = view.findViewById(R.id.txt_motivo);
         bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
@@ -50,19 +48,20 @@ public class PlanCuidadosFragment extends Fragment {
         if(presedencia.equals("consultar")){//funcionalidad para cargar un signo vital con el id de Atencion
             Toast.makeText(getContext(),"Viniste a consultar",Toast.LENGTH_SHORT).show();
             AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
-            etPlan.setText(atencion.getPlanCuidados());
+            etMotivo.setText(atencion.getMotivoAtencion());
 
             boton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
-                    atencion.setPlanCuidados(etPlan.getText().toString());
+                    atencion.setMotivoAtencion(etMotivo.getText().toString());
                     try{
                         atencion.save();
-                        Toast.makeText(getContext(),"Plan Guardado",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"Motivo Guardado",Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
                         Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
                     }
+
                 }
             });
 
@@ -75,13 +74,14 @@ public class PlanCuidadosFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion2));
-                    atencion.setPlanCuidados(etPlan.getText().toString());
+                    atencion.setMotivoAtencion(etMotivo.getText().toString());
                     try{
                         atencion.save();
-                        Toast.makeText(getContext(),"Plan Guardado",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"Motivo Guardado",Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
                         Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
                     }
+
                 }
             });
         }

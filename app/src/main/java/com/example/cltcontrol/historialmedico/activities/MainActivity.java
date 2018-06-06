@@ -36,9 +36,12 @@ public class MainActivity extends AppCompatActivity {
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());*/
 
-        //Almacena datos temporales
-        inicializarVariablesTemp();
-
+        //Almacena datos temporales solo si es que no existen datos
+        List<Empleado> referencia = Empleado.listAll(Empleado.class);
+        if(referencia.isEmpty()){
+            Toast.makeText(getApplicationContext(),"Inicializando datos",Toast.LENGTH_SHORT).show();
+            inicializarVariablesTemp();
+        }
     }
     /*
     * Verifica si el usuario y contrasenia son correctos
@@ -96,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         Date fecha = new Date();
 
+        /*
         AtencionEnfermeria atencion1 = new AtencionEnfermeria(fecha,empTemp,"Dolor de estomago",
                 "Tiene un dolor en la boca del estomago","Tomar mucha agua, con paracetamol, y descanso");
         atencion1.save();
@@ -114,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         AtencionEnfermeria atencion6 = new AtencionEnfermeria(fecha,empTemp,"Dolor",
                 "Tiene un dolor","Tomar mucha agua, con paracetamol");
         atencion6.save();
+        */
 
         ConsultaMedica consultaMedica1 = new ConsultaMedica(empTemp,fecha_actual,"prov1","rev1","pres1", "ex1","motivo1");
         consultaMedica1.save();

@@ -12,7 +12,9 @@ import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
+import com.example.cltcontrol.historialmedico.models.Empleado;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -22,8 +24,9 @@ public class RevisionMedicaFragment extends Fragment {
 
     private EditText et_revision_medica;
     private Button btn_guardar;
-    private String id_consulta_medica;
+    private String id_consulta_medica, presedencia,id_empleado;
     private ConsultaMedica consultaMedica;
+    private Empleado empleado;
 
     public RevisionMedicaFragment() {
         // Required empty public constructor
@@ -40,10 +43,17 @@ public class RevisionMedicaFragment extends Fragment {
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
-        //Recibe el id de consulta medica desde Historial de consulta medica
-        if (extras != null) {
-            id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        presedencia = extras.getString("PRESEDENCIA");
 
+        //Recibe el id de consulta medica desde Historial de consulta medica
+        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+        id_empleado = extras.getString("ID_EMPLEADO");
+        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+
+        if(presedencia.equals("consultar")) {
+            et_revision_medica.setText(consultaMedica.getRevision_medica());
+            btn_guardar.setText("Editar");
         }
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +69,12 @@ public class RevisionMedicaFragment extends Fragment {
         if(revision_medica.equals("")){
             Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
         }else {
-            consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+            if (consultaMedica.getEmpleado() == null) {
+                //Guarda el id del empleado en la consulta y la fecha de consulta
+
+                consultaMedica.setEmpleado(empleado);
+                consultaMedica.setFechaConsulta(new Date());
+            }
             consultaMedica.setRevision_medica(revision_medica);
             consultaMedica.save();
 

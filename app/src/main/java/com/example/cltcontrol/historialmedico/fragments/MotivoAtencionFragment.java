@@ -13,15 +13,18 @@ import android.widget.Toast;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
+import com.example.cltcontrol.historialmedico.models.Empleado;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class MotivoAtencionFragment extends Fragment {
     private EditText etMotivoAtencion;
     private Button btn_guardar;
-    private String id_consulta_medica, id_atencion_enfermeria;
+    private String id_consulta_medica, id_atencion_enfermeria, presedencia, id_empleado;
     private ConsultaMedica consultaMedica;
-    private AtencionEnfermeria atencionEnfermeria;
+    private Empleado empleado;
+    //private AtencionEnfermeria atencionEnfermeria;
 
     public MotivoAtencionFragment() {
         // Required empty public constructor
@@ -37,11 +40,20 @@ public class MotivoAtencionFragment extends Fragment {
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         //Recibe el id de consulta medica desde Historial de consulta medica
-        if (extras != null) {
-            id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-            id_atencion_enfermeria = extras.getString("ID_ATENCION_ENFERMERIA");
-            //consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        presedencia = extras.getString("PRESEDENCIA");
+        id_empleado = extras.getString("ID_EMPLEADO");
+        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+        //id_atencion_enfermeria = extras.getString("ID_ATENCION_ENFERMERIA");
+
+        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+
+        if(presedencia.equals("consultar")){
+            etMotivoAtencion.setText(consultaMedica.getMotivo());
+            btn_guardar.setText("Editar");
         }
+        //consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,16 +70,16 @@ public class MotivoAtencionFragment extends Fragment {
             Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(id_consulta_medica!=null) {
-            consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
-            consultaMedica.setMotivo(motivo);
-            consultaMedica.save();
-            Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
-        } else {
-            atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Long.valueOf(id_atencion_enfermeria));
-            atencionEnfermeria.setMotivoAtencion(motivo);
-            atencionEnfermeria.save();
-            Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
+        else{
+            if (consultaMedica.getEmpleado() == null) {
+                //Guarda el id del empleado en la consulta y la fecha de consulta
+                consultaMedica.setEmpleado(empleado);
+                consultaMedica.setFechaConsulta(new Date());
+            }
+                consultaMedica.setMotivo(motivo);
+                consultaMedica.save();
+                Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
+
         }
     }
 }

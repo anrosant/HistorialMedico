@@ -28,7 +28,7 @@ import java.util.Objects;
  */
 public class SignosVitalesFragment extends Fragment {
     private EditText etPSistolica, etPDistolica, etTemperatura, etPulso;
-    private String id_consulta_medica, id_empleado, id_atencion_enfermeria;
+    private String id_consulta_medica, id_empleado, id_atencion_enfermeria, presedencia;
     private ConsultaMedica consultaMedica;
     private ListView lvSignosVitales;
     private AdapterSignosVitales adapterSignosVitales;
@@ -63,24 +63,24 @@ public class SignosVitalesFragment extends Fragment {
         //Recibe el id de consulta medica desde Historial de consulta medica
         if (extras != null) {
             id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-            id_atencion_enfermeria = extras.getString("ID_ATENCION_ENFERMERIA");
+            id_atencion_enfermeria = extras.getString("ID_ATENCION");
+            presedencia = extras.getString("PRESEDENCIA");
+            //Recibe el id del empleado
+            id_empleado = extras.getString("ID_EMPLEADO");
+            empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
+            //Ingresa a nueva consulta medica
             if(id_consulta_medica!=null) {
 
                 consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
-                id_empleado = extras.getString("ID_EMPLEADO");
-                Log.d("ID EMPL: ", id_empleado);
-                empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
-
                 //Historial de Signos vitales
                 //Obtiene los signos vitales de un empleado
-                signosVitalesList = SignosVitales.find(SignosVitales.class, "consultamedica = ?", String.valueOf(consultaMedica.getId()));
-            }else{
+                signosVitalesList = SignosVitales.find(SignosVitales.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
+            }
+            //Ingresa a atencion enfermeria
+            else{
                 atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Long.valueOf(id_atencion_enfermeria));
-
-                id_empleado = extras.getString("ID_EMPLEADO");
-                empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
                 //Historial de Signos vitales
                 //Obtiene los signos vitales de un empleado
@@ -149,6 +149,7 @@ public class SignosVitalesFragment extends Fragment {
         int presionDistolica = Integer.parseInt(presionDistolicaText);
         float temp = Float.parseFloat(temperaturatext);
         int pulso = Integer.parseInt(pulsoText);
+        //Ejemplo 120-90-80-37
         if(presionSistolica < 100 || presionSistolica > 135 || presionDistolica < 70 || presionDistolica > 90 ||
                 pulso < 60 || pulso > 100 || temp < 34.0 || temp > 43.0){
             Toast.makeText(getContext(),"Los valores están fuera de rango", Toast.LENGTH_SHORT).show();

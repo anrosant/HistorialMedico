@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
+import com.example.cltcontrol.historialmedico.models.Empleado;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -21,12 +23,11 @@ import java.util.Objects;
  */
 public class MotivoAtenEnfermeriaFragment extends Fragment {
 
-    private String idAtencion=null;
-    private String idAtencion2=null;
-    private String presedencia;
+    private String idAtencion=null, presedencia, idEmpleado;
     private Bundle bun;
     private Button boton;
     private EditText etMotivo;
+    private Empleado empleado;
     public MotivoAtenEnfermeriaFragment() {
         // Required empty public constructor
     }
@@ -44,11 +45,41 @@ public class MotivoAtenEnfermeriaFragment extends Fragment {
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
         idAtencion = bun.getString("ID_ATENCION");
         presedencia = bun.getString("PRESEDENCIA");
+        idEmpleado = bun.getString("ID_EMPLEADO");
 
-        if(presedencia.equals("consultar")){//funcionalidad para cargar un signo vital con el id de Atencion
-            Toast.makeText(getContext(),"Viniste a consultar",Toast.LENGTH_SHORT).show();
-            AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
+        AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
+        empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
+
+        if(presedencia.equals("consultar")) {
+            ////funcionalidad para cargar un signo vital con el id de Atencion
+            //Toast.makeText(getContext(),"Viniste a consultar",Toast.LENGTH_SHORT).show();
             etMotivo.setText(atencion.getMotivoAtencion());
+            boton.setText("Editar");
+        }
+        boton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
+                atencion.setMotivoAtencion(etMotivo.getText().toString());
+                if(atencion.getEmpleado()==null){
+                    atencion.setEmpleado(empleado);
+                    atencion.setFecha_atencion(new Date());
+                    atencion.save();
+                }
+                try{
+                    atencion.save();
+                    Toast.makeText(getContext(),"Motivo Guardado",Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //}
+        /*else{//funcionalidad para guardar un signo vital nuevo que fue creado en la ventana contenedora AtencionEnfermeriaActivity
+            // al presionar el boton + en historial de Atencion Medica
+            //Toast.makeText(getContext(),"Viniste a crear",Toast.LENGTH_SHORT).show();
+            //idAtencion2 = bun.getString("ID_ATENCION2");
 
             boton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -64,27 +95,7 @@ public class MotivoAtenEnfermeriaFragment extends Fragment {
 
                 }
             });
-
-        }else{//funcionalidad para guardar un signo vital nuevo que fue creado en la ventana contenedora AtencionEnfermeriaActivity
-            // al presionar el boton + en historial de Atencion Medica
-            Toast.makeText(getContext(),"Viniste a crear",Toast.LENGTH_SHORT).show();
-            idAtencion2 = bun.getString("ID_ATENCION2");
-
-            boton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion2));
-                    atencion.setMotivoAtencion(etMotivo.getText().toString());
-                    try{
-                        atencion.save();
-                        Toast.makeText(getContext(),"Motivo Guardado",Toast.LENGTH_SHORT).show();
-                    }catch (Exception e){
-                        Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            });
-        }
+        }*/
 
         return view;
     }

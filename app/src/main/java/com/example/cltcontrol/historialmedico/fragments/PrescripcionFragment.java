@@ -12,7 +12,9 @@ import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
+import com.example.cltcontrol.historialmedico.models.Empleado;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -21,8 +23,9 @@ import java.util.Objects;
 public class PrescripcionFragment extends Fragment {
     private EditText et_prescripcion;
     private Button btn_guardar;
-    private String id_consulta_medica;
+    private String id_consulta_medica, presedencia,id_empleado;
     private ConsultaMedica consultaMedica;
+    private Empleado empleado;
 
     public PrescripcionFragment() {
         // Required empty public constructor
@@ -39,11 +42,19 @@ public class PrescripcionFragment extends Fragment {
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
-        //Recibe el id de consulta medica desde Historial de consulta medica
-        if (extras != null) {
-            id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        //Recibe el datos desde Historial de consulta medica
+        presedencia = extras.getString("PRESEDENCIA");
+        id_empleado = extras.getString("ID_EMPLEADO");
+        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.parseLong(id_consulta_medica));
 
+        //Si va a consultar que muestre los datos
+        if(presedencia.equals("consultar")) {
+            et_prescripcion.setText(consultaMedica.getPrescripcion());
+            btn_guardar.setText("Editar");
         }
+
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +70,13 @@ public class PrescripcionFragment extends Fragment {
         if(preescripcion.equals("")){
             Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
         }else {
-            consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+            //consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+            if (consultaMedica.getEmpleado() == null) {
+                //Guarda el id del empleado en la consulta y la fecha de consulta
+
+                consultaMedica.setEmpleado(empleado);
+                consultaMedica.setFechaConsulta(new Date());
+            }
             consultaMedica.setPrescripcion(preescripcion);
             consultaMedica.save();
 

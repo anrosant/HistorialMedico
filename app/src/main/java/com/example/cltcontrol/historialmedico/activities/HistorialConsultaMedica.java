@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,17 +18,17 @@ import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class HistorialConsultaMedica extends FragmentActivity implements ComunicadorMenu{
 
-    private String idEmpleado;
+    private String idEmpleado, presedencia, idConsultaMedica;
     private TextView tvNombresEmpleado;
     private ListView lvConsultasMedicas;
     private Empleado empleado;
     private FloatingActionButton btnAgregarConsultaMedica;
+    private List<ConsultaMedica> consultaMedicaList;
+    public static AdapterItemsConsultaMedica adapterItemsConsultaMedica;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +50,29 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         idEmpleado = inMenuEmpleado.getStringExtra("ID_EMPLEADO");
 
         //Busca las consultas medica de un empleado
-        List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "empleado = ?", idEmpleado);
-        Log.d("size consultamedicalist", String.valueOf(consultaMedicaList.size()));
+        consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "empleado = ?", idEmpleado);
+        Log.d("TAMANIO", String.valueOf(consultaMedicaList.size()));
         //Muestra los datos de las consultas medica en el listview
-        AdapterItemsConsultaMedica adapter = new AdapterItemsConsultaMedica(this, (ArrayList<ConsultaMedica>) consultaMedicaList);
-        lvConsultasMedicas.setAdapter(adapter);
-        Log.d("ID EMPL: ", idEmpleado);
+        adapterItemsConsultaMedica = new AdapterItemsConsultaMedica(this, consultaMedicaList);
+        lvConsultasMedicas.setAdapter(adapterItemsConsultaMedica);
+
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
+
+        lvConsultasMedicas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                idConsultaMedica= String.valueOf(consultaMedicaList.get(position).getId());
+                /*idConsultaMedica = view.findViewById(R.id.tvIdAtencion);
+                String idConsulta = idConsultaMedica.getText().toString();*/
+                Intent inConsultaMedica = new Intent(getApplicationContext(),ConsultaMedicaNuevoActivity.class);
+                inConsultaMedica.putExtra("ID_CONSULTA_MEDICA",idConsultaMedica);
+                inConsultaMedica.putExtra("PRESEDENCIA","consultar");
+                inConsultaMedica.putExtra("ID_EMPLEADO",idEmpleado);
+                startActivity(inConsultaMedica);
+            }
+        });
     }
 
     @Override
@@ -72,6 +87,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         inMenu.putExtra("BOTONPULSADO",opcionMenu);
         inMenu.putExtra("ID_EMPLEADO",idEmpleado);
         inMenu.putExtra("ID_CONSULTA_MEDICA", consultaMedica.getId().toString());
+        inMenu.putExtra("PRESEDENCIA", "crear");
 
         startActivity(inMenu);
 

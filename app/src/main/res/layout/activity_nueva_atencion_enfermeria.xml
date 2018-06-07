@@ -20,29 +20,55 @@
         </fragment>
 
     </LinearLayout>
-
-
-    <LinearLayout
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
-        <fragment
-            android:id="@+id/menuAtencionEnfermeria"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2.8"
-            android:name="com.example.cltcontrol.historialmedico.fragments.MenuAtencionEnfermeriaFragment"
-            tools:layout="@layout/fragment_menu_atencion_enfermeria">
-        </fragment>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:text="Atención enfermería"
+            android:background="@drawable/my_style"
+            />
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OK"/>
+    </android.support.v7.widget.LinearLayoutCompat>
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/contenedor_detalle_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/contenedorAtencionEnfermeria"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1.2">
-        </RelativeLayout>
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+            <fragment
+                android:id="@+id/menuAtencionEnfermeria"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2.8"
+                android:name="com.example.cltcontrol.historialmedico.fragments.MenuAtencionEnfermeriaFragment"
+                tools:layout="@layout/fragment_menu_atencion_enfermeria">
+            </fragment>
+
+            <RelativeLayout
+                android:id="@+id/contenedorAtencionEnfermeria"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2">
+            </RelativeLayout>
+        </LinearLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
 
 
 </LinearLayout>

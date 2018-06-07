@@ -3,13 +3,14 @@ package com.example.cltcontrol.historialmedico.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.Adapter.SessionManager;
+import com.example.cltcontrol.historialmedico.Identifiers.Validaciones;
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
@@ -28,6 +29,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        String valor = "ff52g";
+        Log.d("True_false: ", String.valueOf(Validaciones.validarContrasenias(valor)));
+        String valor1 = "122ffg";
+        Log.d("True_false: ", String.valueOf(Validaciones.validarContrasenias(valor1)));
+        String valor2 = "_fjhk55";
+        Log.d("True_false: ", String.valueOf(Validaciones.validarContrasenias(valor2)));
+        String valor3 = "jk_kjh";
+        Log.d("True_false: ", String.valueOf(Validaciones.validarContrasenias(valor3)));
+
 
         etUsuario = findViewById(R.id.etUsuario);
         etContrasenia = findViewById(R.id.etContrasenia);
@@ -99,28 +110,6 @@ public class MainActivity extends AppCompatActivity {
         empTemp2.save();
 
         Date fecha = new Date();
-
-        /*
-        AtencionEnfermeria atencion1 = new AtencionEnfermeria(fecha,empTemp,"Dolor de estomago",
-                "Tiene un dolor en la boca del estomago","Tomar mucha agua, con paracetamol, y descanso");
-        atencion1.save();
-        AtencionEnfermeria atencion2 = new AtencionEnfermeria(fecha,empTemp,"Dolor",
-                "Tiene un dolor","Tomar mucha agua, con paracetamol");
-        atencion2.save();
-        AtencionEnfermeria atencion3 = new AtencionEnfermeria(fecha,empTemp,"Dolor de estomago",
-                "Tiene un dolor en la boca del estomago","Tomar mucha agua, con paracetamol, y descanso");
-        atencion3.save();
-        AtencionEnfermeria atencion4 = new AtencionEnfermeria(fecha,empTemp,"Dolor",
-                "Tiene un dolor","Tomar mucha agua, con paracetamol");
-        atencion4.save();
-        AtencionEnfermeria atencion5 = new AtencionEnfermeria(fecha,empTemp,"Dolor de estomago",
-                "Tiene un dolor en la boca del estomago","Tomar mucha agua, con paracetamol, y descanso");
-        atencion5.save();
-        AtencionEnfermeria atencion6 = new AtencionEnfermeria(fecha,empTemp,"Dolor",
-                "Tiene un dolor","Tomar mucha agua, con paracetamol");
-        atencion6.save();
-        */
-
         ConsultaMedica consultaMedica1 = new ConsultaMedica(empTemp,fecha_actual,"prov1","rev1","pres1", "ex1","motivo1");
         consultaMedica1.save();
         ConsultaMedica consultaMedica2 = new ConsultaMedica(empTemp,fecha_actual,"prov2","rev2","pres2","ex2", "motivo2");

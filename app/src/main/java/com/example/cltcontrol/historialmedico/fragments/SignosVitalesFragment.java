@@ -117,22 +117,6 @@ public class SignosVitalesFragment extends Fragment {
 
     public void guardarSignosVitales(){
 
-        if(id_consulta_medica!=null) {
-            //Si es la primera vez que crea la consulta medica
-            if (consultaMedica.getEmpleado() == null) {
-                //Guarda el id del empleado en la consulta y la fecha de consulta
-                consultaMedica.setEmpleado(empleado);
-                consultaMedica.setFechaConsulta(new Date());
-                consultaMedica.save();
-            }
-        }else{
-            if(atencionEnfermeria.getEmpleado() == null){
-                atencionEnfermeria.setEmpleado(empleado);
-                atencionEnfermeria.setFecha_atencion(new Date());
-                atencionEnfermeria.save();
-            }
-        }
-
         //Recibe los datos de signos vitales
         String presionSistolicaText = etPSistolica.getText().toString();
         String presionDistolicaText = etPDistolica.getText().toString();
@@ -158,6 +142,13 @@ public class SignosVitalesFragment extends Fragment {
 
         //Guarda los datos y el id de la consulta medica o enfermeria
         if(id_consulta_medica!=null){
+            //Si es la primera vez que crea la consulta medica
+            if (consultaMedica.getEmpleado() == null) {
+                //Guarda el id del empleado en la consulta y la fecha de consulta
+                consultaMedica.setEmpleado(empleado);
+                consultaMedica.setFechaConsulta(new Date());
+                consultaMedica.save();
+            }
             SignosVitales signosVitales = new SignosVitales(presionSistolica,presionDistolica,pulso,temp,consultaMedica);
             signosVitales.save();
             ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
@@ -165,6 +156,11 @@ public class SignosVitalesFragment extends Fragment {
 
             adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
         }else{
+            if(atencionEnfermeria.getEmpleado() == null){
+                atencionEnfermeria.setEmpleado(empleado);
+                atencionEnfermeria.setFecha_atencion(new Date());
+                atencionEnfermeria.save();
+            }
             SignosVitales signosVitales = new SignosVitales(presionSistolica,presionDistolica,pulso,temp,atencionEnfermeria);
             signosVitales.save();
             ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,

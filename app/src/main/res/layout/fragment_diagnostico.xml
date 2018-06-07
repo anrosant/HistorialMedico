@@ -114,8 +114,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="10sp"
-                                android:text="Presuntorio"
-                                android:checked="true"/>
+                                android:text="Presuntorio"/>
 
                             <RadioButton
                                 android:id="@+id/rbDefinitorio"

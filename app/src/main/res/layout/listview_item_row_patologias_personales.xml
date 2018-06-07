@@ -9,16 +9,16 @@
     android:layout_weight="1">
 
     <TextView
+        android:id="@+id/tvLugar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="24dp"
-        android:textStyle="bold"
-        android:text="PARENTEZCO" />
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tvDetalle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="ENFERMEDAD"
         android:layout_marginBottom="5dp"
         android:textSize="18dp"/>
 

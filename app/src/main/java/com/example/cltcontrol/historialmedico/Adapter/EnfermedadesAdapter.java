@@ -15,10 +15,14 @@ import java.util.List;
 
 public class EnfermedadesAdapter extends RecyclerView.Adapter<EnfermedadesAdapter.ViewHolder> {
 
-    List<Enfermedad> listaEnfermedades;
+    private List<Enfermedad> listaEnfermedades;
 
     public EnfermedadesAdapter(List<Enfermedad> listaEnfermedades) {
         this.listaEnfermedades = listaEnfermedades;
+    }
+
+    public List<Enfermedad> getListaEnfermedades() {
+        return listaEnfermedades;
     }
 
     @Override

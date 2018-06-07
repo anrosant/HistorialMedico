@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,9 @@ public class DiagnosticoFragment extends Fragment {
     private ListView lvDiagnostico;
     private LinearLayout ly_diagnostico;
     private ImageButton ib_mostrar_ocultar_contendido;
-    public List<Diagnostico> diagnosticoList;
+    private List<Diagnostico> diagnosticoList;
+    private List<Enfermedad> newList;
+
 
     public DiagnosticoFragment() {
         // Required empty public constructor
@@ -67,7 +70,7 @@ public class DiagnosticoFragment extends Fragment {
         ib_mostrar_ocultar_contendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         ly_diagnostico = view.findViewById(R.id.ly_diagnostico);
 
-        Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
+        final Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         if (extras != null) {
             //Recibe el id de consulta medica desde Historial de consulta medica
             id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
@@ -84,6 +87,10 @@ public class DiagnosticoFragment extends Fragment {
         recyclerEnfermedades = view.findViewById(R.id.rvListaEnfermedades);
         recyclerEnfermedades.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
         etBuscarEnfermedades = view.findViewById(R.id.etBuscarEnfermedades);
+
+        //Muestra la lsita de enfermedades
+        adaptadorEnfermedades = new EnfermedadesAdapter(enfermedadList);
+        recyclerEnfermedades.setAdapter(adaptadorEnfermedades);
 
         etBuscarEnfermedades.addTextChangedListener(new TextWatcher() {
 
@@ -105,7 +112,7 @@ public class DiagnosticoFragment extends Fragment {
                 String newTest;
                 if(charSequence.length() != 0){
                     newTest = etBuscarEnfermedades.getText().toString().toLowerCase();
-                    List<Enfermedad> newList = new ArrayList<>();
+                    newList = new ArrayList<>();
                     for (Enfermedad enfermedad:enfermedadList){
                         String nombre = enfermedad.getNombre().toLowerCase();
                         if(nombre.contains(newTest)){
@@ -119,9 +126,6 @@ public class DiagnosticoFragment extends Fragment {
                 }
             }
         });
-        //Muestra la lsita de enfermedades
-        adaptadorEnfermedades = new EnfermedadesAdapter(enfermedadList);
-        recyclerEnfermedades.setAdapter(adaptadorEnfermedades);
 
         //Al dar click en un item, este se guarda en la variable enfermedad
         recyclerEnfermedades.addOnItemTouchListener(
@@ -129,8 +133,8 @@ public class DiagnosticoFragment extends Fragment {
 
                     @Override
                     public void onItemClick(View view, int position) {
-                        Toast.makeText(getContext(), "Se ha escogido "+enfermedadList.get(position).getNombre(),Toast.LENGTH_LONG).show();
-                        enfermedad = enfermedadList.get(position);
+                        Toast.makeText(getContext(), "Se ha escogido " + adaptadorEnfermedades.getListaEnfermedades().get(position).getNombre(), Toast.LENGTH_SHORT).show();
+                        enfermedad = adaptadorEnfermedades.getListaEnfermedades().get(position);
                     }
 
                     @Override
@@ -176,7 +180,7 @@ public class DiagnosticoFragment extends Fragment {
 
     private void guardarDiagnostico() {
         if(enfermedad == null || tipo_enfermedad==null){
-            Toast.makeText(getContext(),"No ha seleccionado ninguna enfermedad",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"No ha seleccionado todos los datos",Toast.LENGTH_SHORT).show();
         }else {
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 

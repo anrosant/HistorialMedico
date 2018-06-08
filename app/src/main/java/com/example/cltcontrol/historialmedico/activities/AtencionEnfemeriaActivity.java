@@ -9,14 +9,11 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.fragments.DiagnosticoEnfermeriaFragment;
 import com.example.cltcontrol.historialmedico.fragments.MotivoAtenEnfermeriaFragment;
-import com.example.cltcontrol.historialmedico.fragments.MotivoAtencionFragment;
 import com.example.cltcontrol.historialmedico.fragments.PlanCuidadosFragment;
-import com.example.cltcontrol.historialmedico.fragments.SignosVitalesEnfermeriaFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;

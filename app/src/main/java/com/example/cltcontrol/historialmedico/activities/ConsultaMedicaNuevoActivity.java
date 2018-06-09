@@ -24,7 +24,10 @@ import com.example.cltcontrol.historialmedico.fragments.RevisionMedicaFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
+import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.models.SignosVitales;
+import com.orm.util.NamingHelper;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -33,7 +36,7 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
 
     private Fragment[] misFragmentos;
     private Empleado empleado;
-    String idConsultaMedica, idEmpleado, presedencia;
+    String idConsultaMedica, idEmpleado, presedencia, cargo;
 
     Button btn_ok;
 
@@ -67,7 +70,11 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         final String id_empleado = extras.getString("ID_EMPLEADO");
         idConsultaMedica = extras.getString("ID_CONSULTA_MEDICA");
         presedencia = extras.getString("PRESEDENCIA");
+        cargo = extras.getString("CARGO");
 
+        if(cargo.equalsIgnoreCase("Enfermera")){
+            btn_ok.setVisibility(View.GONE);
+        }
         //Coloca los datos del empleado en el fragment de informacion
         TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
         empleado = Empleado.findById(Empleado.class, Long.parseLong(id_empleado));
@@ -89,34 +96,53 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
     @Override
     public void onBackPressed()
     {
-        AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
-        //seleccionamos la cadena a mostrar
-        alertbox.setMessage("No se guardara la consulta. Desea salir?");
-        //elegimos un positivo SI
-        alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-            //Funcion llamada cuando se pulsa el boton Si
-            public void onClick(DialogInterface arg0, int arg1) {
-                //Toast.makeText(getApplicationContext(),"Pulsaste SI",Toast.LENGTH_LONG).show();
-                //Elimina la consulta vacía
-                if(presedencia.equals("crear")){
-                    ConsultaMedica consultaMedica= ConsultaMedica.findById(ConsultaMedica.class,Long.parseLong(idConsultaMedica));
-                    consultaMedica.delete();
+        if(cargo.equals("Doctor")) {
+            AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+            if (presedencia.equals("crear")) {
+                //seleccionamos la cadena a mostrar
+                alertbox.setMessage("No se guardara la consulta. Desea salir?");
+                //elegimos un positivo SI
+                alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    //Funcion llamada cuando se pulsa el boton Si
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        //Elimina la consulta vacía
+                        ConsultaMedica consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.parseLong(idConsultaMedica));
+                        //Elimina en cascada
+                        Diagnostico.deleteAll(Diagnostico.class, "consultamedica = ?", idConsultaMedica);
+                        SignosVitales.deleteAll(SignosVitales.class, "consultamedica = ?", idConsultaMedica);
+                        //Reset el autoincrement
+                        ConsultaMedica.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + NamingHelper.toSQLName(ConsultaMedica.class) + "'");
+                        consultaMedica.delete();
+
+
+                        ConsultaMedicaNuevoActivity.super.onBackPressed();
+                    }
+                });
+                //Si editó una consulta
+            } else {
+                //seleccionamos la cadena a mostrar
+                alertbox.setMessage("Los datos que no ha guardado se descartarán. Desea salir?");
+                //elegimos un positivo SI
+                alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    //Funcion llamada cuando se pulsa el boton Si
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        ConsultaMedicaNuevoActivity.super.onBackPressed();
+                    }
+                });
+            }
+            //elegimos un positivo NO
+            alertbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                //Funcion llamada cuando se pulsa el boton No
+                public void onClick(DialogInterface arg0, int arg1) {
+                    //Toast.makeText(getApplicationContext(),"Pulsaste NO",Toast.LENGTH_LONG).show();
                 }
-
-                ConsultaMedicaNuevoActivity.super.onBackPressed();
-            }
-        });
-
-        //elegimos un positivo NO
-        alertbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            //Funcion llamada cuando se pulsa el boton No
-            public void onClick(DialogInterface arg0, int arg1) {
-                //Toast.makeText(getApplicationContext(),"Pulsaste NO",Toast.LENGTH_LONG).show();
-            }
-        });
-
-        //mostramos el alertbox
-        alertbox.show();
+            });
+            //mostramos el alertbox
+            alertbox.show();
+        }
+        else {
+            ConsultaMedicaNuevoActivity.super.onBackPressed();
+        }
     }
 
 

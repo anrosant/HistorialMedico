@@ -23,7 +23,7 @@ import java.util.Objects;
  */
 public class MotivoAtenEnfermeriaFragment extends Fragment {
 
-    private String idAtencion=null, presedencia, idEmpleado;
+    private String idAtencion=null, presedencia, idEmpleado, cargo;
     private Bundle bun;
     private Button boton;
     private EditText etMotivo;
@@ -50,9 +50,15 @@ public class MotivoAtenEnfermeriaFragment extends Fragment {
         AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
 
+        cargo = bun.getString("CARGO");
+        if(cargo.equals("Doctor")){
+            boton.setVisibility(View.GONE);
+            etMotivo.setEnabled(false);
+
+        }
+
         if(presedencia.equals("consultar")) {
             ////funcionalidad para cargar un signo vital con el id de Atencion
-            //Toast.makeText(getContext(),"Viniste a consultar",Toast.LENGTH_SHORT).show();
             etMotivo.setText(atencion.getMotivoAtencion());
             boton.setText("Editar");
         }

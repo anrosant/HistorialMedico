@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.Adapter.AdapterPatologiasPersonales;
@@ -34,7 +35,7 @@ public class PatologiasPersonalesFragment extends Fragment {
     private LinearLayout ly_patologias_personales;
     private EditText etDetalleEnfermedad;
     private ListView lvPatologiasPersonales;
-    private String id_consulta_medica, id_empleado, lugar, detalle;
+    private String id_consulta_medica, id_empleado, lugar, detalle, cargo;
     private ConsultaMedica consultaMedica;
     private ArrayAdapter<CharSequence> adapter;
     private AdapterPatologiasPersonales adapterPatologiaPers;
@@ -42,6 +43,7 @@ public class PatologiasPersonalesFragment extends Fragment {
     private List<PatologiasPersonales> patologiasPersonalesList;
     private Button btn_guardar;
     private Empleado empleado;
+    private TextView tvTitulo;
 
     public PatologiasPersonalesFragment() {
         // Required empty public constructor
@@ -58,6 +60,7 @@ public class PatologiasPersonalesFragment extends Fragment {
         etDetalleEnfermedad = view.findViewById(R.id.etDetalleEnfermedad);
         lvPatologiasPersonales = view.findViewById(R.id.lvPatologiasPersonales);
         btn_guardar = view.findViewById(R.id.btnGuardar);
+        tvTitulo = view.findViewById(R.id.tvTitulo);
 
         Spinner spPatologias = view.findViewById(R.id.spPatologia);
         adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()).getBaseContext(), R.array.patologias, android.R.layout.simple_spinner_dropdown_item);
@@ -74,6 +77,15 @@ public class PatologiasPersonalesFragment extends Fragment {
 
         id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+
+        cargo = extras.getString("CARGO");
+        if(cargo.equals("Enfermera")){
+            btn_guardar.setVisibility(View.GONE);
+            ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
+            ly_patologias_personales.setVisibility(View.GONE);
+            tvTitulo.setVisibility(View.GONE);
+
+        }
 
         spPatologias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

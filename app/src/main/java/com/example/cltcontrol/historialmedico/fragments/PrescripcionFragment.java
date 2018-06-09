@@ -23,7 +23,7 @@ import java.util.Objects;
 public class PrescripcionFragment extends Fragment {
     private EditText et_prescripcion;
     private Button btn_guardar;
-    private String id_consulta_medica, presedencia,id_empleado;
+    private String id_consulta_medica, presedencia,id_empleado, cargo;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
@@ -48,6 +48,13 @@ public class PrescripcionFragment extends Fragment {
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.parseLong(id_consulta_medica));
+
+        cargo = extras.getString("CARGO");
+        if(cargo.equals("Enfermera")){
+            btn_guardar.setVisibility(View.GONE);
+            et_prescripcion.setEnabled(false);
+
+        }
 
         //Si va a consultar que muestre los datos
         if(presedencia.equals("consultar")) {

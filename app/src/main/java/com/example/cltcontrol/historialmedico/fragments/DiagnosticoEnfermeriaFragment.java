@@ -23,7 +23,7 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
 
     private String idAtencion=null;
     //private String idAtencion2=null;
-    private String presedencia, idEmpleado;
+    private String presedencia, idEmpleado,cargo;
     private Bundle bun;
     private Button boton;
     private EditText etDiagnostico;
@@ -49,6 +49,7 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
         idAtencion = bun.getString("ID_ATENCION");
         presedencia = bun.getString("PRESEDENCIA");
         idEmpleado = bun.getString("ID_EMPLEADO");
+        cargo = bun.getString("CARGO");
 
         AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
@@ -58,7 +59,10 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
             etDiagnostico.setText(atencion.getDiagnosticoEnfermeria());
             boton.setText("Editar");
         }
-
+        if(cargo.equals("Doctor")){
+            boton.setVisibility(View.GONE);
+            etDiagnostico.setEnabled(false);
+        }
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,32 +81,6 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
                 }
             }
         });
-
-        //if(presedencia.equals("consultar")){//funcionalidad para cargar un signo vital con el id de Atencion
-            //Toast.makeText(getContext(),"Viniste a consultar",Toast.LENGTH_SHORT).show();
-
-        //}
-        /*else{//funcionalidad para guardar un signo vital nuevo que fue creado en la ventana contenedora AtencionEnfermeriaActivity
-            // al presionar el boton + en historial de Atencion Medica
-            Toast.makeText(getContext(),"Viniste a crear",Toast.LENGTH_SHORT).show();
-            idAtencion2 = bun.getString("ID_ATENCION2");
-
-            boton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion2));
-                    atencion.setDiagnosticoEnfermeria(etDiagnostico.getText().toString());
-                    try{
-                        atencion.save();
-                        Toast.makeText(getContext(),"Diagnostico Guardado",Toast.LENGTH_SHORT).show();
-                    }catch (Exception e){
-                        Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            });
-        }*/
-
         return view;
     }
 

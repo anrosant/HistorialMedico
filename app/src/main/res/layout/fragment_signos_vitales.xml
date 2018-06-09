@@ -30,6 +30,7 @@
                     android:weightSum="2">
 
                     <TextView
+                        android:id="@+id/tvTitulo"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/colorPrimary"
@@ -182,10 +183,19 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_margin="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@color/colorPrimary"
+                    android:padding="5dp"
+                    android:text="REGISTRO DE SIGNOS VITALES"
+                    android:textColor="#FFFFFF"
+                    android:layout_weight="1"/>
 
                 <ListView
                     android:id="@+id/lvSignosVitales"

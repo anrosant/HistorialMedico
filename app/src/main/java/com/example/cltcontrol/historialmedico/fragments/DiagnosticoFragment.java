@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.Adapter.AdapterItemDiagnostico;
@@ -40,7 +41,7 @@ public class DiagnosticoFragment extends Fragment {
     private EnfermedadesAdapter adaptadorEnfermedades;
     private EditText etBuscarEnfermedades;
     private Enfermedad enfermedad;
-    private String tipo_enfermedad,id_consulta_medica, id_empleado;
+    private String tipo_enfermedad,id_consulta_medica, id_empleado, cargo;
     private AdapterItemDiagnostico adapterItemDiagnostico;
     private Button btn_guardar;
     private ConsultaMedica consultaMedica;
@@ -52,6 +53,7 @@ public class DiagnosticoFragment extends Fragment {
     private ImageButton ib_mostrar_ocultar_contendido;
     private List<Diagnostico> diagnosticoList;
     private List<Enfermedad> newList;
+    private TextView tvTitulo;
 
 
     public DiagnosticoFragment() {
@@ -69,20 +71,30 @@ public class DiagnosticoFragment extends Fragment {
         lvDiagnostico = view.findViewById(R.id.lvDiagnostico);
         ib_mostrar_ocultar_contendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         ly_diagnostico = view.findViewById(R.id.ly_diagnostico);
+        tvTitulo = view.findViewById(R.id.tvTitulo);
+
 
         final Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
-        if (extras != null) {
-            //Recibe el id de consulta medica desde Historial de consulta medica
-            id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-            id_empleado = extras.getString("ID_EMPLEADO");
-            empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
-            //Muestra la lista de diagnosticos
-            diagnosticoList = Diagnostico.find(Diagnostico.class, "consultamedica = ?", id_consulta_medica);
-            //Crea un adapter de dicha lista y la muestra en un listview
-            adapterItemDiagnostico = new AdapterItemDiagnostico(getContext(), diagnosticoList);
-            lvDiagnostico.setAdapter(adapterItemDiagnostico);
+        //Recibe el id de consulta medica desde Historial de consulta medica
+        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        id_empleado = extras.getString("ID_EMPLEADO");
+        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+        cargo = extras.getString("CARGO");
+
+        if(cargo.equals("Enfermera")){
+            btn_guardar.setVisibility(View.GONE);
+            ly_diagnostico.setVisibility(View.GONE);
+            ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
+            tvTitulo.setVisibility(View.GONE);
+
         }
+        //Muestra la lista de diagnosticos
+        diagnosticoList = Diagnostico.find(Diagnostico.class, "consultamedica = ?", id_consulta_medica);
+        //Crea un adapter de dicha lista y la muestra en un listview
+        adapterItemDiagnostico = new AdapterItemDiagnostico(getContext(), diagnosticoList);
+        lvDiagnostico.setAdapter(adapterItemDiagnostico);
+
         readEnfermedadesAll();
         recyclerEnfermedades = view.findViewById(R.id.rvListaEnfermedades);
         recyclerEnfermedades.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));

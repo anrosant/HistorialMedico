@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.cltcontrol.historialmedico.Adapter.AdapterSignosVitales;
 import com.example.cltcontrol.historialmedico.R;
@@ -28,7 +29,7 @@ import java.util.Objects;
  */
 public class SignosVitalesFragment extends Fragment {
     private EditText etPSistolica, etPDistolica, etTemperatura, etPulso;
-    private String id_consulta_medica, id_empleado, id_atencion_enfermeria, presedencia;
+    private String id_consulta_medica, id_empleado, id_atencion_enfermeria, presedencia, cargo;
     private ConsultaMedica consultaMedica;
     private ListView lvSignosVitales;
     private AdapterSignosVitales adapterSignosVitales;
@@ -38,7 +39,7 @@ public class SignosVitalesFragment extends Fragment {
     private Button btn_guardar;
     private ImageButton ib_mostrar_ocultar_contendido;
     LinearLayout ly_signos_vitales;
-
+    private TextView tvTitulo;
     public SignosVitalesFragment() {
         // Required empty public constructor
     }
@@ -57,40 +58,52 @@ public class SignosVitalesFragment extends Fragment {
         btn_guardar = view.findViewById(R.id.btnGuardar);
         ib_mostrar_ocultar_contendido =  view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         ly_signos_vitales = view.findViewById(R.id.ly_signos_vitales);
-
+        tvTitulo = view.findViewById(R.id.tvTitulo);
         //
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         //Recibe el id de consulta medica desde Historial de consulta medica
-        if (extras != null) {
-            id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-            id_atencion_enfermeria = extras.getString("ID_ATENCION");
-            presedencia = extras.getString("PRESEDENCIA");
-            //Recibe el id del empleado
-            id_empleado = extras.getString("ID_EMPLEADO");
-            empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
-            //Ingresa a nueva consulta medica
-            if(id_consulta_medica!=null) {
+        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        id_atencion_enfermeria = extras.getString("ID_ATENCION");
+        presedencia = extras.getString("PRESEDENCIA");
+        //Recibe el id del empleado
+        id_empleado = extras.getString("ID_EMPLEADO");
+        cargo = extras.getString("CARGO");
+        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
-                consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
-
-                //Historial de Signos vitales
-                //Obtiene los signos vitales de un empleado
-                signosVitalesList = SignosVitales.find(SignosVitales.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
+        //Ingresa a nueva consulta medica
+        if(id_consulta_medica!=null) {
+            if(cargo.equals("Enfermera")){
+                btn_guardar.setVisibility(View.GONE);
+                ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
+                ly_signos_vitales.setVisibility(View.GONE);
+                tvTitulo.setVisibility(View.GONE);
             }
-            //Ingresa a atencion enfermeria
-            else{
-                atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Long.valueOf(id_atencion_enfermeria));
+            consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
-                //Historial de Signos vitales
-                //Obtiene los signos vitales de un empleado
-                signosVitalesList = SignosVitales.find(SignosVitales.class, "atencionenfermeria = ?", String.valueOf(id_atencion_enfermeria));
-
-            }
-            //Crea un adapter de dicha lista y la muestra en un listview
-            adapterSignosVitales = new AdapterSignosVitales(getContext(), (ArrayList<SignosVitales>) signosVitalesList);
-            lvSignosVitales.setAdapter(adapterSignosVitales);
+            //Historial de Signos vitales
+            //Obtiene los signos vitales de un empleado
+            signosVitalesList = SignosVitales.find(SignosVitales.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
         }
+        //Ingresa a atencion enfermeria
+        else{
+            if(cargo.equals("Doctor")){
+                btn_guardar.setVisibility(View.GONE);
+                ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
+                ly_signos_vitales.setVisibility(View.GONE);
+                tvTitulo.setVisibility(View.GONE);
+            }
+
+            atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Long.valueOf(id_atencion_enfermeria));
+
+            //Historial de Signos vitales
+            //Obtiene los signos vitales de un empleado
+            signosVitalesList = SignosVitales.find(SignosVitales.class, "atencionenfermeria = ?", String.valueOf(id_atencion_enfermeria));
+        }
+        //Crea un adapter de dicha lista y la muestra en un listview
+        adapterSignosVitales = new AdapterSignosVitales(getContext(), (ArrayList<SignosVitales>) signosVitalesList);
+        lvSignosVitales.setAdapter(adapterSignosVitales);
+
 
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +152,6 @@ public class SignosVitalesFragment extends Fragment {
             Toast.makeText(getContext(),"Los valores están fuera de rango", Toast.LENGTH_SHORT).show();
             return;
         }
-
         //Guarda los datos y el id de la consulta medica o enfermeria
         if(id_consulta_medica!=null){
             //Si es la primera vez que crea la consulta medica

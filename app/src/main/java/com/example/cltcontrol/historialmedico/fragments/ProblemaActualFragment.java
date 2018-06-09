@@ -23,7 +23,7 @@ import java.util.Objects;
 public class ProblemaActualFragment extends Fragment {
     private EditText et_problema_actual;
     private Button btn_guardar;
-    private String id_consulta_medica, presedencia, id_empleado;
+    private String id_consulta_medica, presedencia, id_empleado, cargo;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
@@ -49,6 +49,12 @@ public class ProblemaActualFragment extends Fragment {
         id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+        cargo = extras.getString("CARGO");
+        if(cargo.equals("Enfermera")){
+            btn_guardar.setVisibility(View.GONE);
+            et_problema_actual.setEnabled(false);
+
+        }
         if(presedencia.equals("consultar")){
             et_problema_actual.setText(consultaMedica.getProbActual());
             btn_guardar.setText("Editar");

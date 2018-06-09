@@ -1,8 +1,10 @@
 package com.example.cltcontrol.historialmedico.models;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Column;
 
 public class Diagnostico extends SugarRecord{
+
     private ConsultaMedica consulta_medica;
     private Enfermedad enfermedad;
     private String tipoEnfermedad;

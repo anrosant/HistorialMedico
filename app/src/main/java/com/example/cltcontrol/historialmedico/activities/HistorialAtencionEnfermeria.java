@@ -66,12 +66,14 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+
                 Intent atencionEnfermeria = new Intent(getApplicationContext(),AtencionEnfemeriaActivity.class);
                 idAtencion = String.valueOf(atencionEnfermeriaList.get(position).getId());
 
                 atencionEnfermeria.putExtra("ID_ATENCION",idAtencion);
                 atencionEnfermeria.putExtra("PRESEDENCIA","consultar");
                 atencionEnfermeria.putExtra("ID_EMPLEADO",idEmpleado);
+                atencionEnfermeria.putExtra("CARGO", cargo);
                 startActivity(atencionEnfermeria);
             }
         });
@@ -86,6 +88,7 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
         inAtencionEnfermeria.putExtra("PRESEDENCIA","crear");
         inAtencionEnfermeria.putExtra("ID_EMPLEADO",idEmpleado);
         inAtencionEnfermeria.putExtra("ID_ATENCION", atencionEnfermeria.getId().toString());
+        inAtencionEnfermeria.putExtra("CARGO", cargo);
         startActivity(inAtencionEnfermeria);
     }
 

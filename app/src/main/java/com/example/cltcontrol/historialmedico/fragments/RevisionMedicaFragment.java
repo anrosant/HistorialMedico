@@ -24,7 +24,7 @@ public class RevisionMedicaFragment extends Fragment {
 
     private EditText et_revision_medica;
     private Button btn_guardar;
-    private String id_consulta_medica, presedencia,id_empleado;
+    private String id_consulta_medica, presedencia,id_empleado, cargo;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
@@ -50,6 +50,13 @@ public class RevisionMedicaFragment extends Fragment {
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
         id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+
+        cargo = extras.getString("CARGO");
+        if(cargo.equals("Enfermera")){
+            btn_guardar.setVisibility(View.GONE);
+            et_revision_medica.setEnabled(false);
+
+        }
 
         if(presedencia.equals("consultar")) {
             et_revision_medica.setText(consultaMedica.getRevision_medica());

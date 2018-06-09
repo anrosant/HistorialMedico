@@ -94,9 +94,4 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
         }
     }
 
-    public void seleccionarEmpleado(View v){
-        Intent inSeleccionEmpleado = new Intent(this, MenuEmpleadoActivity.class);
-        startActivity(inSeleccionEmpleado);
-    }
-
 }

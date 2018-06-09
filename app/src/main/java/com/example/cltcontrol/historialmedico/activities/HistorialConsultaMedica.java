@@ -22,7 +22,7 @@ import java.util.List;
 
 public class HistorialConsultaMedica extends FragmentActivity implements ComunicadorMenu{
 
-    private String idEmpleado, presedencia, idConsultaMedica;
+    private String idEmpleado, presedencia, idConsultaMedica, cargo;
     private TextView tvNombresEmpleado;
     private ListView lvConsultasMedicas;
     private Empleado empleado;
@@ -41,7 +41,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
 
         //Obtener el cargo del usuario que inició sesión
         SessionManager sesion = new SessionManager(getApplicationContext());
-        String cargo = sesion.obtenerInfoUsuario().get("cargo");
+        cargo = sesion.obtenerInfoUsuario().get("cargo");
         if(cargo.equals("Enfermera")){
             btnAgregarConsultaMedica.setVisibility(View.GONE);
         }
@@ -70,6 +70,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
                 inConsultaMedica.putExtra("ID_CONSULTA_MEDICA",idConsultaMedica);
                 inConsultaMedica.putExtra("PRESEDENCIA","consultar");
                 inConsultaMedica.putExtra("ID_EMPLEADO",idEmpleado);
+                inConsultaMedica.putExtra("CARGO", cargo);
                 startActivity(inConsultaMedica);
             }
         });
@@ -88,6 +89,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         inMenu.putExtra("ID_EMPLEADO",idEmpleado);
         inMenu.putExtra("ID_CONSULTA_MEDICA", consultaMedica.getId().toString());
         inMenu.putExtra("PRESEDENCIA", "crear");
+        inMenu.putExtra("CARGO", cargo);
 
         startActivity(inMenu);
 

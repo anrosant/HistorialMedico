@@ -21,7 +21,7 @@ import java.util.Objects;
 public class MotivoAtencionFragment extends Fragment {
     private EditText etMotivoAtencion;
     private Button btn_guardar;
-    private String id_consulta_medica, id_atencion_enfermeria, presedencia, id_empleado;
+    private String id_consulta_medica, presedencia, id_empleado, cargo;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
     //private AtencionEnfermeria atencionEnfermeria;
@@ -44,6 +44,12 @@ public class MotivoAtencionFragment extends Fragment {
         presedencia = extras.getString("PRESEDENCIA");
         id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+        cargo = extras.getString("CARGO");
+        if(cargo.equals("Enfermera")){
+            btn_guardar.setVisibility(View.GONE);
+            etMotivoAtencion.setEnabled(false);
+
+        }
         //id_atencion_enfermeria = extras.getString("ID_ATENCION_ENFERMERIA");
 
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));

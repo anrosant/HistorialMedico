@@ -23,7 +23,7 @@ import java.util.Objects;
 public class PlanCuidadosFragment extends Fragment {
 
 
-    private String idAtencion=null, presedencia, idEmpleado;
+    private String idAtencion=null, presedencia, idEmpleado, cargo;
     private Bundle bun;
     private Button boton;
     private EditText etPlan;
@@ -48,6 +48,13 @@ public class PlanCuidadosFragment extends Fragment {
         idAtencion = bun.getString("ID_ATENCION");
         presedencia = bun.getString("PRESEDENCIA");
         idEmpleado = bun.getString("ID_EMPLEADO");
+
+        cargo = bun.getString("CARGO");
+        if(cargo.equals("Doctor")){
+            boton.setVisibility(View.GONE);
+            etPlan.setEnabled(false);
+
+        }
 
         AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));

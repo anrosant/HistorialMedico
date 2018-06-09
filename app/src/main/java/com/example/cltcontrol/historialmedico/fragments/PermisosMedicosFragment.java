@@ -3,6 +3,7 @@ package com.example.cltcontrol.historialmedico.fragments;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,12 +35,13 @@ import java.util.concurrent.TimeUnit;
 
 public class PermisosMedicosFragment extends Fragment {
 
-    private String id_empleado, id_consulta_medica;
+    private String id_empleado, id_consulta_medica, cargo, presedencia;
     private Empleado empleado;
     private ConsultaMedica consultaMedica;
     private Diagnostico diagnostico;
     private List<Diagnostico> diagnosticosList;
     private ArrayList<String> lista_enfermedades_diagnostico;
+    private ArrayList<PermisoMedico> permisoMedicoList;
 
     private EditText fecha_desde, fecha_hasta, observaciones;
     private Button btn_guardar;
@@ -49,6 +51,7 @@ public class PermisosMedicosFragment extends Fragment {
     private int dia, mes, anio;
     private Calendar calendar;
     private Date fecha_ini, fecha_fin;
+    private PermisoMedico permisoMedico;
 
     public PermisosMedicosFragment() {}
 
@@ -74,6 +77,23 @@ public class PermisosMedicosFragment extends Fragment {
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
         id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+        cargo = extras.getString("CARGO");
+        presedencia = extras.getString("PRESEDENCIA");
+
+        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+
+        //Obtiene el permiso medico
+        permisoMedicoList = (ArrayList<PermisoMedico>) PermisoMedico.find(PermisoMedico.class, "consultamedica = ?",String.valueOf(id_consulta_medica));
+        if(permisoMedicoList.size()==0){
+            permisoMedico = null;
+        }else{
+            permisoMedico = permisoMedicoList.get(0);
+        }
+
+        if(cargo.equals("Enfermera")){
+            btn_guardar.setVisibility(View.GONE);
+            switch_generar.setVisibility(View.GONE);
+        }
 
         // se obtiene la lista de Diagnosticos del empleado
         diagnosticosList = Diagnostico.find(Diagnostico.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
@@ -149,13 +169,20 @@ public class PermisosMedicosFragment extends Fragment {
             }
         });
 
+        if(presedencia.equals("consultar")) {
+            if(permisoMedico!=null){
+                fecha_desde.setText(permisoMedico.getFecha_inicio().toString());
+                fecha_hasta.setText(permisoMedico.getFecha_fin().toString());
+                observaciones.setText(permisoMedico.getObsevaciones_permiso());
+            }
+            btn_guardar.setText("Editar");
+        }
+
         return view;
     }
 
 
     public void guardarPermisoMedico(){
-        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
-
 
         String enfermedadPrincipalText = sp_enfermedades_diagnostico.getSelectedItem().toString();
         String fechaInicioText = fecha_desde.getText().toString();
@@ -253,6 +280,7 @@ public class PermisosMedicosFragment extends Fragment {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String string_fecha_ini = fecha_desde.getText().toString();
         String string_fecha_fin = fecha_hasta.getText().toString();
+
 
         if (!string_fecha_ini.equals("") && !string_fecha_fin.equals("")) {
             try {

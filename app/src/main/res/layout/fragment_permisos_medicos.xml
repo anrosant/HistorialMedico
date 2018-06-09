@@ -99,6 +99,7 @@
                     android:inputType="textMultiLine"
                     android:singleLine="false"
                     android:textSize="16sp"
+                    android:enabled="false"
                     android:hint="Agregar observación"/>
 
             </LinearLayout>

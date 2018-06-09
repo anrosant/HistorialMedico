@@ -99,28 +99,28 @@ public class MainActivity extends AppCompatActivity {
                 "jorergar@espol.edu.ec","FAE",
                 "Doctor","Soltero",
                 "Masculino","Guayaquil",
-                "Medico Ocupacional",fecha_actual,fecha_actual,30,R.drawable.modelo, usu_doctor);
+                "Doctor",fecha_actual,fecha_actual,30,R.drawable.modelo, usu_doctor);
         empTemp.save();
 
         Empleado empTemp2=new Empleado("0967547365","Anni","Santacruz Hernandez",
                 "anrosant@espol.edu.ec","Sauces",
                 "Ingeniera en Ciencias Computacionales","Soltera",
                 "Femenino","Guayaquil",
-                "Dept. Desarrollo de Software",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_enfermera);
+                "Enfermera",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_enfermera);
         empTemp2.save();
 
         Empleado empTemp3=new Empleado("0913620589","Renato","Illescas Rodriguez",
                 "rillesca@espol.edu.ec","Sauces",
                 "Licenciado en Redes","Soltero",
                 "Masculino","Guayaquil",
-                "Dept. de Redes",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_doctor);
+                "Dept. de Redes",fecha_actual,fecha_actual,20,R.drawable.modelo);
         empTemp3.save();
 
         Empleado empTemp4=new Empleado("0962983345","Daniel","Castro Penafiel",
                 "danijo@espol.edu.ec","Sauces",
                 "Ingeniero en Ciencias Computacionales","Soltero",
                 "Masculino","Guayaquil",
-                "Dept. Desarrollo de Software",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_enfermera);
+                "Dept. Desarrollo de Software",fecha_actual,fecha_actual,20,R.drawable.modelo);
         empTemp4.save();
 
         Date fecha = new Date();

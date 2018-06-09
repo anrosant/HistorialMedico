@@ -15,113 +15,103 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8sp">
+            android:padding="5dp">
 
             <Switch
-                android:id="@+id/switchGenerarPermiso"
+                android:id="@+id/sw_generar_permiso"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
-                android:padding="5sp"
                 android:text="GENERAR PERMISO MEDICO"
+                android:padding="5dp"
                 android:textColor="#FFFFFF"
                 android:textOff="No"
                 android:textOn="Yes" />
 
-            <EditText
-                android:id="@+id/txt_fecha_desde"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:textSize="16sp"
-                android:drawableStart="@android:drawable/ic_menu_my_calendar"
-                android:clickable="true"
-                android:enabled="false"
-                android:focusable="false"
-                android:hint="Desde"
-                android:inputType="date" />
-
-            <EditText
-                android:id="@+id/txt_fecha_hasta"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:textSize="16sp"
-                android:drawableStart="@android:drawable/ic_menu_my_calendar"
-                android:clickable="true"
-                android:enabled="false"
-                android:focusable="false"
-                android:hint="Hasta"
-                android:inputType="date" />
-
             <LinearLayout
+                android:id="@+id/ly_contenedor_permiso_medico"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20sp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:background="#FFFFFF">
+
+                <Spinner
+                    android:id="@+id/sp_enfermedades_diagnostico"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="5dp"/>
+
+                <EditText
+                    android:id="@+id/txt_fecha_desde"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/calendario"
+                    android:clickable="true"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:hint="Desde"
+                    android:inputType="date" />
+
+                <EditText
+                    android:id="@+id/txt_fecha_hasta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/calendario"
+                    android:clickable="true"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:hint="Hasta"
+                    android:inputType="date" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="10dp">
+
+                    <TextView
+                        android:id="@+id/tvDias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Días con permiso médico: " />
+
+                    <TextView
+                        android:id="@+id/tv_numero_dias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvDias"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/text"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Días con permiso médico: " />
+                    android:background="@color/colorPrimary"
+                    android:padding="5dp"
+                    android:text="OBSERVACIONES"
+                    android:textColor="#FFFFFF" />
 
-                <TextView
-                    android:id="@+id/tvNumeroDias"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/txt_observacion"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="" />
+                    android:layout_marginTop="20sp"
+                    android:inputType="textMultiLine"
+                    android:singleLine="false"
+                    android:textSize="16sp"
+                    android:hint="Agregar observación"/>
+
             </LinearLayout>
 
-            <AutoCompleteTextView
-                android:id="@+id/ac_nombre_cie10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:completionThreshold="1"
-                android:dropDownHeight="wrap_content"
-                android:enabled="false"
-                android:hint="Enfermedad" />
-
-            <AutoCompleteTextView
-                android:id="@+id/ac_codigo_cie10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:hint="Código CIE10"
-                android:dropDownHeight="wrap_content"
-                android:completionThreshold="1"
-                android:enabled="false" />
-
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:padding="5dp"
-                android:text="OBSERVACIONES"
-                android:textColor="#FFFFFF" />
-
-            <EditText
-                android:id="@+id/txt_observacion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:inputType="textMultiLine"
-                android:singleLine="false"
-                android:textSize="16sp"
-                android:hint="Agregar observación"/>
-
             <Button
-                android:id="@+id/btnGuardar"
+                android:id="@+id/btn_guardar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Guardar" />
 
         </LinearLayout>
+
     </ScrollView>
 
 </LinearLayout>

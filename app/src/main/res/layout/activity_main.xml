@@ -4,78 +4,92 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:weightSum="3"
     tools:context=".activities.MainActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_marginHorizontal="20dp"
-        android:layout_weight="0.5">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:textColor="@color/colorPrimary"
-            android:text="Inicio de sesion"
-            android:textStyle="bold"
-            android:textSize="24dp" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:weightSum="3">
 
-    <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="30dp"
-        android:gravity="center_vertical"
-        android:layout_weight="1"
-        android:weightSum="4"
-        android:background="#FFFFFF">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginHorizontal="20dp"
+                android:layout_weight="0.5">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="USUARIO" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="Inicio de sesion"
+                    android:textStyle="bold"
+                    android:textSize="24dp" />
+            </LinearLayout>
 
-        <EditText
-            android:id="@+id/etUsuario"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:ems="10"
-            android:singleLine="true" />
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="30dp"
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:weightSum="4"
+                android:background="#FFFFFF">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CONTRASENA" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="USUARIO" />
 
-        <EditText
-            android:id="@+id/etContrasenia"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:singleLine="true" />
+                <EditText
+                    android:id="@+id/etUsuario"
+                    android:layout_width="240dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:ems="10"
+                    android:singleLine="true" />
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CONTRASENA" />
 
-    <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_weight="1">
+                <EditText
+                    android:id="@+id/etContrasenia"
+                    android:layout_width="240dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    android:singleLine="true" />
 
-        <Button
-            android:id="@+id/btnIngresar"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:onClick="ingresoSistema"
-            android:text="INGRESAR"
-            android:textColor="#FFFFFF"
-            android:background="@color/colorPrimary"/>
-    </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btnIngresar"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="ingresoSistema"
+                    android:text="INGRESAR"
+                    android:textColor="#FFFFFF"
+                    android:background="@color/colorPrimary"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

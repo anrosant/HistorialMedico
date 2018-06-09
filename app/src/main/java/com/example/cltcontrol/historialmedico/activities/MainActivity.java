@@ -14,9 +14,9 @@ import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
+import com.example.cltcontrol.historialmedico.utiles.EnfermedadesSQL;
 import com.example.cltcontrol.historialmedico.models.Usuario;
 import com.facebook.stetho.Stetho;
-//import com.facebook.stetho.Stetho;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         if(referencia.isEmpty()){
             Toast.makeText(getApplicationContext(),"Inicializando datos",Toast.LENGTH_SHORT).show();
             inicializarVariablesTemp();
+            llenarEnfermedades();
         }
     }
     /*
@@ -94,20 +95,33 @@ public class MainActivity extends AppCompatActivity {
         usu_enfermera.setContrasenia("a");
         usu_enfermera.save();
 
-        Empleado empTemp=new Empleado("03214567323","Jorge","García",
+        Empleado empTemp=new Empleado("03214567323","Jorge","Garcia Garcia",
                 "jorergar@espol.edu.ec","FAE",
-                "Ingeniero en Ciencias Computacionales","Soltero",
+                "Doctor","Soltero",
                 "Masculino","Guayaquil",
-                "Doctor",fecha_actual,fecha_actual,30,R.drawable.modelo, usu_doctor);
+                "Medico Ocupacional",fecha_actual,fecha_actual,30,R.drawable.modelo, usu_doctor);
         empTemp.save();
 
-
-        Empleado empTemp2=new Empleado("0967547365","Anni","Santacruz",
+        Empleado empTemp2=new Empleado("0967547365","Anni","Santacruz Hernandez",
                 "anrosant@espol.edu.ec","Sauces",
                 "Ingeniera en Ciencias Computacionales","Soltera",
                 "Femenino","Guayaquil",
-                "Enfermera",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_enfermera);
+                "Dept. Desarrollo de Software",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_enfermera);
         empTemp2.save();
+
+        Empleado empTemp3=new Empleado("0913620589","Renato","Illescas Rodriguez",
+                "rillesca@espol.edu.ec","Sauces",
+                "Licenciado en Redes","Soltero",
+                "Masculino","Guayaquil",
+                "Dept. de Redes",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_doctor);
+        empTemp3.save();
+
+        Empleado empTemp4=new Empleado("0962983345","Daniel","Castro Penafiel",
+                "danijo@espol.edu.ec","Sauces",
+                "Ingeniero en Ciencias Computacionales","Soltero",
+                "Masculino","Guayaquil",
+                "Dept. Desarrollo de Software",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_enfermera);
+        empTemp4.save();
 
         Date fecha = new Date();
         ConsultaMedica consultaMedica1 = new ConsultaMedica(empTemp,fecha_actual,"prov1","rev1","pres1", "ex1","motivo1");
@@ -122,15 +136,20 @@ public class MainActivity extends AppCompatActivity {
         consultaMedica5.save();
         ConsultaMedica consultaMedica6 = new ConsultaMedica(empTemp,fecha_actual,"prov6","rev6","pres6", "ex6","motivo6");
         consultaMedica6.save();
-        Enfermedad enf1=new Enfermedad("enf1","111");
-        enf1.save();
-        Enfermedad enf2=new Enfermedad("enf2","121");
-        enf2.save();
-        Enfermedad enf3=new Enfermedad("enf3","131");
-        enf3.save();
-        Enfermedad enf4=new Enfermedad("enf4","141");
-        enf4.save();
 
+    }
+
+    public void llenarEnfermedades(){
+        List<Enfermedad> enfermedades = Enfermedad.find(Enfermedad.class, "CODIGO = ?","A00");
+
+        if(enfermedades.isEmpty()){
+            try{
+                Toast.makeText(getApplicationContext(),"Llenando Enfermedades",Toast.LENGTH_LONG).show();
+                Enfermedad.executeQuery(EnfermedadesSQL.REGISTRO_ENFERMEDADES);
+            }catch(Exception e){
+                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
 }

@@ -3,63 +3,105 @@ package com.example.cltcontrol.historialmedico.fragments;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.recyclerview.extensions.ListAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cltcontrol.historialmedico.Adapter.AdapterItemsConsultaMedica;
-import com.example.cltcontrol.historialmedico.Adapter.EnfermedadesAdapter;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
-import com.example.cltcontrol.historialmedico.models.Enfermedad;
+import com.example.cltcontrol.historialmedico.models.Diagnostico;
+import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.models.PermisoMedico;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class PermisosMedicosFragment extends Fragment {
-    EditText fecha_desde, fecha_hasta;
-    Switch switch_generar;
-    TextView numero_dias;
-    AutoCompleteTextView nombre_cie_10;
-    AutoCompleteTextView codigo_cie_10;
-    int dia, mes, anio;
-    Calendar calendar;
-    Date fecha_ini, fecha_fin;
-    List<Enfermedad> enfermedades;
-    ArrayList<String> enf_nombre = new ArrayList<>();
-    ArrayList<String> enf_codigo = new ArrayList<>();
+
+    private String id_empleado, id_consulta_medica;
+    private Empleado empleado;
+    private ConsultaMedica consultaMedica;
+    private Diagnostico diagnostico;
+    private List<Diagnostico> diagnosticosList;
+    private ArrayList<String> lista_enfermedades_diagnostico;
+
+    private EditText fecha_desde, fecha_hasta, observaciones;
+    private Button btn_guardar;
+    private Switch switch_generar;
+    private TextView numero_dias;
+    private Spinner sp_enfermedades_diagnostico;
+    private int dia, mes, anio;
+    private Calendar calendar;
+    private Date fecha_ini, fecha_fin;
 
     public PermisosMedicosFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //inflado del fragment xml asociado
         View view = inflater.inflate(R.layout.fragment_permisos_medicos, container, false);
+
+        //llamado de los views
         fecha_desde = view.findViewById(R.id.txt_fecha_desde);
         fecha_hasta = view.findViewById(R.id.txt_fecha_hasta);
-        switch_generar = view.findViewById(R.id.switchGenerarPermiso);
-        numero_dias = view.findViewById(R.id.tvNumeroDias);
-        nombre_cie_10 = view.findViewById(R.id.ac_nombre_cie10);
-        codigo_cie_10 = view.findViewById(R.id.ac_codigo_cie10);
-        enfermedades = Enfermedad.listAll(Enfermedad.class);
+        observaciones = view.findViewById(R.id.txt_observacion);
+        switch_generar = view.findViewById(R.id.sw_generar_permiso);
+        numero_dias = view.findViewById(R.id.tv_numero_dias);
+        sp_enfermedades_diagnostico = view.findViewById(R.id.sp_enfermedades_diagnostico);
+        btn_guardar = view.findViewById(R.id.btn_guardar);
+        sp_enfermedades_diagnostico.setEnabled(false);
+
+        //paso de parametros provenientes de activity nueva consulta medica
+        Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
+
+        // extraccion del bundle {clave,valor} de los campos necesitados
+        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        id_empleado = extras.getString("ID_EMPLEADO");
+        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+
+        // se obtiene la lista de Diagnosticos del empleado
+        diagnosticosList = Diagnostico.find(Diagnostico.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
+
+        //se crea un nueva lista con los nombres de las enfermedades
+        lista_enfermedades_diagnostico = new ArrayList<>();
+
+        //se llena la lista de los nombres de las enfermedades
+        for(Diagnostico nuevaListaDiagnostico: diagnosticosList){
+            lista_enfermedades_diagnostico.add(nuevaListaDiagnostico.getEnfermedad().getNombre());
+        }
+
+        sp_enfermedades_diagnostico.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                diagnostico = diagnosticosList.get(position);
+                //Toast.makeText(getContext(), ""+diagnostico, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        ArrayAdapter<Diagnostico> adapter = new ArrayAdapter(
+                Objects.requireNonNull(getActivity()).getBaseContext(),android.R.layout.simple_spinner_dropdown_item, lista_enfermedades_diagnostico);
+        sp_enfermedades_diagnostico.setAdapter(adapter);
 
         calendar = Calendar.getInstance();
         dia = calendar.get(Calendar.DAY_OF_MONTH);
@@ -69,15 +111,16 @@ public class PermisosMedicosFragment extends Fragment {
         switch_generar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (switch_generar.isChecked()) {
+                    sp_enfermedades_diagnostico.setEnabled(true);
                     fecha_desde.setEnabled(true);
                     fecha_hasta.setEnabled(true);
-                    nombre_cie_10.setEnabled(true);
-                    codigo_cie_10.setEnabled(true);
+                    observaciones.setEnabled(true);
                 } else {
+                    sp_enfermedades_diagnostico.setEnabled(false);
                     fecha_desde.setEnabled(false);
                     fecha_hasta.setEnabled(false);
-                    nombre_cie_10.setEnabled(false);
-                    codigo_cie_10.setEnabled(false);
+                    observaciones.setEnabled(false);
+
                 }
             }
         });
@@ -89,6 +132,7 @@ public class PermisosMedicosFragment extends Fragment {
             }
 
         });
+
         fecha_hasta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,62 +141,60 @@ public class PermisosMedicosFragment extends Fragment {
 
         });
 
-        EnfermedadesAdapter adapter = new EnfermedadesAdapter(enfermedades);
-        for(Enfermedad enf: enfermedades){
-            enf_nombre.add(enf.getNombre());
-        }
-        for(Enfermedad enf: enfermedades){
-            enf_codigo.add(enf.getCodigo());
-        }
-        inicializarAutocompletado(enf_nombre, enf_codigo);
+        btn_guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                guardarPermisoMedico();
+
+            }
+        });
 
         return view;
     }
 
-    private void inicializarAutocompletado(final ArrayList<String> nombresCie10, final ArrayList<String> codigosCie10) {
-        ArrayAdapter<String> adaptador;
 
-        adaptador = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, nombresCie10);
-        final AutoCompleteTextView tv_nombre_cie10 = nombre_cie_10;
-        tv_nombre_cie10.setAdapter(adaptador);
+    public void guardarPermisoMedico(){
+        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
-        adaptador = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, codigosCie10);
-        final AutoCompleteTextView tv_codigo_cie10 = codigo_cie_10;
-        tv_codigo_cie10.setAdapter(adaptador);
 
-        tv_nombre_cie10.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String nombre = (String) parent.getItemAtPosition(position);
-                int pos = -1;
-                for (int i = 0; i < nombresCie10.size(); i++) {
-                    if (nombre.equalsIgnoreCase(nombresCie10.get(i))) {
-                        pos = i;
-                        break;
-                    }
-                }
-                String codigo = codigosCie10.get(pos);
-                tv_codigo_cie10.setText(codigo);
-            }
-        });
+        String enfermedadPrincipalText = sp_enfermedades_diagnostico.getSelectedItem().toString();
+        String fechaInicioText = fecha_desde.getText().toString();
+        String fechaFinText = fecha_hasta.getText().toString();
+        String diasPermisoText = numero_dias.getText().toString();
+        String observacionesPermisoText = observaciones.getText().toString();
 
-        tv_codigo_cie10.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String codigo = (String) parent.getItemAtPosition(position);
-                int pos = -1;
-                for (int i = 0; i < codigosCie10.size(); i++) {
-                    if (codigo.equalsIgnoreCase(codigosCie10.get(i))) {
-                        pos = i;
-                        break;
-                    }
-                }
-                String nombre = nombresCie10.get(pos);
-                tv_nombre_cie10.setText(nombre);
-            }
-        });
+        if(!switch_generar.isChecked() || enfermedadPrincipalText.equals("") || fechaInicioText.equals("") ||
+                fechaFinText.equals("") || diasPermisoText.equals("") || observacionesPermisoText.equals("")) {
+            Toast.makeText(getContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+        Date fecha_inicio = null;
+        Date fecha_fin = null;
+        try {
+            fecha_inicio = format.parse(fechaInicioText);
+            fecha_fin = format.parse(fechaFinText);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int dias_permiso = Integer.parseInt(diasPermisoText);
+        String observaciones_permiso=observacionesPermisoText;
+
+
+        if (consultaMedica.getEmpleado() == null) {
+            //Guarda el id del empleado en la consulta y la fecha de consulta
+            consultaMedica.setEmpleado(empleado);
+            consultaMedica.setFechaConsulta(new Date());
+        }
+        PermisoMedico permisoMedico = new PermisoMedico(diagnostico,fecha_inicio,fecha_fin,dias_permiso,observaciones_permiso,consultaMedica);
+        permisoMedico.save();
+        Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
+
 
     }
+
 
     public void DateDialogInicio() {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {

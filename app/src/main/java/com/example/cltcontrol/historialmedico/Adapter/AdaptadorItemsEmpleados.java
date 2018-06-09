@@ -21,21 +21,23 @@ public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItems
         this.listaEmpleados = listaEmpleados;
     }
 
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_buscar_empleados_recyclerview, null, false);
+        return new ViewHolder(view);
+    }
+
     public List<Empleado> getListaEmpleados() {
         return listaEmpleados;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_buscar_empleados_recyclerview, null, false);
-
-        return new ViewHolder(view);
-    }
-
-    @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tvnombresitems.setText(listaEmpleados.get(position).getNombre());
-        holder.tvareatrabajoitems.setText(listaEmpleados.get(position).getOcupacion());
+        holder.tv_nombres_items.setText(listaEmpleados.get(position).getApellido()+" "+listaEmpleados.get(position).getNombre());
+        holder.tv_cedula_items.setText(listaEmpleados.get(position).getCedula());
+        holder.tv_profesion_items.setText(listaEmpleados.get(position).getProfesion());
+        holder.tv_ocupacion_items.setText(listaEmpleados.get(position).getOcupacion());
         holder.ivfotoitems.setImageResource(listaEmpleados.get(position).getFoto());
     }
 
@@ -46,11 +48,13 @@ public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItems
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivfotoitems;
-        TextView tvnombresitems, tvareatrabajoitems;
+        TextView tv_nombres_items, tv_cedula_items, tv_profesion_items, tv_ocupacion_items;
         ViewHolder(View itemView) {
             super(itemView);
-            tvnombresitems = itemView.findViewById(R.id.tvnombresitems);
-            tvareatrabajoitems = itemView.findViewById(R.id.tvareatrabajoitems);
+            tv_nombres_items = itemView.findViewById(R.id.tv_nombres_items);
+            tv_cedula_items =itemView.findViewById(R.id.tv_cedula_items);
+            tv_profesion_items =itemView.findViewById(R.id.tv_profesion_items);
+            tv_ocupacion_items = itemView.findViewById(R.id.tv_ocupacion_items);
             ivfotoitems = itemView.findViewById(R.id.ivfotoitems);
         }
     }

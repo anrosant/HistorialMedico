@@ -45,10 +45,12 @@
         <activity
             android:name=".activities.ConsultaMedicaNuevoActivity"
             android:label="@string/consulta_medica_nuevo"
+            android:configChanges="screenSize|orientation"
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activities.AtencionEnfemeriaActivity"
-            android:label="@string/consulta_medica_nuevo"/>
+            android:label="@string/consulta_medica_nuevo"
+            android:configChanges="screenSize|orientation" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.cltcontrol.historialmedico.Adapter;
+package com.example.cltcontrol.historialmedico.adapter;
 
 import android.app.Activity;
 import android.content.Context;

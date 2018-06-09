@@ -1,4 +1,4 @@
-package com.example.cltcontrol.historialmedico.Adapter;
+package com.example.cltcontrol.historialmedico.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,7 +12,6 @@ import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.fragments.DiagnosticoFragment;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterItemDiagnostico extends ArrayAdapter<Diagnostico> {

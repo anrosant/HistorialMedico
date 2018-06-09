@@ -53,10 +53,10 @@
                     android:id="@+id/tvareatrabajoitems"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="informacion de salud del empleado"
-                    android:textSize="14dp"
+                    android:layout_marginTop="4dp"
+                    android:text="Información de salud del empleado"
                     android:textColor="#FFFFFF"
-                    android:layout_marginTop="4dp" />
+                    android:textSize="14dp" />
 
             </LinearLayout>
 

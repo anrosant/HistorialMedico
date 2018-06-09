@@ -41,10 +41,11 @@
                 android:layout_weight="1"
                 android:onClick="aperturaHistorialConsultaMedica"
                 android:src="@drawable/consultamedica"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Consulta Medica"
+                android:text="Consulta Médica"
                 android:textSize="15dp" />
 
         </LinearLayout>
@@ -64,10 +65,11 @@
                 android:layout_weight="1"
                 android:onClick="aperturaHistorialAtencionEnfermeria"
                 android:src="@drawable/consultaenfermeria"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Consulta Enfermeria"
+                android:text="Atención Enfermería"
                 android:textSize="15dp" />
 
         </LinearLayout>
@@ -119,10 +121,11 @@
                 android:background="#FFFFFF"
                 android:layout_weight="1"
                 android:src="@drawable/permisomedico"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Permisos Medicos"
+                android:text="Permisos Médicos"
                 android:textSize="15dp" />
 
         </LinearLayout>

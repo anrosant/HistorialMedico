@@ -26,7 +26,7 @@
                 android:background="@color/colorPrimary"
                 android:gravity="center_vertical"
                 android:padding="5dp"
-                android:text="MOTIVO DE ATENCION"
+                android:text="MOTIVO DE ATENCIÓN"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
 

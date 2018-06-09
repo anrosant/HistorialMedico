@@ -1,4 +1,4 @@
-package com.example.cltcontrol.historialmedico.Adapter;
+package com.example.cltcontrol.historialmedico.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

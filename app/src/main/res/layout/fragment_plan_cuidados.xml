@@ -26,11 +26,11 @@
                     android:id="@+id/text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:background="@color/colorPrimary"
                     android:padding="5dp"
-                    android:text="PLAN CUIDADOS"
-                    android:textColor="#FFFFFF"
-                    android:layout_weight="1" />
+                    android:text="PLAN DE CUIDADOS"
+                    android:textColor="#FFFFFF" />
 
             </LinearLayout>
 

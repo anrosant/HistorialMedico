@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cltcontrol.historialmedico.Adapter.AdapterItemDiagnostico;
-import com.example.cltcontrol.historialmedico.Adapter.EnfermedadesAdapter;
-import com.example.cltcontrol.historialmedico.Adapter.RecyclerItemClickListener;
+import com.example.cltcontrol.historialmedico.adapter.AdapterItemDiagnostico;
+import com.example.cltcontrol.historialmedico.adapter.EnfermedadesAdapter;
+import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
@@ -55,10 +54,7 @@ public class DiagnosticoFragment extends Fragment {
     private List<Enfermedad> newList;
     private TextView tvTitulo;
 
-
-    public DiagnosticoFragment() {
-        // Required empty public constructor
-    }
+    public DiagnosticoFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,7 +68,6 @@ public class DiagnosticoFragment extends Fragment {
         ib_mostrar_ocultar_contendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         ly_diagnostico = view.findViewById(R.id.ly_diagnostico);
         tvTitulo = view.findViewById(R.id.tvTitulo);
-
 
         final Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
@@ -131,7 +126,6 @@ public class DiagnosticoFragment extends Fragment {
                             newList.add(enfermedad);
                         }
                     }
-
                     adaptadorEnfermedades.setFilter((List<Enfermedad>) newList);
                 }else{
                     adaptadorEnfermedades.setFilter((List<Enfermedad>) enfermedadList);
@@ -185,10 +179,8 @@ public class DiagnosticoFragment extends Fragment {
                 }
             }
         });
-
         return  view;
     }
-
 
     private void guardarDiagnostico() {
         if(enfermedad == null || tipo_enfermedad==null){
@@ -221,6 +213,5 @@ public class DiagnosticoFragment extends Fragment {
             Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_LONG).show();
         }
     }
-
 
 }

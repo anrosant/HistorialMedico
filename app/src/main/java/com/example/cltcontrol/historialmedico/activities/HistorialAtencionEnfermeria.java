@@ -8,13 +8,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.example.cltcontrol.historialmedico.Adapter.AdapterItemsAtencionEnfermeria;
-import com.example.cltcontrol.historialmedico.Adapter.SessionManager;
+import com.example.cltcontrol.historialmedico.adapter.AdapterItemAtencionEnfermeria;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.Empleado;
-
 import java.util.List;
 
 public class HistorialAtencionEnfermeria extends FragmentActivity {
@@ -23,7 +21,7 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
     private FloatingActionButton btnAgregarAtencionEnfermeria;
     private ListView lvAtencionEnf;
     private List<AtencionEnfermeria> atencionEnfermeriaList;
-    public static AdapterItemsAtencionEnfermeria adapter;
+    public static AdapterItemAtencionEnfermeria adapter;
     private Empleado empleado;
     private SessionManager sesion;
     private Intent inMenuEmpleado;
@@ -49,7 +47,7 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
         atencionEnfermeriaList = AtencionEnfermeria.find(AtencionEnfermeria.class, "empleado = ?", idEmpleado);
 
         //Crea un adapter de dicha lista y la muestra en un listview
-        adapter = new AdapterItemsAtencionEnfermeria(this, atencionEnfermeriaList);
+        adapter = new AdapterItemAtencionEnfermeria(this, atencionEnfermeriaList);
         lvAtencionEnf.setAdapter(adapter);
 
         //Busca al empleado con el id y muestra la informacion en el frgagment de informacion
@@ -67,7 +65,7 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                Intent atencionEnfermeria = new Intent(getApplicationContext(),AtencionEnfemeriaActivity.class);
+                Intent atencionEnfermeria = new Intent(getApplicationContext(),AtencionEnfermeriaActivity.class);
                 idAtencion = String.valueOf(atencionEnfermeriaList.get(position).getId());
 
                 atencionEnfermeria.putExtra("ID_ATENCION",idAtencion);
@@ -84,7 +82,7 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
         AtencionEnfermeria atencionEnfermeria=new AtencionEnfermeria();
         atencionEnfermeria.save();
 
-        Intent inAtencionEnfermeria = new Intent(getApplicationContext(),AtencionEnfemeriaActivity.class);
+        Intent inAtencionEnfermeria = new Intent(getApplicationContext(),AtencionEnfermeriaActivity.class);
         inAtencionEnfermeria.putExtra("PRESEDENCIA","crear");
         inAtencionEnfermeria.putExtra("ID_EMPLEADO",idEmpleado);
         inAtencionEnfermeria.putExtra("ID_ATENCION", atencionEnfermeria.getId().toString());

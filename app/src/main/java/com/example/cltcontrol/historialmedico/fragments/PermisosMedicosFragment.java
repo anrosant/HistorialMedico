@@ -3,7 +3,7 @@ package com.example.cltcontrol.historialmedico.fragments;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,19 +30,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class PermisosMedicosFragment extends Fragment {
 
-    private String id_empleado, id_consulta_medica, cargo, presedencia;
+    private String id_empleado, id_consulta_medica, cargo, precedencia;
     private Empleado empleado;
     private ConsultaMedica consultaMedica;
     private Diagnostico diagnostico;
     private List<Diagnostico> diagnosticosList;
     private ArrayList<String> lista_enfermedades_diagnostico;
     private ArrayList<PermisoMedico> permisoMedicoList;
-
     private EditText fecha_desde, fecha_hasta, observaciones;
     private Button btn_guardar;
     private Switch switch_generar;
@@ -78,7 +78,7 @@ public class PermisosMedicosFragment extends Fragment {
         id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
         cargo = extras.getString("CARGO");
-        presedencia = extras.getString("PRESEDENCIA");
+        precedencia = extras.getString("PRESEDENCIA");
 
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
@@ -140,7 +140,6 @@ public class PermisosMedicosFragment extends Fragment {
                     fecha_desde.setEnabled(false);
                     fecha_hasta.setEnabled(false);
                     observaciones.setEnabled(false);
-
                 }
             }
         });
@@ -169,21 +168,28 @@ public class PermisosMedicosFragment extends Fragment {
             }
         });
 
-        if(presedencia.equals("consultar")) {
+        if(precedencia.equals("consultar")) {
+            SimpleDateFormat simpleDateFormat;
             if(permisoMedico!=null){
-                fecha_desde.setText(permisoMedico.getFecha_inicio().toString());
-                fecha_hasta.setText(permisoMedico.getFecha_fin().toString());
+                simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                try {
+                    Date a = simpleDateFormat.parse(permisoMedico.getFecha_inicio().toString());
+                    Date b = simpleDateFormat.parse(permisoMedico.getFecha_fin().toString());
+                    simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    fecha_desde.setText(simpleDateFormat.format(a));
+                    fecha_hasta.setText(simpleDateFormat.format(b));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                numero_dias.setText(String.valueOf(permisoMedico.getDias_permiso()));
                 observaciones.setText(permisoMedico.getObsevaciones_permiso());
             }
             btn_guardar.setText("Editar");
         }
-
         return view;
     }
 
-
     public void guardarPermisoMedico(){
-
         String enfermedadPrincipalText = sp_enfermedades_diagnostico.getSelectedItem().toString();
         String fechaInicioText = fecha_desde.getText().toString();
         String fechaFinText = fecha_hasta.getText().toString();
@@ -197,7 +203,6 @@ public class PermisosMedicosFragment extends Fragment {
         }
 
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-
         Date fecha_inicio = null;
         Date fecha_fin = null;
         try {
@@ -209,19 +214,25 @@ public class PermisosMedicosFragment extends Fragment {
         int dias_permiso = Integer.parseInt(diasPermisoText);
         String observaciones_permiso=observacionesPermisoText;
 
-
         if (consultaMedica.getEmpleado() == null) {
             //Guarda el id del empleado en la consulta y la fecha de consulta
             consultaMedica.setEmpleado(empleado);
             consultaMedica.setFechaConsulta(new Date());
         }
-        PermisoMedico permisoMedico = new PermisoMedico(diagnostico,fecha_inicio,fecha_fin,dias_permiso,observaciones_permiso,consultaMedica);
-        permisoMedico.save();
+        if(permisoMedico == null) {
+            PermisoMedico permisoMed = new PermisoMedico(diagnostico, fecha_inicio, fecha_fin, dias_permiso, observaciones_permiso, consultaMedica);
+            permisoMed.save();
+        } else {
+            permisoMedico.setDiagnostico(diagnostico);
+            permisoMedico.setFecha_inicio(fecha_inicio);
+            permisoMedico.setFecha_fin(fecha_fin);
+            permisoMedico.setDias_permiso(dias_permiso);
+            permisoMedico.setObsevaciones_permiso(observaciones_permiso);
+            permisoMedico.setConsulta_medica(consultaMedica);
+            permisoMedico.save();
+        }
         Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
-
-
     }
-
 
     public void DateDialogInicio() {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
@@ -281,7 +292,6 @@ public class PermisosMedicosFragment extends Fragment {
         String string_fecha_ini = fecha_desde.getText().toString();
         String string_fecha_fin = fecha_hasta.getText().toString();
 
-
         if (!string_fecha_ini.equals("") && !string_fecha_fin.equals("")) {
             try {
                 fecha_ini = simpleDateFormat.parse(string_fecha_ini);
@@ -293,12 +303,6 @@ public class PermisosMedicosFragment extends Fragment {
             long numDias = TimeUnit.DAYS.convert(dias_mili, TimeUnit.MILLISECONDS);
             numero_dias.setText(Long.toString(numDias + 1));
         }
-    }
-
-    @Override
-    public void onResume() {
-        calcNumDias();
-        super.onResume();
     }
 
 }

@@ -1,29 +1,25 @@
-package com.example.cltcontrol.historialmedico.Adapter;
+package com.example.cltcontrol.historialmedico.adapter;
 
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class AdapterItemsConsultaMedica extends ArrayAdapter<ConsultaMedica> {
+public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
     private Activity activity;
     private List<ConsultaMedica> consultaMedicasList;
     private final Context context;
 
-    public AdapterItemsConsultaMedica(Context context, List<ConsultaMedica> consultaMedicaList) {
+    public AdapterItemConsultaMedica(Context context, List<ConsultaMedica> consultaMedicaList) {
         super(context, 0, consultaMedicaList);
         this.context = context;
         this.consultaMedicasList = consultaMedicaList;
@@ -75,7 +71,7 @@ public class AdapterItemsConsultaMedica extends ArrayAdapter<ConsultaMedica> {
         this.consultaMedicasList.addAll(consultaMedicaListNuevo);
         notifyDataSetChanged();
     }
-    /*public AdapterItemsConsultaMedica(Activity activity, ArrayList<ConsultaMedica> listaConsultaMedica) {
+    /*public AdapterItemConsultaMedica(Activity activity, ArrayList<ConsultaMedica> listaConsultaMedica) {
         this.activity = activity;
         items = listaConsultaMedica;
     }

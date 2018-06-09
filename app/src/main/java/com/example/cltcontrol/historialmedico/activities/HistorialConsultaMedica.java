@@ -9,10 +9,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.cltcontrol.historialmedico.Adapter.AdapterItemsConsultaMedica;
-import com.example.cltcontrol.historialmedico.Adapter.SessionManager;
+import com.example.cltcontrol.historialmedico.adapter.AdapterItemConsultaMedica;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
@@ -28,7 +27,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
     private Empleado empleado;
     private FloatingActionButton btnAgregarConsultaMedica;
     private List<ConsultaMedica> consultaMedicaList;
-    public static AdapterItemsConsultaMedica adapterItemsConsultaMedica;
+    public static AdapterItemConsultaMedica adapterItemConsultaMedica;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +52,8 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "empleado = ?", idEmpleado);
         Log.d("TAMANIO", String.valueOf(consultaMedicaList.size()));
         //Muestra los datos de las consultas medica en el listview
-        adapterItemsConsultaMedica = new AdapterItemsConsultaMedica(this, consultaMedicaList);
-        lvConsultasMedicas.setAdapter(adapterItemsConsultaMedica);
+        adapterItemConsultaMedica = new AdapterItemConsultaMedica(this, consultaMedicaList);
+        lvConsultasMedicas.setAdapter(adapterItemConsultaMedica);
 
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());

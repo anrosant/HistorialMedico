@@ -10,63 +10,53 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.example.cltcontrol.historialmedico.Adapter.AdaptadorItemsEmpleados;
-import com.example.cltcontrol.historialmedico.Adapter.RecyclerItemClickListener;
+import com.example.cltcontrol.historialmedico.adapter.AdapterItemEmpleado;
+import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BuscarEmpleadoActivity extends FragmentActivity {
-
     private static List<Empleado> empleadosList;
-    private AdaptadorItemsEmpleados adaptadorEmpleados;
+    private AdapterItemEmpleado adaptadorEmpleados;
     private EditText buscar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar_empleados);
-
         readEmpleadosAll();
         RecyclerView recyclerEmpleados = findViewById(R.id.rvlistaempleados);
         recyclerEmpleados.setLayoutManager(new LinearLayoutManager(this));
         buscar = findViewById(R.id.etBusquedaUsuario);
 
         buscar.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void afterTextChanged(Editable s) {}
-
             @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String newText;
                 if(s.length() != 0){
                     newText = buscar.getText().toString().toLowerCase();
                     List<Empleado> newList = new ArrayList<>();
                     for(Empleado empleado:empleadosList){
                         String nombre = empleado.getNombre().toLowerCase();
-                        if(nombre.contains(newText)){
+                        String apellido = empleado.getApellido().toLowerCase();
+                        if(nombre.contains(newText) || apellido.contains(newText)){
                             newList.add(empleado);
                         }
                     }
-
                     adaptadorEmpleados.setFilter(newList);
-                }else{
+                } else {
                     adaptadorEmpleados.setFilter(empleadosList);
                 }
             }
         });
 
-        adaptadorEmpleados = new AdaptadorItemsEmpleados(empleadosList);
+        adaptadorEmpleados = new AdapterItemEmpleado(empleadosList);
         recyclerEmpleados.setAdapter(adaptadorEmpleados);
 
         recyclerEmpleados.addOnItemTouchListener(
@@ -77,7 +67,6 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                         Intent i = new Intent(getApplicationContext(), MenuEmpleadoActivity.class);
                         i.putExtra("ID_EMPLEADO", String.valueOf(id_empleado));
                         startActivity(i);
-
                     }
                     @Override public void onLongItemClick(View view, int position) {
                         // do whatever

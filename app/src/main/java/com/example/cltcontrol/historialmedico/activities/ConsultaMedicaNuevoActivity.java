@@ -2,15 +2,12 @@ package com.example.cltcontrol.historialmedico.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.fragments.DiagnosticoFragment;
 import com.example.cltcontrol.historialmedico.fragments.ExamenFisicoFragment;
@@ -28,16 +25,13 @@ import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.orm.util.NamingHelper;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ComunicadorMenu{
-
     private Fragment[] misFragmentos;
     private Empleado empleado;
-    String idConsultaMedica, idEmpleado, presedencia, cargo;
-
+    String idConsultaMedica, idEmpleado, precedencia, cargo;
     Button btn_ok;
 
     @Override
@@ -46,7 +40,6 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         setContentView(R.layout.activity_nueva_consulta_medica);
 
         misFragmentos = new Fragment[10];
-
         misFragmentos[0] = new SignosVitalesFragment();
         misFragmentos[1] = new MotivoAtencionFragment();
         misFragmentos[2] = new PatologiasPersonalesFragment();
@@ -69,7 +62,7 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         //Recibe el id del empleado desde el HistorialConsultaMedica
         final String id_empleado = extras.getString("ID_EMPLEADO");
         idConsultaMedica = extras.getString("ID_CONSULTA_MEDICA");
-        presedencia = extras.getString("PRESEDENCIA");
+        precedencia = extras.getString("PRESEDENCIA");
         cargo = extras.getString("CARGO");
 
         if(cargo.equalsIgnoreCase("Enfermera")){
@@ -83,22 +76,19 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ArrayList<ConsultaMedica> consultaMedicas = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class,
                         "empleado = ?", String.valueOf(empleado.getId()));
-                HistorialConsultaMedica.adapterItemsConsultaMedica.actualizarConsultaMedicaList(consultaMedicas);
-
+                HistorialConsultaMedica.adapterItemConsultaMedica.actualizarConsultaMedicaList(consultaMedicas);
                 ConsultaMedicaNuevoActivity.super.onBackPressed();
             }
         });
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         if(cargo.equals("Doctor")) {
             AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
-            if (presedencia.equals("crear")) {
+            if (precedencia.equals("crear")) {
                 //seleccionamos la cadena a mostrar
                 alertbox.setMessage("No se guardara la consulta. Desea salir?");
                 //elegimos un positivo SI
@@ -113,15 +103,13 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
                         //Reset el autoincrement
                         ConsultaMedica.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + NamingHelper.toSQLName(ConsultaMedica.class) + "'");
                         consultaMedica.delete();
-
-
                         ConsultaMedicaNuevoActivity.super.onBackPressed();
                     }
                 });
                 //Si editó una consulta
             } else {
                 //seleccionamos la cadena a mostrar
-                alertbox.setMessage("Los datos que no ha guardado se descartarán. Desea salir?");
+                alertbox.setMessage("Los datos que no ha guardado se descartarán. ¿Desea salir?");
                 //elegimos un positivo SI
                 alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     //Funcion llamada cuando se pulsa el boton Si
@@ -144,7 +132,6 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
             ConsultaMedicaNuevoActivity.super.onBackPressed();
         }
     }
-
 
     @Override
     public void menuPulsado(int opcionMenu) {

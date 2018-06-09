@@ -25,8 +25,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:padding="5dp"
-                android:text="EXAMEN FISICO"
-                android:textColor="#FFFFFF"/>
+                android:text="EXAMEN FÍSICO"
+                android:textColor="#FFFFFF" />
 
         </LinearLayout>
 
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
-                android:hint="No refiere examen fisico"
+                android:hint="No refiere examen físico"
                 android:inputType="textMultiLine"
                 android:textSize="16sp" />
 

@@ -23,7 +23,7 @@
             android:textColor="#FFFFFF"
             android:hint="Buscar empleados"
             android:inputType="text"
-            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXYZ"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXYZáéíóúÁÉÍÓÚ"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:textSize="18sp"

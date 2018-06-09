@@ -26,7 +26,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
                     android:padding="5dp"
-                    android:text="PATOLOGIAS FAMILIARES"
+                    android:text="PATOLOGÍAS FAMILIARES"
                     android:textColor="#FFFFFF" />
 
                 <ListView

@@ -27,15 +27,15 @@
                 android:id="@+id/btnMotivoAtencion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:text="Motivo Atencion" />
+                android:text="Motivo Atención"
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/btnDiagnosticoEnfermeria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:text="Diagnostico" />
+                android:text="Diagnóstico"
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/btnPlanCuidados"

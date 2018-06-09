@@ -3,18 +3,15 @@ package com.example.cltcontrol.historialmedico.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.example.cltcontrol.historialmedico.Adapter.SessionManager;
-import com.example.cltcontrol.historialmedico.Identifiers.Validaciones;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
-import com.example.cltcontrol.historialmedico.utiles.EnfermedadesSQL;
+import com.example.cltcontrol.historialmedico.utils.EnfermedadesSQL;
 import com.example.cltcontrol.historialmedico.models.Usuario;
 import com.facebook.stetho.Stetho;
 import java.util.Date;
@@ -29,20 +26,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        String valor = "ff52g";
-        Log.d("True_false: ", String.valueOf(Validaciones.validarContrasenias(valor)));
-        String valor1 = "122ffg";
-        Log.d("True_false: ", String.valueOf(Validaciones.validarContrasenias(valor1)));
-        String valor2 = "_fjhk55";
-        Log.d("True_false: ", String.valueOf(Validaciones.validarContrasenias(valor2)));
-        String valor3 = "jk_kjh";
-        Log.d("True_false: ", String.valueOf(Validaciones.validarContrasenias(valor3)));
-
-
         etUsuario = findViewById(R.id.etUsuario);
         etContrasenia = findViewById(R.id.etContrasenia);
-
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
@@ -88,55 +73,55 @@ public class MainActivity extends AppCompatActivity {
         Date fecha_actual = new Date();
         Usuario usu_doctor = new Usuario();
         Usuario usu_enfermera = new Usuario();
-        usu_doctor.setUsuario("j");
-        usu_doctor.setContrasenia("j");
+        Empleado emp_temp;
+        ConsultaMedica consulta;
+        usu_doctor.setUsuario("jorgegarcia");
+        usu_doctor.setContrasenia("jorgegarcia");
         usu_doctor.save();
-        usu_enfermera.setUsuario("a");
-        usu_enfermera.setContrasenia("a");
+        usu_enfermera.setUsuario("anni1997");
+        usu_enfermera.setContrasenia("anni1997");
         usu_enfermera.save();
 
-        Empleado empTemp=new Empleado("03214567323","Jorge","Garcia Garcia",
+        emp_temp = new Empleado("03214567323","Jorge","García García",
                 "jorergar@espol.edu.ec","FAE",
-                "Doctor","Soltero",
+                "Analista de datos","Soltero",
                 "Masculino","Guayaquil",
-                "Doctor",fecha_actual,fecha_actual,30,R.drawable.modelo, usu_doctor);
-        empTemp.save();
+                "Dept. de Seguridad",fecha_actual,fecha_actual,30,R.drawable.modelo, usu_doctor);
+        emp_temp.save();
 
-        Empleado empTemp2=new Empleado("0967547365","Anni","Santacruz Hernandez",
+        consulta = new ConsultaMedica(emp_temp,fecha_actual,"prov1","rev1","pres1", "ex1","motivo1");
+        consulta.save();
+        consulta = new ConsultaMedica(emp_temp,fecha_actual,"prov2","rev2","pres2","ex2", "motivo2");
+        consulta.save();
+        consulta = new ConsultaMedica(emp_temp,fecha_actual,"prov3","rev3","pres3", "ex3","motivo3");
+        consulta.save();
+        consulta = new ConsultaMedica(emp_temp,fecha_actual,"prov4","rev4","pres4", "ex4","motivo4");
+        consulta.save();
+        consulta = new ConsultaMedica(emp_temp,fecha_actual,"prov5","rev5","pres5","ex5", "motivo5");
+        consulta.save();
+        consulta = new ConsultaMedica(emp_temp,fecha_actual,"prov6","rev6","pres6", "ex6","motivo6");
+        consulta.save();
+
+        emp_temp = new Empleado("0967547365","Anni","Santacruz Hernández",
                 "anrosant@espol.edu.ec","Sauces",
                 "Ingeniera en Ciencias Computacionales","Soltera",
                 "Femenino","Guayaquil",
-                "Enfermera",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_enfermera);
-        empTemp2.save();
+                "Dept. de Sistemas",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_enfermera);
+        emp_temp.save();
 
-        Empleado empTemp3=new Empleado("0913620589","Renato","Illescas Rodriguez",
+        emp_temp = new Empleado("0913620589","Renato","Illescas Rodríguez",
                 "rillesca@espol.edu.ec","Sauces",
                 "Licenciado en Redes","Soltero",
                 "Masculino","Guayaquil",
                 "Dept. de Redes",fecha_actual,fecha_actual,20,R.drawable.modelo);
-        empTemp3.save();
+        emp_temp.save();
 
-        Empleado empTemp4=new Empleado("0962983345","Daniel","Castro Penafiel",
+        emp_temp = new Empleado("0962983345","Daniel","Castro Peñafiel",
                 "danijo@espol.edu.ec","Sauces",
                 "Ingeniero en Ciencias Computacionales","Soltero",
                 "Masculino","Guayaquil",
                 "Dept. Desarrollo de Software",fecha_actual,fecha_actual,20,R.drawable.modelo);
-        empTemp4.save();
-
-        Date fecha = new Date();
-        ConsultaMedica consultaMedica1 = new ConsultaMedica(empTemp,fecha_actual,"prov1","rev1","pres1", "ex1","motivo1");
-        consultaMedica1.save();
-        ConsultaMedica consultaMedica2 = new ConsultaMedica(empTemp,fecha_actual,"prov2","rev2","pres2","ex2", "motivo2");
-        consultaMedica2.save();
-        ConsultaMedica consultaMedica3 = new ConsultaMedica(empTemp,fecha_actual,"prov3","rev3","pres3", "ex3","motivo3");
-        consultaMedica3.save();
-        ConsultaMedica consultaMedica4 = new ConsultaMedica(empTemp,fecha_actual,"prov4","rev4","pres4", "ex4","motivo4");
-        consultaMedica4.save();
-        ConsultaMedica consultaMedica5 = new ConsultaMedica(empTemp,fecha_actual,"prov5","rev5","pres5","ex5", "motivo5");
-        consultaMedica5.save();
-        ConsultaMedica consultaMedica6 = new ConsultaMedica(empTemp,fecha_actual,"prov6","rev6","pres6", "ex6","motivo6");
-        consultaMedica6.save();
-
+        emp_temp.save();
     }
 
     public void llenarEnfermedades(){

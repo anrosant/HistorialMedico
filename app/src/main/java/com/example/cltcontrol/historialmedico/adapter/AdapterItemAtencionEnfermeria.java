@@ -1,4 +1,4 @@
-package com.example.cltcontrol.historialmedico.Adapter;
+package com.example.cltcontrol.historialmedico.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,24 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class AdapterItemsAtencionEnfermeria extends ArrayAdapter<AtencionEnfermeria> {
+public class AdapterItemAtencionEnfermeria extends ArrayAdapter<AtencionEnfermeria> {
 
     private Activity activity;
     private List<AtencionEnfermeria> atencionEnfermeriaList;
     private final Context context;
 
-    public AdapterItemsAtencionEnfermeria(Context context, List<AtencionEnfermeria> atencionEnfermeriaList) {
+    public AdapterItemAtencionEnfermeria(Context context, List<AtencionEnfermeria> atencionEnfermeriaList) {
         super(context, 0, atencionEnfermeriaList);
         this.context = context;
         this.atencionEnfermeriaList = atencionEnfermeriaList;
@@ -88,7 +85,7 @@ public class AdapterItemsAtencionEnfermeria extends ArrayAdapter<AtencionEnferme
     /*private Activity activity;
     private ArrayList<AtencionEnfermeria> items;
 
-    public AdapterItemsAtencionEnfermeria(Activity activity, ArrayList<AtencionEnfermeria> data) {
+    public AdapterItemAtencionEnfermeria(Activity activity, ArrayList<AtencionEnfermeria> data) {
         this.activity = activity;
         items = data;
     }

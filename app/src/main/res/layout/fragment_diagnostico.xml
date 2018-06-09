@@ -19,9 +19,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_margin="5dp"
                 android:gravity="center"
-                android:layout_margin="5dp">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -33,21 +33,21 @@
                         android:id="@+id/tvTitulo"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_weight="0.3"
                         android:background="@color/colorPrimary"
                         android:gravity="center_vertical"
                         android:padding="5dp"
-                        android:text="DIAGNOSTICO"
                         android:paddingRight="10dp"
-                        android:textColor="#FFFFFF"
-                        android:layout_weight="0.3"/>
+                        android:text="DIAGNÓSTICO"
+                        android:textColor="#FFFFFF" />
 
                     <ImageButton
                         android:id="@+id/ib_mostrar_ocultar_contendido"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorPrimary"
                         android:layout_weight="1.7"
-                        android:src="@drawable/flecha_arriba"/>
+                        android:background="@color/colorPrimary"
+                        android:src="@drawable/flecha_arriba" />
 
                 </LinearLayout>
 
@@ -55,25 +55,25 @@
                     android:id="@+id/ly_diagnostico"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="#FFFFFF">
+                    android:background="#FFFFFF"
+                    android:orientation="vertical">
 
                     <EditText
                         android:id="@+id/etBuscarEnfermedades"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Buscar enfermedad"
                         android:layout_marginTop="5dp"
+                        android:hint="Buscar enfermedad"
                         android:singleLine="true"
-                        android:textSize="20sp" />
+                        android:textSize="14sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal">
 
-                        <ScrollView
+                        <android.support.v4.widget.NestedScrollView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="#FFFFFF">
@@ -81,28 +81,27 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:orientation="vertical"
+                                android:layout_weight="2"
                                 android:gravity="center_horizontal"
-                                android:layout_weight="2">
+                                android:orientation="vertical">
 
                                 <android.support.v7.widget.RecyclerView
                                     android:id="@+id/rvListaEnfermedades"
                                     android:layout_width="match_parent"
-                                    android:layout_height="200dp"
-                                    android:background="#FFFFFF">
-                                </android.support.v7.widget.RecyclerView>
+                                    android:layout_height="180dp"
+                                    android:background="#FFFFFF"></android.support.v7.widget.RecyclerView>
 
                             </LinearLayout>
 
-                        </ScrollView>
+                        </android.support.v4.widget.NestedScrollView>
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_horizontal">
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
 
                         <RadioGroup
                             android:id="@+id/rgTipoEnfer"
@@ -115,7 +114,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="10sp"
-                                android:text="Presuntorio"/>
+                                android:text="Presuntorio" />
 
                             <RadioButton
                                 android:id="@+id/rbDefinitorio"
@@ -130,8 +129,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <Button
                             android:id="@+id/btn_guardar"
@@ -145,6 +144,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -153,12 +154,13 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
-                    android:padding="5dp"
-                    android:text="REGISTRO DE DIAGNOSTICO"
-                    android:textColor="#FFFFFF"
-                    android:layout_weight="1"/>
+                    android:paddingBottom="7dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="7dp"
+                    android:text="REGISTRO DE DIAGNÓSTICO"
+                    android:textColor="#FFFFFF" />
 
                 <ListView
                     android:id="@+id/lvDiagnostico"

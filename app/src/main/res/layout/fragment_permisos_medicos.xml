@@ -22,8 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
-                android:text="GENERAR PERMISO MEDICO"
                 android:padding="5dp"
+                android:text="GENERAR PERMISO MÉDICO"
                 android:textColor="#FFFFFF"
                 android:textOff="No"
                 android:textOn="Yes" />
@@ -45,22 +45,22 @@
                     android:id="@+id/txt_fecha_desde"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/calendario"
                     android:clickable="true"
+                    android:drawableStart="@drawable/calendario"
                     android:enabled="false"
                     android:focusable="false"
-                    android:hint="Desde"
+                    android:hint="Fecha de inicio"
                     android:inputType="date" />
 
                 <EditText
                     android:id="@+id/txt_fecha_hasta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/calendario"
                     android:clickable="true"
+                    android:drawableStart="@drawable/calendario"
                     android:enabled="false"
                     android:focusable="false"
-                    android:hint="Hasta"
+                    android:hint="Fecha de fin"
                     android:inputType="date" />
 
                 <LinearLayout
@@ -73,13 +73,13 @@
                         android:id="@+id/tvDias"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Días con permiso médico: " />
+                        android:layout_marginLeft="5dp"
+                        android:text="DÍAS CON PERMISO MÉDICO: " />
 
                     <TextView
                         android:id="@+id/tv_numero_dias"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <TextView

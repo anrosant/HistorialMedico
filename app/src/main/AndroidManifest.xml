@@ -48,7 +48,7 @@
             android:configChanges="screenSize|orientation"
             android:windowSoftInputMode="stateHidden"/>
         <activity
-            android:name=".activities.AtencionEnfemeriaActivity"
+            android:name=".activities.AtencionEnfermeriaActivity"
             android:label="@string/consulta_medica_nuevo"
             android:configChanges="screenSize|orientation" />
     </application>

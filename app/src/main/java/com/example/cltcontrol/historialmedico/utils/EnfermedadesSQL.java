@@ -1,4 +1,4 @@
-package com.example.cltcontrol.historialmedico.utiles;
+package com.example.cltcontrol.historialmedico.utils;
 
 public class EnfermedadesSQL {
 

@@ -33,13 +33,13 @@
                         android:id="@+id/tvTitulo"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_weight="0.3"
                         android:background="@color/colorPrimary"
                         android:gravity="center_vertical"
                         android:padding="5dp"
-                        android:text="PATOLOGIAS PERSONALES"
                         android:paddingRight="10dp"
-                        android:textColor="#FFFFFF"
-                        android:layout_weight="0.3"/>
+                        android:text="PATOLOGÍAS PERSONALES"
+                        android:textColor="#FFFFFF" />
 
                     <ImageButton
                         android:id="@+id/ib_mostrar_ocultar_contendido"
@@ -112,8 +112,8 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
                     android:padding="5dp"
-                    android:text="REGISTRO DE PATALOGIAS"
-                    android:textColor="#FFFFFF"/>
+                    android:text="REGISTRO DE PATALOGÍAS"
+                    android:textColor="#FFFFFF" />
 
                 <ListView
                     android:id="@+id/lvPatologiasPersonales"

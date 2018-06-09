@@ -21,14 +21,14 @@ import java.util.Objects;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MotivoAtenEnfermeriaFragment extends Fragment {
+public class MotivoAtencionEnfermeriaFragment extends Fragment {
 
     private String idAtencion=null, presedencia, idEmpleado, cargo;
     private Bundle bun;
     private Button boton;
     private EditText etMotivo;
     private Empleado empleado;
-    public MotivoAtenEnfermeriaFragment() {
+    public MotivoAtencionEnfermeriaFragment() {
         // Required empty public constructor
     }
 

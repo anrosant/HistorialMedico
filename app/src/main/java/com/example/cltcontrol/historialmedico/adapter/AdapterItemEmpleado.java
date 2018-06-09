@@ -1,4 +1,4 @@
-package com.example.cltcontrol.historialmedico.Adapter;
+package com.example.cltcontrol.historialmedico.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,11 +13,11 @@ import com.example.cltcontrol.historialmedico.models.Empleado;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdaptadorItemsEmpleados extends RecyclerView.Adapter<AdaptadorItemsEmpleados.ViewHolder> {
+public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmpleado.ViewHolder> {
 
     private List<Empleado> listaEmpleados;
 
-    public AdaptadorItemsEmpleados(List<Empleado> listaEmpleados) {
+    public AdapterItemEmpleado(List<Empleado> listaEmpleados) {
         this.listaEmpleados = listaEmpleados;
     }
 

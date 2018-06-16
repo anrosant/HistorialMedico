@@ -140,7 +140,7 @@ public class EmpleadoController {
 
     //funcionalidad ingreso
     public Boolean validarIngreso(List<Usuario> misListaUsuarios, String etUsuario, String etContrasenia){
-        if(obtenerUsuario(misListaUsuarios,etUsuario,etContrasenia).size()!=0){
+        if(obtenerUsuario(misListaUsuarios,etUsuario,etContrasenia).size()==0){
             return true;
         }
         return false;
@@ -148,43 +148,17 @@ public class EmpleadoController {
 
     public void ingresoSistema(List<Usuario> misListaUsuarios, String etUsuario, String etContrasenia){
         if(validarIngreso(misListaUsuarios,etUsuario,etContrasenia)){
-
-            Log.e("validarIngreso",""+validarIngreso(misListaUsuarios,etUsuario,etContrasenia));
+            aperturaBusqueda(obtenerUsuario(misListaUsuarios,etUsuario,etContrasenia).get(0).getId());
+            //Log.e("validarIngreso",""+validarIngreso(misListaUsuarios,etUsuario,etContrasenia));
             //Toast.makeText(miActivity.getApplicationContext(), "Acceso Sistema",Toast.LENGTH_SHORT).show();
-            //aperturaBusqueda(obtenerUsuario(misListaUsuarios,etUsuario,etContrasenia).get(0).getId());
         }else {
-            Log.e("validarIngreso",""+validarIngreso(misListaUsuarios,etUsuario,etContrasenia));
             //Toast.makeText(miActivity.getApplicationContext(), "Usuario y/o contraseña incorrecto",Toast.LENGTH_SHORT).show();
         }
     }
 
-
-
-    /*private void inicializarVariablesTemp() {
-        Date fecha_actual = new Date();
-        Usuario usu_doctor = new Usuario();
-        Usuario usu_enfermera = new Usuario();
-        Empleado emp_temp;
-        ConsultaMedica consulta;
-        usu_doctor.setUsuario("jorgegarcia");
-        usu_doctor.setContrasenia("jorgegarcia");
-        usu_doctor.save();
-        usu_enfermera.setUsuario("anni1997");
-        usu_enfermera.setContrasenia("anni1997");
-        usu_enfermera.save();
-
-        consulta = new ConsultaMedica(emp_temp, fecha_actual, "prov1", "rev1", "pres1", "ex1", "motivo1");
-        consulta.save();
-        consulta = new ConsultaMedica(emp_temp, fecha_actual, "prov2", "rev2", "pres2", "ex2", "motivo2");
-        consulta.save();
-        consulta = new ConsultaMedica(emp_temp, fecha_actual, "prov3", "rev3", "pres3", "ex3", "motivo3");
-        consulta.save();
-        consulta = new ConsultaMedica(emp_temp, fecha_actual, "prov4", "rev4", "pres4", "ex4", "motivo4");
-        consulta.save();
-        consulta = new ConsultaMedica(emp_temp, fecha_actual, "prov5", "rev5", "pres5", "ex5", "motivo5");
-        consulta.save();
-        consulta = new ConsultaMedica(emp_temp, fecha_actual, "prov6", "rev6", "pres6", "ex6", "motivo6");
-        consulta.save();
-    }*/
+    public void aperturaBusqueda(Long idUsuario){
+        SessionManager sesion = new SessionManager(miActivity.getApplicationContext());
+        sesion.crearSesion(idUsuario);
+    }
 
 }

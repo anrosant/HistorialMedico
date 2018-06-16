@@ -3,9 +3,12 @@ package com.example.cltcontrol.historialmedico.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.cltcontrol.historialmedico.utils.EmpleadoController;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
@@ -21,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText etUsuario;
     private EditText etContrasenia;
+    private List<Empleado> empleados = null;
+    private List<Usuario> usuarios = null;
+    private EmpleadoController miController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,33 +39,61 @@ public class MainActivity extends AppCompatActivity {
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
 
+        miController = new EmpleadoController();
+        miController.llenadoEmpleados();
+        miController.llenadoUsuarios();
+        usuarios = miController.getUsuarios();
+        empleados = miController.getEmpleados();
+        miController.mostrarEmpleados(empleados);
+        miController.mostrarUsuarios(usuarios);
+
+        Toast.makeText(getApplicationContext(), "# empleados: "+ miController.countItemLista(empleados), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "# usuarios: "+ miController.countItemLista(usuarios), Toast.LENGTH_SHORT).show();
+
+        miController.llenarEnfermedades(this);
+
+        //empleados = miController.cargarEmpleados(empleados);
+
         //Almacena datos temporales solo si es que no existen datos
+        /*
         List<Empleado> referencia = Empleado.listAll(Empleado.class);
         if(referencia.isEmpty()){
             Toast.makeText(getApplicationContext(),"Inicializando datos",Toast.LENGTH_SHORT).show();
             inicializarVariablesTemp();
             llenarEnfermedades();
-        }
+        }*/
     }
+
     /*
     * Verifica si el usuario y contrasenia son correctos
     * si lo son, va a la funcion aperturarBusqeuda
-    * Caso contrario, imprime un mensaje de error*/
+    * Caso contrario, imprime un mensaje de error
+    */
     public void ingresoSistema(View v){
         String nombreUsuario = etUsuario.getText().toString();
         String contrasenia = etContrasenia.getText().toString();
-        //Usuario usuario;
 
+        if(miController.validarIngreso(usuarios,nombreUsuario,contrasenia)){
+            Toast.makeText(this.getApplicationContext(), "Acceso Sistema",Toast.LENGTH_SHORT).show();
+
+        }else {
+            Toast.makeText(this.getApplicationContext(), "Usuario y/o contraseña incorrecto",Toast.LENGTH_SHORT).show();
+        }
+
+
+        /*
         List<Usuario> usuarios = Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?", nombreUsuario, contrasenia);
 
         if(!usuarios.isEmpty()){
+            //Llamado evento
             aperturaBusqueda(usuarios.get(0).getId());
         } else {
             etUsuario.setText("");
             etContrasenia.setText("");
             Toast.makeText(getApplicationContext(), "Usuario y/o contraseña incorrecto",Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
+
 
     //Ingresa a BuscarEmpleadoActivity
     private void aperturaBusqueda(Long usu_id){
@@ -69,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(inbuscarempleado);
     }
 
-    private void inicializarVariablesTemp(){
+    /*private void inicializarVariablesTemp(){
         Date fecha_actual = new Date();
         Usuario usu_doctor = new Usuario();
         Usuario usu_enfermera = new Usuario();
@@ -81,13 +115,6 @@ public class MainActivity extends AppCompatActivity {
         usu_enfermera.setUsuario("anni1997");
         usu_enfermera.setContrasenia("anni1997");
         usu_enfermera.save();
-
-        emp_temp = new Empleado("03214567323","Jorge","García García",
-                "jorergar@espol.edu.ec","FAE",
-                "Analista de datos","Soltero",
-                "Masculino","Guayaquil",
-                "Dept. de Seguridad",fecha_actual,fecha_actual,30,R.drawable.modelo, usu_doctor);
-        emp_temp.save();
 
         consulta = new ConsultaMedica(emp_temp,fecha_actual,"prov1","rev1","pres1", "ex1","motivo1");
         consulta.save();
@@ -101,6 +128,13 @@ public class MainActivity extends AppCompatActivity {
         consulta.save();
         consulta = new ConsultaMedica(emp_temp,fecha_actual,"prov6","rev6","pres6", "ex6","motivo6");
         consulta.save();
+
+        emp_temp = new Empleado("03214567323","Jorge","García García",
+                "jorergar@espol.edu.ec","FAE",
+                "Analista de datos","Soltero",
+                "Masculino","Guayaquil",
+                "Dept. de Seguridad",fecha_actual,fecha_actual,30,R.drawable.modelo, usu_doctor);
+        emp_temp.save();
 
         emp_temp = new Empleado("0967547365","Anni","Santacruz Hernández",
                 "anrosant@espol.edu.ec","Sauces",
@@ -122,9 +156,9 @@ public class MainActivity extends AppCompatActivity {
                 "Masculino","Guayaquil",
                 "Dept. Desarrollo de Software",fecha_actual,fecha_actual,20,R.drawable.modelo);
         emp_temp.save();
-    }
+    }*/
 
-    public void llenarEnfermedades(){
+    /*public void llenarEnfermedades(){
         List<Enfermedad> enfermedades = Enfermedad.find(Enfermedad.class, "CODIGO = ?","A00");
 
         if(enfermedades.isEmpty()){
@@ -135,6 +169,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
             }
         }
-    }
+    }*/
 
 }

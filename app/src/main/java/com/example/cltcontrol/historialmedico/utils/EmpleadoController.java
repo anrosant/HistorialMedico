@@ -1,10 +1,13 @@
 package com.example.cltcontrol.historialmedico.utils;
 
+import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.activities.BuscarEmpleadoActivity;
 import com.example.cltcontrol.historialmedico.activities.MainActivity;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
@@ -39,10 +42,8 @@ public class EmpleadoController {
     //Metodos
     //Setter de registros Usuarios y Empleados
     public void llenadoUsuarios(){
-
         misUsuarios = new Usuario("dgarcia","dgarcia");
         misUsuarios.save();
-
         misUsuarios = new Usuario("anni","anni");
         misUsuarios.save();
     }
@@ -76,6 +77,18 @@ public class EmpleadoController {
                 "Masculino","Guayaquil",
                 "Dept. Desarrollo de Software",fecha_actual,fecha_actual,20,R.drawable.modelo);
         misEmpleados.save();
+    }
+
+    public void llenadoEnfermedades(MainActivity miActivity) {
+        List<Enfermedad> enfermedades = Enfermedad.find(Enfermedad.class, "CODIGO = ?", "A00");
+        if (enfermedades.isEmpty()) {
+            try {
+                Toast.makeText(miActivity.getApplicationContext(), "Llenando Enfermedades", Toast.LENGTH_LONG).show();
+                Enfermedad.executeQuery(EnfermedadesSQL.REGISTRO_ENFERMEDADES);
+            } catch (Exception e) {
+                Toast.makeText(miActivity.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     //conteo cantidad de registros en la lista
@@ -115,18 +128,37 @@ public class EmpleadoController {
         }
     }
 
-    //funcionalidad ingreso
-    public Boolean validarIngreso(List<Usuario> miLista, String etUsuario, String etContrasenia){
+    //Busqueda de un Usuario
+    public List<Usuario> obtenerUsuario(List<Usuario> misListaUsuarios, String etUsuario, String etContrasenia){
+        List<Usuario> encontrado = null;
+        for(Usuario buscarUsuario: misListaUsuarios){
+            encontrado = Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?", etUsuario, etContrasenia);
+            //aperturaBusqueda(encontrado.get(0).getId());
+        }
+        return encontrado;
+    }
 
-        for(Usuario buscarUsuarios: miLista){
-            if((buscarUsuarios.getUsuario().equals(etUsuario)) && (buscarUsuarios.getContrasenia().equals(etContrasenia))) {
-                return true;
-            }/*
-            else
-                Toast.makeText(miActivity.getApplicationContext(), "Usuario y/o contraseña incorrecto",Toast.LENGTH_SHORT).show();
-        */}
+    //funcionalidad ingreso
+    public Boolean validarIngreso(List<Usuario> misListaUsuarios, String etUsuario, String etContrasenia){
+        if(obtenerUsuario(misListaUsuarios,etUsuario,etContrasenia).size()!=0){
+            return true;
+        }
         return false;
     }
+
+    public void ingresoSistema(List<Usuario> misListaUsuarios, String etUsuario, String etContrasenia){
+        if(validarIngreso(misListaUsuarios,etUsuario,etContrasenia)){
+
+            Log.e("validarIngreso",""+validarIngreso(misListaUsuarios,etUsuario,etContrasenia));
+            //Toast.makeText(miActivity.getApplicationContext(), "Acceso Sistema",Toast.LENGTH_SHORT).show();
+            //aperturaBusqueda(obtenerUsuario(misListaUsuarios,etUsuario,etContrasenia).get(0).getId());
+        }else {
+            Log.e("validarIngreso",""+validarIngreso(misListaUsuarios,etUsuario,etContrasenia));
+            //Toast.makeText(miActivity.getApplicationContext(), "Usuario y/o contraseña incorrecto",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     /*private void inicializarVariablesTemp() {
         Date fecha_actual = new Date();
@@ -153,48 +185,6 @@ public class EmpleadoController {
         consulta.save();
         consulta = new ConsultaMedica(emp_temp, fecha_actual, "prov6", "rev6", "pres6", "ex6", "motivo6");
         consulta.save();
-
-        emp_temp = new Empleado("03214567323", "Jorge", "García García",
-                "jorergar@espol.edu.ec", "FAE",
-                "Analista de datos", "Soltero",
-                "Masculino", "Guayaquil",
-                "Dept. de Seguridad", fecha_actual, fecha_actual, 30, R.drawable.modelo, usu_doctor);
-        emp_temp.save();
-
-        emp_temp = new Empleado("0967547365", "Anni", "Santacruz Hernández",
-                "anrosant@espol.edu.ec", "Sauces",
-                "Ingeniera en Ciencias Computacionales", "Soltera",
-                "Femenino", "Guayaquil",
-                "Dept. de Sistemas", fecha_actual, fecha_actual, 20, R.drawable.modelo, usu_enfermera);
-        emp_temp.save();
-
-        emp_temp = new Empleado("0913620589", "Renato", "Illescas Rodríguez",
-                "rillesca@espol.edu.ec", "Sauces",
-                "Licenciado en Redes", "Soltero",
-                "Masculino", "Guayaquil",
-                "Dept. de Redes", fecha_actual, fecha_actual, 20, R.drawable.modelo);
-        emp_temp.save();
-
-        emp_temp = new Empleado("0962983345", "Daniel", "Castro Peñafiel",
-                "danijo@espol.edu.ec", "Sauces",
-                "Ingeniero en Ciencias Computacionales", "Soltero",
-                "Masculino", "Guayaquil",
-                "Dept. Desarrollo de Software", fecha_actual, fecha_actual, 20, R.drawable.modelo);
-        emp_temp.save();
-
     }*/
-
-    public void llenarEnfermedades(MainActivity miActivity) {
-        List<Enfermedad> enfermedades = Enfermedad.find(Enfermedad.class, "CODIGO = ?", "A00");
-
-        if (enfermedades.isEmpty()) {
-            try {
-                Toast.makeText(miActivity.getApplicationContext(), "Llenando Enfermedades", Toast.LENGTH_LONG).show();
-                Enfermedad.executeQuery(EnfermedadesSQL.REGISTRO_ENFERMEDADES);
-            } catch (Exception e) {
-                Toast.makeText(miActivity.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
 }

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText etUsuario;
     private EditText etContrasenia;
+    private Button btnIngresoSistema;
     private List<Empleado> empleados = null;
     private List<Usuario> usuarios = null;
     private EmpleadoController miController;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         etUsuario = findViewById(R.id.etUsuario);
         etContrasenia = findViewById(R.id.etContrasenia);
+        btnIngresoSistema = findViewById(R.id.btnIngresar);
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
@@ -50,8 +53,18 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "# empleados: "+ miController.countItemLista(empleados), Toast.LENGTH_SHORT).show();
         Toast.makeText(getApplicationContext(), "# usuarios: "+ miController.countItemLista(usuarios), Toast.LENGTH_SHORT).show();
 
-        miController.llenarEnfermedades(this);
+        miController.llenadoEnfermedades(this);
 
+        btnIngresoSistema.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                miController.ingresoSistema(usuarios,etUsuario.getText().toString(),etContrasenia.getText().toString());
+                //miController.obtenerUsuario(usuarios,etUsuario.getText().toString(),etContrasenia.getText().toString());
+                aperturaBusqueda((miController.obtenerUsuario(usuarios,etUsuario.getText().toString(),etContrasenia.getText().toString())).get(0).getId());
+
+
+            }
+        });
         //empleados = miController.cargarEmpleados(empleados);
 
         //Almacena datos temporales solo si es que no existen datos
@@ -64,44 +77,40 @@ public class MainActivity extends AppCompatActivity {
         }*/
     }
 
+
+    private void aperturaBusqueda(Long usu_id){
+        SessionManager sesion = new SessionManager(this.getApplicationContext());
+        sesion.crearSesion(usu_id);
+        Intent inbuscarempleado = new Intent(this, BuscarEmpleadoActivity.class);
+        startActivity(inbuscarempleado);
+    }
+
     /*
     * Verifica si el usuario y contrasenia son correctos
     * si lo son, va a la funcion aperturarBusqeuda
     * Caso contrario, imprime un mensaje de error
     */
+    /*
     public void ingresoSistema(View v){
         String nombreUsuario = etUsuario.getText().toString();
         String contrasenia = etContrasenia.getText().toString();
 
         if(miController.validarIngreso(usuarios,nombreUsuario,contrasenia)){
             Toast.makeText(this.getApplicationContext(), "Acceso Sistema",Toast.LENGTH_SHORT).show();
-
+            //aperturaBusqueda(miController.obtenerUsuario(usuarios,nombreUsuario,contrasenia).get(0).getId());
         }else {
             Toast.makeText(this.getApplicationContext(), "Usuario y/o contraseña incorrecto",Toast.LENGTH_SHORT).show();
         }
-
-
-        /*
-        List<Usuario> usuarios = Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?", nombreUsuario, contrasenia);
-
-        if(!usuarios.isEmpty()){
-            //Llamado evento
-            aperturaBusqueda(usuarios.get(0).getId());
-        } else {
-            etUsuario.setText("");
-            etContrasenia.setText("");
-            Toast.makeText(getApplicationContext(), "Usuario y/o contraseña incorrecto",Toast.LENGTH_SHORT).show();
-        }*/
-    }
-
+    }*/
 
     //Ingresa a BuscarEmpleadoActivity
+    /*
     private void aperturaBusqueda(Long usu_id){
-        SessionManager sesion = new SessionManager(getApplicationContext());
+        SessionManager sesion = new SessionManager(this.getApplicationContext());
         sesion.crearSesion(usu_id);
         Intent inbuscarempleado = new Intent(this, BuscarEmpleadoActivity.class);
         startActivity(inbuscarempleado);
-    }
+    }*/
 
     /*private void inicializarVariablesTemp(){
         Date fecha_actual = new Date();

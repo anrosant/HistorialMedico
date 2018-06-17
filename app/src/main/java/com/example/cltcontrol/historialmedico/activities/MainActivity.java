@@ -25,9 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText etUsuario;
     private EditText etContrasenia;
-    private Button btnIngresoSistema;
-    private List<Empleado> empleados = null;
-    private List<Usuario> usuarios = null;
     private EmpleadoController miController;
 
     @Override
@@ -36,31 +33,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         etUsuario = findViewById(R.id.etUsuario);
         etContrasenia = findViewById(R.id.etContrasenia);
-        btnIngresoSistema = findViewById(R.id.btnIngresar);
+        Button btnIngresoSistema = findViewById(R.id.btnIngresar);
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
 
-        miController = new EmpleadoController();
-        miController.llenadoEmpleados();
-        miController.llenadoUsuarios();
-        usuarios = miController.getUsuarios();
-        empleados = miController.getEmpleados();
+        miController = new EmpleadoController(getApplicationContext());
+        List<Usuario> usuarios = miController.getLista_usuarios();
+        List<Empleado> empleados = miController.getLista_empleados();
         miController.mostrarEmpleados(empleados);
         miController.mostrarUsuarios(usuarios);
-
-        Toast.makeText(this.getApplicationContext(), "# empleados: "+ miController.countItemLista(empleados), Toast.LENGTH_SHORT).show();
-        Toast.makeText(this.getApplicationContext(), "# usuarios: "+ miController.countItemLista(usuarios), Toast.LENGTH_SHORT).show();
-
-        miController.llenadoEnfermedades(this);
+        miController.llenadoEnfermedades(getApplicationContext());
 
         btnIngresoSistema.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Usuario nuevo = new Usuario();
-                miController.ingresoSistema(usuarios,etUsuario.getText().toString(),etContrasenia.getText().toString());
-                siguienteActivity();
+                if(miController.ingresoSistema(etUsuario.getText().toString(),etContrasenia.getText().toString())) {
+                    crearSesion();
+                    siguienteActivity();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Usuario y/o contraseña incorrecto", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -68,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
     private void siguienteActivity(){
         Intent inbuscarempleado = new Intent(this, BuscarEmpleadoActivity.class);
         startActivity(inbuscarempleado);
+    }
+
+    private void crearSesion(){
+        SessionManager sesion = new SessionManager(getApplicationContext());
+        Long id = Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?",
+                etUsuario.getText().toString(),etContrasenia.getText().toString()).get(0).getId();
+        sesion.crearSesion(id);
     }
 
 }

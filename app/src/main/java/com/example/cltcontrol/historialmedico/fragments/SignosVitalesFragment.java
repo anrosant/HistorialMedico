@@ -28,7 +28,7 @@ import java.util.Objects;
  */
 public class SignosVitalesFragment extends Fragment {
     private EditText etPSistolica, etPDistolica, etTemperatura, etPulso;
-    private String id_consulta_medica, id_empleado, id_atencion_enfermeria, presedencia, cargo;
+    private String id_consulta_medica, id_empleado, id_atencion_enfermeria, precedencia, cargo;
     private ConsultaMedica consultaMedica;
     private ListView lvSignosVitales;
     private AdapterSignosVitales adapterSignosVitales;
@@ -39,6 +39,7 @@ public class SignosVitalesFragment extends Fragment {
     private ImageButton ib_mostrar_ocultar_contendido;
     LinearLayout ly_signos_vitales;
     private TextView tvTitulo;
+
     public SignosVitalesFragment() {
         // Required empty public constructor
     }
@@ -64,7 +65,7 @@ public class SignosVitalesFragment extends Fragment {
 
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
         id_atencion_enfermeria = extras.getString("ID_ATENCION");
-        presedencia = extras.getString("PRESEDENCIA");
+        precedencia = extras.getString("PRESEDENCIA");
         //Recibe el id del empleado
         id_empleado = extras.getString("ID_EMPLEADO");
         cargo = extras.getString("CARGO");

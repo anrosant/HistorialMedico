@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.adapter.AdapterItemDiagnostico;
-import com.example.cltcontrol.historialmedico.adapter.EnfermedadesAdapter;
+import com.example.cltcontrol.historialmedico.adapter.AdapterEnfermedades;
 import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
@@ -37,7 +37,7 @@ public class DiagnosticoFragment extends Fragment {
 
     public static List<Enfermedad> enfermedadList;
     private RecyclerView recyclerEnfermedades;
-    private EnfermedadesAdapter adaptadorEnfermedades;
+    private AdapterEnfermedades adaptadorEnfermedades;
     private EditText etBuscarEnfermedades;
     private Enfermedad enfermedad;
     private String tipo_enfermedad,id_consulta_medica, id_empleado, cargo;
@@ -96,7 +96,7 @@ public class DiagnosticoFragment extends Fragment {
         etBuscarEnfermedades = view.findViewById(R.id.etBuscarEnfermedades);
 
         //Muestra la lsita de enfermedades
-        adaptadorEnfermedades = new EnfermedadesAdapter(enfermedadList);
+        adaptadorEnfermedades = new AdapterEnfermedades(enfermedadList);
         recyclerEnfermedades.setAdapter(adaptadorEnfermedades);
 
         etBuscarEnfermedades.addTextChangedListener(new TextWatcher() {

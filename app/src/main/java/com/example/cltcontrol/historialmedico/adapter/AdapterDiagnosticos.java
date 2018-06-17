@@ -18,13 +18,13 @@ import java.util.ArrayList;
  * Created by jorge on 7/1/2018.
  */
 
-class DiagnosticosAdapter extends ArrayAdapter<Diagnostico> {
+class AdapterDiagnosticos extends ArrayAdapter<Diagnostico> {
 
     private Context context;
     private int layoutResourceId;
     private ArrayList<Diagnostico> data=null;
 
-    public DiagnosticosAdapter(Context context, int layaoutResouceId, ArrayList<Diagnostico> data) {
+    public AdapterDiagnosticos(Context context, int layaoutResouceId, ArrayList<Diagnostico> data) {
         super(context,layaoutResouceId,data);
 
         this.context=context;

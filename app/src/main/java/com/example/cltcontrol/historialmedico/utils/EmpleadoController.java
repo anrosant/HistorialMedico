@@ -1,94 +1,48 @@
 package com.example.cltcontrol.historialmedico.utils;
 
-import android.content.Intent;
+import android.content.Context;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
-
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.activities.BuscarEmpleadoActivity;
-import com.example.cltcontrol.historialmedico.activities.MainActivity;
-import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.models.Usuario;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class EmpleadoController {
-
-    //Atributos
-    private List<Empleado> misListaEmpleados;
-    private List<Usuario> misListaUsuarios;
-    private Empleado misEmpleados;
-    private Usuario misUsuarios;
-    private MainActivity miActivity;
-    private Date fecha_actual;
-    private Usuario usu_doctor, usu_enfermera;
+    private List<Empleado> lista_empleados;
+    private List<Usuario> lista_usuarios;
+    private Context miActivity;
+    private Usuario usuario_doctor, usuario_enfermera;
 
     //Constructores
-    public EmpleadoController() {
-
+    public EmpleadoController(){
+        this.llenadoEmpleados();
+        this.llenadoUsuarios();
     }
 
-    public EmpleadoController(List<Empleado> misListaEmpleados, MainActivity miActivity) {
-        this.misListaEmpleados = misListaEmpleados;
+    public EmpleadoController(Context miActivity) {
         this.miActivity = miActivity;
+        this.llenadoUsuarios();
+        this.llenadoEmpleados();
     }
 
-    //Metodos
-    //Setter de registros Usuarios y Empleados
-    public void llenadoUsuarios(){
-        misUsuarios = new Usuario("dgarcia","dgarcia");
-        misUsuarios.save();
-        misUsuarios = new Usuario("anni","anni");
-        misUsuarios.save();
+    //Getter de registros Usuarios y Empleados
+    public List<Empleado> getLista_empleados() {
+        return lista_empleados;
     }
 
-    public void llenadoEmpleados(){
-
-        misEmpleados = new Empleado("03214567323","Jorge","García García",
-                "jorergar@espol.edu.ec","FAE",
-                "Analista de datos","Soltero",
-                "Masculino","Guayaquil",
-                "Dept. de Seguridad",fecha_actual,fecha_actual,30,R.drawable.modelo, usu_doctor);
-        misEmpleados.save();
-
-        misEmpleados = new Empleado("0967547365","Anni","Santacruz Hernández",
-                "anrosant@espol.edu.ec","Sauces",
-                "Ingeniera en Ciencias Computacionales","Soltera",
-                "Femenino","Guayaquil",
-                "Dept. de Sistemas",fecha_actual,fecha_actual,20,R.drawable.modelo,usu_enfermera);
-        misEmpleados.save();
-
-        misEmpleados = new Empleado("0913620589","Renato","Illescas Rodríguez",
-                "rillesca@espol.edu.ec","Sauces",
-                "Licenciado en Redes","Soltero",
-                "Masculino","Guayaquil",
-                "Dept. de Redes",fecha_actual,fecha_actual,20,R.drawable.modelo);
-        misEmpleados.save();
-
-        misEmpleados = new Empleado("0962983345","Daniel","Castro Peñafiel",
-                "danijo@espol.edu.ec","Sauces",
-                "Ingeniero en Ciencias Computacionales","Soltero",
-                "Masculino","Guayaquil",
-                "Dept. Desarrollo de Software",fecha_actual,fecha_actual,20,R.drawable.modelo);
-        misEmpleados.save();
+    public List<Usuario> getLista_usuarios() {
+        return lista_usuarios;
     }
 
-    public void llenadoEnfermedades(MainActivity miActivity) {
-        List<Enfermedad> enfermedades = Enfermedad.find(Enfermedad.class, "CODIGO = ?", "A00");
-        if (enfermedades.isEmpty()) {
-            try {
-                Toast.makeText(miActivity.getApplicationContext(), "Llenando Enfermedades", Toast.LENGTH_LONG).show();
-                Enfermedad.executeQuery(EnfermedadesSQL.REGISTRO_ENFERMEDADES);
-            } catch (Exception e) {
-                Toast.makeText(miActivity.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
+    public void setLista_empleados(List<Empleado> lista_empleados) {
+        this.lista_empleados = lista_empleados;
+    }
+
+    public void setLista_usuarios(List<Usuario> lista_usuarios) {
+        this.lista_usuarios = lista_usuarios;
     }
 
     //conteo cantidad de registros en la lista
@@ -96,69 +50,83 @@ public class EmpleadoController {
         return miLista.size();
     }
 
-    //Getter de registros Usuarios y Empleados
-    public List<Usuario> getUsuarios() {
-        misListaUsuarios = misUsuarios.listAll(Usuario.class);
-        if(misListaUsuarios.isEmpty()){
-            //
-        }
-        return misListaUsuarios;
+    //Metodos
+    //Setter de registros Usuarios y Empleados
+    private void llenadoUsuarios(){
+        usuario_doctor = new Usuario("jgarcia", "jgarcia");
+        usuario_doctor.save();
+        usuario_enfermera = new Usuario("asantacruz","asantacruz");
+        usuario_enfermera.save();
+        this.setLista_usuarios(Usuario.listAll(Usuario.class));
     }
 
-    public List<Empleado> getEmpleados() {
-        misListaEmpleados = misEmpleados.listAll(Empleado.class);
-        if (misListaEmpleados.isEmpty()) {
-            //
-            //inicializarVariablesTemp();
-            //llenarEnfermedades(miActivity);
+    private void llenadoEmpleados(){
+        Empleado miEmpleado = new Empleado("03214567323", "Jorge", "García García",
+                "jorergar@espol.edu.ec", "FAE",
+                "Analista de datos", "Soltero",
+                "Masculino", "Guayaquil",
+                "Dept. de Seguridad", new Date(), new Date(), 30, R.drawable.modelo, usuario_doctor);
+        miEmpleado.save();
+
+        miEmpleado = new Empleado("0967547365","Anni","Santacruz Hernández",
+                "anrosant@espol.edu.ec","Sauces",
+                "Ingeniera en Ciencias Computacionales","Soltera",
+                "Femenino","Guayaquil",
+                "Dept. de Sistemas",new Date(),new Date(),20,R.drawable.modelo, usuario_enfermera);
+        miEmpleado.save();
+
+        miEmpleado = new Empleado("0913620589","Renato","Illescas Rodríguez",
+                "rillesca@espol.edu.ec","Sauces",
+                "Licenciado en Redes","Soltero",
+                "Masculino","Guayaquil",
+                "Dept. de Redes",new Date(),new Date(),20,R.drawable.modelo);
+        miEmpleado.save();
+
+        miEmpleado = new Empleado("0962983345","Daniel","Castro Peñafiel",
+                "danijo@espol.edu.ec","Sauces",
+                "Ingeniero en Ciencias Computacionales","Soltero",
+                "Masculino","Guayaquil",
+                "Dept. Desarrollo de Software",new Date(),new Date(),20,R.drawable.modelo);
+        miEmpleado.save();
+        this.setLista_empleados(Empleado.listAll(Empleado.class));
+    }
+
+    public void llenadoEnfermedades(Context miActivity) {
+        List<Enfermedad> enfermedades = Enfermedad.find(Enfermedad.class, "CODIGO = ?", "A00");
+        if (enfermedades.isEmpty()) {
+            try {
+                Enfermedad.executeQuery(EnfermedadesSQL.REGISTRO_ENFERMEDADES);
+            } catch (Exception e) {
+                Toast.makeText(miActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
-        return misListaEmpleados;
     }
 
     //Show de registros Usuarios y Empleados
-    public void mostrarEmpleados(List<Empleado> misListaEmpleados) {
-        for (Empleado verEmpleados : misListaEmpleados) {
+    public void mostrarEmpleados(List<Empleado> lista_empleados) {
+        for (Empleado verEmpleados : lista_empleados) {
             Log.e("aqui nombre", verEmpleados.getApellido());
         }
     }
 
-    public void mostrarUsuarios(List<Usuario> misListaUsuarios) {
-        for (Usuario verUsuarios : misListaUsuarios) {
+    public void mostrarUsuarios(List<Usuario> lista_usuarios) {
+        for (Usuario verUsuarios : lista_usuarios) {
             Log.e("aqui usuario", verUsuarios.getUsuario());
         }
     }
 
-    //Busqueda de un Usuario
-    public List<Usuario> obtenerUsuario(List<Usuario> misListaUsuarios, String etUsuario, String etContrasenia){
-        List<Usuario> encontrado = null;
-        for(Usuario buscarUsuario: misListaUsuarios){
-            encontrado = Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?", etUsuario, etContrasenia);
-            //aperturaBusqueda(encontrado.get(0).getId());
-        }
-        return encontrado;
+    public Boolean ingresoSistema(String etUsuario, String etContrasenia){
+        return validarIngreso(etUsuario, etContrasenia);
     }
 
     //funcionalidad ingreso
-    public Boolean validarIngreso(List<Usuario> misListaUsuarios, String etUsuario, String etContrasenia){
-        if(obtenerUsuario(misListaUsuarios,etUsuario,etContrasenia).size()==0){
-            return true;
-        }
-        return false;
+    private Boolean validarIngreso(String etUsuario, String etContrasenia){
+        return obtenerUsuario(etUsuario, etContrasenia).size() != 0;
     }
 
-    public void ingresoSistema(List<Usuario> misListaUsuarios, String etUsuario, String etContrasenia){
-        if(validarIngreso(misListaUsuarios,etUsuario,etContrasenia)){
-            aperturaBusqueda(obtenerUsuario(misListaUsuarios,etUsuario,etContrasenia).get(0).getId());
-            //Log.e("validarIngreso",""+validarIngreso(misListaUsuarios,etUsuario,etContrasenia));
-            //Toast.makeText(miActivity.getApplicationContext(), "Acceso Sistema",Toast.LENGTH_SHORT).show();
-        }else {
-            //Toast.makeText(miActivity.getApplicationContext(), "Usuario y/o contraseña incorrecto",Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void aperturaBusqueda(Long idUsuario){
-        SessionManager sesion = new SessionManager(miActivity.getApplicationContext());
-        sesion.crearSesion(idUsuario);
+    //Busqueda de un Usuario
+    private List<Usuario> obtenerUsuario(String etUsuario, String etContrasenia){
+        return Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?", etUsuario, etContrasenia);
     }
 
 }

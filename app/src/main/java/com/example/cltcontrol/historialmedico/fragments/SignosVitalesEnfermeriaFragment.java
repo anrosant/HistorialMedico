@@ -20,7 +20,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
 
     private String idAtencion=null;
     private String idAtencion2=null;
-    private String presedencia;
+    private String precedencia;
     private Bundle bun;
     private EditText etPresionSistolica;
     private EditText etPresionDistolica;
@@ -48,10 +48,10 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
         idAtencion= bun.getString("ID_ATENCION");
-        presedencia= bun.getString("PRESEDENCIA");
+        precedencia = bun.getString("PRESEDENCIA");
 
 
-        if(presedencia.equals("consultar")){//funcionalidad para cargar un signo vital con el id de Atencion
+        if(precedencia.equals("consultar")){//funcionalidad para cargar un signo vital con el id de Atencion
             Toast.makeText(getContext(),"Viniste a consultar",Toast.LENGTH_SHORT).show();
             List<SignosVitales> signos = SignosVitales.find(SignosVitales.class,"atencionenfermeria = ?",idAtencion);
             if(!signos.isEmpty()) {
@@ -99,7 +99,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
             Toast.makeText(getContext(),"No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
         }else{
             try{
-                if(presedencia.equals("consultar")){
+                if(precedencia.equals("consultar")){
                     SignosVitales nuevo = SignosVitales.find(SignosVitales.class,"atencionEnfermeria = ?",idAten).get(0);
                     nuevo.setAtencion_enfermeria(atencionEnfermeria);
                     nuevo.setPresion_sistolica(pSis);

@@ -13,11 +13,11 @@ import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnfermedadesAdapter extends RecyclerView.Adapter<EnfermedadesAdapter.ViewHolder> {
+public class AdapterEnfermedades extends RecyclerView.Adapter<AdapterEnfermedades.ViewHolder> {
 
     private List<Enfermedad> listaEnfermedades;
 
-    public EnfermedadesAdapter(List<Enfermedad> listaEnfermedades) {
+    public AdapterEnfermedades(List<Enfermedad> listaEnfermedades) {
         this.listaEnfermedades = listaEnfermedades;
     }
 
@@ -33,7 +33,7 @@ public class EnfermedadesAdapter extends RecyclerView.Adapter<EnfermedadesAdapte
     }
 
     @Override
-    public void onBindViewHolder(EnfermedadesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(AdapterEnfermedades.ViewHolder holder, int position) {
         holder.tvNombreCie10items.setText(listaEnfermedades.get(position).getNombre());
         holder.tvCodigoCie10items.setText(listaEnfermedades.get(position).getCodigo());
 

@@ -24,7 +24,7 @@ public class RevisionMedicaFragment extends Fragment {
 
     private EditText et_revision_medica;
     private Button btn_guardar;
-    private String id_consulta_medica, presedencia,id_empleado, cargo;
+    private String id_consulta_medica, precedencia,id_empleado, cargo;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
@@ -43,7 +43,7 @@ public class RevisionMedicaFragment extends Fragment {
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
-        presedencia = extras.getString("PRESEDENCIA");
+        precedencia = extras.getString("PRECEDENCIA");
 
         //Recibe el id de consulta medica desde Historial de consulta medica
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
@@ -55,10 +55,9 @@ public class RevisionMedicaFragment extends Fragment {
         if(cargo.equals("Enfermera")){
             btn_guardar.setVisibility(View.GONE);
             et_revision_medica.setEnabled(false);
-
         }
 
-        if(presedencia.equals("consultar")) {
+        if(precedencia.equals("consultar")) {
             et_revision_medica.setText(consultaMedica.getRevision_medica());
             btn_guardar.setText("Editar");
         }
@@ -71,6 +70,7 @@ public class RevisionMedicaFragment extends Fragment {
 
         return view;
     }
+
     private void guardarRevisionMedica() {
         String revision_medica = et_revision_medica.getText().toString();
         if(revision_medica.equals("")){

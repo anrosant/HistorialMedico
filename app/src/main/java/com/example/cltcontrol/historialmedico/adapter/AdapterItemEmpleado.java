@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmpleado.ViewHolder> {
-
     private List<Empleado> listaEmpleados;
+
+    public AdapterItemEmpleado(){}
 
     public AdapterItemEmpleado(List<Empleado> listaEmpleados) {
         this.listaEmpleados = listaEmpleados;
@@ -23,7 +24,6 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_buscar_empleados_recyclerview, null, false);
         return new ViewHolder(view);
     }
@@ -64,4 +64,14 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
         listaEmpleados.addAll(newList);
         notifyDataSetChanged();
     }
+
+    public Boolean validarBusqueda(String s){
+        for(int i = 0; i < s.length(); i++){
+            char c = s.charAt(i);
+            if(!Character.isLetter(c))
+                return false;
+        }
+        return true;
+    }
+
 }

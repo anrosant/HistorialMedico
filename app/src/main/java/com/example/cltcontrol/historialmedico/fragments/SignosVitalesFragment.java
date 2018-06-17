@@ -1,6 +1,7 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,29 +130,27 @@ public class SignosVitalesFragment extends Fragment {
     }
 
     public void guardarSignosVitales(){
-
         //Recibe los datos de signos vitales
         String presionSistolicaText = etPSistolica.getText().toString();
         String presionDistolicaText = etPDistolica.getText().toString();
         String temperaturatext = etTemperatura.getText().toString();
         String pulsoText = etPulso.getText().toString();
 
-        if(presionDistolicaText.equals("") || presionSistolicaText.equals("") ||
-                temperaturatext.equals("") || pulsoText.equals("")){
-            Toast.makeText(getContext(),"No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
+        SignosVitales signos = new SignosVitales();
+        int res = signos.validarSignos(presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
+        if(res == 0) {
+            Toast.makeText(getContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
+            return;
+        } else if(res == 1) {
+            Toast.makeText(getContext(), "Los valores están fuera de rango", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        int presionSistolica = Integer.parseInt(presionSistolicaText);
-        int presionDistolica = Integer.parseInt(presionDistolicaText);
-        float temp = Float.parseFloat(temperaturatext);
-        int pulso = Integer.parseInt(pulsoText);
-        //Ejemplo 120-90-80-37
-        if(presionSistolica < 100 || presionSistolica > 135 || presionDistolica < 70 || presionDistolica > 90 ||
-                pulso < 60 || pulso > 100 || temp < 34.0 || temp > 43.0){
-            Toast.makeText(getContext(),"Los valores están fuera de rango", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        signos.setPresion_sistolica(Integer.parseInt(presionSistolicaText));
+        signos.setPresion_distolica(Integer.parseInt(presionDistolicaText));
+        signos.setPulso(Integer.parseInt(pulsoText));
+        signos.setTemperatura(Float.parseFloat(temperaturatext));
+
         //Guarda los datos y el id de la consulta medica o enfermeria
         if(id_consulta_medica!=null){
             //Si es la primera vez que crea la consulta medica
@@ -161,23 +160,25 @@ public class SignosVitalesFragment extends Fragment {
                 consultaMedica.setFechaConsulta(new Date());
                 consultaMedica.save();
             }
-            SignosVitales signosVitales = new SignosVitales(presionSistolica,presionDistolica,pulso,temp,consultaMedica);
-            signosVitales.save();
+
+            signos.setConsultaMedica(consultaMedica);
+            signos.save();
+
             ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
                     "consultamedica = ?", String.valueOf(consultaMedica.getId()));
-
             adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
-        }else{
+        } else {
             if(atencionEnfermeria.getEmpleado() == null){
                 atencionEnfermeria.setEmpleado(empleado);
                 atencionEnfermeria.setFecha_atencion(new Date());
                 atencionEnfermeria.save();
             }
-            SignosVitales signosVitales = new SignosVitales(presionSistolica,presionDistolica,pulso,temp,atencionEnfermeria);
-            signosVitales.save();
+
+            signos.setAtencion_enfermeria(atencionEnfermeria);
+            signos.save();
+
             ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
                     "atencionenfermeria = ?", String.valueOf(id_atencion_enfermeria));
-
             adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
         }
         Toast.makeText(getContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();

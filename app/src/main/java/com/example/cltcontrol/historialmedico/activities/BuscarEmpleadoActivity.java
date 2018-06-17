@@ -38,9 +38,8 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String newText;
-                if(s.length() != 0){
-                    newText = buscar.getText().toString().toLowerCase();
+                String newText = buscar.getText().toString().toLowerCase();
+                if(newText.length() != 0 && adaptadorEmpleados.validarBusqueda(newText)){
                     List<Empleado> newList = new ArrayList<>();
                     for(Empleado empleado:empleadosList){
                         String nombre = empleado.getNombre().toLowerCase();

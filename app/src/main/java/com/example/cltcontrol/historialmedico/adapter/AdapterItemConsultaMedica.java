@@ -12,12 +12,17 @@ import android.widget.TextView;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
     private Activity activity;
     private List<ConsultaMedica> consultaMedicasList;
     private final Context context;
+    SimpleDateFormat simpleDateFormat;
 
     public AdapterItemConsultaMedica(Context context, List<ConsultaMedica> consultaMedicaList) {
         super(context, 0, consultaMedicaList);
@@ -53,16 +58,17 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
         }
 
         ConsultaMedica consultaMedica = consultaMedicasList.get(position);
+        TextView tvfechaConsulta = v.findViewById(R.id.tvFechaConsulta);
 
-        TextView fechaConsulta = v.findViewById(R.id.tvFechaConsulta);
-
-
-        //Muestra los valores
-
-        fechaConsulta.setText(consultaMedica.getFechaConsulta().toString());
-        //Desabilita la edicion
-        fechaConsulta.setEnabled(false);
-
+        simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        try {
+            Date fecha_consulta = simpleDateFormat.parse(consultaMedica.getFechaConsulta().toString());
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            tvfechaConsulta.setText(simpleDateFormat.format(fecha_consulta));
+            tvfechaConsulta.setEnabled(false);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return v;
     }
 

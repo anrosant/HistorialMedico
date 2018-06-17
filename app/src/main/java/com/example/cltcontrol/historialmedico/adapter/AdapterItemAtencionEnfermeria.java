@@ -54,21 +54,17 @@ public class AdapterItemAtencionEnfermeria extends ArrayAdapter<AtencionEnfermer
             v = Objects.requireNonNull(inf).inflate(R.layout.item_signos_vitales, null);*/
         }
 
-        AtencionEnfermeria atencionEnfermeria = atencionEnfermeriaList.get(position);
-
         TextView fechaAtencion = v.findViewById(R.id.tvFechaAtencion);
         TextView motivoAtencion = v.findViewById(R.id.tvMotivo);
 
-
-        String DateToStr;
-        AtencionEnfermeria atenciones = atencionEnfermeriaList.get(position);
+        AtencionEnfermeria atencion = atencionEnfermeriaList.get(position);
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         //Se obtiene la fecha, se le da el formato del simpleDateFormat y se lo setea al holder
-        DateToStr = format.format(atenciones.getFecha_atencion());
+        String DateToStr = format.format(atencion.getFecha_atencion());
 
         //Muestra los valores
         fechaAtencion.setText(DateToStr);
-        motivoAtencion.setText(atenciones.getMotivoAtencion());
+        motivoAtencion.setText(atencion.getMotivoAtencion());
 
         //Desabilita la edicion
         fechaAtencion.setEnabled(false);

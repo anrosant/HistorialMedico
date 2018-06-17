@@ -11,23 +11,31 @@ import static org.junit.Assert.assertTrue;
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class MainActivityTest {
+    private EmpleadoController ec = new EmpleadoController();
 
     @Test
     public void testCredenciales_correctas(){
-        EmpleadoController ec = new EmpleadoController();
         assertTrue(ec.ingresoSistema("jgarcia", "jgarcia"));
     }
 
     @Test
-    public void testCredenciales_incorrectas(){
-        EmpleadoController ec = new EmpleadoController();
-        assertFalse(ec.ingresoSistema("jorgeg", "jorgeg"));
+    public void testUsuario_incorrecto1(){
+        assertFalse(ec.ingresoSistema("jorgeg", "jgarcia"));
     }
 
     @Test
-    public void testCredenciales_en_blanco(){
-        EmpleadoController ec = new EmpleadoController();
-        assertFalse(ec.ingresoSistema("", ""));
+    public void testUsuario_incorrecto2(){
+        assertFalse(ec.ingresoSistema("", "jgarcia"));
+    }
+
+    @Test
+    public void testContrasenia_incorrecta1(){
+        assertFalse(ec.ingresoSistema("jgarcia", "jor"));
+    }
+
+    @Test
+    public void testContrasenia_incorrecta2(){
+        assertFalse(ec.ingresoSistema("jgarcia", ""));
     }
 
 }

@@ -179,4 +179,5 @@ public class Empleado extends SugarRecord {
     public void setFoto(int foto) {
         this.foto = foto;
     }
+
 }

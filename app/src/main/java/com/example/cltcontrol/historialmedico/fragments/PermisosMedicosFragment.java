@@ -35,7 +35,6 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class PermisosMedicosFragment extends Fragment {
-
     private String id_empleado, id_consulta_medica, cargo, precedencia;
     private Empleado empleado;
     private ConsultaMedica consultaMedica;

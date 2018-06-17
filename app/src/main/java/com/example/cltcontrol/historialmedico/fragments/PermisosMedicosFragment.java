@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class PermisosMedicosFragment extends Fragment {
         sp_enfermedades_diagnostico = view.findViewById(R.id.sp_enfermedades_diagnostico);
         btn_guardar = view.findViewById(R.id.btn_guardar);
         sp_enfermedades_diagnostico.setEnabled(false);
+        btn_guardar.setEnabled(false);
 
         //paso de parametros provenientes de activity nueva consulta medica
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
@@ -109,7 +111,6 @@ public class PermisosMedicosFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 diagnostico = diagnosticosList.get(position);
-                //Toast.makeText(getContext(), ""+diagnostico, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -134,11 +135,13 @@ public class PermisosMedicosFragment extends Fragment {
                     fecha_desde.setEnabled(true);
                     fecha_hasta.setEnabled(true);
                     observaciones.setEnabled(true);
+                    btn_guardar.setEnabled(true);
                 } else {
                     sp_enfermedades_diagnostico.setEnabled(false);
                     fecha_desde.setEnabled(false);
                     fecha_hasta.setEnabled(false);
                     observaciones.setEnabled(false);
+                    btn_guardar.setEnabled(false);
                 }
             }
         });
@@ -189,48 +192,51 @@ public class PermisosMedicosFragment extends Fragment {
     }
 
     public void guardarPermisoMedico(){
-        String enfermedadPrincipalText = sp_enfermedades_diagnostico.getSelectedItem().toString();
-        String fechaInicioText = fecha_desde.getText().toString();
-        String fechaFinText = fecha_hasta.getText().toString();
-        String diasPermisoText = numero_dias.getText().toString();
-        String observacionesPermisoText = observaciones.getText().toString();
+        if(diagnosticosList.size()!=0) {
+            String enfermedadPrincipalText = sp_enfermedades_diagnostico.getSelectedItem().toString();
+            String fechaInicioText = fecha_desde.getText().toString();
+            String fechaFinText = fecha_hasta.getText().toString();
+            String diasPermisoText = numero_dias.getText().toString();
+            String observacionesPermisoText = observaciones.getText().toString();
 
-        if(!switch_generar.isChecked() || enfermedadPrincipalText.equals("") || fechaInicioText.equals("") ||
-                fechaFinText.equals("") || diasPermisoText.equals("") || observacionesPermisoText.equals("")) {
-            Toast.makeText(getContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
-            return;
-        }
+            if (!switch_generar.isChecked() || enfermedadPrincipalText.equals("") || fechaInicioText.equals("") ||
+                    fechaFinText.equals("") || diasPermisoText.equals("") || observacionesPermisoText.equals("")) {
+                Toast.makeText(getContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        Date fecha_inicio = null;
-        Date fecha_fin = null;
-        try {
-            fecha_inicio = format.parse(fechaInicioText);
-            fecha_fin = format.parse(fechaFinText);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        int dias_permiso = Integer.parseInt(diasPermisoText);
-        String observaciones_permiso=observacionesPermisoText;
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            Date fecha_inicio = null;
+            Date fecha_fin = null;
+            try {
+                fecha_inicio = format.parse(fechaInicioText);
+                fecha_fin = format.parse(fechaFinText);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            int dias_permiso = Integer.parseInt(diasPermisoText);
 
-        if (consultaMedica.getEmpleado() == null) {
-            //Guarda el id del empleado en la consulta y la fecha de consulta
-            consultaMedica.setEmpleado(empleado);
-            consultaMedica.setFechaConsulta(new Date());
+            if (consultaMedica.getEmpleado() == null) {
+                //Guarda el id del empleado en la consulta y la fecha de consulta
+                consultaMedica.setEmpleado(empleado);
+                consultaMedica.setFechaConsulta(new Date());
+            }
+            if (permisoMedico == null) {
+                PermisoMedico permisoMed = new PermisoMedico(diagnostico, fecha_inicio, fecha_fin, dias_permiso, observacionesPermisoText, consultaMedica);
+                permisoMed.save();
+            } else {
+                permisoMedico.setDiagnostico(diagnostico);
+                permisoMedico.setFecha_inicio(fecha_inicio);
+                permisoMedico.setFecha_fin(fecha_fin);
+                permisoMedico.setDias_permiso(dias_permiso);
+                permisoMedico.setObsevaciones_permiso(observacionesPermisoText);
+                permisoMedico.setConsulta_medica(consultaMedica);
+                permisoMedico.save();
+            }
+            Toast.makeText(getContext(), "Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
         }
-        if(permisoMedico == null) {
-            PermisoMedico permisoMed = new PermisoMedico(diagnostico, fecha_inicio, fecha_fin, dias_permiso, observaciones_permiso, consultaMedica);
-            permisoMed.save();
-        } else {
-            permisoMedico.setDiagnostico(diagnostico);
-            permisoMedico.setFecha_inicio(fecha_inicio);
-            permisoMedico.setFecha_fin(fecha_fin);
-            permisoMedico.setDias_permiso(dias_permiso);
-            permisoMedico.setObsevaciones_permiso(observaciones_permiso);
-            permisoMedico.setConsulta_medica(consultaMedica);
-            permisoMedico.save();
-        }
-        Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getContext(), "No existen diagnosticos para generar permiso medico", Toast.LENGTH_SHORT).show();
     }
 
     public void DateDialogInicio() {
@@ -281,7 +287,8 @@ public class PermisosMedicosFragment extends Fragment {
             Calendar c = Calendar.getInstance();
             String fecha[] = fecha_desde.getText().toString().split("/");
             c.set(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[1]) - 1, Integer.parseInt(fecha[0]));
-            dpDialog.getDatePicker().setMinDate(c.getTimeInMillis());
+            long milis = c.getTimeInMillis()-1000;
+            dpDialog.getDatePicker().setMinDate(milis);
         }
         dpDialog.show();
     }

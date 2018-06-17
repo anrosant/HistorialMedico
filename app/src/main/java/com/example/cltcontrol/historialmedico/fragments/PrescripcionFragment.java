@@ -74,13 +74,16 @@ public class PrescripcionFragment extends Fragment {
 
     private void guardarPreescripcion() {
         String preescripcion = et_prescripcion.getText().toString();
-        if(preescripcion.equals("")){
+        //Validar el ingreso de preescripcion
+        int res = consultaMedica.validarCampoTexto(preescripcion);
+        if(res==0)
             Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
-        }else {
-            //consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+        else if(res == 1)
+            Toast.makeText(getContext(),"Ha ingresado solo numeros",Toast.LENGTH_SHORT).show();
+        else {
+            //Si es la primera vez que ingresa datos a una consulta média, crea una
             if (consultaMedica.getEmpleado() == null) {
                 //Guarda el id del empleado en la consulta y la fecha de consulta
-
                 consultaMedica.setEmpleado(empleado);
                 consultaMedica.setFechaConsulta(new Date());
             }

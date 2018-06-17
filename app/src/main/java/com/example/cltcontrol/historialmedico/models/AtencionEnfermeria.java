@@ -60,4 +60,13 @@ public class AtencionEnfermeria extends SugarRecord {
     public void setPlanCuidados(String planCuidados) {
         this.planCuidados = planCuidados;
     }
+
+    public int validarCampoTexto(String texto){
+        if(texto.equals(""))
+            return 0;
+        else if(texto.matches("^[0-9]+$")){
+            return 1;
+        }
+        return 2;
+    }
 }

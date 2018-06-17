@@ -72,19 +72,21 @@ public class MotivoAtencionFragment extends Fragment {
     //Verifica si ha ingresado texto y guarda en consulta medica, caso contrario imprime un mensaje
     private void guardarMotivo() {
         String motivo = etMotivoAtencion.getText().toString();
-        if(motivo.equals("")) {
+        int res = consultaMedica.validarCampoTexto(motivo);
+        if(res == 0)
             Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        else if(res == 1)
+            Toast.makeText(getContext(),"Ha ingresado solo numeros",Toast.LENGTH_SHORT).show();
         else{
+            //Si aun no ha creado la consulta, la crea y añade los datos
             if (consultaMedica.getEmpleado() == null) {
                 //Guarda el id del empleado en la consulta y la fecha de consulta
                 consultaMedica.setEmpleado(empleado);
                 consultaMedica.setFechaConsulta(new Date());
             }
-                consultaMedica.setMotivo(motivo);
-                consultaMedica.save();
-                Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
+            consultaMedica.setMotivo(motivo);
+            consultaMedica.save();
+            Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
 
         }
     }

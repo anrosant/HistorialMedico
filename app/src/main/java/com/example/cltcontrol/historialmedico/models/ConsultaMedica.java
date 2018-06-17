@@ -80,4 +80,14 @@ public class ConsultaMedica extends SugarRecord {
     public void setExamen_fisico(String examen_fisico) {
         this.examen_fisico = examen_fisico;
     }
+
+    public int validarCampoTexto(String texto){
+        if(texto.equals(""))
+            return 0;
+        else if(texto.matches("^[0-9]+$")){
+            return 1;
+        }
+        return 2;
+    }
+
 }

@@ -28,12 +28,9 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
     private Button boton;
     private EditText etDiagnostico;
     private Empleado empleado;
+    private AtencionEnfermeria atencion;
 
-
-
-    public DiagnosticoEnfermeriaFragment() {
-
-    }
+    public DiagnosticoEnfermeriaFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,7 +48,7 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
         idEmpleado = bun.getString("ID_EMPLEADO");
         cargo = bun.getString("CARGO");
 
-        AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
+        atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
 
         //Si va a consultar, muestra los datos
@@ -66,18 +63,21 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
-                if(atencion.getEmpleado()==null){
-                    atencion.setEmpleado(empleado);
-                    atencion.setFecha_atencion(new Date());
+                String diagnostico = etDiagnostico.getText().toString();
+                int res = atencion.validarCampoTexto(diagnostico);
+                if(res == 0)
+                    Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
+                else if(res == 1){
+                    Toast.makeText(getContext(),"Ha ingresado solo numeros",Toast.LENGTH_SHORT).show();
+                }else {
+                    //Si no ha creado la atención enfermería, la crea y agrega los datos
+                    if (atencion.getEmpleado() == null) {
+                        atencion.setEmpleado(empleado);
+                        atencion.setFecha_atencion(new Date());
+                    }
+                    atencion.setDiagnosticoEnfermeria(diagnostico);
                     atencion.save();
-                }
-                atencion.setDiagnosticoEnfermeria(etDiagnostico.getText().toString());
-                try{
-                    atencion.save();
-                    Toast.makeText(getContext(),"Diagnostico Guardado",Toast.LENGTH_SHORT).show();
-                }catch (Exception e){
-                    Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Diagnostico Guardado", Toast.LENGTH_SHORT).show();
                 }
             }
         });

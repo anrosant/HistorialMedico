@@ -50,11 +50,12 @@ public class ExamenFisicoFragment extends Fragment {
         id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
+        //Validar quien ingresa Enfermera o Doctor
         cargo = extras.getString("CARGO");
+        //En caso de ser enfermera no puede crear ni editar
         if(cargo.equals("Enfermera")){
             btn_guardar.setVisibility(View.GONE);
             et_examen_fisico.setEnabled(false);
-
         }
 
         if(presedencia.equals("consultar")) {
@@ -73,8 +74,11 @@ public class ExamenFisicoFragment extends Fragment {
     }
     private void guardarExamenFisico() {
         String examen_fisico = et_examen_fisico.getText().toString();
-        if(examen_fisico.equals("")){
+        int res = consultaMedica.validarCampoTexto(examen_fisico);
+        if(res == 0)
             Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
+        else if(res == 1){
+            Toast.makeText(getContext(),"Ha ingresado solo numeros",Toast.LENGTH_SHORT).show();
         }else {
             if (consultaMedica.getEmpleado() == null) {
                 //Guarda el id del empleado en la consulta y la fecha de consulta

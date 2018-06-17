@@ -28,6 +28,7 @@ public class PlanCuidadosFragment extends Fragment {
     private Button boton;
     private EditText etPlan;
     private Empleado empleado;
+    private AtencionEnfermeria atencion;
 
     public PlanCuidadosFragment() {
         // Required empty public constructor
@@ -56,7 +57,7 @@ public class PlanCuidadosFragment extends Fragment {
 
         }
 
-        AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
+        atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
 
         //Si va a consultar, muestra los datos
@@ -68,46 +69,24 @@ public class PlanCuidadosFragment extends Fragment {
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
-                atencion.setPlanCuidados(etPlan.getText().toString());
-                if(atencion.getEmpleado()==null){
-                    atencion.setEmpleado(empleado);
-                    atencion.setFecha_atencion(new Date());
-                    atencion.save();
-                }
-                try{
-                    atencion.save();
-                    Toast.makeText(getContext(),"Plan Guardado",Toast.LENGTH_SHORT).show();
-                }catch (Exception e){
-                    Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                String plan_cuidados = etPlan.getText().toString();
+                int res = atencion.validarCampoTexto(plan_cuidados);
+                if(res == 0)
+                    Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
+                else if(res == 1){
+                    Toast.makeText(getContext(),"Ha ingresado solo numeros",Toast.LENGTH_SHORT).show();
+                }else {
+                    atencion.setPlanCuidados(plan_cuidados);
+                    //Si no ha creado la atención enfermería, la crea y agrega los datos
+                    if (atencion.getEmpleado() == null) {
+                        atencion.setEmpleado(empleado);
+                        atencion.setFecha_atencion(new Date());
+                        atencion.save();
+                        Toast.makeText(getContext(), "Plan Guardado", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
-
-        //if(presedencia.equals("consultar")){//funcionalidad para cargar un signo vital con el id de Atencion
-            //Toast.makeText(getContext(),"Viniste a consultar",Toast.LENGTH_SHORT).show();
-
-
-        //}
-        /*else{//funcionalidad para guardar un signo vital nuevo que fue creado en la ventana contenedora AtencionEnfermeriaActivity
-            // al presionar el boton + en historial de Atencion Medica
-            Toast.makeText(getContext(),"Viniste a crear",Toast.LENGTH_SHORT).show();
-            idAtencion2 = bun.getString("ID_ATENCION2");
-
-            boton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AtencionEnfermeria atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion2));
-                    atencion.setPlanCuidados(etPlan.getText().toString());
-                    try{
-                        atencion.save();
-                        Toast.makeText(getContext(),"Plan Guardado",Toast.LENGTH_SHORT).show();
-                    }catch (Exception e){
-                        Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }*/
 
         return view;
     }

@@ -71,9 +71,12 @@ public class ProblemaActualFragment extends Fragment {
 
     private void guardarProblemaActual() {
         String problema_actual = et_problema_actual.getText().toString();
-        if(problema_actual.equals("")){
+        int res = consultaMedica.validarCampoTexto(problema_actual);
+        if(res == 0)
             Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
-        }else {
+        else if(res == 1)
+            Toast.makeText(getContext(),"Ha ingresado solo numeros",Toast.LENGTH_SHORT).show();
+        else {
             if (consultaMedica.getEmpleado() == null) {
                 //Guarda el id del empleado en la consulta y la fecha de consulta
                 consultaMedica.setEmpleado(empleado);

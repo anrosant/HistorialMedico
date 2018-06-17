@@ -43,7 +43,7 @@ public class RevisionMedicaFragment extends Fragment {
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
-        precedencia = extras.getString("PRECEDENCIA");
+        precedencia = extras.getString("PRESEDENCIA");
 
         //Recibe el id de consulta medica desde Historial de consulta medica
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
@@ -73,9 +73,12 @@ public class RevisionMedicaFragment extends Fragment {
 
     private void guardarRevisionMedica() {
         String revision_medica = et_revision_medica.getText().toString();
-        if(revision_medica.equals("")){
+        int res = consultaMedica.validarCampoTexto(revision_medica);
+        if(res == 0)
             Toast.makeText(getContext(),"No ha ingresado nada",Toast.LENGTH_SHORT).show();
-        }else {
+        else if (res == 1)
+            Toast.makeText(getContext(),"Ha ingresado solo numeros",Toast.LENGTH_SHORT).show();
+        else {
             if (consultaMedica.getEmpleado() == null) {
                 //Guarda el id del empleado en la consulta y la fecha de consulta
 

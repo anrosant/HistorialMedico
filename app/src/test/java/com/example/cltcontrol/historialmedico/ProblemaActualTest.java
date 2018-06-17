@@ -8,7 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class PrescripcionTest {
+public class ProblemaActualTest {
     private ConsultaMedica consultaMedica;
     private int res;
 
@@ -25,27 +25,26 @@ public class PrescripcionTest {
     }
 
     @Test
-    public void testPrescripcion_valida1(){
-        res = consultaMedica.validarCampoTexto("Tomar 2 paracetamol");
+    public void testProblemaActual_valida1(){
+        res = consultaMedica.validarCampoTexto("Vomito continuo");
         Assert.assertEquals(2, res);
     }
 
     @Test
-    public void testPrescripcion_valida2(){
-        res = consultaMedica.validarCampoTexto("Guardar reposo");
+    public void testProblemaActual_valida2(){
+        res = consultaMedica.validarCampoTexto("Presenta diarrea");
         Assert.assertEquals(2, res);
     }
 
     @Test
-    public void testPrescripcion_invalida1(){
+    public void testProblemaActual_invalida1(){
         res = consultaMedica.validarCampoTexto("");
         Assert.assertEquals(0, res);
     }
 
     @Test
-    public void testPrescripcion_invalida2(){
+    public void testProblemaActual_invalida2(){
         res = consultaMedica.validarCampoTexto("1233");
         Assert.assertEquals(1, res);
     }
-
 }

@@ -91,14 +91,12 @@ public class EmpleadoController {
         this.setLista_empleados(Empleado.listAll(Empleado.class));
     }
 
-    public void llenadoEnfermedades(Context miActivity) {
+    public void llenadoEnfermedades() {
         List<Enfermedad> enfermedades = Enfermedad.find(Enfermedad.class, "CODIGO = ?", "A00");
         if (enfermedades.isEmpty()) {
             try {
                 Enfermedad.executeQuery(EnfermedadesSQL.REGISTRO_ENFERMEDADES);
-            } catch (Exception e) {
-                Toast.makeText(miActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+            } catch (Exception e) {}
         }
     }
 

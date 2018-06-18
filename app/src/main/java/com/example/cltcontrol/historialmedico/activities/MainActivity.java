@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         List<Empleado> empleados = miController.getLista_empleados();
         miController.mostrarEmpleados(empleados);
         miController.mostrarUsuarios(usuarios);
-        miController.llenadoEnfermedades(getApplicationContext());
+        miController.llenadoEnfermedades();
 
         btnIngresoSistema.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -70,5 +70,8 @@ public class PermisoMedico extends SugarRecord{
         this.obsevaciones_permiso = obsevaciones_permiso;
     }
 
+    public void validarPermiso(){
+
+    }
 
 }

@@ -86,7 +86,7 @@ public class SignosVitales extends SugarRecord {
             float temp = Float.parseFloat(temperatura);
             int pul = Integer.parseInt(pulso);
             if(presionSistolica < 100 || presionSistolica > 135 || presionDistolica < 70 || presionDistolica > 90 ||
-                    pul < 60 || pul > 100 || temp < 34.0 || temp > 43.0)
+                    pul < 60 || pul > 100 || temp < 34 || temp > 43)
                 return 1;
         } catch(Exception e){
             return 2;

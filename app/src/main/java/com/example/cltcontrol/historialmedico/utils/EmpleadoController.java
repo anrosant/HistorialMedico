@@ -7,7 +7,10 @@ import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.models.Usuario;
+import com.orm.util.NamingHelper;
+
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class EmpleadoController {
@@ -18,14 +21,24 @@ public class EmpleadoController {
 
     //Constructores
     public EmpleadoController(){
-        this.llenadoEmpleados();
-        this.llenadoUsuarios();
+        Iterator<Empleado> lista_empleados = Empleado.findAll(Empleado.class);
+        Iterator<Usuario> lista_usuarios = Usuario.findAll(Usuario.class);
+        if(!lista_empleados.hasNext() && !lista_usuarios.hasNext()){
+            this.llenadoUsuarios();
+            this.llenadoEmpleados();
+
+        }
     }
 
     public EmpleadoController(Context miActivity) {
         this.miActivity = miActivity;
-        this.llenadoUsuarios();
-        this.llenadoEmpleados();
+        Iterator<Empleado> lista_empleados = Empleado.findAll(Empleado.class);
+        Iterator<Usuario> lista_usuarios = Usuario.findAll(Usuario.class);
+        if(!lista_empleados.hasNext() && !lista_usuarios.hasNext()){
+            this.llenadoUsuarios();
+            this.llenadoEmpleados();
+
+        }
     }
 
     //Getter de registros Usuarios y Empleados
@@ -65,14 +78,14 @@ public class EmpleadoController {
                 "jorergar@espol.edu.ec", "FAE",
                 "Analista de datos", "Soltero",
                 "Masculino", "Guayaquil",
-                "Dept. de Seguridad", new Date(), new Date(), 30, R.drawable.modelo, usuario_doctor);
+                "Doctor", new Date(), new Date(), 30, R.drawable.modelo, usuario_doctor);
         miEmpleado.save();
 
         miEmpleado = new Empleado("0967547365","Anni","Santacruz Hernández",
                 "anrosant@espol.edu.ec","Sauces",
                 "Ingeniera en Ciencias Computacionales","Soltera",
                 "Femenino","Guayaquil",
-                "Dept. de Sistemas",new Date(),new Date(),20,R.drawable.modelo, usuario_enfermera);
+                "Enfermera",new Date(),new Date(),20,R.drawable.modelo, usuario_enfermera);
         miEmpleado.save();
 
         miEmpleado = new Empleado("0913620589","Renato","Illescas Rodríguez",
@@ -97,19 +110,6 @@ public class EmpleadoController {
             try {
                 Enfermedad.executeQuery(EnfermedadesSQL.REGISTRO_ENFERMEDADES);
             } catch (Exception e) {}
-        }
-    }
-
-    //Show de registros Usuarios y Empleados
-    public void mostrarEmpleados(List<Empleado> lista_empleados) {
-        for (Empleado verEmpleados : lista_empleados) {
-            Log.e("aqui nombre", verEmpleados.getApellido());
-        }
-    }
-
-    public void mostrarUsuarios(List<Usuario> lista_usuarios) {
-        for (Usuario verUsuarios : lista_usuarios) {
-            Log.e("aqui usuario", verUsuarios.getUsuario());
         }
     }
 

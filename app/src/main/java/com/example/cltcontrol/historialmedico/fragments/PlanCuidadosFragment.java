@@ -81,9 +81,9 @@ public class PlanCuidadosFragment extends Fragment {
                     if (atencion.getEmpleado() == null) {
                         atencion.setEmpleado(empleado);
                         atencion.setFecha_atencion(new Date());
-                        atencion.save();
-                        Toast.makeText(getContext(), "Plan Guardado", Toast.LENGTH_SHORT).show();
                     }
+                    atencion.save();
+                    Toast.makeText(getContext(), "Plan Guardado", Toast.LENGTH_SHORT).show();
                 }
             }
         });

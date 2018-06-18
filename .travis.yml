@@ -15,4 +15,4 @@ android:
   - yes | sdkmanager "platforms;android-27"
   - chmod +x gradlew
   script:
-   - gradle build connectedCheck coveralls
+   - ./gradlew build connectedCheck

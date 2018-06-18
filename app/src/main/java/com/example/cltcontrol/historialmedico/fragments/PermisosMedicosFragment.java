@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,15 +44,16 @@ public class PermisosMedicosFragment extends Fragment {
     private List<Diagnostico> diagnosticosList;
     private ArrayList<String> lista_enfermedades_diagnostico;
     private ArrayList<PermisoMedico> permisoMedicoList;
-    private EditText fecha_desde, fecha_hasta, observaciones;
+    private EditText fecha_hasta, observaciones;
     private Button btn_guardar;
     private Switch switch_generar;
-    private TextView numero_dias;
+    private TextView fecha_desde, numero_dias;
     private Spinner sp_enfermedades_diagnostico;
     private int dia, mes, anio;
     private Calendar calendar;
     private Date fecha_ini, fecha_fin;
     private PermisoMedico permisoMedico;
+    private SimpleDateFormat simpleDateFormat;
 
     public PermisosMedicosFragment() {}
 
@@ -70,6 +72,20 @@ public class PermisosMedicosFragment extends Fragment {
         btn_guardar = view.findViewById(R.id.btn_guardar);
         sp_enfermedades_diagnostico.setEnabled(false);
         btn_guardar.setEnabled(false);
+
+        //inicializar fecha de inicio
+        fecha_desde.setPadding(fecha_hasta.getPaddingStart(), fecha_hasta.getPaddingTop(),
+                fecha_hasta.getPaddingRight(), fecha_hasta.getPaddingBottom());
+        fecha_desde.setGravity(Gravity.CENTER_VERTICAL);
+        Date hoy = new Date();
+        try {
+            simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+            Date fecha_actual = simpleDateFormat.parse(hoy.toString());
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            fecha_desde.setText(simpleDateFormat.format(fecha_actual));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         //paso de parametros provenientes de activity nueva consulta medica
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
@@ -132,26 +148,16 @@ public class PermisosMedicosFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (switch_generar.isChecked()) {
                     sp_enfermedades_diagnostico.setEnabled(true);
-                    fecha_desde.setEnabled(true);
                     fecha_hasta.setEnabled(true);
                     observaciones.setEnabled(true);
                     btn_guardar.setEnabled(true);
                 } else {
                     sp_enfermedades_diagnostico.setEnabled(false);
-                    fecha_desde.setEnabled(false);
                     fecha_hasta.setEnabled(false);
                     observaciones.setEnabled(false);
                     btn_guardar.setEnabled(false);
                 }
             }
-        });
-
-        fecha_desde.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DateDialogInicio();
-            }
-
         });
 
         fecha_hasta.setOnClickListener(new View.OnClickListener() {
@@ -166,12 +172,10 @@ public class PermisosMedicosFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 guardarPermisoMedico();
-
             }
         });
 
         if(precedencia.equals("consultar")) {
-            SimpleDateFormat simpleDateFormat;
             if(permisoMedico!=null){
                 simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
                 try {
@@ -239,32 +243,6 @@ public class PermisosMedicosFragment extends Fragment {
             Toast.makeText(getContext(), "No existen diagnosticos para generar permiso medico", Toast.LENGTH_SHORT).show();
     }
 
-    public void DateDialogInicio() {
-        DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Date date = new Date();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                try {
-                    date = simpleDateFormat.parse("" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                fecha_desde.setText(simpleDateFormat.format(date));
-                calcNumDias();
-            }
-        };
-        DatePickerDialog dpDialog = new DatePickerDialog(getContext(), listener, anio, mes, dia);
-        dpDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-        if(!fecha_hasta.getText().toString().equals("")){
-            Calendar c = Calendar.getInstance();
-            String fecha[] = fecha_hasta.getText().toString().split("/");
-            c.set(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[1]) - 1, Integer.parseInt(fecha[0]));
-            dpDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
-        }
-        dpDialog.show();
-    }
-
     public void DateDialogFin() {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -281,15 +259,11 @@ public class PermisosMedicosFragment extends Fragment {
             }
         };
         DatePickerDialog dpDialog = new DatePickerDialog(getContext(), listener, anio, mes, dia);
-        if(fecha_desde.getText().toString().equals("")){
-            dpDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-        } else {
-            Calendar c = Calendar.getInstance();
-            String fecha[] = fecha_desde.getText().toString().split("/");
-            c.set(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[1]) - 1, Integer.parseInt(fecha[0]));
-            long milis = c.getTimeInMillis()-1000;
-            dpDialog.getDatePicker().setMinDate(milis);
-        }
+        Calendar c = Calendar.getInstance();
+        String fecha[] = fecha_desde.getText().toString().split("/");
+        c.set(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[1]) - 1, Integer.parseInt(fecha[0]));
+        long milis = c.getTimeInMillis()-1000;
+        dpDialog.getDatePicker().setMinDate(milis);
         dpDialog.show();
     }
 
@@ -311,4 +285,10 @@ public class PermisosMedicosFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!fecha_desde.getText().toString().isEmpty() && !fecha_hasta.getText().toString().isEmpty())
+            calcNumDias();
+    }
 }

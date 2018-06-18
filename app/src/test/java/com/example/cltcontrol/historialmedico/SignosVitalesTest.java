@@ -2,11 +2,26 @@ package com.example.cltcontrol.historialmedico;
 
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import junit.framework.Assert;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SignosVitalesTest {
-    private SignosVitales signos = new SignosVitales();
+    private SignosVitales signos;
     private int res;
+
+    @Before
+    public void beforeEachTest(){
+        signos = new SignosVitales();
+        res = -1;
+    }
+
+    @After
+    public void afterEachTest(){
+        signos = null;
+        res = -1;
+    }
 
     @Test
     public void testSignos_correctos(){

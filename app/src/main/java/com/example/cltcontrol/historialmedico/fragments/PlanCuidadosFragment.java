@@ -66,6 +66,9 @@ public class PlanCuidadosFragment extends Fragment {
             boton.setText("Editar");
         }
 
+        /*
+         * Guarda los datos de un plan de cuidados
+         * */
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

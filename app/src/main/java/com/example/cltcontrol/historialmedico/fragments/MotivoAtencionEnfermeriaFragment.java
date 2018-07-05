@@ -63,6 +63,9 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
             etMotivo.setText(atencion.getMotivoAtencion());
             boton.setText("Editar");
         }
+        /*
+         * Guarda los datos de un motivo atención
+         * */
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

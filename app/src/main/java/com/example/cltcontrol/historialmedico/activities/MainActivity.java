@@ -40,10 +40,9 @@ public class MainActivity extends AppCompatActivity {
                 .build());
 
         miController = new EmpleadoController(getApplicationContext());
-        List<Usuario> usuarios = miController.getLista_usuarios();
-        List<Empleado> empleados = miController.getLista_empleados();
         miController.llenadoEnfermedades();
 
+        //Si el usuario es correcto, lleva a la siguiente pantalla, caso contrario muestra mensaje
         btnIngresoSistema.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,12 +55,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    /*
+     * Lleva a la ventana de BuscarEmpleadoActivity
+     * */
     private void siguienteActivity(){
         Intent inbuscarempleado = new Intent(this, BuscarEmpleadoActivity.class);
         startActivity(inbuscarempleado);
     }
 
+    /*
+     * Crea una sesión validando los datos ingresados
+     * */
     private void crearSesion(){
         SessionManager sesion = new SessionManager(getApplicationContext());
         Long id = Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?",

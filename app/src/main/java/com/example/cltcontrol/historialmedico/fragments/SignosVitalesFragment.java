@@ -129,6 +129,9 @@ public class SignosVitalesFragment extends Fragment {
         return view;
     }
 
+    /*
+     * Guarda los datos de signos vitales
+     * */
     public void guardarSignosVitales(){
         //Recibe los datos de signos vitales
         String presionSistolicaText = etPSistolica.getText().toString();
@@ -184,7 +187,9 @@ public class SignosVitalesFragment extends Fragment {
         Toast.makeText(getContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();
         limpiarCampos();
     }
-
+    /*
+     * Limpia los campos luego de guardar los datos y que la lista se ha actualizado
+     * */
     private void limpiarCampos(){
         etPSistolica.setText("");
         etPDistolica.setText("");

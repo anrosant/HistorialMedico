@@ -68,7 +68,9 @@ public class ProblemaActualFragment extends Fragment {
 
         return view;
     }
-
+    /*
+     * Guarda los datos de un problema actual
+     * */
     private void guardarProblemaActual() {
         String problema_actual = et_problema_actual.getText().toString();
         int res = consultaMedica.validarCampoTexto(problema_actual);

@@ -25,16 +25,25 @@ public class AdapterSignosVitales extends ArrayAdapter<SignosVitales> {
             this.signosVitalesList = signosVitalesList;
     }
 
+    /*
+     * Retorna el número de SignosVitales en la lista
+     * */
     @Override
     public int getCount() {
         return signosVitalesList.size();
     }
 
+    /*
+     * Retorna un SignoVital dentro de la lista dada una posición
+     * */
     @Override
     public SignosVitales getItem(int position) {
         return signosVitalesList.get(position);
     }
 
+    /*
+     * Retorna la posicion de un SignoVital
+     * */
     @Override
     public long getItemId(int position) {
         return position;
@@ -75,6 +84,9 @@ public class AdapterSignosVitales extends ArrayAdapter<SignosVitales> {
         return v;
     }
 
+    /*
+     * Actualiza la lista de SignosVitales cuando ya ha almacenado una
+     * */
     public void actualizarSignosVitalesList(List<SignosVitales> signosVitalesListNuevo) {
         this.signosVitalesList.clear();
         this.signosVitalesList.addAll(signosVitalesListNuevo);

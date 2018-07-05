@@ -73,6 +73,9 @@ public class EmpleadoController {
         this.setLista_usuarios(Usuario.listAll(Usuario.class));
     }
 
+    /*
+     * Crea empleados temporales
+     * */
     private void llenadoEmpleados(){
         Empleado miEmpleado = new Empleado("03214567323", "Jorge", "García García",
                 "jorergar@espol.edu.ec", "FAE",
@@ -103,7 +106,9 @@ public class EmpleadoController {
         miEmpleado.save();
         this.setLista_empleados(Empleado.listAll(Empleado.class));
     }
-
+    /*
+     * Guarda las enfermedades en una lista
+     * */
     public void llenadoEnfermedades() {
         List<Enfermedad> enfermedades = Enfermedad.find(Enfermedad.class, "CODIGO = ?", "A00");
         if (enfermedades.isEmpty()) {
@@ -112,17 +117,23 @@ public class EmpleadoController {
             } catch (Exception e) {}
         }
     }
-
+    /*
+     * Valida el ingreso al sistema
+     * */
     public Boolean ingresoSistema(String etUsuario, String etContrasenia){
         return validarIngreso(etUsuario, etContrasenia);
     }
 
-    //funcionalidad ingreso
+    /*
+     * funcionalidad ingreso
+     * */
     private Boolean validarIngreso(String etUsuario, String etContrasenia){
         return obtenerUsuario(etUsuario, etContrasenia).size() != 0;
     }
 
-    //Busqueda de un Usuario
+    /*
+     * Busqueda de un Usuario
+     * */
     private List<Usuario> obtenerUsuario(String etUsuario, String etContrasenia){
         return Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?", etUsuario, etContrasenia);
     }

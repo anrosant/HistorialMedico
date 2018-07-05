@@ -17,14 +17,21 @@ public class AdapterEnfermedades extends RecyclerView.Adapter<AdapterEnfermedade
 
     private List<Enfermedad> listaEnfermedades;
 
+    //Constructor
     public AdapterEnfermedades(List<Enfermedad> listaEnfermedades) {
         this.listaEnfermedades = listaEnfermedades;
     }
 
+    /*
+     * Retorna la lista de enfermedades
+     * */
     public List<Enfermedad> getListaEnfermedades() {
         return listaEnfermedades;
     }
 
+    /*
+     * Rellena la lista con las enfermedades
+     * */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_enfermedades,null,false);
@@ -38,11 +45,14 @@ public class AdapterEnfermedades extends RecyclerView.Adapter<AdapterEnfermedade
         holder.tvCodigoCie10items.setText(listaEnfermedades.get(position).getCodigo());
 
     }
-
+    /*
+     * Retorna el número de elementos en la lista
+     * */
     @Override
     public int getItemCount() {
         return listaEnfermedades.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvNombreCie10items, tvCodigoCie10items;
@@ -54,7 +64,9 @@ public class AdapterEnfermedades extends RecyclerView.Adapter<AdapterEnfermedade
 
         }
     }
-
+    /*
+     * Setea un nuevo filtro con la lista actual
+     * */
     public void setFilter(List<Enfermedad> newList){
         listaEnfermedades = new ArrayList<>();
         listaEnfermedades.addAll(newList);

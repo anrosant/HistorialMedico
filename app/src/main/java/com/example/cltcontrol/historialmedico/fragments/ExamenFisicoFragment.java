@@ -72,6 +72,9 @@ public class ExamenFisicoFragment extends Fragment {
 
         return view;
     }
+    /*
+    * Guarda los datos de un examen fisico
+    * */
     private void guardarExamenFisico() {
         String examen_fisico = et_examen_fisico.getText().toString();
         int res = consultaMedica.validarCampoTexto(examen_fisico);

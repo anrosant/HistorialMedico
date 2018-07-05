@@ -73,7 +73,9 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                 })
         );
     }
-
+    /*
+    * Guada todos los empleados que se encuentran en la base de datos en una lista
+    * */
     private void readEmpleadosAll(){
         try{
             empleadosList = Empleado.listAll(Empleado.class);

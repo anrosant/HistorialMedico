@@ -16,7 +16,7 @@ public class DatosEmpleadoFragment extends Fragment {
 
 
     public DatosEmpleadoFragment() {
-        // Required empty public constructor
+        // Requiere un constructor vacío
     }
 
 

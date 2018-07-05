@@ -69,7 +69,9 @@ public class MotivoAtencionFragment extends Fragment {
         return view;
     }
 
-    //Verifica si ha ingresado texto y guarda en consulta medica, caso contrario imprime un mensaje
+    /*
+    * Verifica si ha ingresado texto y guarda en consulta medica, caso contrario imprime un mensaje
+    **/
     private void guardarMotivo() {
         String motivo = etMotivoAtencion.getText().toString();
         int res = consultaMedica.validarCampoTexto(motivo);

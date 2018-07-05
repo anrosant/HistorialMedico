@@ -75,11 +75,12 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         });
     }
 
+    /*
+     * Lleva a la ventana de ConsultaMedicaNuevo y envia datos
+     * */
     @Override
     public void menuPulsado(int opcionMenu) {
         //Se crea una consulta medica vacia
-        /*ConsultaMedica consultaMedica = new ConsultaMedica(empleado, fecha_actual,
-                "Problema act", "Rev aparatos", "Preescripcion");*/
         ConsultaMedica consultaMedica=new ConsultaMedica();
         consultaMedica.save();
 
@@ -92,8 +93,6 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
 
         startActivity(inMenu);
 
-        /*Bundle datos = new Bundle();
-        datos.putInt("BOTONPULSADO",opcionMenu);*/
 
     }
 

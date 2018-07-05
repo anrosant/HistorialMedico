@@ -76,7 +76,9 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
             }
         });
     }
-
+    /*
+     * Lleva al usuario a la ventana de AtencionEnfermeriaActivity y envia datos
+     * */
     public void aperturaAtencionMedica(View v){
         //Se crea una atencion enfermeria vacia
         AtencionEnfermeria atencionEnfermeria=new AtencionEnfermeria();

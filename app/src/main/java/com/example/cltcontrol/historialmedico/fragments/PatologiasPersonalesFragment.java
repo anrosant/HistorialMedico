@@ -125,7 +125,9 @@ public class PatologiasPersonalesFragment extends Fragment {
 
         return view;
     }
-
+    /*
+     * Guarda los datos de una patologia personal
+     * */
     private void guardarPatologiasPersonales() {
         detalle = etDetalleEnfermedad.getText().toString();
         if(lugar==null || detalle.equals("")){

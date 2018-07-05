@@ -20,23 +20,31 @@ public class AdapterItemDiagnostico extends ArrayAdapter<Diagnostico> {
     private DiagnosticoFragment activity;
 
 
-
     public AdapterItemDiagnostico(Context context, List<Diagnostico> diagnosticoList) {
         super(context, 0, diagnosticoList);
         this.context = context;
         this.diagnosticoList = diagnosticoList;
     }
 
+    /*
+     * Retorna el número de elementos en la lista
+     * */
     @Override
     public int getCount() {
         return diagnosticoList.size();
     }
 
+    /*
+     * Retorna un Diagnostico dentro de la lista dada una posición
+     * */
     @Override
     public Diagnostico getItem(int position) {
         return diagnosticoList.get(position);
     }
 
+    /*
+     * Retorna la posicion de un Diagnostico
+     * */
     @Override
     public long getItemId(int position) {
         return position;
@@ -64,7 +72,9 @@ public class AdapterItemDiagnostico extends ArrayAdapter<Diagnostico> {
 
         return v;
     }
-
+    /*
+     * Actualiza la lista de Diagnostico cuando ya ha almacenado una
+     * */
     public void actualizarDiagnosticoList(List<Diagnostico> diagnosticoListNuevo) {
         this.diagnosticoList.clear();
         this.diagnosticoList.addAll(diagnosticoListNuevo);

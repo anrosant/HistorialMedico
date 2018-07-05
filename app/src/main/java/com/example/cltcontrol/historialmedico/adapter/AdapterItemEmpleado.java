@@ -15,9 +15,8 @@ import java.util.List;
 
 public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmpleado.ViewHolder> {
     private List<Empleado> listaEmpleados;
-
+    //Constructores
     public AdapterItemEmpleado(){}
-
     public AdapterItemEmpleado(List<Empleado> listaEmpleados) {
         this.listaEmpleados = listaEmpleados;
     }
@@ -27,7 +26,9 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_buscar_empleados_recyclerview, null, false);
         return new ViewHolder(view);
     }
-
+    /*
+     * Retorna la lista de empleados que hay
+     * */
     public List<Empleado> getListaEmpleados() {
         return listaEmpleados;
     }
@@ -41,6 +42,9 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
         holder.ivfotoitems.setImageResource(listaEmpleados.get(position).getFoto());
     }
 
+    /*
+     * Retorna el número de empleados en la lista
+     * */
     @Override
     public int getItemCount() {
         return listaEmpleados.size();
@@ -58,13 +62,17 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
             ivfotoitems = itemView.findViewById(R.id.ivfotoitems);
         }
     }
-
+    /*
+     * Setea la lista de la nueva búsqueda
+     * */
     public void setFilter(List<Empleado> newList){
         listaEmpleados = new ArrayList<>();
         listaEmpleados.addAll(newList);
         notifyDataSetChanged();
     }
-
+    /*
+     * Valida que los caracteres para realizar la búsque sean válidos
+     * */
     public Boolean validarBusqueda(String s){
         for(int i = 0; i < s.length(); i++){
             char c = s.charAt(i);

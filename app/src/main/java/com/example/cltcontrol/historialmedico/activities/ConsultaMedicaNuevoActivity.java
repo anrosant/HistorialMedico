@@ -83,7 +83,9 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
             }
         });
     }
-
+    /*
+     * si presiona el botón de ir atrás valida si desea salir sin guardar datos o permanecer
+     * */
     @Override
     public void onBackPressed() {
         if(cargo.equals("Doctor")) {

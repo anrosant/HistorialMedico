@@ -27,16 +27,24 @@ public class AdapterItemAtencionEnfermeria extends ArrayAdapter<AtencionEnfermer
         this.atencionEnfermeriaList = atencionEnfermeriaList;
     }
 
+    /*
+     * Retorna el número de elementos en la lista
+     * */
     @Override
     public int getCount() {
         return atencionEnfermeriaList.size();
     }
-
+    /*
+     * Retorna una AtencionEnfermeria dentro de la lista dada una posición
+     * */
     @Override
     public AtencionEnfermeria getItem(int position) {
         return atencionEnfermeriaList.get(position);
     }
 
+    /*
+     * Retorna la posicion de una AtencionEnfermeria
+     * */
     @Override
     public long getItemId(int position) {
         return position;
@@ -49,9 +57,6 @@ public class AdapterItemAtencionEnfermeria extends ArrayAdapter<AtencionEnfermer
 
         if (v == null) {
             v = LayoutInflater.from(getContext()).inflate(R.layout.item_atencion_enfermeria, parent, false);
-
-            /*LayoutInflater inf = (LayoutInflater) Objects.requireNonNull(activity.getActivity()).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = Objects.requireNonNull(inf).inflate(R.layout.item_signos_vitales, null);*/
         }
 
         TextView fechaAtencion = v.findViewById(R.id.tvFechaAtencion);
@@ -72,59 +77,12 @@ public class AdapterItemAtencionEnfermeria extends ArrayAdapter<AtencionEnfermer
 
         return v;
     }
-
+    /*
+     * Actualiza la lista de AtencionEnfermeria cuando ya ha almacenado una
+     * */
     public void actualizarAtencionEnfermeriaList(List<AtencionEnfermeria> atencionEnfermeriaListNuevo) {
         this.atencionEnfermeriaList.clear();
         this.atencionEnfermeriaList.addAll(atencionEnfermeriaListNuevo);
         notifyDataSetChanged();
     }
-    /*private Activity activity;
-    private ArrayList<AtencionEnfermeria> items;
-
-    public AdapterItemAtencionEnfermeria(Activity activity, ArrayList<AtencionEnfermeria> data) {
-        this.activity = activity;
-        items = data;
-    }
-
-    @Override
-    public int getCount() {
-        return items.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return items.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View v = convertView;
-        if (convertView == null) {
-            LayoutInflater inf = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = Objects.requireNonNull(inf).inflate(R.layout.item_atencion_enfermeria, null);
-        }
-
-        TextView fechaAtencion = v.findViewById(R.id.tvFechaAtencion);
-        //TextView idAtencion = v.findViewById(R.id.tvIdAtencion);
-        TextView motivoAtencion = v.findViewById(R.id.tvMotivo);
-
-
-        String DateToStr;
-        AtencionEnfermeria atenciones = items.get(position);
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        //Se obtiene la fecha, se le da el formato del simpleDateFormat y se lo setea al holder
-        DateToStr = format.format(atenciones.getFecha_atencion());
-
-
-        fechaAtencion.setText(DateToStr);
-        //idAtencion.setText(atenciones.getId().toString());
-        motivoAtencion.setText(atenciones.getMotivoAtencion());
-
-        return v;
-    }*/
 }

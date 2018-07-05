@@ -24,6 +24,7 @@ class AdapterDiagnosticos extends ArrayAdapter<Diagnostico> {
     private int layoutResourceId;
     private ArrayList<Diagnostico> data=null;
 
+    //Constructor
     public AdapterDiagnosticos(Context context, int layaoutResouceId, ArrayList<Diagnostico> data) {
         super(context,layaoutResouceId,data);
 

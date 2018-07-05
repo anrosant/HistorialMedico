@@ -31,7 +31,9 @@ public class MenuEmpleadoActivity extends FragmentActivity {
         empleado = Empleado.findById(Empleado.class,Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
     }
-
+    /*
+     * Lleva a la ventana de HistorialConsultaMedica y envia el id del empleado
+     * */
     public void aperturaHistorialConsultaMedica(View v) {
 
         //Envia el id del empleado a HistorialConsultaMedica
@@ -40,7 +42,9 @@ public class MenuEmpleadoActivity extends FragmentActivity {
         inHistorialConsultaMedica.putExtra("ID_EMPLEADO", idEmpleado);
         startActivity(inHistorialConsultaMedica);
     }
-
+    /*
+     * Lleva a la ventana de HistorialAtencionEnfermeria y envia el id del empleado
+     * */
     public void aperturaHistorialAtencionEnfermeria(View v){
         //Envia el id del empleado a HistorialAtencionEnfermeria
         Intent inHistorialAtencionEnfermeria = new Intent(getApplicationContext(), HistorialAtencionEnfermeria.class);

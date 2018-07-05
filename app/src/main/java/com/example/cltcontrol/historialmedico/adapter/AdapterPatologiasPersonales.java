@@ -25,16 +25,25 @@ public class AdapterPatologiasPersonales extends ArrayAdapter<PatologiasPersonal
         this.patologiasPersonalesList = patologiasPersonalesList;
     }
 
+    /*
+     * Retorna el número de PatologiasPersonales en la lista
+     * */
     @Override
     public int getCount() {
         return patologiasPersonalesList.size();
     }
 
+    /*
+     * Retorna una PatologiaPersonal dentro de la lista dada una posición
+     * */
     @Override
     public PatologiasPersonales getItem(int position) {
         return patologiasPersonalesList.get(position);
     }
 
+    /*
+     * Retorna la posicion de una PatologiaPersonal
+     * */
     @Override
     public long getItemId(int position) {
         return position;
@@ -61,6 +70,9 @@ public class AdapterPatologiasPersonales extends ArrayAdapter<PatologiasPersonal
         return v;
     }
 
+    /*
+     * Actualiza la lista de PatologiasPersonales cuando ya ha almacenado una
+     * */
     public void actualizarPatologiasPersonalesList(List<PatologiasPersonales> patologiasPersonalesListNuevo) {
         this.patologiasPersonalesList.clear();
         this.patologiasPersonalesList.addAll(patologiasPersonalesListNuevo);

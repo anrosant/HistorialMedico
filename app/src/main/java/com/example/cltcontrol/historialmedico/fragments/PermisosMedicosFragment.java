@@ -194,7 +194,9 @@ public class PermisosMedicosFragment extends Fragment {
         }
         return view;
     }
-
+    /*
+     * Guarda los datos de un permiso médico
+     * */
     public void guardarPermisoMedico(){
         if(diagnosticosList.size()!=0) {
             String enfermedadPrincipalText = sp_enfermedades_diagnostico.getSelectedItem().toString();

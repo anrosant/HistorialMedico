@@ -71,7 +71,9 @@ public class PrescripcionFragment extends Fragment {
 
         return view;
     }
-
+    /*
+     * Guarda los datos de una preescripción
+     * */
     private void guardarPreescripcion() {
         String preescripcion = et_prescripcion.getText().toString();
         //Validar el ingreso de preescripcion

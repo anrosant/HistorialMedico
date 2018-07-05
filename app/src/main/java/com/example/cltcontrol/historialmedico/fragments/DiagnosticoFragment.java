@@ -205,7 +205,9 @@ public class DiagnosticoFragment extends Fragment {
             Toast.makeText(getContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();
         }
     }
-
+    /*
+    * Guarda las enfermedades que están en la base de datos, en una lista
+    * */
     public void readEnfermedadesAll(){
         try{
             enfermedadList = Enfermedad.listAll(Enfermedad.class);

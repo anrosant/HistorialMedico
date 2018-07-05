@@ -71,6 +71,9 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements Comu
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedorAtencionEnfermeria,misFragmentos[opcionMenu]).commit();
     }
 
+    /*
+    * si presiona el botón de ir atrás valida si desea salir sin guardar datos o permanecer
+    * */
     @Override
     public void onBackPressed(){
         if(cargo.equals("Enfermera")) {

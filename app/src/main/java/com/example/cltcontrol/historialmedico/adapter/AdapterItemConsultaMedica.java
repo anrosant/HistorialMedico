@@ -30,16 +30,25 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
         this.consultaMedicasList = consultaMedicaList;
     }
 
+    /*
+     * Retorna el número de elementos en la lista
+     * */
     @Override
     public int getCount() {
         return consultaMedicasList.size();
     }
 
+    /*
+     * Retorna una ConsultaMedica dentro de la lista dada una posición
+     * */
     @Override
     public ConsultaMedica getItem(int position) {
         return consultaMedicasList.get(position);
     }
 
+    /*
+     * Retorna la posicion de una ConsultaMedica
+     * */
     @Override
     public long getItemId(int position) {
         return position;
@@ -52,9 +61,6 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
 
         if (v == null) {
             v = LayoutInflater.from(getContext()).inflate(R.layout.item_consulta_medica, parent, false);
-
-            /*LayoutInflater inf = (LayoutInflater) Objects.requireNonNull(activity.getActivity()).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = Objects.requireNonNull(inf).inflate(R.layout.item_signos_vitales, null);*/
         }
 
         ConsultaMedica consultaMedica = consultaMedicasList.get(position);
@@ -71,45 +77,12 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
         }
         return v;
     }
-
+    /*
+     * Actualiza la lista de ConsultaMedica cuando ya ha almacenado una
+     * */
     public void actualizarConsultaMedicaList(List<ConsultaMedica> consultaMedicaListNuevo) {
         this.consultaMedicasList.clear();
         this.consultaMedicasList.addAll(consultaMedicaListNuevo);
         notifyDataSetChanged();
     }
-    /*public AdapterItemConsultaMedica(Activity activity, ArrayList<ConsultaMedica> listaConsultaMedica) {
-        this.activity = activity;
-        items = listaConsultaMedica;
-    }
-
-    @Override
-    public int getCount() {
-        return items.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return items.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View v = convertView;
-        if (convertView == null) {
-            LayoutInflater inf = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = Objects.requireNonNull(inf).inflate(R.layout.item_consulta_medica, null);
-        }
-
-        ConsultaMedica consultaMedica = items.get(position);
-
-        TextView fechaConsulta = v.findViewById(R.id.tvFechaConsulta);
-        fechaConsulta.setText(consultaMedica.getFechaConsulta().toString());
-
-        return v;
-    }*/
 }

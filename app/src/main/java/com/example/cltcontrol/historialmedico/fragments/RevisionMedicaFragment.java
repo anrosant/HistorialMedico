@@ -70,7 +70,9 @@ public class RevisionMedicaFragment extends Fragment {
 
         return view;
     }
-
+    /*
+     * Guarda los datos de una revisión médica
+     * */
     private void guardarRevisionMedica() {
         String revision_medica = et_revision_medica.getText().toString();
         int res = consultaMedica.validarCampoTexto(revision_medica);

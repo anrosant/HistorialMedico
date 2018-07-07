@@ -43,7 +43,7 @@ public class RevisionMedicaFragment extends Fragment {
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
-        precedencia = extras.getString("PRESEDENCIA");
+        precedencia = extras.getString("PRECEDENCIA");
 
         //Recibe el id de consulta medica desde Historial de consulta medica
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");

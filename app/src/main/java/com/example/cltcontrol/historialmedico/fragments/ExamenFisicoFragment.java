@@ -24,7 +24,7 @@ public class ExamenFisicoFragment extends Fragment {
 
     private EditText et_examen_fisico;
     private Button btn_guardar;
-    private String id_consulta_medica, presedencia, id_empleado, cargo;
+    private String id_consulta_medica, precedencia, id_empleado, cargo;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
@@ -43,7 +43,7 @@ public class ExamenFisicoFragment extends Fragment {
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
-        presedencia = extras.getString("PRESEDENCIA");
+        precedencia = extras.getString("PRECEDENCIA");
         //Recibe el id de consulta medica desde Historial de consulta medica
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
@@ -58,7 +58,7 @@ public class ExamenFisicoFragment extends Fragment {
             et_examen_fisico.setEnabled(false);
         }
 
-        if(presedencia.equals("consultar")) {
+        if(precedencia.equals("consultar")) {
             et_examen_fisico.setText(consultaMedica.getExamen_fisico());
             btn_guardar.setText("Editar");
         }

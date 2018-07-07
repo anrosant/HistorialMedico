@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
@@ -21,7 +19,7 @@ import java.util.Objects;
 public class MotivoAtencionFragment extends Fragment {
     private EditText etMotivoAtencion;
     private Button btn_guardar;
-    private String id_consulta_medica, presedencia, id_empleado, cargo;
+    private String id_consulta_medica, precedencia, id_empleado, cargo;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
     //private AtencionEnfermeria atencionEnfermeria;
@@ -41,7 +39,7 @@ public class MotivoAtencionFragment extends Fragment {
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         //Recibe el id de consulta medica desde Historial de consulta medica
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-        presedencia = extras.getString("PRESEDENCIA");
+        precedencia = extras.getString("PRECEDENCIA");
         id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
         cargo = extras.getString("CARGO");
@@ -54,7 +52,7 @@ public class MotivoAtencionFragment extends Fragment {
 
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
-        if(presedencia.equals("consultar")){
+        if(precedencia.equals("consultar")){
             etMotivoAtencion.setText(consultaMedica.getMotivo());
             btn_guardar.setText("Editar");
         }

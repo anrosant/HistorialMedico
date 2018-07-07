@@ -12,6 +12,7 @@ import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.fragments.DiagnosticoEnfermeriaFragment;
 import com.example.cltcontrol.historialmedico.fragments.MotivoAtencionEnfermeriaFragment;
 import com.example.cltcontrol.historialmedico.fragments.PlanCuidadosFragment;
+import com.example.cltcontrol.historialmedico.fragments.SignosVitalesEnfermeriaFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
@@ -36,7 +37,7 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements Comu
         //Recibe el id de atencion desde el HistorialAtencionEnfermeria
         idAtencion = getIntent().getStringExtra("ID_ATENCION");
         idEmpleado = getIntent().getStringExtra("ID_EMPLEADO");
-        precedencia = getIntent().getStringExtra("PRESEDENCIA");
+        precedencia = getIntent().getStringExtra("PRECEDENCIA");
         cargo = getIntent().getStringExtra("CARGO");
 
         if(cargo.equalsIgnoreCase("Doctor")){
@@ -58,7 +59,7 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements Comu
         });
 
         misFragmentos = new Fragment[4];
-        misFragmentos[0] = new SignosVitalesFragment();
+        misFragmentos[0] = new SignosVitalesEnfermeriaFragment();
         misFragmentos[1] = new MotivoAtencionEnfermeriaFragment();
         misFragmentos[2] = new DiagnosticoEnfermeriaFragment();
         misFragmentos[3] = new PlanCuidadosFragment();

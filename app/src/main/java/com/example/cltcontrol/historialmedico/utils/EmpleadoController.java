@@ -68,7 +68,7 @@ public class EmpleadoController {
     private void llenadoUsuarios(){
         usuario_doctor = new Usuario("jgarcia", "jgarcia");
         usuario_doctor.save();
-        usuario_enfermera = new Usuario("asantacruz","asantacruz");
+        usuario_enfermera = new Usuario("anrosant","anrosant");
         usuario_enfermera.save();
         this.setLista_usuarios(Usuario.listAll(Usuario.class));
     }

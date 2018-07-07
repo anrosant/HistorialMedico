@@ -1,21 +1,40 @@
 package com.example.cltcontrol.historialmedico.models;
 
+import android.app.ProgressDialog;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
+import com.example.cltcontrol.historialmedico.utils.VolleySingleton;
 import com.orm.SugarRecord;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_CONSULTA_MEDICA;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_SIGNOS;
 
 public class ConsultaMedica extends SugarRecord {
     private Empleado empleado;
-    //private String cedulaEmpleado;
     private Date fechaConsulta;
     private String probActual, prescripcion, motivo, revision_medica, examen_fisico;
-
+    private int status;
     public ConsultaMedica() {
     }
 
     public ConsultaMedica(Empleado empleado, Date fechaConsulta, String probActual,
                           String revisionMedica, String prescripcion, String examen_fisico,
-                          String motivo) {
+                          String motivo, int status) {
         this.empleado = empleado;
         this.fechaConsulta = fechaConsulta;
         this.probActual = probActual;
@@ -23,6 +42,15 @@ public class ConsultaMedica extends SugarRecord {
         this.prescripcion = prescripcion;
         this.examen_fisico = examen_fisico;
         this.motivo = motivo;
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public Empleado getEmpleado() {

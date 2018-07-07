@@ -62,7 +62,7 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         //Recibe el id del empleado desde el HistorialConsultaMedica
         final String id_empleado = extras.getString("ID_EMPLEADO");
         idConsultaMedica = extras.getString("ID_CONSULTA_MEDICA");
-        precedencia = extras.getString("PRESEDENCIA");
+        precedencia = extras.getString("PRECEDENCIA");
         cargo = extras.getString("CARGO");
 
         if(cargo.equalsIgnoreCase("Enfermera")){

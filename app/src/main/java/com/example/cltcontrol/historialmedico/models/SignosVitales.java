@@ -11,22 +11,34 @@ public class SignosVitales extends SugarRecord {
     private ConsultaMedica consulta_medica;
     private AtencionEnfermeria atencion_enfermeria;
 
+    private int status;
+
     public SignosVitales() {}
 
-    public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, float temperatura, ConsultaMedica consultaMedica) {
+    public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, float temperatura, ConsultaMedica consultaMedica, int status) {
         this.presion_sistolica = presion_sistolica;
         this.presion_distolica = presion_distolica;
         this.pulso = pulso;
         this.temperatura = temperatura;
         this.consulta_medica = consultaMedica;
+        this.status = status;
     }
 
-    public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, float temperatura, AtencionEnfermeria atencion_enfermeria) {
+    public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, float temperatura, AtencionEnfermeria atencion_enfermeria, int status) {
         this.presion_sistolica = presion_sistolica;
         this.presion_distolica = presion_distolica;
         this.pulso = pulso;
         this.temperatura = temperatura;
         this.atencion_enfermeria = atencion_enfermeria;
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public int getPresion_sistolica() {

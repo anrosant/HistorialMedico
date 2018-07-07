@@ -23,7 +23,7 @@ import java.util.Objects;
 public class ProblemaActualFragment extends Fragment {
     private EditText et_problema_actual;
     private Button btn_guardar;
-    private String id_consulta_medica, presedencia, id_empleado, cargo;
+    private String id_consulta_medica, precedencia, id_empleado, cargo;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
@@ -45,7 +45,7 @@ public class ProblemaActualFragment extends Fragment {
 
         //Recibe el id de consulta medica desde Historial de consulta medica
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-        presedencia = extras.getString("PRESEDENCIA");
+        precedencia = extras.getString("PRECEDENCIA");
         id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
@@ -55,7 +55,7 @@ public class ProblemaActualFragment extends Fragment {
             et_problema_actual.setEnabled(false);
 
         }
-        if(presedencia.equals("consultar")){
+        if(precedencia.equals("consultar")){
             et_problema_actual.setText(consultaMedica.getProbActual());
             btn_guardar.setText("Editar");
         }

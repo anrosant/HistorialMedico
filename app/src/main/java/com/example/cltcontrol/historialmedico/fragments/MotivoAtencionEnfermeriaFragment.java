@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
@@ -23,7 +22,7 @@ import java.util.Objects;
  */
 public class MotivoAtencionEnfermeriaFragment extends Fragment {
 
-    private String idAtencion=null, presedencia, idEmpleado, cargo;
+    private String idAtencion=null, precedencia, idEmpleado, cargo;
     private Bundle bun;
     private Button boton;
     private EditText etMotivo;
@@ -45,7 +44,7 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
         idAtencion = bun.getString("ID_ATENCION");
-        presedencia = bun.getString("PRESEDENCIA");
+        precedencia = bun.getString("PRECEDENCIA");
         idEmpleado = bun.getString("ID_EMPLEADO");
 
         atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
@@ -58,7 +57,7 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
 
         }
 
-        if(presedencia.equals("consultar")) {
+        if(precedencia.equals("consultar")) {
             ////funcionalidad para cargar un signo vital con el id de Atencion
             etMotivo.setText(atencion.getMotivoAtencion());
             boton.setText("Editar");

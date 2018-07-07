@@ -1,11 +1,8 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +21,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.cltcontrol.historialmedico.adapter.AdapterSignosVitales;
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.adapter.AdapterSignosVitales;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
-import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.example.cltcontrol.historialmedico.utils.VolleySingleton;
@@ -42,86 +38,86 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.DATA_SAVED_BROADCAST;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_SIGNOS;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class SignosVitalesFragment extends Fragment {
-    private EditText etPSistolica, etPDistolica, etTemperatura, etPulso;
-    private String id_consulta_medica, id_empleado, cargo;
-    private ConsultaMedica consultaMedica;
+public class SignosVitalesEnfermeriaFragment extends Fragment {
+
+    private String id_atencion, id_empleado, cargo;
+    private Bundle extras;
+    private EditText etPresionSistolica;
+    private EditText etPresionDistolica;
     private ListView lvSignosVitales;
-    private AdapterSignosVitales adapterSignosVitales;
-    private Empleado empleado;
-    private List<SignosVitales> signosVitalesList;
+    private EditText etPulso;
+    private EditText etTemperatura;
     private Button btn_guardar;
+    private AdapterSignosVitales adapterSignosVitales;
     private ImageButton ib_mostrar_ocultar_contendido;
-    LinearLayout ly_signos_vitales;
+    private LinearLayout ly_signos_vitales;
     private TextView tvTitulo;
-
-    private BroadcastReceiver broadcastReceiver;
+    private AtencionEnfermeria atencionEnfermeria;
+    private List<SignosVitales> signosVitalesList;
     private SignosVitales signos;
+    private Empleado empleado;
 
 
-    public SignosVitalesFragment() {
+    public SignosVitalesEnfermeriaFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Inflate the layout for this fragment
+        // Inflate y vinculaciones de las variables globales
         View view = inflater.inflate(R.layout.fragment_signos_vitales, container, false);
-        etPSistolica = view.findViewById(R.id.etPSistolica);
-        etPDistolica = view.findViewById(R.id.etPDistolica);
-        etTemperatura = view.findViewById(R.id.etTemperatura);
+        etPresionSistolica = view.findViewById(R.id.etPSistolica);
+        etPresionDistolica = view.findViewById(R.id.etPDistolica);
         etPulso = view.findViewById(R.id.etPulso);
-        lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
+        etTemperatura = view.findViewById(R.id.etTemperatura);
         btn_guardar = view.findViewById(R.id.btnGuardar);
         ib_mostrar_ocultar_contendido =  view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         ly_signos_vitales = view.findViewById(R.id.ly_signos_vitales);
+        lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
         tvTitulo = view.findViewById(R.id.tvTitulo);
-        //
-        Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
-        //Recibe el id de consulta medica desde Historial de consulta medica
+        extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
-        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-        //Recibe el id del empleado
+        //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
+        id_atencion = extras.getString("ID_ATENCION");
+
         id_empleado = extras.getString("ID_EMPLEADO");
         cargo = extras.getString("CARGO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
         //Ingresa a nueva consulta medica
-        if(id_consulta_medica!=null) {
-            if(cargo.equals("Enfermera")){
+        if(id_atencion!=null) {
+            if(cargo.equals("Doctor")){
                 btn_guardar.setVisibility(View.GONE);
                 ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
                 ly_signos_vitales.setVisibility(View.GONE);
                 tvTitulo.setVisibility(View.GONE);
             }
-            consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
+            atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Long.valueOf(id_atencion));
+            Log.d("ATENCIONENF", String.valueOf(atencionEnfermeria));
             //Historial de Signos vitales
             //Obtiene los signos vitales de un empleado
-            signosVitalesList = SignosVitales.find(SignosVitales.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
+            signosVitalesList = SignosVitales.find(SignosVitales.class, "atencionenfermeria = ?", String.valueOf(id_atencion));
+            Log.d("LISTASIGNOS", String.valueOf(signosVitalesList.size()));
         }
-
-        //Crea un adapter de dicha lista y la muestra en un listview
         adapterSignosVitales = new AdapterSignosVitales(getContext(), (ArrayList<SignosVitales>) signosVitalesList);
+        Log.d("ADAPTERSIGNOSV", String.valueOf(adapterSignosVitales));
         lvSignosVitales.setAdapter(adapterSignosVitales);
 
 
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //guardarSignosVitalesLocal();
                 //Recibe los datos de signos vitales
-                final String presionSistolicaText = etPSistolica.getText().toString();
-                final String presionDistolicaText = etPDistolica.getText().toString();
+                final String presionSistolicaText = etPresionSistolica.getText().toString();
+                final String presionDistolicaText = etPresionDistolica.getText().toString();
                 final String temperaturatext = etTemperatura.getText().toString();
                 final String pulsoText = etPulso.getText().toString();
 
@@ -134,22 +130,9 @@ public class SignosVitalesFragment extends Fragment {
                     Toast.makeText(getContext(), "Los valores están fuera de rango", Toast.LENGTH_SHORT).show();
                     SignosVitales.delete(signos);
                 }else{
-                    //guardarSignosVitalesLocal(presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText, NAME_NOT_SYNCED_WITH_SERVER);
                     guardarSignosVitalesEnServidor(presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
                 }
-
-                /*//Broadcast receiver to know the sync status
-                broadcastReceiver = new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-
-                        //Confirmar que se ha guardado
-                        Toast.makeText(getContext(),"Datos enviados al servidor ",Toast.LENGTH_SHORT).show();
-                    }
-                };
-
-                Objects.requireNonNull(getContext()).registerReceiver(broadcastReceiver, new IntentFilter(DATA_SAVED_BROADCAST));
-            */}
+            }
         });
 
         ib_mostrar_ocultar_contendido.setOnClickListener(new View.OnClickListener() {
@@ -167,12 +150,11 @@ public class SignosVitalesFragment extends Fragment {
 
         return view;
     }
-    
     /*
-    * Función que guarda los signos vitales localmente
-    * */
+     * Función que guarda los signos vitales localmente
+     * */
     public void guardarSignosVitalesLocal(String presionSistolicaText, String presionDistolicaText,
-                                     String temperaturatext, String pulsoText,int status){
+                                          String temperaturatext, String pulsoText, int status){
 
         signos.setPresion_sistolica(Integer.parseInt(presionSistolicaText));
         signos.setPresion_distolica(Integer.parseInt(presionDistolicaText));
@@ -181,40 +163,39 @@ public class SignosVitalesFragment extends Fragment {
         signos.setStatus(status);
         signos.save();
         //Guarda los datos y el id de la consulta medica o enfermeria
-        if(id_consulta_medica!=null){
+        if(id_atencion!=null){
             //Si es la primera vez que crea la consulta medica
-            if (consultaMedica.getEmpleado() == null) {
+            if(atencionEnfermeria.getEmpleado() == null){
                 //Guarda el id del empleado en la consulta y la fecha de consulta
-                consultaMedica.setEmpleado(empleado);
-                consultaMedica.setFechaConsulta(new Date());
-                consultaMedica.save();
-            }
+                atencionEnfermeria.setEmpleado(empleado);
+                atencionEnfermeria.setFecha_atencion(new Date());
+                atencionEnfermeria.save();
+            }//mmavalos@pichincha.com
 
-            signos.setConsultaMedica(consultaMedica);
+            signos.setAtencion_enfermeria(atencionEnfermeria);
             signos.save();
 
             ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
-                    "consultamedica = ?", String.valueOf(consultaMedica.getId()));
+                    "atencionenfermeria = ?", String.valueOf(id_atencion));
             adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
         }
-
         Toast.makeText(getContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();
         limpiarCampos();
     }
     /*
-     * Limpia los campos luego de haber ingresado los signos vitales
-     * */
+    * Limpia los campos luego de haber ingresado los signos vitales
+    * */
     private void limpiarCampos(){
-        etPSistolica.setText("");
-        etPDistolica.setText("");
+        etPresionSistolica.setText("");
+        etPresionDistolica.setText("");
         etTemperatura.setText("");
         etPulso.setText("");
-        etPSistolica.requestFocus();
+        etPresionSistolica.requestFocus();
     }
 
     /*
-     * Función que guardar los datos de signos vitales en el servidor
-     * */
+    * Función que guardar los datos de signos vitales en el servidor
+    * */
     private void guardarSignosVitalesEnServidor(final String presionSistolicaText, final String presionDistolicaText,
                                                 final String temperaturatext, final String pulsoText) {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
@@ -267,5 +248,4 @@ public class SignosVitalesFragment extends Fragment {
 
         VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
-
 }

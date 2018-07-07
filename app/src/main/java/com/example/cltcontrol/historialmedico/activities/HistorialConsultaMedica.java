@@ -21,7 +21,7 @@ import java.util.List;
 
 public class HistorialConsultaMedica extends FragmentActivity implements ComunicadorMenu{
 
-    private String idEmpleado, presedencia, idConsultaMedica, cargo;
+    private String idEmpleado, idConsultaMedica, cargo;
     private TextView tvNombresEmpleado;
     private ListView lvConsultasMedicas;
     private Empleado empleado;
@@ -88,7 +88,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         inMenu.putExtra("BOTONPULSADO",opcionMenu);
         inMenu.putExtra("ID_EMPLEADO",idEmpleado);
         inMenu.putExtra("ID_CONSULTA_MEDICA", consultaMedica.getId().toString());
-        inMenu.putExtra("PRESEDENCIA", "crear");
+        inMenu.putExtra("PRECEDENCIA", "crear");
         inMenu.putExtra("CARGO", cargo);
 
         startActivity(inMenu);

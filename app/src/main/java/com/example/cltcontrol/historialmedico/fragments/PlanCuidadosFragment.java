@@ -23,7 +23,7 @@ import java.util.Objects;
 public class PlanCuidadosFragment extends Fragment {
 
 
-    private String idAtencion=null, presedencia, idEmpleado, cargo;
+    private String idAtencion=null, precedencia, idEmpleado, cargo;
     private Bundle bun;
     private Button boton;
     private EditText etPlan;
@@ -47,7 +47,7 @@ public class PlanCuidadosFragment extends Fragment {
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
         idAtencion = bun.getString("ID_ATENCION");
-        presedencia = bun.getString("PRESEDENCIA");
+        precedencia = bun.getString("PRECEDENCIA");
         idEmpleado = bun.getString("ID_EMPLEADO");
 
         cargo = bun.getString("CARGO");
@@ -61,7 +61,7 @@ public class PlanCuidadosFragment extends Fragment {
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
 
         //Si va a consultar, muestra los datos
-        if(presedencia.equals("consultar")) {
+        if(precedencia.equals("consultar")) {
             etPlan.setText(atencion.getPlanCuidados());
             boton.setText("Editar");
         }

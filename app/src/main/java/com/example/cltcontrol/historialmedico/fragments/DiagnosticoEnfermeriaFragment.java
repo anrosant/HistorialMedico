@@ -23,7 +23,7 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
 
     private String idAtencion=null;
     //private String idAtencion2=null;
-    private String presedencia, idEmpleado,cargo;
+    private String precedencia, idEmpleado,cargo;
     private Bundle bun;
     private Button boton;
     private EditText etDiagnostico;
@@ -44,7 +44,7 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
         bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         idAtencion = bun.getString("ID_ATENCION");
-        presedencia = bun.getString("PRESEDENCIA");
+        precedencia = bun.getString("PRECEDENCIA");
         idEmpleado = bun.getString("ID_EMPLEADO");
         cargo = bun.getString("CARGO");
 
@@ -52,7 +52,7 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
         empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
 
         //Si va a consultar, muestra los datos
-        if(presedencia.equals("consultar")) {
+        if(precedencia.equals("consultar")) {
             etDiagnostico.setText(atencion.getDiagnosticoEnfermeria());
             boton.setText("Editar");
         }

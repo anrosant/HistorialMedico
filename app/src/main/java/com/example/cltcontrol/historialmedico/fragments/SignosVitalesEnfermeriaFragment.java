@@ -90,7 +90,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
         cargo = extras.getString("CARGO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
-        //Ingresa a nueva consulta medica
+        //Ingresa a nueva atención enfermería
         if(id_atencion!=null) {
             if(cargo.equals("Doctor")){
                 btn_guardar.setVisibility(View.GONE);
@@ -162,15 +162,15 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
         signos.setTemperatura(Float.parseFloat(temperaturatext));
         signos.setStatus(status);
         signos.save();
-        //Guarda los datos y el id de la consulta medica o enfermeria
+
         if(id_atencion!=null){
-            //Si es la primera vez que crea la consulta medica
+            //Si es la primera vez que crea la atención enferemería
             if(atencionEnfermeria.getEmpleado() == null){
-                //Guarda el id del empleado en la consulta y la fecha de consulta
+                //Guarda el id del empleado en la atención enfermería y la fecha de atención
                 atencionEnfermeria.setEmpleado(empleado);
                 atencionEnfermeria.setFecha_atencion(new Date());
                 atencionEnfermeria.save();
-            }//mmavalos@pichincha.com
+            }
 
             signos.setAtencion_enfermeria(atencionEnfermeria);
             signos.save();
@@ -241,7 +241,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
                 params.put("presion_distolica", presionDistolicaText);
                 params.put("temperatura", temperaturatext);
                 params.put("pulso", pulsoText);
-                params.put("consulta_medica", String.valueOf(0));
+                params.put("atencion_enfermeria", String.valueOf(0));
                 return params;
             }
         };

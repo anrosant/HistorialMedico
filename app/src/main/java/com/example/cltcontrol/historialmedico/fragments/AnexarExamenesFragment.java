@@ -1,6 +1,5 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -22,13 +21,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
 import java.io.File;
+import java.io.IOException;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -84,7 +83,7 @@ public class AnexarExamenesFragment extends Fragment {
     }
 
     private boolean validaPermisos() {
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M){
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
             return true;
         }
 

@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -21,10 +23,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.utils.ImageOrientation;
 
 import java.io.File;
 
@@ -38,18 +42,20 @@ public class AnexarExamenesFragment extends Fragment {
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
+    private String ruta="";
+    private String path;
+    private Bitmap bitmap;
+    private File fileImagen;
+
     //Constantes
     //Se define carpeta Raiz para las imagenes
-    private static final String CARPETA_RAIZ="Medicos/"; //carpeta principal
+    private static final String CARPETA_RAIZ = "Medicos/";
     //Se define la carpeta donde se guardaran las imagenes de examenes
-    private static final String CARPETA_IMAGENES ="examenes"; //carperta imagen
+    private static final String CARPETA_IMAGENES = "examenes";
     //Se define la ruta donde se guardan la fotos
-    private static final String DIRECTORIO=CARPETA_RAIZ+CARPETA_IMAGENES; //directorio imagen
+    private static final String DIRECTORIO = CARPETA_RAIZ + CARPETA_IMAGENES;
     private static final int COD_SELECCION = 10;
     private static final int COD_CAMARA = 20;
-    private String path;
-    File fileImagen;
-    Bitmap bitmap;
 
     public AnexarExamenesFragment() {
         // Required empty public constructor
@@ -158,10 +164,10 @@ public class AnexarExamenesFragment extends Fragment {
         //Variable Booleana para validar que la foto fue creada
         boolean directorioEsCreado = myFile.exists();
 
-        if(directorioEsCreado==false){
+        if(!directorioEsCreado){
             directorioEsCreado = myFile.mkdirs();
         }
-        if(directorioEsCreado==true) {
+        if(directorioEsCreado) {
             //Asignacion nombre de la imagen
             //currentTimeMillis devuelve la hora en milisegundos
             Long consecutivo = (System.currentTimeMillis() / 1000);
@@ -187,6 +193,8 @@ public class AnexarExamenesFragment extends Fragment {
             case COD_SELECCION:
                 try{
                     Uri miPath = data.getData();
+                    ruta = miPath.toString();
+                    Toast.makeText(getContext(),"ruta: " + ruta,Toast.LENGTH_LONG).show();
                     idImage .setImageURI(miPath);
                 }catch (Exception e){
                     //
@@ -205,9 +213,24 @@ public class AnexarExamenesFragment extends Fragment {
                         });
 
                 bitmap = BitmapFactory.decodeFile(path);
-                idImage.setImageBitmap(bitmap);
+                Matrix matrix = null;
+                if(bitmap!=null){
+                    try{
+                        ruta = path.toString();
+                        Toast.makeText(getContext(),"ruta: "+ ruta,Toast.LENGTH_LONG).show();
+                        //proceso para adaptar orientacion de la foto tomada por la camara atraves de la App
+                        final ExifInterface exif = new ExifInterface(path);
+                        final int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+                        matrix = ImageOrientation.orientacionImagen(exifOrientation);
+                        final Bitmap transformedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                        idImage.setImageBitmap(transformedBitmap);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
                 break;
         }
 
     }
+
 }

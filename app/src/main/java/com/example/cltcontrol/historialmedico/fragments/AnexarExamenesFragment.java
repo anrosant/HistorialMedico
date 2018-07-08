@@ -27,11 +27,9 @@ import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
 import java.io.File;
-import java.io.IOException;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
 
 public class AnexarExamenesFragment extends Fragment {
 
@@ -187,8 +185,12 @@ public class AnexarExamenesFragment extends Fragment {
 
         switch (requestCode){
             case COD_SELECCION:
-                Uri miPath = data.getData();
-                idImage.setImageURI(miPath);
+                try{
+                    Uri miPath = data.getData();
+                    idImage .setImageURI(miPath);
+                }catch (Exception e){
+                    //
+                }
                 break;
 
             case COD_CAMARA:

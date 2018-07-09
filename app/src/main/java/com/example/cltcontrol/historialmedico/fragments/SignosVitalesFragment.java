@@ -260,7 +260,8 @@ public class SignosVitalesFragment extends Fragment {
                 params.put("presion_distolica", presionDistolicaText);
                 params.put("temperatura", temperaturatext);
                 params.put("pulso", pulsoText);
-                params.put("consulta_medica", String.valueOf(0));
+                params.put("consulta_medica", String.valueOf(1));
+                params.put("atencion_enfermeria", String.valueOf(0));
                 return params;
             }
         };

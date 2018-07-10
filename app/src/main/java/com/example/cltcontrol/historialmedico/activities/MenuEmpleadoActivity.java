@@ -52,4 +52,12 @@ public class MenuEmpleadoActivity extends FragmentActivity {
         inHistorialAtencionEnfermeria.putExtra("ID_EMPLEADO", idEmpleado);
         startActivity(inHistorialAtencionEnfermeria);
     }
+
+    public void aperturaSignos(View v){
+        //Envia el id del empleado a Signos Vitales
+        Intent inSignos = new Intent(getApplicationContext(), SigVitalRapidoActivity.class);
+        //inHistorialAtencionEnfermeria.putExtra("CEDULA", cedulaEmpleado);
+        inSignos.putExtra("ID_EMPLEADO", idEmpleado);
+        startActivity(inSignos);
+    }
 }

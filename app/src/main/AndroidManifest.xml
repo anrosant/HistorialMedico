@@ -49,6 +49,9 @@
             android:name=".activities.MenuEmpleadoActivity"
             android:label="@string/menu_empleado"/>
         <activity
+            android:name=".activities.SigVitalRapidoActivity"
+            android:label="Signos vitales"/>
+        <activity
             android:name=".activities.ConsultaMedicaNuevoActivity"
             android:label="@string/consulta_medica_nuevo"
             android:configChanges="screenSize|orientation"

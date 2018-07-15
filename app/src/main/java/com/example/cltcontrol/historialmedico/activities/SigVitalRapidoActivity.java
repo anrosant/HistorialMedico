@@ -3,18 +3,16 @@ package com.example.cltcontrol.historialmedico.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.adapter.AdapterItemAtencionEnfermeria;
+import com.example.cltcontrol.historialmedico.fragments.SignosVitalesEnfermeriaFragment;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
-import com.example.cltcontrol.historialmedico.utils.SessionManager;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class SigVitalRapidoActivity extends FragmentActivity {
@@ -26,6 +24,7 @@ public class SigVitalRapidoActivity extends FragmentActivity {
     List<ConsultaMedica> consultasList;
     List<AtencionEnfermeria> atencionesList;
     private Empleado empleado;
+    private Fragment miFragmento;
 
 
     @Override
@@ -34,10 +33,15 @@ public class SigVitalRapidoActivity extends FragmentActivity {
         setContentView(R.layout.activity_signo_rapido);
 
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+        miFragmento= new SignosVitalesEnfermeriaFragment();
 
         //Recibe el id del empleado desde MenuEmpleadoActivity
         Intent inMenuEmpleado = getIntent();
         idEmpleado = inMenuEmpleado.getStringExtra("ID_EMPLEADO");
+
+        //Busca al empleado con el id y muestra la informacion en el frgagment de informacion
+        empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
+        tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
 
         //Busca los signos vitales de un empleado
         signosVitalesList= SignosVitales.find(SignosVitales.class, "empleado = ?", idEmpleado);
@@ -58,9 +62,15 @@ public class SigVitalRapidoActivity extends FragmentActivity {
             signosVitalesTempList.clear(); //Se vacia la lista temporal
         }
 
-        //Busca al empleado con el id y muestra la informacion en el frgagment de informacion
-        empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
-        tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
+        //Guarda el empleado en los signos vitales que vinieron desde atencion de Enfermeria y consulta medica
+        for(SignosVitales actual : signosVitalesList){
+            if(actual.getEmpleado()==null){
+                actual.setEmpleado(empleado);
+                actual.save();
+            }
+        }
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenedorSigno,miFragmento).commit();
 
     }
 

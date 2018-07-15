@@ -105,7 +105,10 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
             //Obtiene los signos vitales de un empleado
             signosVitalesList = SignosVitales.find(SignosVitales.class, "atencionenfermeria = ?", String.valueOf(id_atencion));
             Log.d("LISTASIGNOS", String.valueOf(signosVitalesList.size()));
+        }else{ //Esta es la parte de signos vitales rapidos
+            signosVitalesList = SignosVitales.find(SignosVitales.class, "empleado = ?", String.valueOf(id_empleado));
         }
+
         adapterSignosVitales = new AdapterSignosVitales(getContext(), (ArrayList<SignosVitales>) signosVitalesList);
         Log.d("ADAPTERSIGNOSV", String.valueOf(adapterSignosVitales));
         lvSignosVitales.setAdapter(adapterSignosVitales);
@@ -122,7 +125,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
                 final String pulsoText = etPulso.getText().toString();
 
                 signos = new SignosVitales();
-                int res = signos.validarSignos(presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
+                int res = signos.validarSignos(presionSistolicaText, presionDistolicaText, pulsoText , temperaturatext);
                 if(res == 0) {
                     Toast.makeText(getContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
                     SignosVitales.delete(signos);
@@ -177,6 +180,12 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
 
             ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
                     "atencionenfermeria = ?", String.valueOf(id_atencion));
+            adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
+        }else{//Esta es la parte de signos vitales rapidos
+            signos.setEmpleado(empleado);
+            signos.save();
+            ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
+                    "empleado = ?", String.valueOf(id_empleado));
             adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
         }
         Toast.makeText(getContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();

@@ -9,15 +9,17 @@ import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.models.Usuario;
 import com.orm.util.NamingHelper;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 public class EmpleadoController {
-    private List<Empleado> lista_empleados;
+    private Iterator<Empleado> lista_empleados;
     private List<Usuario> lista_usuarios;
     private Context miActivity;
     private Usuario usuario_doctor, usuario_enfermera;
+    Empleado empleado_doctor, empleado_enfermera;
 
     //Constructores
     public EmpleadoController(){
@@ -42,7 +44,7 @@ public class EmpleadoController {
     }
 
     //Getter de registros Usuarios y Empleados
-    public List<Empleado> getLista_empleados() {
+    public Iterator<Empleado> getLista_empleados() {
         return lista_empleados;
     }
 
@@ -50,7 +52,7 @@ public class EmpleadoController {
         return lista_usuarios;
     }
 
-    public void setLista_empleados(List<Empleado> lista_empleados) {
+    public void setLista_empleados(Iterator<Empleado> lista_empleados) {
         this.lista_empleados = lista_empleados;
     }
 
@@ -77,35 +79,38 @@ public class EmpleadoController {
      * Crea empleados temporales
      * */
     private void llenadoEmpleados(){
-        Empleado miEmpleado = new Empleado("03214567323", "Jorge", "García García",
+        empleado_doctor = new Empleado("03214567323", "Jorge", "García García",
                 "jorergar@espol.edu.ec", "FAE",
                 "Analista de datos", "Soltero",
                 "Masculino", "Guayaquil",
                 "Doctor", new Date(), new Date(), 30, R.drawable.modelo, usuario_doctor);
-        miEmpleado.save();
+        empleado_doctor.save();
 
-        miEmpleado = new Empleado("0967547365","Anni","Santacruz Hernández",
+        /*empleado_enfermera = new Empleado("0967547365","Anni","Santacruz Hernández",
                 "anrosant@espol.edu.ec","Sauces",
                 "Ingeniera en Ciencias Computacionales","Soltera",
                 "Femenino","Guayaquil",
                 "Enfermera",new Date(),new Date(),20,R.drawable.modelo, usuario_enfermera);
-        miEmpleado.save();
+        empleado_enfermera.save();
 
-        miEmpleado = new Empleado("0913620589","Renato","Illescas Rodríguez",
+        Empleado miEmpleado3 = new Empleado("0913620589","Renato","Illescas Rodríguez",
                 "rillesca@espol.edu.ec","Sauces",
                 "Licenciado en Redes","Soltero",
                 "Masculino","Guayaquil",
                 "Dept. de Redes",new Date(),new Date(),20,R.drawable.modelo);
-        miEmpleado.save();
+        miEmpleado3.save();
 
-        miEmpleado = new Empleado("0962983345","Daniel","Castro Peñafiel",
+        Empleado miEmpleado4 = new Empleado("0962983345","Daniel","Castro Peñafiel",
                 "danijo@espol.edu.ec","Sauces",
                 "Ingeniero en Ciencias Computacionales","Soltero",
                 "Masculino","Guayaquil",
                 "Dept. Desarrollo de Software",new Date(),new Date(),20,R.drawable.modelo);
-        miEmpleado.save();
-        this.setLista_empleados(Empleado.listAll(Empleado.class));
+        miEmpleado4.save();*/
+
+
+        //this.setLista_empleados(Empleado.findAll(Empleado.class));
     }
+
     /*
      * Guarda las enfermedades en una lista
      * */

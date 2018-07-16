@@ -1,48 +1,45 @@
 package com.example.cltcontrol.historialmedico.models;
 
-import android.app.ProgressDialog;
-import android.widget.Toast;
+import android.content.Context;
+import android.util.Log;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
-import com.example.cltcontrol.historialmedico.utils.VolleySingleton;
 import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_CONSULTA_MEDICA;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_SIGNOS;
 
 public class ConsultaMedica extends SugarRecord {
+    @Unique
+    private int id_serv;
+    private Context context;
     private Empleado empleado;
     private Date fechaConsulta;
-    private String probActual, prescripcion, motivo, revision_medica, examen_fisico;
+    private String prob_actual, prescripcion, motivo, revision_medica, examen_fisico;
     private int status;
+
     public ConsultaMedica() {
     }
 
-    public ConsultaMedica(Empleado empleado, Date fechaConsulta, String probActual,
+    public ConsultaMedica(Empleado empleado, Date fechaConsulta, String prob_actual,
                           String revisionMedica, String prescripcion, String examen_fisico,
                           String motivo, int status) {
         this.empleado = empleado;
         this.fechaConsulta = fechaConsulta;
-        this.probActual = probActual;
+        this.prob_actual = prob_actual;
         this.revision_medica = revisionMedica;
         this.prescripcion = prescripcion;
         this.examen_fisico = examen_fisico;
         this.motivo = motivo;
         this.status = status;
+    }
+
+    public int getId_serv() {
+        return id_serv;
+    }
+
+    public void setId_serv(int id_serv) {
+        this.id_serv = id_serv;
     }
 
     public int getStatus() {
@@ -69,12 +66,12 @@ public class ConsultaMedica extends SugarRecord {
         this.fechaConsulta = fechaConsulta;
     }
 
-    public String getProbActual() {
-        return probActual;
+    public String getProb_actual() {
+        return prob_actual;
     }
 
-    public void setProbActual(String probActual) {
-        this.probActual = probActual;
+    public void setProb_actual(String prob_actual) {
+        this.prob_actual = prob_actual;
     }
 
     public String getPrescripcion() {
@@ -116,6 +113,12 @@ public class ConsultaMedica extends SugarRecord {
             return 1;
         }
         return 2;
+    }
+
+    public ArrayList<ConsultaMedica> getConsultaMedicaUnsynced(){
+        Log.d("HERE CONSULTA", "heeere");
+        ArrayList<ConsultaMedica> consultasMedicaUnsynced = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class, "status = ?", String.valueOf(0));
+        return consultasMedicaUnsynced;
     }
 
 }

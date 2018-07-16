@@ -7,17 +7,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
+        android:layout_margin="5dp"
         android:background="#FFFFFF"
-        android:layout_margin="5dp">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_gravity="center"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -27,17 +27,17 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/flechas_visto"/>
+                    android:src="@drawable/flechas_visto" />
 
                 <TextView
                     android:id="@+id/etPresionSistolica"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:singleLine="true"
-                    android:maxLength="3"
-                    android:textAlignment="center"
                     android:hint="Sist"
+                    android:maxLength="3"
+                    android:singleLine="true"
+                    android:textAlignment="center"
                     android:textColor="@android:color/black" />
 
                 <TextView
@@ -52,17 +52,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:singleLine="true"
-                    android:maxLength="3"
-                    android:textAlignment="center"
                     android:hint="Dist"
+                    android:maxLength="3"
+                    android:singleLine="true"
+                    android:textAlignment="center"
                     android:textColor="@android:color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginHorizontal="5dp"
+                    android:gravity="center"
                     android:text="mmHg" />
             </LinearLayout>
 
@@ -76,16 +76,16 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/corazon_visto"/>
+                android:src="@drawable/corazon_visto" />
 
             <TextView
                 android:id="@+id/etPulso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:singleLine="true"
-                android:maxLength="3"
                 android:hint="Pulso"
+                android:maxLength="3"
+                android:singleLine="true"
                 android:textColor="@android:color/black" />
 
             <TextView
@@ -93,7 +93,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:gravity="center"
-                android:text="ppm"/>
+                android:text="ppm" />
 
         </LinearLayout>
 
@@ -105,17 +105,17 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/temperatura_visto"/>
+                android:src="@drawable/temperatura_visto" />
 
             <TextView
                 android:id="@+id/etTemperatura"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:singleLine="true"
-                android:maxLength="4"
-                android:textAlignment="center"
                 android:hint="Temp"
+                android:maxLength="4"
+                android:singleLine="true"
+                android:textAlignment="center"
                 android:textColor="@android:color/black" />
 
             <TextView
@@ -123,7 +123,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:gravity="center"
-                android:text="°C"/>
+                android:text="°C" />
 
         </LinearLayout>
 

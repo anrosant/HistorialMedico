@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
+import com.example.cltcontrol.historialmedico.utils.NetworkStateChecker;
 import com.example.cltcontrol.historialmedico.utils.VolleySingleton;
 
 import org.json.JSONException;
@@ -45,6 +47,7 @@ import java.util.Objects;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.DATA_SAVED_BROADCAST;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_CONSULTA_MEDICA;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_SIGNOS;
 
 /**
@@ -72,9 +75,13 @@ public class SignosVitalesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Registar el receiver para sincronizar datos
+        Objects.requireNonNull(getContext()).registerReceiver(new NetworkStateChecker(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_signos_vitales, container, false);
         etPSistolica = view.findViewById(R.id.etPSistolica);
@@ -105,17 +112,17 @@ public class SignosVitalesFragment extends Fragment {
                 tvTitulo.setVisibility(View.GONE);
             }
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
-
             //Historial de Signos vitales
             //Obtiene los signos vitales de un empleado
             signosVitalesList = SignosVitales.find(SignosVitales.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
+
         }
 
         //Crea un adapter de dicha lista y la muestra en un listview
         adapterSignosVitales = new AdapterSignosVitales(getContext(), (ArrayList<SignosVitales>) signosVitalesList);
         lvSignosVitales.setAdapter(adapterSignosVitales);
 
-
+        //BOTON GUARDAR SIGNOS VITALES
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,22 +141,30 @@ public class SignosVitalesFragment extends Fragment {
                     Toast.makeText(getContext(), "Los valores están fuera de rango", Toast.LENGTH_SHORT).show();
                     SignosVitales.delete(signos);
                 }else{
-                    //guardarSignosVitalesLocal(presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText, NAME_NOT_SYNCED_WITH_SERVER);
-                    guardarSignosVitalesEnServidor(presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
-                }
+                    //Si es la primera vez que crea la consulta medica
+                    if (consultaMedica.getEmpleado() == null) {
+                        Date fechaConsulta = new Date();
+                        //Guarda el id del empleado en la consulta y la fecha de consulta
+                        //Dentro de guardarConsultaMedicaServidor guarda SignosVitales
+                        guardarConsultaMedicaEnServidor(empleado.getId(), fechaConsulta, presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
+                    }else{
+                        signos.setConsultaMedica(consultaMedica);
+                        signos.save();
+                        guardarSignosVitalesEnServidor(presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
+                    }
 
-                /*//Broadcast receiver to know the sync status
+                }
+                cargarSignosVitales(consultaMedica.getId());
+                //Broadcast receiver to know the sync status
                 broadcastReceiver = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-
-                        //Confirmar que se ha guardado
-                        Toast.makeText(getContext(),"Datos enviados al servidor ",Toast.LENGTH_SHORT).show();
+                        cargarSignosVitales(consultaMedica.getId());
                     }
                 };
 
                 Objects.requireNonNull(getContext()).registerReceiver(broadcastReceiver, new IntentFilter(DATA_SAVED_BROADCAST));
-            */}
+            }
         });
 
         ib_mostrar_ocultar_contendido.setOnClickListener(new View.OnClickListener() {
@@ -167,39 +182,48 @@ public class SignosVitalesFragment extends Fragment {
 
         return view;
     }
-    
+    /*
+    * Función que carga los signos vitales en la lista
+    * */
+    public void cargarSignosVitales(Long id){
+        ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
+                "consultamedica = ?", String.valueOf(id));
+        adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
+    }
     /*
     * Función que guarda los signos vitales localmente
     * */
-    public void guardarSignosVitalesLocal(String presionSistolicaText, String presionDistolicaText,
+    public void guardarSignosVitalesLocal(int id_serv, String presionSistolicaText, String presionDistolicaText,
                                      String temperaturatext, String pulsoText,int status){
-
+        signos.setId_serv(id_serv);
         signos.setPresion_sistolica(Integer.parseInt(presionSistolicaText));
         signos.setPresion_distolica(Integer.parseInt(presionDistolicaText));
         signos.setPulso(Integer.parseInt(pulsoText));
         signos.setTemperatura(Float.parseFloat(temperaturatext));
         signos.setStatus(status);
         signos.save();
-        //Guarda los datos y el id de la consulta medica o enfermeria
-        if(id_consulta_medica!=null){
-            //Si es la primera vez que crea la consulta medica
-            if (consultaMedica.getEmpleado() == null) {
-                //Guarda el id del empleado en la consulta y la fecha de consulta
-                consultaMedica.setEmpleado(empleado);
-                consultaMedica.setFechaConsulta(new Date());
-                consultaMedica.save();
-            }
-
-            signos.setConsultaMedica(consultaMedica);
-            signos.save();
-
-            ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
-                    "consultamedica = ?", String.valueOf(consultaMedica.getId()));
-            adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
-        }
 
         Toast.makeText(getContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();
         limpiarCampos();
+        cargarSignosVitales(signos.getConsultaMedica().getId());
+    }
+
+    /*
+    * Función que guarda una consulta médica localmente
+    * */
+    public void guardarConsultaMedicaLocal(Date fechaConsulta, int id_servidor, int status,
+                                           final String presionSistolicaText, final String presionDistolicaText,
+                                           final String temperaturatext, final String pulsoText){
+        consultaMedica.setId_serv(id_servidor);
+        consultaMedica.setEmpleado(empleado);
+        consultaMedica.setFechaConsulta(fechaConsulta);
+        consultaMedica.setStatus(status);
+        consultaMedica.save();
+
+        signos.setConsultaMedica(consultaMedica);
+        signos.save();
+        guardarSignosVitalesEnServidor(presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
+
     }
     /*
      * Limpia los campos luego de haber ingresado los signos vitales
@@ -223,20 +247,20 @@ public class SignosVitalesFragment extends Fragment {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVE_SIGNOS,
                 new Response.Listener<String>() {
+
                     @Override
                     public void onResponse(String response) {
                         progressDialog.dismiss();
                         try {
                             JSONObject obj = new JSONObject(response);
                             if (!obj.has("error")) {
-                                //if there is a success
-                                //storing the name to sqlite with status synced
-                                guardarSignosVitalesLocal(presionSistolicaText, presionDistolicaText,
+                                int id_serv_signos = Integer.parseInt(String.valueOf(obj.get("pk")));
+                                //Si se guarda en el servidor, guardar localmente con status 1
+                                guardarSignosVitalesLocal(id_serv_signos, presionSistolicaText, presionDistolicaText,
                                         temperaturatext, pulsoText, NAME_SYNCED_WITH_SERVER);
                             } else {
-                                //if there is some error
-                                //saving the name to sqlite with status unsynced
-                                guardarSignosVitalesLocal(presionSistolicaText, presionDistolicaText,
+                                //Si no se guarda en el servidor, guardar localmente con status 0
+                                guardarSignosVitalesLocal(0, presionSistolicaText, presionDistolicaText,
                                         temperaturatext, pulsoText, NAME_NOT_SYNCED_WITH_SERVER);
                             }
                         } catch (JSONException e) {
@@ -248,19 +272,84 @@ public class SignosVitalesFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
-                        //on error storing the name to sqlite with status unsynced
-                        guardarSignosVitalesLocal(presionSistolicaText, presionDistolicaText,
+                        Toast.makeText(getContext(),"No tiene conexión.",Toast.LENGTH_SHORT).show();
+                        //Si no se guarda en el servidor, guardar localmente con status 0
+                        guardarSignosVitalesLocal(0, presionSistolicaText, presionDistolicaText,
                                 temperaturatext, pulsoText, NAME_NOT_SYNCED_WITH_SERVER);
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/json; charset=utf-8");
+                params.put("consulta_medica", String.valueOf(signos.getConsultaMedica().getId_serv()));
+                params.put("atencion_enfermeria", "");
                 params.put("presion_sistolica", presionSistolicaText);
                 params.put("presion_distolica", presionDistolicaText);
-                params.put("temperatura", temperaturatext);
                 params.put("pulso", pulsoText);
-                params.put("consulta_medica", String.valueOf(0));
+                params.put("temperatura", temperaturatext);
+
+
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
+    }
+
+    /*
+     * Función que guardar una Consulta médica en el servidor
+     * */
+    private void guardarConsultaMedicaEnServidor(final long idEmpleado, final Date fechaConsulta,
+                                                 final String presionSistolicaText, final String presionDistolicaText,
+                                                 final String temperaturatext, final String pulsoText) {
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Guardando consulta médica...");
+        progressDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVE_CONSULTA_MEDICA,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            if (!obj.has("error")) {
+                                //Si se guarda en el servidor, guardar localmente con status 1
+                                guardarConsultaMedicaLocal(fechaConsulta, Integer.parseInt(String.valueOf(obj.get("pk"))),
+                                        NAME_SYNCED_WITH_SERVER, presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
+                            } else {
+                                //Si no se guarda en el servidor, guardar localmente con status 0
+                                guardarConsultaMedicaLocal(fechaConsulta, 0,NAME_NOT_SYNCED_WITH_SERVER,
+                                        presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Si no se guarda en el servidor, guardar localmente con status 0
+                        progressDialog.dismiss();
+                        guardarConsultaMedicaLocal(fechaConsulta, 0,NAME_NOT_SYNCED_WITH_SERVER,
+                                presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                // Falta Examen fisico
+                Map<String, String> params = new HashMap<>();
+                params.put("empleado", "1");
+                params.put("fecha", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fechaConsulta)));
+                params.put("motivo", "");
+                params.put("problema_actual", "");
+                params.put("revision", "");
+                params.put("prescripcion", "");
+                params.put("examen_fisico", "");
+
                 return params;
             }
         };

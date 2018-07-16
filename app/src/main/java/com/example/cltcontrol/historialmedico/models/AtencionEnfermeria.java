@@ -1,14 +1,18 @@
 package com.example.cltcontrol.historialmedico.models;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
 
 import java.util.Date;
 
 public class AtencionEnfermeria extends SugarRecord {
+    @Unique
+    private int id_serv;
     private Date fechaAtencion;
     //private String cedulaEmpleado;
     private Empleado empleado;
     private String motivoAtencion, diagnosticoEnfermeria, planCuidados;
+    private int status;
 
     public AtencionEnfermeria() {
     }
@@ -19,6 +23,22 @@ public class AtencionEnfermeria extends SugarRecord {
         this.motivoAtencion = motivoAtencion;
         this.diagnosticoEnfermeria = diagnosticoEnfermeria;
         this.planCuidados = planCuidados;
+    }
+
+    public int getId_serv() {
+        return id_serv;
+    }
+
+    public void setId_serv(int id_serv) {
+        this.id_serv = id_serv;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public Empleado getEmpleado() {

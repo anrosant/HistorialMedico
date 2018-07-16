@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.models.PatologiasPersonales;
+import com.example.cltcontrol.historialmedico.models.PermisoMedico;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.orm.util.NamingHelper;
 import java.util.ArrayList;
@@ -76,6 +79,7 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Guardar todo en el servidor
                 ArrayList<ConsultaMedica> consultaMedicas = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class,
                         "empleado = ?", String.valueOf(empleado.getId()));
                 HistorialConsultaMedica.adapterItemConsultaMedica.actualizarConsultaMedicaList(consultaMedicas);
@@ -97,11 +101,17 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
                 alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     //Funcion llamada cuando se pulsa el boton Si
                     public void onClick(DialogInterface arg0, int arg1) {
+
+                        //Eliminar en cascada Consulta del servidor
+
                         //Elimina la consulta vacía
                         ConsultaMedica consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.parseLong(idConsultaMedica));
                         //Elimina en cascada
                         Diagnostico.deleteAll(Diagnostico.class, "consultamedica = ?", idConsultaMedica);
                         SignosVitales.deleteAll(SignosVitales.class, "consultamedica = ?", idConsultaMedica);
+                        PermisoMedico.deleteAll(PermisoMedico.class, "consultamedica = ?", idConsultaMedica);
+                        PatologiasPersonales.deleteAll(PatologiasPersonales.class, "consultamedica = ?", idConsultaMedica);
+
                         //Reset el autoincrement
                         ConsultaMedica.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + NamingHelper.toSQLName(ConsultaMedica.class) + "'");
                         consultaMedica.delete();

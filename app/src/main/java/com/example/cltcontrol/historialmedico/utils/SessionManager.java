@@ -2,6 +2,7 @@ package com.example.cltcontrol.historialmedico.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Usuario;
@@ -26,9 +27,13 @@ public class SessionManager {
 
     public void crearSesion(Long usu_id) {
         List<Empleado> empleado = Empleado.find(Empleado.class, "usuario = ?", String.valueOf(usu_id));
-        editor.putString(NOMBRE_USUARIO, empleado.get(0).getUsuario().getUsuario());
-        editor.putString(CARGO, empleado.get(0).getOcupacion());
-        editor.commit();
+        Log.d("Empleados", String.valueOf(empleado.size()));
+        if(empleado.size()!=0){
+            editor.putString(NOMBRE_USUARIO, empleado.get(0).getUsuario().getUsuario());
+            editor.putString(CARGO, empleado.get(0).getOcupacion());
+            editor.commit();
+        }
+
     }
 
     public HashMap<String, String> obtenerInfoUsuario() {

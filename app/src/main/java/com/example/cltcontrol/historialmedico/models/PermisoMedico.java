@@ -1,15 +1,19 @@
 package com.example.cltcontrol.historialmedico.models;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
 
 import java.util.Date;
 
 public class PermisoMedico extends SugarRecord{
+    @Unique
+    private int id_serv;
     private Diagnostico diagnostico;
     private Date fecha_inicio, fecha_fin;
     private int dias_permiso;
     private String obsevaciones_permiso;
     private ConsultaMedica consulta_medica;
+    private int status;
 
     public PermisoMedico(){}
 
@@ -22,6 +26,21 @@ public class PermisoMedico extends SugarRecord{
         this.obsevaciones_permiso = obsevaciones_permiso;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getId_serv() {
+        return id_serv;
+    }
+
+    public void setId_serv(int id_serv) {
+        this.id_serv = id_serv;
+    }
     public ConsultaMedica getConsulta_medica() {
         return consulta_medica;
     }

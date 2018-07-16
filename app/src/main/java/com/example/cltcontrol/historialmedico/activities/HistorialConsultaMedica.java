@@ -50,7 +50,6 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
 
         //Busca las consultas medica de un empleado
         consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "empleado = ?", idEmpleado);
-        Log.d("TAMANIO", String.valueOf(consultaMedicaList.size()));
         //Muestra los datos de las consultas medica en el listview
         adapterItemConsultaMedica = new AdapterItemConsultaMedica(this, consultaMedicaList);
         lvConsultasMedicas.setAdapter(adapterItemConsultaMedica);
@@ -67,7 +66,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
                 String idConsulta = idConsultaMedica.getText().toString();*/
                 Intent inConsultaMedica = new Intent(getApplicationContext(),ConsultaMedicaNuevoActivity.class);
                 inConsultaMedica.putExtra("ID_CONSULTA_MEDICA",idConsultaMedica);
-                inConsultaMedica.putExtra("PRESEDENCIA","consultar");
+                inConsultaMedica.putExtra("PRECEDENCIA","consultar");
                 inConsultaMedica.putExtra("ID_EMPLEADO",idEmpleado);
                 inConsultaMedica.putExtra("CARGO", cargo);
                 startActivity(inConsultaMedica);

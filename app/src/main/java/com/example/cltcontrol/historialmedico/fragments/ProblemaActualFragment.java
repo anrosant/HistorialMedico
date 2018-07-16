@@ -56,7 +56,7 @@ public class ProblemaActualFragment extends Fragment {
 
         }
         if(precedencia.equals("consultar")){
-            et_problema_actual.setText(consultaMedica.getProbActual());
+            et_problema_actual.setText(consultaMedica.getProb_actual());
             btn_guardar.setText("Editar");
         }
         btn_guardar.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +84,7 @@ public class ProblemaActualFragment extends Fragment {
                 consultaMedica.setEmpleado(empleado);
                 consultaMedica.setFechaConsulta(new Date());
             }
-            consultaMedica.setProbActual(problema_actual);
+            consultaMedica.setProb_actual(problema_actual);
             consultaMedica.save();
 
             Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();

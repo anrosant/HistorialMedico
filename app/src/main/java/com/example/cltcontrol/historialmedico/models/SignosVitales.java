@@ -1,11 +1,17 @@
 package com.example.cltcontrol.historialmedico.models;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
+
+import java.util.ArrayList;
 
 public class SignosVitales extends SugarRecord {
+    @Unique
+    private int id_serv;
     private int presion_sistolica, presion_distolica, pulso;
     private float temperatura;
     private ConsultaMedica consulta_medica;
@@ -32,7 +38,13 @@ public class SignosVitales extends SugarRecord {
         this.atencion_enfermeria = atencion_enfermeria;
         this.status = status;
     }
+    public int getId_serv() {
+        return id_serv;
+    }
 
+    public void setId_serv(int id_serv) {
+        this.id_serv = id_serv;
+    }
     public int getStatus() {
         return status;
     }
@@ -104,6 +116,11 @@ public class SignosVitales extends SugarRecord {
             return 2;
         }
         return 3;
+    }
+
+    public ArrayList<SignosVitales> getSignosVitalesUnsynced(){
+        ArrayList<SignosVitales> signosVitalesUnsynced = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class, "status = ?", String.valueOf(0));
+        return signosVitalesUnsynced;
     }
 
 }

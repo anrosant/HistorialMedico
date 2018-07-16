@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
         miController = new EmpleadoController(getApplicationContext());
         miController.llenadoEnfermedades();
-
         //Si el usuario es correcto, lleva a la siguiente pantalla, caso contrario muestra mensaje
         btnIngresoSistema.setOnClickListener(new View.OnClickListener() {
             @Override

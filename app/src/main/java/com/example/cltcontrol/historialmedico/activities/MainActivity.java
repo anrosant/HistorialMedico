@@ -1,6 +1,8 @@
 package com.example.cltcontrol.historialmedico.activities;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.utils.EmpleadoController;
+import com.example.cltcontrol.historialmedico.utils.NetworkStateChecker;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
@@ -20,6 +23,7 @@ import com.example.cltcontrol.historialmedico.models.Usuario;
 import com.facebook.stetho.Stetho;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
+        //Registar el receiver para sincronizar datos
+        //registerReceiver(new NetworkStateChecker(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         miController = new EmpleadoController(getApplicationContext());
         miController.llenadoEnfermedades();

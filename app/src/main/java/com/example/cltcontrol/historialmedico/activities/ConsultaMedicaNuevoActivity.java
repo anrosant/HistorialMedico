@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.fragments.AnexarExamenesFragment;
 import com.example.cltcontrol.historialmedico.fragments.DiagnosticoFragment;
 import com.example.cltcontrol.historialmedico.fragments.ExamenFisicoFragment;
 import com.example.cltcontrol.historialmedico.fragments.MotivoAtencionFragment;
@@ -42,7 +43,7 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_consulta_medica);
 
-        misFragmentos = new Fragment[10];
+        misFragmentos = new Fragment[11];
         misFragmentos[0] = new SignosVitalesFragment();
         misFragmentos[1] = new MotivoAtencionFragment();
         misFragmentos[2] = new PatologiasPersonalesFragment();
@@ -50,10 +51,10 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         misFragmentos[4] = new ProblemaActualFragment();
         misFragmentos[5] = new RevisionMedicaFragment();
         misFragmentos[6] = new ExamenFisicoFragment();
-        //misFragmentos[8] = new anexa examenes
-        misFragmentos[7] = new DiagnosticoFragment();
-        misFragmentos[8] = new PrescripcionFragment();
-        misFragmentos[9] = new PermisosMedicosFragment();
+        misFragmentos[7] = new AnexarExamenesFragment();
+        misFragmentos[8] = new DiagnosticoFragment();
+        misFragmentos[9] = new PrescripcionFragment();
+        misFragmentos[10] = new PermisosMedicosFragment();
 
         //Permite regresar al historial
         btn_ok = findViewById(R.id.btn_ok);

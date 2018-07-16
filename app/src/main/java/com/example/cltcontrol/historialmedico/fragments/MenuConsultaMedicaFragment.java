@@ -26,7 +26,7 @@ public class MenuConsultaMedicaFragment extends Fragment {
             R.id.btnProblemaActual,
             R.id.btnRevisionMedica,
             R.id.btnExamenFisico,
-            //R.id.btnAnexarExamenes,
+            R.id.btnAnexarExamenes,
             R.id.btnDiagnostico,
             R.id.btnPrescripcion,
             R.id.btnPermisosMedicos};

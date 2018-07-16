@@ -16,6 +16,7 @@ public class SignosVitales extends SugarRecord {
     private float temperatura;
     private ConsultaMedica consulta_medica;
     private AtencionEnfermeria atencion_enfermeria;
+    private Empleado empleado;
 
     private int status;
 
@@ -45,6 +46,15 @@ public class SignosVitales extends SugarRecord {
     public void setId_serv(int id_serv) {
         this.id_serv = id_serv;
     }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
     public int getStatus() {
         return status;
     }

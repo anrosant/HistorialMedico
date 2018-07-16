@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.SigVitalRapidoActivity">
+
+    <fragment
+        android:id="@+id/frDatosEmpleado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.example.cltcontrol.historialmedico.fragments.DatosEmpleadoFragment"
+        tools:layout="@layout/fragment_datos_empleado">
+    </fragment>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/my_style_title"
+        android:padding="10dp"
+        android:text="Signos vitales"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:id="@+id/contenedorSigno"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="-3dp"
+        android:background="@drawable/my_style_content">
+
+    </FrameLayout>
+
+</LinearLayout>

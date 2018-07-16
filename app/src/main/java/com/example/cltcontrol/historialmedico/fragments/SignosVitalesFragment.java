@@ -349,7 +349,6 @@ public class SignosVitalesFragment extends Fragment {
                 params.put("revision", "");
                 params.put("prescripcion", "");
                 params.put("examen_fisico", "");
-
                 return params;
             }
         };

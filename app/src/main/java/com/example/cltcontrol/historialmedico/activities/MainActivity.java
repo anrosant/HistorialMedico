@@ -59,13 +59,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
+        Button btnIngresoGaleria = findViewById(R.id.pruebaImagen);
+        btnIngresoGaleria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                abrirPruebaGaleria();
+            }
+        });
+
     }
     /*
      * Lleva a la ventana de BuscarEmpleadoActivity
      * */
     private void siguienteActivity(){
         Intent inbuscarempleado = new Intent(this, BuscarEmpleadoActivity.class);
+
         startActivity(inbuscarempleado);
+    }
+
+    private void abrirPruebaGaleria(){
+        Intent prueba = new Intent(this, GaleriaFragmentActivity.class);
+
+        startActivity(prueba);
     }
 
     /*

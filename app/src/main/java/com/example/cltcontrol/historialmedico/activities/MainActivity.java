@@ -22,6 +22,7 @@ import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
+import com.example.cltcontrol.historialmedico.models.PatologiasFamiliares;
 import com.example.cltcontrol.historialmedico.models.PatologiasPersonales;
 import com.example.cltcontrol.historialmedico.models.PermisoMedico;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
@@ -120,41 +121,48 @@ public class MainActivity extends AppCompatActivity {
                 dialog.setMessage("Cargando...");
                 dialog.show();
                 try {
-                    String usuario = response.getString("usuarioId");
-                    guardarUsuario(usuario);
+                    String msj = response.getString("msj");
+                    if(msj.equalsIgnoreCase("Ingreso exitoso")){
+                        String usuario = response.getString("usuarioId");
+                        guardarUsuario(usuario);
 
-                    String enfermedad = response.getString("enfermedad");
-                    guardarEnfermedad(enfermedad);
+                        String enfermedad = response.getString("enfermedad");
+                        guardarEnfermedad(enfermedad);
 
-                    String empleados = response.getString("empleado");
-                    guardarEmpleado(empleados);
+                        String empleados = response.getString("empleado");
+                        guardarEmpleado(empleados);
 
-                    String atencionEnf = response.getString("atencionEnfermeria");
-                    guardarAtencionEnfermeria(atencionEnf);
+                        String atencionEnf = response.getString("atencionEnfermeria");
+                        guardarAtencionEnfermeria(atencionEnf);
 
-                    String consultaMed = response.getString("consultaMedica");
-                    guardarConsultaMedica(consultaMed);
+                        String consultaMed = response.getString("consultaMedica");
+                        guardarConsultaMedica(consultaMed);
 
-                    String patologiasPers = response.getString("patologiasPersonales");
-                    guardarPatologiaPersonales(patologiasPers);
+                        String patologiasPers = response.getString("patologiasPersonales");
+                        guardarPatologiaPersonales(patologiasPers);
 
-                    String patologiasFam = response.getString("patologiasFamiliares");
-                    //guardarPatologiaFamiliares(patologiasFam);
+                        String patologiasFam = response.getString("patologiasFamiliares");
+                        guardarPatologiaFamiliares(patologiasFam);
 
-                    String signosVitales = response.getString("signosVitales");
-                    guardarSignosVitales(signosVitales);
+                        String signosVitales = response.getString("signosVitales");
+                        guardarSignosVitales(signosVitales);
 
-                    String diagnostico = response.getString("diagnostico");
-                    guardarDiagnostico(diagnostico);
+                        String diagnostico = response.getString("diagnostico");
+                        guardarDiagnostico(diagnostico);
 
-                    String permisoMedico = response.getString("permisoMedico");
-                    guardarPermisoMedico(permisoMedico);
+                        String permisoMedico = response.getString("permisoMedico");
+                        guardarPermisoMedico(permisoMedico);
 
-                    crearSesion();
-                    siguienteActivity();
+                        crearSesion();
+                        siguienteActivity();
+
+                    }else{
+                        dialog.dismiss();
+                        Toast.makeText(getApplicationContext(), msj, Toast.LENGTH_SHORT).show();
+                    }
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    dialog.dismiss();
                 }
             }
 
@@ -248,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
 
                 nuevoEmpleado.setId_serv(idServ);
                 nuevoEmpleado.setStatus(1);
+                nuevoEmpleado.setFicha_actual(Integer.parseInt(fields.getString("actual_ficha_medica")));
                 List<Usuario> userList = Usuario.find(Usuario.class, "idserv = ?",fields.getString("nombre_usuario"));
 
                 if(userList.size()!=0){
@@ -401,8 +410,8 @@ public class MainActivity extends AppCompatActivity {
      * Función que guarda Signos Vitales localmente
      * */
     private void guardarSignosVitales(String response) {
-        ConsultaMedica consulta_medica = null;
-        AtencionEnfermeria atencionEnfermeria = null;
+        ConsultaMedica consulta_medica;
+        AtencionEnfermeria atencionEnfermeria;
         int presion_sistolica, presion_distolica, pulso;
         float temperatura;
         JSONArray obj;
@@ -444,8 +453,7 @@ public class MainActivity extends AppCompatActivity {
     /*
      * Función que guarda Patologia Familiares localmente
      * */
-    /*private void guardarPatologiaFamiliares(String response) {
-        String enfermedad;
+    private void guardarPatologiaFamiliares(String response) {
         String parentesco;
         JSONArray obj;
         try {
@@ -453,17 +461,23 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < obj.length(); i++) {
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
-                enfermedad = fields.getString("enfermedad");
                 parentesco = fields.getString("parentesco");
-                PatologiasFamilires patologiasFamilires = new PatologiasFamilires(enfermedad, parentesco);
+                PatologiasFamiliares patologiasFamilires = new PatologiasFamiliares();
                 patologiasFamilires.setId_serv(Integer.parseInt(objectJSON.getString("pk")));
+                patologiasFamilires.setId_ficha(Integer.parseInt(fields.getString("ficha_medica")));
+                List<Enfermedad> enfermedadList = Enfermedad.find(Enfermedad.class, "idserv = ?",fields.getString("enfermedad"));
+                if(enfermedadList.size()!=0){
+                    Enfermedad enfermedad = enfermedadList.get(0);
+                    patologiasFamilires.setEnfermedad(enfermedad);
+                }
+                patologiasFamilires.setParentesco(parentesco);
                 patologiasFamilires.setStatus(1);
                 patologiasFamilires.save();
             }
         }catch (JSONException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
     /*
      * Crea una sesión y va a la siguiente pantalla
@@ -547,11 +561,11 @@ public class MainActivity extends AppCompatActivity {
     * Crea una sesión y guarda el usuario
     * */
     private void crearSesion(){
+        dialog.dismiss();
         SessionManager sesion = new SessionManager(getApplicationContext());
         Long id = Usuario.find(Usuario.class, "usuario = ? ",
                 usuario).get(0).getId();
         sesion.crearSesion(id);
-        dialog.dismiss();
     }
 
     /*

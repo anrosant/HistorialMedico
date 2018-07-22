@@ -30,7 +30,7 @@ public class Empleado extends SugarRecord {
     private String nombre, apellido, correo, direccion,profesion, estadoCivil, sexo,
             lugarNacimiento, ocupacion;
     private Date fechaNacimiento, fechaRegistro;
-    private int edad,foto, status;
+    private int edad,foto, status, ficha_actual;
     private Usuario usuario;
     private Context context;
 
@@ -79,6 +79,15 @@ public class Empleado extends SugarRecord {
         this.foto = foto;
         this.usuario=usuario;
     }
+
+    public int getFicha_actual() {
+        return ficha_actual;
+    }
+
+    public void setFicha_actual(int ficha_actual) {
+        this.ficha_actual = ficha_actual;
+    }
+
     public int getId_serv() {
         return id_serv;
     }

@@ -74,12 +74,12 @@ public class MainActivity extends AppCompatActivity {
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
+
         if(SessionManager.getLoggedStatus(getApplicationContext())) {
             SessionManager sessionManager = new SessionManager(getApplicationContext());
             Toast.makeText(getApplicationContext(),"usuario" + sessionManager.obtenerInfoUsuario().get("nombre_usuario"),Toast.LENGTH_SHORT).show();
             siguienteActivity();
         }else{
-
             miController = new EmpleadoController(getApplicationContext());
             miController.llenadoEnfermedades();
             //Si el usuario es correcto, lleva a la siguiente pantalla, caso contrario muestra mensaje
@@ -97,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+        Button btnIngresoGaleria = findViewById(R.id.pruebaImagen);
+        btnIngresoGaleria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                abrirPruebaGaleria();
+            }
+        });
 
     }
 
@@ -165,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),String.valueOf(error),Toast.LENGTH_SHORT).show();
             }
         };
+
     }
 
     /*
@@ -365,22 +374,30 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
                 lugar = fields.getString("lugar_patologia");
                 detalle = fields.getString("detalle_patologia");
-                List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?",fields.getString("consulta_medica"));
+                List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?", fields.getString("consulta_medica"));
 
-                if(consultaMedicaList.size()!=0){
+                if (consultaMedicaList.size() != 0) {
                     consulta_medica = consultaMedicaList.get(0);
                 }
-                PatologiasPersonales patologiasPersonales = new PatologiasPersonales(consulta_medica,lugar, detalle);
+                PatologiasPersonales patologiasPersonales = new PatologiasPersonales(consulta_medica, lugar, detalle);
                 patologiasPersonales.setId_serv(Integer.parseInt(objectJSON.getString("pk")));
                 patologiasPersonales.setStatus(1);
                 patologiasPersonales.save();
             }
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
     /*
+    * Abre el activity GaleriaFragmentActivity
+    * */
+    private void abrirPruebaGaleria(){
+            Intent prueba = new Intent(this, GaleriaFragmentActivity.class);
+            startActivity(prueba);
+        }
+
+
+        /*
      * Función que guarda Signos Vitales localmente
      * */
     private void guardarSignosVitales(String response) {
@@ -525,6 +542,10 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    /*
+    * Crea una sesión y guarda el usuario
+    * */
     private void crearSesion(){
         SessionManager sesion = new SessionManager(getApplicationContext());
         Long id = Usuario.find(Usuario.class, "usuario = ? ",
@@ -541,6 +562,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(inbuscarempleado);
     }
 
+    /*
+    * Convierte la fecha(String) en Date
+    * */
     private Date convertirFecha(String fecha){
         //Fechas
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-mmm");

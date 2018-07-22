@@ -54,6 +54,9 @@
             android:name=".activities.SigVitalRapidoActivity"
             android:label="Signos vitales"/>
         <activity
+            android:name=".activities.GaleriaFragmentActivity"
+            android:label="Galeria"/>
+        <activity
             android:name=".activities.ConsultaMedicaNuevoActivity"
             android:label="@string/consulta_medica_nuevo"
             android:configChanges="screenSize|orientation"

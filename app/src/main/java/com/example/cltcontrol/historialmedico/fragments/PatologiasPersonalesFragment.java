@@ -26,7 +26,6 @@ import com.example.cltcontrol.historialmedico.adapter.AdapterPatologiasPersonale
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
-import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.models.PatologiasPersonales;
 import com.example.cltcontrol.historialmedico.utils.VolleySingleton;
 
@@ -43,8 +42,8 @@ import java.util.Objects;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_CONSULTA_MEDICA;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_PATOLOGIAS_PERSONALES;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_PATOLOGIAS_PERSONALES;
 
 public class PatologiasPersonalesFragment extends Fragment {
 
@@ -202,7 +201,7 @@ public class PatologiasPersonalesFragment extends Fragment {
      * */
     private void guardarConsultaMedicaEnServidor(Long id, final Date fechaConsulta) {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVE_CONSULTA_MEDICA,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CONSULTA_MEDICA,
                 new Response.Listener<String>() {
 
                     @Override
@@ -257,7 +256,7 @@ public class PatologiasPersonalesFragment extends Fragment {
         progressDialog.setMessage("Guardando diagnóstico...");
         progressDialog.show();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVE_PATOLOGIAS_PERSONALES,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_PATOLOGIAS_PERSONALES,
                 new Response.Listener<String>() {
 
                     @Override

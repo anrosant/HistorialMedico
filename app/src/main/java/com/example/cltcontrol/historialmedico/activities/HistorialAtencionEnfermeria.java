@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -55,7 +56,6 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
 
 
-
         if(cargo.equals("Doctor")){
             btnAgregarAtencionEnfermeria.setVisibility(View.GONE);
         }
@@ -72,6 +72,7 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
                 atencionEnfermeria.putExtra("PRECEDENCIA","consultar");
                 atencionEnfermeria.putExtra("ID_EMPLEADO",idEmpleado);
                 atencionEnfermeria.putExtra("CARGO", cargo);
+
                 startActivity(atencionEnfermeria);
             }
         });

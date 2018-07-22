@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.cltcontrol.historialmedico.adapter.AdapterSignosVitales;
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
@@ -47,8 +45,8 @@ import java.util.Objects;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.DATA_SAVED_BROADCAST;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_CONSULTA_MEDICA;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_SIGNOS;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SIGNOS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -245,7 +243,7 @@ public class SignosVitalesFragment extends Fragment {
         progressDialog.setMessage("Guardando signos vitales...");
         progressDialog.show();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVE_SIGNOS,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SIGNOS,
                 new Response.Listener<String>() {
 
                     @Override
@@ -307,7 +305,7 @@ public class SignosVitalesFragment extends Fragment {
         progressDialog.setMessage("Guardando consulta médica...");
         progressDialog.show();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVE_CONSULTA_MEDICA,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CONSULTA_MEDICA,
                 new Response.Listener<String>() {
 
                     @Override

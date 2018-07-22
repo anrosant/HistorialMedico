@@ -48,8 +48,8 @@ import java.util.Objects;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_CONSULTA_MEDICA;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_DIAGNOSTICO;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_DIAGNOSTICO;
 
 public class DiagnosticoFragment extends Fragment {
 
@@ -270,9 +270,8 @@ public class DiagnosticoFragment extends Fragment {
      * */
     private void guardarConsultaMedicaEnServidor(Long id, final Date fechaConsulta) {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVE_CONSULTA_MEDICA,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CONSULTA_MEDICA,
                 new Response.Listener<String>() {
-
                     @Override
                     public void onResponse(String response) {
                         progressDialog.dismiss();
@@ -325,7 +324,7 @@ public class DiagnosticoFragment extends Fragment {
         progressDialog.setMessage("Guardando diagnóstico...");
         progressDialog.show();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVE_DIAGNOSTICO,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_DIAGNOSTICO,
                 new Response.Listener<String>() {
 
                     @Override

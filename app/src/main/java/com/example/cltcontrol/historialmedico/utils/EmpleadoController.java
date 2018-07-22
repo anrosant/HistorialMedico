@@ -23,24 +23,24 @@ public class EmpleadoController {
 
     //Constructores
     public EmpleadoController(){
-        Iterator<Empleado> lista_empleados = Empleado.findAll(Empleado.class);
+        /*Iterator<Empleado> lista_empleados = Empleado.findAll(Empleado.class);
         Iterator<Usuario> lista_usuarios = Usuario.findAll(Usuario.class);
         if(!lista_empleados.hasNext() && !lista_usuarios.hasNext()){
             this.llenadoUsuarios();
             this.llenadoEmpleados();
 
-        }
+        }*/
     }
 
     public EmpleadoController(Context miActivity) {
         this.miActivity = miActivity;
-        Iterator<Empleado> lista_empleados = Empleado.findAll(Empleado.class);
+        /*Iterator<Empleado> lista_empleados = Empleado.findAll(Empleado.class);
         Iterator<Usuario> lista_usuarios = Usuario.findAll(Usuario.class);
         if(!lista_empleados.hasNext() && !lista_usuarios.hasNext()){
             this.llenadoUsuarios();
             this.llenadoEmpleados();
 
-        }
+        }*/
     }
 
     //Getter de registros Usuarios y Empleados
@@ -68,10 +68,8 @@ public class EmpleadoController {
     //Metodos
     //Setter de registros Usuarios y Empleados
     private void llenadoUsuarios(){
-        usuario_doctor = new Usuario("jgarcia", "jgarcia");
+        usuario_doctor = new Usuario("jgarcia");
         usuario_doctor.save();
-        usuario_enfermera = new Usuario("anrosant","anrosant");
-        usuario_enfermera.save();
         this.setLista_usuarios(Usuario.listAll(Usuario.class));
     }
 

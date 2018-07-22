@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cltcontrol.historialmedico.adapter.AdapterItemConsultaMedica;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
@@ -62,8 +63,10 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 idConsultaMedica= String.valueOf(consultaMedicaList.get(position).getId());
-                /*idConsultaMedica = view.findViewById(R.id.tvIdAtencion);
-                String idConsulta = idConsultaMedica.getText().toString();*/
+                Log.d("IDCONSULTA",idConsultaMedica);
+                Log.d("IDEMPLEADO",idEmpleado);
+                Log.d("IDCARGO",cargo);
+
                 Intent inConsultaMedica = new Intent(getApplicationContext(),ConsultaMedicaNuevoActivity.class);
                 inConsultaMedica.putExtra("ID_CONSULTA_MEDICA",idConsultaMedica);
                 inConsultaMedica.putExtra("PRECEDENCIA","consultar");

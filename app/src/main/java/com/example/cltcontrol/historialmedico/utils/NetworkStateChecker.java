@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -26,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_CONSULTA_MEDICA;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
 
 public class NetworkStateChecker extends BroadcastReceiver {
 
@@ -105,7 +104,7 @@ public class NetworkStateChecker extends BroadcastReceiver {
         final String finalId_consulta_medica = id_consulta_medica;
         final String finalId_atencion_enfermeria = id_atencion_enfermeria;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Identifiers.URL_SAVE_SIGNOS,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Identifiers.URL_SIGNOS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -152,7 +151,7 @@ public class NetworkStateChecker extends BroadcastReceiver {
     private void guardarConsultaMedica(final ConsultaMedica consulta, Empleado empleado, final Date fechaConsulta, final String probActual,
                                        final String revisionMedica, final String prescripcion, final String examen_fisico,
                                        final String motivo) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVE_CONSULTA_MEDICA,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CONSULTA_MEDICA,
                 new Response.Listener<String>() {
 
                     @Override

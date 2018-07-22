@@ -1,9 +1,11 @@
 package com.example.cltcontrol.historialmedico.models;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
 
 public class Enfermedad extends SugarRecord{
-
+    @Unique
+    private int id_serv, status;
     private String codigo;
     private String nombre;
     private String grupo;
@@ -20,6 +22,22 @@ public class Enfermedad extends SugarRecord{
         this.codigo = codigo;
         this.nombre = nombre;
         this.grupo = grupo;
+    }
+
+    public int getId_serv() {
+        return id_serv;
+    }
+
+    public void setId_serv(int id_serv) {
+        this.id_serv = id_serv;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getCodigo() {

@@ -1,9 +1,26 @@
 package com.example.cltcontrol.historialmedico.models;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.example.cltcontrol.historialmedico.utils.VolleySingleton;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
+import java.util.List;
+import java.util.TreeMap;
+
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_EMPLEADO;
 
 public class Empleado extends SugarRecord {
     @Unique
@@ -13,8 +30,9 @@ public class Empleado extends SugarRecord {
     private String nombre, apellido, correo, direccion,profesion, estadoCivil, sexo,
             lugarNacimiento, ocupacion;
     private Date fechaNacimiento, fechaRegistro;
-    private int edad,foto;
+    private int edad,foto, status;
     private Usuario usuario;
+    private Context context;
 
     //Constructor vacío
     public Empleado(){super();}
@@ -61,6 +79,30 @@ public class Empleado extends SugarRecord {
         this.foto = foto;
         this.usuario=usuario;
     }
+    public int getId_serv() {
+        return id_serv;
+    }
+
+    public void setId_serv(int id_serv) {
+        this.id_serv = id_serv;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -180,5 +222,6 @@ public class Empleado extends SugarRecord {
     public void setFoto(int foto) {
         this.foto = foto;
     }
+
 
 }

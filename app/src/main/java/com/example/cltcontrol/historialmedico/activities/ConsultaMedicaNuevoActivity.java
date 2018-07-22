@@ -80,7 +80,7 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Guardar todo en el servidor
+                //Guardar
                 ArrayList<ConsultaMedica> consultaMedicas = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class,
                         "empleado = ?", String.valueOf(empleado.getId()));
                 HistorialConsultaMedica.adapterItemConsultaMedica.actualizarConsultaMedicaList(consultaMedicas);

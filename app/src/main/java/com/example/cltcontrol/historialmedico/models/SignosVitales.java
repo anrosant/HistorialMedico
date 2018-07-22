@@ -21,7 +21,19 @@ public class SignosVitales extends SugarRecord {
     private int status;
 
     public SignosVitales() {}
-
+    /*
+     * Constructor sin Consulta Medica ni atencion enfermeria
+     * */
+    public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, float temperatura, int status) {
+        this.presion_sistolica = presion_sistolica;
+        this.presion_distolica = presion_distolica;
+        this.pulso = pulso;
+        this.temperatura = temperatura;
+        this.status = status;
+    }
+    /*
+    * Constructor con Consulta Medica
+    * */
     public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, float temperatura, ConsultaMedica consultaMedica, int status) {
         this.presion_sistolica = presion_sistolica;
         this.presion_distolica = presion_distolica;
@@ -30,7 +42,9 @@ public class SignosVitales extends SugarRecord {
         this.consulta_medica = consultaMedica;
         this.status = status;
     }
-
+    /*
+    * Constructor con Atencion enfermeria
+    * */
     public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, float temperatura, AtencionEnfermeria atencion_enfermeria, int status) {
         this.presion_sistolica = presion_sistolica;
         this.presion_distolica = presion_distolica;
@@ -39,6 +53,7 @@ public class SignosVitales extends SugarRecord {
         this.atencion_enfermeria = atencion_enfermeria;
         this.status = status;
     }
+
     public int getId_serv() {
         return id_serv;
     }

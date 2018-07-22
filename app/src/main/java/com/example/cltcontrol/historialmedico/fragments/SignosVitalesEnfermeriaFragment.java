@@ -47,8 +47,8 @@ import java.util.Objects;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.DATA_SAVED_BROADCAST;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_ATENCION_ENFERMERIA;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SAVE_SIGNOS;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_ATENCION_ENFERMERIA;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SIGNOS;
 
 public class SignosVitalesEnfermeriaFragment extends Fragment {
 
@@ -114,11 +114,9 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
             }
 
             atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Long.valueOf(id_atencion));
-            Log.d("ATENCIONENF", String.valueOf(atencionEnfermeria));
             //Historial de Signos vitales
             //Obtiene los signos vitales de un empleado
             signosVitalesList = SignosVitales.find(SignosVitales.class, "atencionenfermeria = ?", String.valueOf(id_atencion));
-            Log.d("LISTASIGNOS", String.valueOf(signosVitalesList.size()));
         }else{ //Esta es la parte de signos vitales rapidos
             signosVitalesList = SignosVitales.find(SignosVitales.class, "empleado = ?", String.valueOf(id_empleado));
         }
@@ -146,19 +144,23 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
                     SignosVitales.delete(signos);
                 }else{
                     //Si es la primera vez que crea la atención enfermería
-                    if (atencionEnfermeria.getEmpleado() == null) {
+                    if (id_atencion!=null && atencionEnfermeria.getEmpleado() == null) {
                         Date fechaAtencion = new Date();
 
                         //Guarda el id del empleado en la atención y la fecha de atención
                         guardarAtencionEnfermeriaEnServidor(empleado.getId(), fechaAtencion, presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
-                    }else{
+                        cargarSignosVitales(atencionEnfermeria.getId());
+                    }else if(atencionEnfermeria.getEmpleado()!=null){
                         signos.setAtencion_enfermeria(atencionEnfermeria);
                         signos.save();
                         guardarSignosVitalesEnServidor(presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
+                        cargarSignosVitales(atencionEnfermeria.getId());
+                    }else{
+                        cargarSignosVitalesSin();
                     }
 
                 }
-                cargarSignosVitales(atencionEnfermeria.getId());
+                //cargarSignosVitales(atencionEnfermeria.getId());
                 //Broadcast receiver to know the sync status
                 broadcastReceiver = new BroadcastReceiver() {
                     @Override
@@ -166,7 +168,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
 
                         //Confirmar que se ha guardado
                         Toast.makeText(getContext(),"Datos enviados al servidor ",Toast.LENGTH_SHORT).show();
-                        cargarSignosVitales(atencionEnfermeria.getId());
+                        //cargarSignosVitales(atencionEnfermeria.getId());
                     }
                 };
 
@@ -197,6 +199,13 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
                 "atencionenfermeria = ?", String.valueOf(id));
         adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
     }
+
+    public void cargarSignosVitalesSin(){
+        ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
+                "empleado = ?", String.valueOf(id_empleado));
+        adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
+    }
+
     /*
      * Función que guarda los signos vitales localmente
      * */
@@ -254,7 +263,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
         progressDialog.setMessage("Guardando datos en el servidor...");
         progressDialog.show();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVE_SIGNOS,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SIGNOS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -309,7 +318,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
                                                      final String presionSistolicaText, final String presionDistolicaText,
                                                      final String temperaturatext, final String pulsoText) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SAVE_ATENCION_ENFERMERIA,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ATENCION_ENFERMERIA,
                 new Response.Listener<String>() {
 
                     @Override

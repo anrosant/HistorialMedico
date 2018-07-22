@@ -1,8 +1,10 @@
 package com.example.cltcontrol.historialmedico.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -14,6 +16,8 @@ import com.example.cltcontrol.historialmedico.adapter.AdapterItemEmpleado;
 import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +86,32 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
         }catch (Exception e){
             Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
         }
+    }
+
+    /*
+    * Si presiona atrás puede salir de la sesión
+    * */
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+        //seleccionamos la cadena a mostrar
+        alertbox.setMessage("¿Desea cerrar sesión?");
+        //elegimos un positivo SI
+        alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            //Funcion llamada cuando se pulsa el boton Si
+            public void onClick(DialogInterface arg0, int arg1) {
+                SessionManager sesion = new SessionManager(getApplicationContext());
+                sesion.cerrarSesion(getApplicationContext());
+                BuscarEmpleadoActivity.super.onBackPressed();
+            }
+        });
+        //elegimos un positivo NO
+        alertbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+            }
+        });
+        //mostramos el alertbox
+        alertbox.show();
     }
 
 }

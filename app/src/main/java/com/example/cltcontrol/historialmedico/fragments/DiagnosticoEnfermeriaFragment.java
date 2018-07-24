@@ -9,9 +9,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.interfaces.IResult;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.service.RequestService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.Objects;
@@ -22,7 +28,6 @@ import java.util.Objects;
 public class DiagnosticoEnfermeriaFragment extends Fragment {
 
     private String idAtencion=null;
-    //private String idAtencion2=null;
     private String precedencia, idEmpleado,cargo;
     private Bundle bun;
     private Button boton;

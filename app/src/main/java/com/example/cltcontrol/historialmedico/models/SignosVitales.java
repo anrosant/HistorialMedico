@@ -144,8 +144,7 @@ public class SignosVitales extends SugarRecord {
     }
 
     public ArrayList<SignosVitales> getSignosVitalesUnsynced(){
-        ArrayList<SignosVitales> signosVitalesUnsynced = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class, "status = ?", String.valueOf(0));
-        return signosVitalesUnsynced;
+        return (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class, "status = ?", String.valueOf(0));
     }
 
 }

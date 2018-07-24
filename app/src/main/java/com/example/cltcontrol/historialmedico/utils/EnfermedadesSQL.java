@@ -1,12 +1,11 @@
 package com.example.cltcontrol.historialmedico.utils;
-
+/*" ('A00','Cólera','|I1'),\n" +
+            " ('A000','Colera debido a vibrio cholerae o1, biotipo cholerae',NULL),\n" +
+            " ('A001','Colera debido a vibrio cholerae o1, biotipo el tor',NULL),\n" +
+            " ('A009','Colera no especificado',NULL),\n" +*/
 public class EnfermedadesSQL {
 
     public static final String REGISTRO_ENFERMEDADES = "INSERT INTO 'enfermedad' ('codigo','nombre','grupo') VALUES \n" +
-            " ('A00','Cólera','|I1'),\n" +
-            " ('A000','Colera debido a vibrio cholerae o1, biotipo cholerae',NULL),\n" +
-            " ('A001','Colera debido a vibrio cholerae o1, biotipo el tor',NULL),\n" +
-            " ('A009','Colera no especificado',NULL),\n" +
             " ('A01','Fiebres tifoidea y paratifoidea','|I1'),\n" +
             " ('A010','Fiebre tifoidea',NULL),\n" +
             " ('A011','Fiebre paratifoidea a',NULL),\n" +

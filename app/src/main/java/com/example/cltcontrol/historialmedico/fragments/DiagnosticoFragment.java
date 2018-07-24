@@ -1,6 +1,5 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,35 +20,31 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.example.cltcontrol.historialmedico.adapter.AdapterItemDiagnostico;
 import com.example.cltcontrol.historialmedico.adapter.AdapterEnfermedades;
 import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.interfaces.IResult;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
-import com.example.cltcontrol.historialmedico.utils.VolleySingleton;
+import com.example.cltcontrol.historialmedico.service.RequestService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_DIAGNOSTICO;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertirFecha;
 
 public class DiagnosticoFragment extends Fragment {
 
@@ -58,6 +53,7 @@ public class DiagnosticoFragment extends Fragment {
     private AdapterEnfermedades adaptadorEnfermedades;
     private EditText etBuscarEnfermedades;
     private Enfermedad enfermedad;
+    private Diagnostico diagnostico;
     private String tipo_enfermedad,id_consulta_medica, id_empleado, cargo;
     private AdapterItemDiagnostico adapterItemDiagnostico;
     private Button btn_guardar;
@@ -71,7 +67,13 @@ public class DiagnosticoFragment extends Fragment {
     private List<Diagnostico> diagnosticoList;
     private List<Enfermedad> newList;
     private TextView tvTitulo;
-    private Diagnostico diagnostico;
+
+    IResult mResultCallback = null;
+    RequestService requestService;
+    int idEmpleadoServidor;
+
+    Date fechaConsulta;
+    String TAGDIAGNOSTICO = "tagdiagnostico", TAGCONSULTA="tagconsulta";
 
     public DiagnosticoFragment() {}
 
@@ -94,6 +96,7 @@ public class DiagnosticoFragment extends Fragment {
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
         id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+        idEmpleadoServidor = empleado.getId_serv();
         cargo = extras.getString("CARGO");
 
         if(cargo.equals("Enfermera")){
@@ -160,6 +163,7 @@ public class DiagnosticoFragment extends Fragment {
                     public void onItemClick(View view, int position) {
                         Toast.makeText(getContext(), "Se ha escogido " + adaptadorEnfermedades.getListaEnfermedades().get(position).getNombre(), Toast.LENGTH_SHORT).show();
                         enfermedad = adaptadorEnfermedades.getListaEnfermedades().get(position);
+                        Log.d("ENFERMEDAD", String.valueOf(enfermedad.getId()));
                     }
 
                     @Override
@@ -182,24 +186,21 @@ public class DiagnosticoFragment extends Fragment {
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(enfermedad == null || tipo_enfermedad==null){
-                    Toast.makeText(getContext(),"No ha seleccionado todos los datos",Toast.LENGTH_SHORT).show();
-                }else {
+                diagnostico = new Diagnostico();
+                if (enfermedad == null || tipo_enfermedad == null) {
+                    Toast.makeText(getContext(), "No ha seleccionado todos los datos", Toast.LENGTH_SHORT).show();
+                    Diagnostico.delete(diagnostico);
+                } else {
                     consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
-                    Log.d("CONSULTAMED", id_consulta_medica);
-                    Log.d("CONSULTAMEDD", String.valueOf(consultaMedica.getId_serv()));
 
                     //Si es la primera vez que crea la consulta medica
-                    if(consultaMedica.getEmpleado()==null){
-                        Date fechaConsulta = new Date();
-
-                        //Guarda el id del empleado en la consulta y la fecha de consulta
-                        guardarConsultaMedicaEnServidor(empleado.getId(), fechaConsulta);
-                    }else{
-                        guardarDiagnosticoEnServidor();
+                    if (consultaMedica.getEmpleado() == null) {
+                        fechaConsulta = new Date();
+                        postConsultaMedica(fechaConsulta);
+                    } else {
+                        postDiagnostico(String.valueOf(consultaMedica.getId_serv()));
                     }
-
-                    actualizarDiagnosticos();
+                    cargarDiagnosticos(consultaMedica.getId());
                 }
             }
         });
@@ -219,17 +220,59 @@ public class DiagnosticoFragment extends Fragment {
         return  view;
     }
 
-    /*
-     * Función que actualiza la lista de diagnósticos
-     * */
-    public void actualizarDiagnosticos(){
-        //Actualizar la lista de diagnosticos
-        ArrayList<Diagnostico> diagnosticosList = (ArrayList<Diagnostico>) Diagnostico.find(Diagnostico.class, "consultamedica = ?", String.valueOf(consultaMedica.getId()));
-        adapterItemDiagnostico.actualizarDiagnosticoList(diagnosticosList);
+    private void postDiagnostico(String id_consulta) {
+        Log.d("HEREPOST", id_consulta);
+        Log.d("IDENF", String.valueOf(enfermedad.getId()));
+        Log.d("IDSERVER", String.valueOf(enfermedad.getId_serv()));
+        String id_serv = "";
+        if(enfermedad.getId_serv()!=0){
+            id_serv = String.valueOf(enfermedad.getId_serv());
+        }
+        Log.d("IDSERV", id_serv);
+        mResultCallback = null;
+        initRequestCallback(TAGDIAGNOSTICO);
+        requestService = new RequestService(mResultCallback, getActivity());
+        JSONObject sendObj = null;
+        try {
+            sendObj = new JSONObject("{" +
+                    "'consulta_medica': "+id_consulta+", " +
+                    "'enfermedad': '"+id_serv+"', "+
+                    "'tipo': "+tipo_enfermedad+
+                    "}");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("SENDOBJ", String.valueOf(sendObj));
+        requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj);
     }
 
     /*
-     * Función que guardar una Consulta médica localmente
+     * Función que carga los diagnosticos en la lista
+     * */
+    public void cargarDiagnosticos(Long id){
+        ArrayList<Diagnostico> diagnosticoList = (ArrayList<Diagnostico>) Diagnostico.find(Diagnostico.class,
+                "consultamedica = ?", String.valueOf(id));
+        adapterItemDiagnostico.actualizarDiagnosticoList(diagnosticoList);
+    }
+
+    /*
+    * Función que guarda un diagnóstico localmente
+    * */
+    private void guardarDiagnosticoLocal(int id_serv, int status) {
+        diagnostico.setEnfermedad(enfermedad);
+        diagnostico.setTipoEnfermedad(tipo_enfermedad);
+        diagnostico.setId_serv(id_serv);
+        diagnostico.setStatus(status);
+        diagnostico.setConsulta_medica(consultaMedica);
+        diagnostico.save();
+
+        Toast.makeText(getContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();
+
+        cargarDiagnosticos(consultaMedica.getId());
+    }
+
+    /*
+     * Función que guarda una consulta médica localmente
      * */
     public void guardarConsultaMedicaLocal(Date fechaConsulta, int id_servidor, int status){
         consultaMedica.setId_serv(id_servidor);
@@ -237,21 +280,6 @@ public class DiagnosticoFragment extends Fragment {
         consultaMedica.setFechaConsulta(fechaConsulta);
         consultaMedica.setStatus(status);
         consultaMedica.save();
-
-        guardarDiagnosticoEnServidor();
-    }
-
-    /*
-     * Función que guarda un diagnóstico localmente
-     * */
-    private void guardarDiagnostico(int id_serv, int status) {
-        //Se guarda la consulta medica en diagnostico
-        diagnostico = new Diagnostico(consultaMedica,enfermedad, tipo_enfermedad);
-        diagnostico.setStatus(status);
-        diagnostico.setId_serv(id_serv);
-        diagnostico.save();
-
-        Toast.makeText(getContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();
     }
 
     /*
@@ -266,106 +294,88 @@ public class DiagnosticoFragment extends Fragment {
     }
 
     /*
-     * Función que guardar una Consulta médica en el servidor
+     * Inicializar las llamadas a Request
+     * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
      * */
-    private void guardarConsultaMedicaEnServidor(Long id, final Date fechaConsulta) {
-        final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_CONSULTA_MEDICA,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        progressDialog.dismiss();
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            if (!obj.has("error")) {
-                                //Si se guarda en el servidor, guardar localmente con status 1
-                                guardarConsultaMedicaLocal(fechaConsulta, Integer.parseInt(String.valueOf(obj.get("pk"))),NAME_SYNCED_WITH_SERVER);
-                            } else {
-                                //Si no se guarda en el servidor, guardar localmente con status 0
-                                guardarConsultaMedicaLocal(fechaConsulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //Si no se guarda en el servidor, guardar localmente con status 0
-                        progressDialog.dismiss();
-                        guardarConsultaMedicaLocal(fechaConsulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
-                    }
-                }) {
+    void initRequestCallback(final String TAG){
+        mResultCallback = new IResult() {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                // Falta Examen fisico
-                Map<String, String> params = new HashMap<>();
-                params.put("empleado", "1");
-                params.put("fecha", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fechaConsulta)));
-                params.put("motivo", "");
-                params.put("problema_actual", "");
-                params.put("revision", "");
-                params.put("prescripcion", "");
-                params.put("examen_fisico", "");
+            public void notifySuccess(String requestType,JSONObject response) {
+                if(TAG.equalsIgnoreCase("tagconsulta")){
+                    try {
+                        Log.d("HERECONSULTA", String.valueOf(response));
+                        //Si ha realizado post en ConsultaMedica
+                        String fechaConsulta = response.getString("fecha");
+                        Date fecha = convertirFecha(fechaConsulta);
+                        String pk = response.getString("pk");
+                        guardarConsultaMedicaLocal(fecha,Integer.parseInt(pk), NAME_SYNCED_WITH_SERVER);
+                        postDiagnostico(pk);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    try {
+                        //Si ha realizado post en Diagnóstico
+                        String pk = response.getString("pk");
+                        guardarDiagnosticoLocal(Integer.parseInt(pk),NAME_SYNCED_WITH_SERVER);
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void notifyError(String requestType,VolleyError error) {
+                Log.d("HEREERROR", String.valueOf(error));
+                if(TAG.equalsIgnoreCase("tagconsulta")){
+                    guardarConsultaMedicaLocal(fechaConsulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
+                }else {
+                    guardarDiagnosticoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
+                }
+                Log.e("ERROR", String.valueOf(error));
+                Toast.makeText(getContext(),String.valueOf(error),Toast.LENGTH_SHORT).show();
+            }
 
-                return params;
+            @Override
+            public void notifyMsjError(String requestType, String error) {
+                Log.d("HEREMSJERROR", String.valueOf(error));
+                if(TAG.equalsIgnoreCase("tagconsulta")){
+                    guardarConsultaMedicaLocal(fechaConsulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
+                }else {
+                    guardarDiagnosticoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
+                }
+                Log.e("ERROR", String.valueOf(error));
+                Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void notifyJSONError(String requestType, JSONException error) {
             }
         };
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
 
     /*
-    * Función que guarda un diágnostico en el servidor
-    * */
-    private void guardarDiagnosticoEnServidor() {
-        final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Guardando diagnóstico...");
-        progressDialog.show();
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_DIAGNOSTICO,
-                new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        progressDialog.dismiss();
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            if (!obj.has("error")) {
-                                //Si se guarda en el servidor, guardar localmente con status 1
-                                guardarDiagnostico(Integer.parseInt(String.valueOf(obj.get("pk"))),NAME_SYNCED_WITH_SERVER);
-                            } else {
-                                //Si no se guarda en el servidor, guardar localmente con status 0
-                                guardarDiagnostico(0, NAME_NOT_SYNCED_WITH_SERVER);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //Si no se guarda en el servidor, guardar localmente con status 0
-                        progressDialog.dismiss();
-                        Toast.makeText(getContext(),"No tiene conexión.",Toast.LENGTH_SHORT).show();
-                        guardarDiagnostico(0, NAME_NOT_SYNCED_WITH_SERVER);
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                // Falta Examen fisico
-                Map<String, String> params = new HashMap<>();
-                params.put("consulta_medica", String.valueOf(consultaMedica.getId_serv()));
-                params.put("enfermedad", String.valueOf(enfermedad.getId()));
-                params.put("tipo", tipo_enfermedad);
-
-                return params;
-            }
-        };
-
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
+     * Envía datos de Consulta médica al servidor
+     * */
+    public void postConsultaMedica(final Date fechaConsulta){
+        initRequestCallback(TAGCONSULTA);
+        requestService = new RequestService(mResultCallback, getActivity());
+        JSONObject sendObj = null;
+        try {
+            sendObj = new JSONObject("{" +
+                    "'empleado': "+String.valueOf(idEmpleadoServidor)+", " +
+                    "'fecha': "+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fechaConsulta))+", " +
+                    "'motivo': '',"+
+                    "'problema_actual': '',"+
+                    "'revision': '',"+
+                    "'prescripcion': '',"+
+                    "'examen_fisico': ''"+
+                    "}");
+            Log.d("ENDOBJ", String.valueOf(sendObj));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj);
     }
 
 }

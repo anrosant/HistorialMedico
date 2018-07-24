@@ -1,26 +1,11 @@
 package com.example.cltcontrol.historialmedico.models;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.example.cltcontrol.historialmedico.utils.VolleySingleton;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Date;
-import java.util.List;
-import java.util.TreeMap;
-
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_EMPLEADO;
 
 public class Empleado extends SugarRecord {
     @Unique

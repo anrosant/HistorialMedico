@@ -71,16 +71,16 @@ public class NetworkStateChecker extends BroadcastReceiver {
                         if (motivo == null) {
                             motivo = "";
                         }
-                        guardarConsultaMedica(consultas, consultas.getEmpleado(), consultas.getFechaConsulta(), problemaActual,
-                                revisionMedica, preescripcion, examenFisico, motivo);
+                        /*guardarConsultaMedica(consultas, consultas.getEmpleado(), consultas.getFechaConsulta(), problemaActual,
+                                revisionMedica, preescripcion, examenFisico, motivo);*/
                     }
                 }
                 //Obtiene todos los signos vitales unsynced
                 List<SignosVitales> signosVitalesUnsynced = signosVitales.getSignosVitalesUnsynced();
                 for(SignosVitales signos : signosVitalesUnsynced){
-                    guardarSignosVitales(signos, signos.getPresion_distolica(), signos.getPresion_sistolica(),
+                    /*guardarSignosVitales(signos, signos.getPresion_distolica(), signos.getPresion_sistolica(),
                             signos.getPulso(), signos.getTemperatura(), signos.getAtencion_enfermeria(),
-                            signos.getConsultaMedica());
+                            signos.getConsultaMedica());*/
                 }
             }
         }
@@ -145,7 +145,7 @@ public class NetworkStateChecker extends BroadcastReceiver {
             }
         };
 
-        VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
+        RequestManager.getInstance(context).addToRequestQueue(stringRequest);
     }
 
     private void guardarConsultaMedica(final ConsultaMedica consulta, Empleado empleado, final Date fechaConsulta, final String probActual,
@@ -198,7 +198,7 @@ public class NetworkStateChecker extends BroadcastReceiver {
             }
         };
 
-        VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
+        RequestManager.getInstance(context).addToRequestQueue(stringRequest);
     }
 
 }

@@ -1,21 +1,14 @@
 package com.example.cltcontrol.historialmedico.activities;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.example.cltcontrol.historialmedico.interfaces.IResult;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
@@ -31,7 +24,6 @@ import com.example.cltcontrol.historialmedico.utils.EmpleadoController;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Usuario;
-import com.example.cltcontrol.historialmedico.utils.VolleySingleton;
 import com.facebook.stetho.Stetho;
 
 import org.json.JSONArray;
@@ -46,23 +38,17 @@ import java.util.List;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_EMPLEADO;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_USUARIO;
 
-
 public class MainActivity extends AppCompatActivity {
 
     private EditText etUsuario;
     private EditText etContrasenia;
     private EmpleadoController miController;
 
-    private int idUsuario;
     private String usuario;
     private String password;
 
-    private String TAGUSUARIO = "USUARIO", TAGEMPLEADO = "EMPLEADO";
     IResult mResultCallback = null;
     RequestService requestService;
-
-    private ProgressDialog dialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,13 +99,10 @@ public class MainActivity extends AppCompatActivity {
     * Inicializar las llamadas a Request
     * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
     * */
-    void initRequestCallback(final String TAG){
+    void initRequestCallback(){
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
-                dialog=new ProgressDialog(MainActivity.this);
-                dialog.setMessage("Cargando...");
-                dialog.show();
                 try {
                     String msj = response.getString("msj");
                     if(msj.equalsIgnoreCase("Ingreso exitoso")){
@@ -157,12 +140,11 @@ public class MainActivity extends AppCompatActivity {
                         siguienteActivity();
 
                     }else{
-                        dialog.dismiss();
                         Toast.makeText(getApplicationContext(), msj, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
-                    dialog.dismiss();
+
                 }
             }
 
@@ -190,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
      * Retorna una respuesta
      * */
     public void iniciarSesion(String usuario, String contrasenia){
-        initRequestCallback(TAGUSUARIO);
-        requestService = new RequestService(mResultCallback,getApplicationContext());
+        initRequestCallback();
+        requestService = new RequestService(mResultCallback, MainActivity.this);
         JSONObject sendObj = null;
         try {
             sendObj = new JSONObject("{" +
@@ -561,7 +543,6 @@ public class MainActivity extends AppCompatActivity {
     * Crea una sesión y guarda el usuario
     * */
     private void crearSesion(){
-        dialog.dismiss();
         SessionManager sesion = new SessionManager(getApplicationContext());
         Long id = Usuario.find(Usuario.class, "usuario = ? ",
                 usuario).get(0).getId();

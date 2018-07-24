@@ -9,21 +9,21 @@ import com.android.volley.toolbox.Volley;
 /**
  * Created by Anni on 04/07/18.
  */
-public class VolleySingleton {
+public class RequestManager {
 
-    private static VolleySingleton mInstance;
+    private static RequestManager mInstance;
     private RequestQueue mRequestQueue;
     private static Context mCtx;
 
-    private VolleySingleton(Context context) {
+    private RequestManager(Context context) {
         mCtx = context;
         mRequestQueue = getRequestQueue();
 
     }
 
-    public static synchronized VolleySingleton getInstance(Context context) {
+    public static synchronized RequestManager getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new VolleySingleton(context);
+            mInstance = new RequestManager(context);
         }
         return mInstance;
     }

@@ -32,7 +32,7 @@ import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.example.cltcontrol.historialmedico.utils.NetworkStateChecker;
-import com.example.cltcontrol.historialmedico.utils.VolleySingleton;
+import com.example.cltcontrol.historialmedico.utils.RequestManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,7 +81,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Objects.requireNonNull(getContext()).registerReceiver(new NetworkStateChecker(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+//        Objects.requireNonNull(getContext()).registerReceiver(new NetworkStateChecker(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
 
         // Inflate y vinculaciones de las variables globales
@@ -308,7 +308,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
             }
         };
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
+        RequestManager.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
 
     /*
@@ -363,6 +363,6 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
             }
         };
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
+        RequestManager.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
 }

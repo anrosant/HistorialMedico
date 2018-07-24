@@ -27,7 +27,7 @@ import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.PatologiasPersonales;
-import com.example.cltcontrol.historialmedico.utils.VolleySingleton;
+import com.example.cltcontrol.historialmedico.utils.RequestManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -245,7 +245,7 @@ public class PatologiasPersonalesFragment extends Fragment {
             }
         };
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
+        RequestManager.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
 
     /*
@@ -298,6 +298,6 @@ public class PatologiasPersonalesFragment extends Fragment {
             }
         };
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
+        RequestManager.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
 }

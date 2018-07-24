@@ -1,5 +1,9 @@
 package com.example.cltcontrol.historialmedico.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Identifiers {
 
     public static final String URL_SIGNOS = "http://historialmedico.pythonanywhere.com/api/signosVitales/";
@@ -23,5 +27,20 @@ public class Identifiers {
 
     //Sesion
     public static final String CARGO = "cargo";
+
+    /*
+     * Convierte la fecha(String) en Date
+     * */
+    public static Date convertirFecha(String fecha){
+        //Fechas
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-mmm");
+        Date fechaNueva = null;
+        try {
+            fechaNueva = formatter.parse(fecha);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return fechaNueva;
+    }
 
 }

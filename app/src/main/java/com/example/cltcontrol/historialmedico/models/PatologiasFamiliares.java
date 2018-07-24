@@ -7,6 +7,7 @@ import com.orm.dsl.Unique;
 public class PatologiasFamiliares extends SugarRecord {
     @Unique
     private int id_serv, id_ficha;
+
     private int status;
     private Enfermedad enfermedad;
     private String parentesco;

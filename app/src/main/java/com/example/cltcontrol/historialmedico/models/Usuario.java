@@ -7,7 +7,9 @@ public class Usuario extends SugarRecord {
 
     // ATRIBUTOS DE CLASE
     @Unique
-    private int id_serv, status;
+    private int id_serv;
+
+    private int status;
     private String usuario;
     //private String contrasenia;
     //pensar si se necesita tener atributo tipo de usuario (medico o enfermera)

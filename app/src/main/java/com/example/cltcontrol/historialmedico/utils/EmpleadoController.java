@@ -115,9 +115,9 @@ public class EmpleadoController {
     public void llenadoEnfermedades() {
         List<Enfermedad> enfermedades = Enfermedad.find(Enfermedad.class, "CODIGO = ?", "A00");
         if (enfermedades.isEmpty()) {
-            try {
+            /*try {
                 Enfermedad.executeQuery(EnfermedadesSQL.REGISTRO_ENFERMEDADES);
-            } catch (Exception e) {}
+            } catch (Exception e) {}*/
         }
     }
     /*

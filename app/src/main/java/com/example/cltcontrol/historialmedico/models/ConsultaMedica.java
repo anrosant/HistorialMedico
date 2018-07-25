@@ -6,6 +6,9 @@ import android.util.Log;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -116,9 +119,29 @@ public class ConsultaMedica extends SugarRecord {
     }
 
     public ArrayList<ConsultaMedica> getConsultaMedicaUnsynced(){
-        Log.d("HERE CONSULTA", "heeere");
         ArrayList<ConsultaMedica> consultasMedicaUnsynced = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class, "status = ?", String.valueOf(0));
         return consultasMedicaUnsynced;
     }
 
+    public static JSONObject getJSONConsultaMedica(String id_empleado_servidor, Date fecha_consulta,
+                                                   String motivo, String prob_actual, String revision_medica,
+                                                   String prescripcion, String examen_fisico){
+        JSONObject sendObj = null;
+        try {
+            sendObj = new JSONObject("{" +
+                    "'empleado': "+String.valueOf(id_empleado_servidor)+", " +
+                    "'fecha': '"+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta))+"', " +
+                    "'motivo': '"+motivo+"', "+
+                    "'problema_actual': '"+prob_actual+"',"+
+                    "'revision': '"+revision_medica+"', "+
+                    "'prescripcion': '"+prescripcion+"',"+
+                    "'examen_fisico': '"+examen_fisico+"'"+
+                    "}");
+            Log.d("ENDOBJ", String.valueOf(sendObj));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return sendObj;
+
+    }
 }

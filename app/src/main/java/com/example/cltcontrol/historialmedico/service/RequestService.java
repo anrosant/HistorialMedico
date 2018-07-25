@@ -48,7 +48,7 @@ public class RequestService {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     if(mResultCallback != null){
-                        mResultCallback.notifyError(requestType,error);
+                        mResultCallback.notifyMsjError(requestType,"No tiene conexión");
                     }
                     dialog.dismiss();
                 }

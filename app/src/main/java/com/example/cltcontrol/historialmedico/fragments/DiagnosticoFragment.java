@@ -1,6 +1,7 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,7 +49,7 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
 
 public class DiagnosticoFragment extends Fragment {
 
-    public static List<Enfermedad> enfermedadList;
+    private static List<Enfermedad> enfermedadList;
     private RecyclerView recyclerEnfermedades;
     private AdapterEnfermedades adaptadorEnfermedades;
     private EditText etBuscarEnfermedades;
@@ -68,17 +69,18 @@ public class DiagnosticoFragment extends Fragment {
     private List<Enfermedad> newList;
     private TextView tvTitulo;
 
-    IResult mResultCallback = null;
-    RequestService requestService;
-    int idEmpleadoServidor;
+    private IResult mResultCallback = null;
+    private RequestService requestService;
+    private int id_empleado_servidor;
 
-    Date fechaConsulta;
-    String TAGDIAGNOSTICO = "tagdiagnostico", TAGCONSULTA="tagconsulta";
+    private Date fecha_consulta;
+    private final String TAGDIAGNOSTICO = "tagdiagnostico";
+    private final String TAGCONSULTA="tagconsulta";
 
     public DiagnosticoFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_diagnostico, container, false);
@@ -93,12 +95,14 @@ public class DiagnosticoFragment extends Fragment {
         final Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         //Recibe el id de consulta medica desde Historial de consulta medica
+        assert extras != null;
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
         id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
-        idEmpleadoServidor = empleado.getId_serv();
+        id_empleado_servidor = empleado.getId_serv();
         cargo = extras.getString("CARGO");
 
+        assert cargo != null;
         if(cargo.equals("Enfermera")){
             btn_guardar.setVisibility(View.GONE);
             ly_diagnostico.setVisibility(View.GONE);
@@ -148,9 +152,9 @@ public class DiagnosticoFragment extends Fragment {
                             newList.add(enfermedad);
                         }
                     }
-                    adaptadorEnfermedades.setFilter((List<Enfermedad>) newList);
+                    adaptadorEnfermedades.setFilter(newList);
                 }else{
-                    adaptadorEnfermedades.setFilter((List<Enfermedad>) enfermedadList);
+                    adaptadorEnfermedades.setFilter(enfermedadList);
                 }
             }
         });
@@ -177,7 +181,7 @@ public class DiagnosticoFragment extends Fragment {
         rg_tipo_enfermedad.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                radioButton = (RadioButton) view.findViewById(checkedId);
+                radioButton = view.findViewById(checkedId);
                 tipo_enfermedad = (String) radioButton.getText();
             }
         });
@@ -195,8 +199,8 @@ public class DiagnosticoFragment extends Fragment {
 
                     //Si es la primera vez que crea la consulta medica
                     if (consultaMedica.getEmpleado() == null) {
-                        fechaConsulta = new Date();
-                        postConsultaMedica(fechaConsulta);
+                        fecha_consulta = new Date();
+                        postConsultaMedica(fecha_consulta);
                     } else {
                         postDiagnostico(String.valueOf(consultaMedica.getId_serv()));
                     }
@@ -209,10 +213,10 @@ public class DiagnosticoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (!ly_diagnostico.isShown()){
-                    ly_diagnostico.setVisibility(view.VISIBLE);
+                    ly_diagnostico.setVisibility(View.VISIBLE);
                     ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_arriba);
                 }else {
-                    ly_diagnostico.setVisibility(view.GONE);
+                    ly_diagnostico.setVisibility(View.GONE);
                     ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_abajo);
                 }
             }
@@ -221,9 +225,6 @@ public class DiagnosticoFragment extends Fragment {
     }
 
     private void postDiagnostico(String id_consulta) {
-        Log.d("HEREPOST", id_consulta);
-        Log.d("IDENF", String.valueOf(enfermedad.getId()));
-        Log.d("IDSERVER", String.valueOf(enfermedad.getId_serv()));
         String id_serv = "";
         if(enfermedad.getId_serv()!=0){
             id_serv = String.valueOf(enfermedad.getId_serv());
@@ -232,24 +233,14 @@ public class DiagnosticoFragment extends Fragment {
         mResultCallback = null;
         initRequestCallback(TAGDIAGNOSTICO);
         requestService = new RequestService(mResultCallback, getActivity());
-        JSONObject sendObj = null;
-        try {
-            sendObj = new JSONObject("{" +
-                    "'consulta_medica': "+id_consulta+", " +
-                    "'enfermedad': '"+id_serv+"', "+
-                    "'tipo': "+tipo_enfermedad+
-                    "}");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.d("SENDOBJ", String.valueOf(sendObj));
+        JSONObject sendObj = Diagnostico.getJSONDiagnostico(id_consulta, tipo_enfermedad, id_serv);
         requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj);
     }
 
     /*
      * Función que carga los diagnosticos en la lista
      * */
-    public void cargarDiagnosticos(Long id){
+    private void cargarDiagnosticos(Long id){
         ArrayList<Diagnostico> diagnosticoList = (ArrayList<Diagnostico>) Diagnostico.find(Diagnostico.class,
                 "consultamedica = ?", String.valueOf(id));
         adapterItemDiagnostico.actualizarDiagnosticoList(diagnosticoList);
@@ -266,15 +257,18 @@ public class DiagnosticoFragment extends Fragment {
         diagnostico.setConsulta_medica(consultaMedica);
         diagnostico.save();
 
-        Toast.makeText(getContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();
-
+        if(status==NAME_SYNCED_WITH_SERVER) {
+            Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(getContext(), "No hay conexión a internet. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
+        }
         cargarDiagnosticos(consultaMedica.getId());
     }
 
     /*
      * Función que guarda una consulta médica localmente
      * */
-    public void guardarConsultaMedicaLocal(Date fechaConsulta, int id_servidor, int status){
+    private void guardarConsultaMedicaLocal(Date fechaConsulta, int id_servidor, int status){
         consultaMedica.setId_serv(id_servidor);
         consultaMedica.setEmpleado(empleado);
         consultaMedica.setFechaConsulta(fechaConsulta);
@@ -285,7 +279,7 @@ public class DiagnosticoFragment extends Fragment {
     /*
      * Guarda las enfermedades que están en la base de datos, en una lista
      * */
-    public void readEnfermedadesAll(){
+    private void readEnfermedadesAll(){
         try{
             enfermedadList = Enfermedad.listAll(Enfermedad.class);
         }catch (Exception e){
@@ -297,13 +291,12 @@ public class DiagnosticoFragment extends Fragment {
      * Inicializar las llamadas a Request
      * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
      * */
-    void initRequestCallback(final String TAG){
+    private void initRequestCallback(final String TAG){
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
                 if(TAG.equalsIgnoreCase("tagconsulta")){
                     try {
-                        Log.d("HERECONSULTA", String.valueOf(response));
                         //Si ha realizado post en ConsultaMedica
                         String fechaConsulta = response.getString("fecha");
                         Date fecha = convertirFecha(fechaConsulta);
@@ -327,7 +320,7 @@ public class DiagnosticoFragment extends Fragment {
             public void notifyError(String requestType,VolleyError error) {
                 Log.d("HEREERROR", String.valueOf(error));
                 if(TAG.equalsIgnoreCase("tagconsulta")){
-                    guardarConsultaMedicaLocal(fechaConsulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
+                    guardarConsultaMedicaLocal(fecha_consulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
                 }else {
                     guardarDiagnosticoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
@@ -339,7 +332,7 @@ public class DiagnosticoFragment extends Fragment {
             public void notifyMsjError(String requestType, String error) {
                 Log.d("HEREMSJERROR", String.valueOf(error));
                 if(TAG.equalsIgnoreCase("tagconsulta")){
-                    guardarConsultaMedicaLocal(fechaConsulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
+                    guardarConsultaMedicaLocal(fecha_consulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
                 }else {
                     guardarDiagnosticoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
@@ -357,24 +350,10 @@ public class DiagnosticoFragment extends Fragment {
     /*
      * Envía datos de Consulta médica al servidor
      * */
-    public void postConsultaMedica(final Date fechaConsulta){
+    private void postConsultaMedica(final Date fecha_consulta){
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
-        JSONObject sendObj = null;
-        try {
-            sendObj = new JSONObject("{" +
-                    "'empleado': "+String.valueOf(idEmpleadoServidor)+", " +
-                    "'fecha': "+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fechaConsulta))+", " +
-                    "'motivo': '',"+
-                    "'problema_actual': '',"+
-                    "'revision': '',"+
-                    "'prescripcion': '',"+
-                    "'examen_fisico': ''"+
-                    "}");
-            Log.d("ENDOBJ", String.valueOf(sendObj));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject sendObj = ConsultaMedica.getJSONConsultaMedica(String.valueOf(id_empleado_servidor), fecha_consulta, "","","","","");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj);
     }
 

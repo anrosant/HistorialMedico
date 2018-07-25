@@ -1,6 +1,8 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,12 +32,8 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
 
 public class MotivoAtencionFragment extends Fragment {
     private EditText etMotivoAtencion;
-    private Button btn_guardar;
-    private String id_consulta_medica, precedencia, id_empleado, cargo;
     private ConsultaMedica consultaMedica;
-    private Empleado empleado;
     private String motivo, id_empleado_servidor; //1) Declarar id_empelado_servidor y las 2 de abajo
-    private RequestService requestService;
     private IResult mResultCallback;
     //private AtencionEnfermeria atencionEnfermeria;
 
@@ -43,22 +41,25 @@ public class MotivoAtencionFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_motivo_atencion, container, false);
 
         etMotivoAtencion = view.findViewById(R.id.txt_motivo);
-        btn_guardar = view.findViewById(R.id.btnGuardar);
+        Button btn_guardar = view.findViewById(R.id.btnGuardar);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         //Recibe el id de consulta medica desde Historial de consulta medica
-        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-        precedencia = extras.getString("PRECEDENCIA");
-        id_empleado = extras.getString("ID_EMPLEADO");
-        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+        assert extras != null;
+        String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        String precedencia = extras.getString("PRECEDENCIA");
+        String id_empleado = extras.getString("ID_EMPLEADO");
+        Empleado empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
         id_empleado_servidor = String.valueOf(empleado.getId_serv()); //2) Obtenemos Id del servidor del empleado
-        cargo = extras.getString("CARGO");
+        String cargo = extras.getString("CARGO");
+        assert cargo != null;
         if(cargo.equals("Enfermera")){
             btn_guardar.setVisibility(View.GONE);
             etMotivoAtencion.setEnabled(false);
@@ -89,20 +90,23 @@ public class MotivoAtencionFragment extends Fragment {
     private void guardarMotivo() {
         motivo = etMotivoAtencion.getText().toString();
         int res = consultaMedica.validarCampoTexto(motivo);
-        if(res == 0)
-            Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
-        else if(res == 1)
-            Toast.makeText(getContext(),"Ha ingresado solo numeros",Toast.LENGTH_SHORT).show();
-        else{
-            //Si aun no ha creado la consulta, la crea y añade los datos
-            if (consultaMedica.getEmpleado() == null) {
-                //4) Comentar las funciones de abajo y hacer post y enviar new Date()
-                postConsultaMedica(new Date());
-            }else{
-                //HACER PUT
-            }
-            Toast.makeText(getContext(),"Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
+        switch (res) {
+            case 0:
+                Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
+                break;
+            case 1:
+                Toast.makeText(getContext(), "Ha ingresado solo numeros", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                //Si aun no ha creado la consulta, la crea y añade los datos
+                if (consultaMedica.getEmpleado() == null) {
+                    //4) Comentar las funciones de abajo y hacer post y enviar new Date()
+                    postConsultaMedica(new Date());
+                } else {
+                    //HACER PUT
+                }
 
+                break;
         }
     }
 
@@ -110,19 +114,24 @@ public class MotivoAtencionFragment extends Fragment {
     /*
     * Guardar motivo localmento
     * */
-    void guardarMotivoLocal(Date fecha, int status, int id_serv){
+    private void guardarMotivoLocal(Date fecha, int status, int id_serv){
         consultaMedica.setId_serv(id_serv);
         consultaMedica.setFechaConsulta(fecha);
         consultaMedica.setStatus(status);
         consultaMedica.setMotivo(motivo);
         consultaMedica.save();
-
+        if(status==NAME_SYNCED_WITH_SERVER) {
+            Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getContext(),"No hay conexión a internet. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
+        }
     }
     /*
      * Inicializar las llamadas a Request
      * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
      * */
-    void initRequestCallback(){
+    private void initRequestCallback(){
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
@@ -166,25 +175,11 @@ public class MotivoAtencionFragment extends Fragment {
     /*
      * Envía datos de Consulta médica al servidor
      * */
-    public void postConsultaMedica(final Date fechaConsulta){
+    private void postConsultaMedica(final Date fechaConsulta){
         initRequestCallback();
-        requestService = new RequestService(mResultCallback, getActivity());
-        JSONObject sendObj = null;
-        // 5) CAMBIAR LOS DATOS DEL JSON
-        try {
-            sendObj = new JSONObject("{" +
-                    "'empleado': "+String.valueOf(id_empleado_servidor)+", " +
-                    "'fecha': "+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fechaConsulta))+", " +
-                    "'motivo': "+motivo+", "+
-                    "'problema_actual': '',"+
-                    "'revision': '',"+
-                    "'prescripcion': '',"+
-                    "'examen_fisico': ''"+
-                    "}");
-            Log.d("ENDOBJ", String.valueOf(sendObj));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        RequestService requestService = new RequestService(mResultCallback, getActivity());
+        // 5) PASAR LOS DATOS A LA FUNCIÓN
+        JSONObject sendObj = ConsultaMedica.getJSONConsultaMedica(id_empleado_servidor,fechaConsulta, motivo,"","","","");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj);
     }
 

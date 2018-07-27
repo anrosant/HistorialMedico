@@ -182,7 +182,7 @@ public class ProblemaActualFragment extends Fragment {
 
             @Override
             public void notifyJSONError(String requestType, JSONException error) {
-                String error2 = "hubo error";
+                Toast.makeText(getContext(), error.toString(),Toast.LENGTH_SHORT).show();
             }
         };
 

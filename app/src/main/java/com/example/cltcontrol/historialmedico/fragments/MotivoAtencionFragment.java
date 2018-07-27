@@ -33,8 +33,10 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
 public class MotivoAtencionFragment extends Fragment {
     private EditText etMotivoAtencion;
     private ConsultaMedica consultaMedica;
-    private String motivo, id_empleado_servidor; //1) Declarar id_empelado_servidor y las 2 de abajo
+    private String motivo;
+    private String id_empleado_servidor; //1) Declarar id_empelado_servidor y las 2 de abajo
     private IResult mResultCallback;
+    private Empleado empleado;
     //private AtencionEnfermeria atencionEnfermeria;
 
     public MotivoAtencionFragment() {
@@ -56,7 +58,7 @@ public class MotivoAtencionFragment extends Fragment {
         String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
         String precedencia = extras.getString("PRECEDENCIA");
         String id_empleado = extras.getString("ID_EMPLEADO");
-        Empleado empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
         id_empleado_servidor = String.valueOf(empleado.getId_serv()); //2) Obtenemos Id del servidor del empleado
         String cargo = extras.getString("CARGO");
         assert cargo != null;
@@ -78,7 +80,7 @@ public class MotivoAtencionFragment extends Fragment {
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                guardarMotivo();
+                guardarConsulta();
             }
         });
         return view;
@@ -87,9 +89,9 @@ public class MotivoAtencionFragment extends Fragment {
     /*
     * Verifica si ha ingresado texto y guarda en consulta medica, caso contrario imprime un mensaje
     **/
-    private void guardarMotivo() {
+    private void guardarConsulta() {
         motivo = etMotivoAtencion.getText().toString();
-        int res = consultaMedica.validarCampoTexto(motivo);
+        int res = consultaMedica.validarCampoTexto(motivo);//Valida lo que se ingresa (difiere)
         switch (res) {
             case 0:
                 Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
@@ -114,11 +116,12 @@ public class MotivoAtencionFragment extends Fragment {
     /*
     * Guardar motivo localmento
     * */
-    private void guardarMotivoLocal(Date fecha, int status, int id_serv){
+    private void guardarConsultaLocal(Date fecha, int status, int id_serv){
+        consultaMedica.setEmpleado(empleado);
         consultaMedica.setId_serv(id_serv);
         consultaMedica.setFechaConsulta(fecha);
         consultaMedica.setStatus(status);
-        consultaMedica.setMotivo(motivo);
+        consultaMedica.setMotivo(motivo); //setea lo que quieres
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
@@ -142,7 +145,7 @@ public class MotivoAtencionFragment extends Fragment {
                     String fechaConsulta = response.getString("fecha");
                     Date fecha = convertirFecha(fechaConsulta);
                     String pk = response.getString("pk");
-                    guardarMotivoLocal(fecha,Integer.parseInt(pk), NAME_SYNCED_WITH_SERVER);
+                    guardarConsultaLocal(fecha, NAME_SYNCED_WITH_SERVER, Integer.parseInt(pk));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -150,7 +153,7 @@ public class MotivoAtencionFragment extends Fragment {
             @Override
             public void notifyError(String requestType,VolleyError error) {
                 Log.d("HEREERROR", String.valueOf(error));
-                guardarMotivoLocal(new Date(), 0,NAME_NOT_SYNCED_WITH_SERVER);
+                guardarConsultaLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
 
                 Log.e("ERROR", String.valueOf(error));
                 Toast.makeText(getContext(),String.valueOf(error),Toast.LENGTH_SHORT).show();
@@ -159,7 +162,7 @@ public class MotivoAtencionFragment extends Fragment {
             @Override
             public void notifyMsjError(String requestType, String error) {
                 Log.d("HEREMSJERROR", String.valueOf(error));
-                guardarMotivoLocal(new Date(), 0,NAME_NOT_SYNCED_WITH_SERVER);
+                guardarConsultaLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
 
                 Log.e("ERROR", String.valueOf(error));
                 Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();

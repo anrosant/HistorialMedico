@@ -7,6 +7,8 @@ import com.orm.dsl.Unique;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class Diagnostico extends SugarRecord{
     @Unique
     private int id_serv;
@@ -62,6 +64,10 @@ public class Diagnostico extends SugarRecord{
 
     public void setTipoEnfermedad(String tipoEnfermedad) {
         this.tipoEnfermedad = tipoEnfermedad;
+    }
+
+    public ArrayList<Diagnostico> getDiagnosticoUnsynced(){
+        return (ArrayList<Diagnostico>) Diagnostico.find(Diagnostico.class, "status = ?", String.valueOf(0));
     }
 
     public static JSONObject getJSONDiagnostico(String id_consulta, String tipo_enfermedad, String id_enfermedad){

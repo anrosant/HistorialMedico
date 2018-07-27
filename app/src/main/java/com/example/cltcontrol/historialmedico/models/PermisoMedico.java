@@ -1,8 +1,14 @@
 package com.example.cltcontrol.historialmedico.models;
 
+import android.util.Log;
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 public class PermisoMedico extends SugarRecord{
@@ -107,8 +113,28 @@ public class PermisoMedico extends SugarRecord{
         this.obsevaciones_permiso = obsevaciones_permiso;
     }
 
-    public void validarPermiso(){
-
+    public ArrayList<PermisoMedico> getPermisoMedicoUnsynced(){
+        return (ArrayList<PermisoMedico>) PermisoMedico.find(PermisoMedico.class, "status = ?", String.valueOf(0));
     }
 
+    public static JSONObject getJSONPermisoMedico(String id_empleado_servidor, String id_diagnostico, String id_consulta,Date fecha_inicio,
+                                                  Date fecha_fin, String dias, String observaciones){
+        JSONObject sendObj = null;
+        try {
+            sendObj = new JSONObject("{" +
+                    "'diagnostico': "+id_diagnostico+", " +
+                    "'empleado': '"+id_empleado_servidor+"', " +
+                    "'consulta_medica': '"+id_consulta+"', "+
+                    "'fecha_inicio': '"+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_inicio))+"',"+
+                    "'fecha_fin': '"+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_fin))+"', "+
+                    "'dias': '"+dias+"',"+
+                    "'observaciones': '"+observaciones+"'"+
+                    "}");
+            Log.d("ENDOBJ", String.valueOf(sendObj));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return sendObj;
+
+    }
 }

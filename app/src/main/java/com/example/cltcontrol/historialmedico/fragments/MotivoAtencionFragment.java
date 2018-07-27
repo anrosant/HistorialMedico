@@ -33,9 +33,9 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
 public class MotivoAtencionFragment extends Fragment {
     private EditText etMotivoAtencion;
     private ConsultaMedica consultaMedica;
-    private String motivo, id_empleado_servidor; //1) Declarar id_empelado_servidor y las 2 de abajo
+    private String motivo, id_empleado_servidor; //1) Declarar id_empelado_servidor y la de abajo
     private IResult mResultCallback;
-    //private AtencionEnfermeria atencionEnfermeria;
+    private Empleado empleado;
 
     public MotivoAtencionFragment() {
         // Required empty public constructor
@@ -56,7 +56,7 @@ public class MotivoAtencionFragment extends Fragment {
         String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
         String precedencia = extras.getString("PRECEDENCIA");
         String id_empleado = extras.getString("ID_EMPLEADO");
-        Empleado empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
         id_empleado_servidor = String.valueOf(empleado.getId_serv()); //2) Obtenemos Id del servidor del empleado
         String cargo = extras.getString("CARGO");
         assert cargo != null;
@@ -69,7 +69,7 @@ public class MotivoAtencionFragment extends Fragment {
 
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
-        if(precedencia.equals("consultar")){
+        if(Objects.equals(precedencia, "consultar")){
             etMotivoAtencion.setText(consultaMedica.getMotivo());
             btn_guardar.setText("Editar");
         }
@@ -119,6 +119,7 @@ public class MotivoAtencionFragment extends Fragment {
         consultaMedica.setFechaConsulta(fecha);
         consultaMedica.setStatus(status);
         consultaMedica.setMotivo(motivo);
+        consultaMedica.setEmpleado(empleado);
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();

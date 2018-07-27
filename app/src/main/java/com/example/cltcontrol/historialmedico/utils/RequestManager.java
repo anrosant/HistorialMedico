@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.android.volley.Request;
@@ -13,6 +14,7 @@ public class RequestManager {
 
     private static RequestManager mInstance;
     private RequestQueue mRequestQueue;
+    @SuppressLint("StaticFieldLeak")
     private static Context mCtx;
 
     private RequestManager(Context context) {
@@ -28,7 +30,7 @@ public class RequestManager {
         return mInstance;
     }
 
-    public RequestQueue getRequestQueue() {
+    private RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.

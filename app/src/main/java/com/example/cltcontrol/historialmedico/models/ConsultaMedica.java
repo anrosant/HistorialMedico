@@ -119,8 +119,7 @@ public class ConsultaMedica extends SugarRecord {
     }
 
     public ArrayList<ConsultaMedica> getConsultaMedicaUnsynced(){
-        ArrayList<ConsultaMedica> consultasMedicaUnsynced = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class, "status = ?", String.valueOf(0));
-        return consultasMedicaUnsynced;
+        return (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class, "status = ?", String.valueOf(0));
     }
 
     public static JSONObject getJSONConsultaMedica(String id_empleado_servidor, Date fecha_consulta,

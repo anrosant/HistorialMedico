@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.service;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
@@ -22,17 +23,18 @@ public class RequestService {
 
     IResult mResultCallback = null;
     Context mContext;
-    ProgressDialog dialog;
+    ProgressDialog dialog=null;
     public RequestService(IResult resultCallback, Context context){
         mResultCallback = resultCallback;
         mContext = context;
     }
 
     public void postDataRequest(final String requestType, String url,JSONObject sendObj){
-
-        dialog=new ProgressDialog(mContext);
-        dialog.setMessage("Cargando...");
-        dialog.show();
+        if (mContext instanceof Activity){
+            dialog=new ProgressDialog(mContext);
+            dialog.setMessage("Cargando...");
+            dialog.show();
+        }
         try {
             final RequestQueue queue = Volley.newRequestQueue(mContext);
 
@@ -42,7 +44,8 @@ public class RequestService {
                     if(mResultCallback != null){
                         mResultCallback.notifySuccess(requestType,response);
                     }
-                    dialog.dismiss();
+                    if(dialog!=null)
+                        dialog.dismiss();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -50,7 +53,8 @@ public class RequestService {
                     if(mResultCallback != null){
                         mResultCallback.notifyMsjError(requestType,"No tiene conexión");
                     }
-                    dialog.dismiss();
+                    if(dialog!=null)
+                        dialog.dismiss();
                 }
             });
 
@@ -60,15 +64,19 @@ public class RequestService {
             if(mResultCallback != null) {
                 mResultCallback.notifyMsjError(requestType, "No tiene conexión");
             }
-            dialog.dismiss();
+            if(dialog!=null)
+                dialog.dismiss();
 
         }
     }
 
     public void getDataRequest(final String requestType, String url){
-        dialog=new ProgressDialog(mContext);
-        dialog.setMessage("Cargando...");
-        dialog.show();
+        if(mContext instanceof Activity){
+            dialog=new ProgressDialog(mContext);
+            dialog.setMessage("Cargando...");
+            dialog.show();
+        }
+
         //RequestQueue queue = Volley.newRequestQueue(mContext);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -83,10 +91,12 @@ public class RequestService {
                                     Log.d("HERE-RESPONSE", String.valueOf(objectJSON));
                                     mResultCallback.notifySuccess(requestType, objectJSON);
                             }
-                            dialog.dismiss();
+                            if(dialog!=null)
+                                dialog.dismiss();
                         }catch(JSONException e){
                             getOneObject(requestType, response);
-                            dialog.dismiss();
+                            if(dialog!=null)
+                                dialog.dismiss();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -94,7 +104,8 @@ public class RequestService {
             public void onErrorResponse(VolleyError error) {
                 if(mResultCallback != null)
                     mResultCallback.notifyError(requestType, error);
-                dialog.dismiss();
+                if(dialog!=null)
+                    dialog.dismiss();
             }
         });
         RequestManager.getInstance(mContext).addToRequestQueue(stringRequest);
@@ -106,11 +117,13 @@ public class RequestService {
             JSONObject objectJSON = new JSONObject(response);
             if(mResultCallback != null)
                 mResultCallback.notifySuccess(requestType, objectJSON);
-            dialog.dismiss();
+            if(dialog!=null)
+                dialog.dismiss();
         } catch (JSONException e) {
             if(mResultCallback != null)
                 mResultCallback.notifyJSONError(requestType, e);
-            dialog.dismiss();
+            if(dialog!=null)
+                dialog.dismiss();
         }
 
 

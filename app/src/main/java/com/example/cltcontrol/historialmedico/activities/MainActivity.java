@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,7 +36,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_EMPLEADO;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_USUARIO;
 
 public class MainActivity extends AppCompatActivity {
@@ -562,7 +562,7 @@ public class MainActivity extends AppCompatActivity {
     * */
     private Date convertirFecha(String fecha){
         //Fechas
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-mmm");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-mmm");
         Date fechaNueva = null;
         try {
             fechaNueva = formatter.parse(fecha);

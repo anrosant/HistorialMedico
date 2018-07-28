@@ -23,7 +23,8 @@
         android:padding="10dp"
         android:text="Historial Consulta Médica"
         android:textColor="@color/colorPrimary"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:targetApi="o" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -31,7 +32,8 @@
         android:layout_marginTop="-3dp"
         android:layout_marginHorizontal="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/my_style_content">
+        android:background="@drawable/my_style_content"
+        tools:targetApi="o">
 
         <ListView
             android:id="@+id/lvConsultasMedicas"
@@ -49,7 +51,8 @@
             android:src="@drawable/ic_add_white"
             android:clickable="true"
             android:onClick="aperturaConsultaMedica"
-            android:layout_margin="16dp" />
+            android:layout_margin="16dp"
+            android:focusable="true" />
 
     </FrameLayout>
 

@@ -9,7 +9,6 @@ import java.util.Date;
 
 public class Empleado extends SugarRecord {
     @Unique
-    private int id_serv;
     private String cedula;
 
     private String nombre, apellido, correo, direccion,profesion, estadoCivil, sexo,
@@ -18,6 +17,7 @@ public class Empleado extends SugarRecord {
     private int edad,foto, status, ficha_actual;
     private Usuario usuario;
     private Context context;
+    private int id_serv;
 
     //Constructor vacío
     public Empleado(){super();}

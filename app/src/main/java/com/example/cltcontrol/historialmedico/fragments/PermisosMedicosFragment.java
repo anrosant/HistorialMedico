@@ -1,10 +1,9 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,11 +90,14 @@ public class PermisosMedicosFragment extends Fragment {
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         // extraccion del bundle {clave,valor} de los campos necesitados
-        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-        id_empleado = extras.getString("ID_EMPLEADO");
-        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
-        cargo = extras.getString("CARGO");
-        precedencia = extras.getString("PRECEDENCIA");
+        if (extras != null) {
+            id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+            id_empleado = extras.getString("ID_EMPLEADO");
+            empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+            cargo = extras.getString("CARGO");
+            precedencia = extras.getString("PRECEDENCIA");
+        }
+
 
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
@@ -211,7 +213,7 @@ public class PermisosMedicosFragment extends Fragment {
                 return;
             }
 
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
             Date fecha_inicio = null;
             Date fecha_fin = null;
             try {

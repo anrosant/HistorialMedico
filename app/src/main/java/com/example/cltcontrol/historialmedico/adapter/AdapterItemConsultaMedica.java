@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -54,6 +55,7 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
         return position;
     }
 
+    @SuppressLint("SimpleDateFormat")
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

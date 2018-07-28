@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
-        android:text="Seleccionar imagen" />
+        android:text="Seleccionar imagen"
+        tools:targetApi="o" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,11 +21,13 @@
         <ImageView
             android:id="@+id/idImage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="10dp"
-            android:src="@drawable/image0"/>
+            android:src="@drawable/image0"
+            android:contentDescription="TODO"
+            tools:targetApi="o" />
 
     </ScrollView>
 

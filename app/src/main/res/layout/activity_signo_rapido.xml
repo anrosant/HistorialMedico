@@ -23,7 +23,8 @@
         android:padding="10dp"
         android:text="Signos vitales"
         android:textColor="@color/colorPrimary"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:targetApi="o" />
 
     <FrameLayout
         android:id="@+id/contenedorSigno"
@@ -32,7 +33,8 @@
         android:layout_marginBottom="5dp"
         android:layout_marginHorizontal="5dp"
         android:layout_marginTop="-3dp"
-        android:background="@drawable/my_style_content">
+        android:background="@drawable/my_style_content"
+        tools:targetApi="o">
 
     </FrameLayout>
 

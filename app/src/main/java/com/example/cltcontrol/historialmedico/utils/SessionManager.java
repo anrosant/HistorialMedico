@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -24,6 +25,7 @@ public class SessionManager {
 
 
 
+    @SuppressLint("CommitPrefEdits")
     public SessionManager(Context context) {
         this.context = context;
         sharedPrefer = context.getSharedPreferences(SESION, PRIVATE_MODE);

@@ -1,9 +1,5 @@
 package com.example.cltcontrol.historialmedico.models;
 
-import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
@@ -11,10 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class SignosVitales extends SugarRecord {
-    @Unique
     private int id_serv;
     private int presion_sistolica, presion_distolica, pulso;
     private float temperatura;

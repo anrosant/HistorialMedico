@@ -9,8 +9,6 @@ import android.widget.TextView;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
-import java.util.List;
-
 public class MenuEmpleadoActivity extends FragmentActivity {
 
     private String idEmpleado;

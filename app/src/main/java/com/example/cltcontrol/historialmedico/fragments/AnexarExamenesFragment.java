@@ -30,8 +30,6 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.interfaces.IResult;
-import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
-import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.ExamenImagen;
 import com.example.cltcontrol.historialmedico.service.RequestService;
 import com.example.cltcontrol.historialmedico.utils.ImageOrientation;

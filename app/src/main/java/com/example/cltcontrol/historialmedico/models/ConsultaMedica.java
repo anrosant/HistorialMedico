@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ConsultaMedica extends SugarRecord {
-    @Unique
     private int id_serv;
     private Context context;
     private Empleado empleado;

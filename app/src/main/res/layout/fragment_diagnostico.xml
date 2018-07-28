@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -47,7 +47,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.7"
                         android:background="@color/colorPrimary"
-                        android:src="@drawable/flecha_arriba" />
+                        android:src="@drawable/flecha_arriba"
+                        android:contentDescription="TODO" />
 
                 </LinearLayout>
 
@@ -114,7 +115,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="10sp"
-                                android:text="Presuntorio" />
+                                android:text="Presuntorio"
+                                tools:targetApi="o" />
 
                             <RadioButton
                                 android:id="@+id/rbDefinitorio"
@@ -165,7 +167,8 @@
                 <ListView
                     android:id="@+id/lvDiagnostico"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    tools:ignore="NestedScrolling">
                 </ListView>
 
             </LinearLayout>

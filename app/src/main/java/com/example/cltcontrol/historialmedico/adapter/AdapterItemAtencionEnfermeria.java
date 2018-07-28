@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -63,7 +64,7 @@ public class AdapterItemAtencionEnfermeria extends ArrayAdapter<AtencionEnfermer
         TextView motivoAtencion = v.findViewById(R.id.tvMotivo);
 
         AtencionEnfermeria atencion = atencionEnfermeriaList.get(position);
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         //Se obtiene la fecha, se le da el formato del simpleDateFormat y se lo setea al holder
         String DateToStr = format.format(atencion.getFecha_atencion());
 

@@ -48,7 +48,6 @@ public class SignosVitalesFragment extends Fragment {
     private AdapterSignosVitales adapterSignosVitales;
     private Empleado empleado;
     private List<SignosVitales> signosVitalesList;
-    private Button btn_guardar;
     private ImageButton ib_mostrar_ocultar_contendido;
     LinearLayout ly_signos_vitales;
     private TextView tvTitulo;
@@ -56,16 +55,18 @@ public class SignosVitalesFragment extends Fragment {
     private SignosVitales signos;
 
     //POST
-    IResult mResultCallback = null;
-    RequestService requestService;
-    int id_empleado_Servidor;
-    String TAGSIGNOS = "tagsignos", TAGCONSULTA="tagconsulta";
+    private IResult mResultCallback = null;
+    private RequestService requestService;
+    private int id_empleado_Servidor;
+    private String TAGSIGNOS = "tagsignos", TAGCONSULTA="tagconsulta";
 
-    String presionSistolicaText;
-    String presionDistolicaText;
-    String temperaturatext;
-    String pulsoText;
-    Date fecha_consulta;
+    private String presionSistolicaText;
+    private String presionDistolicaText;
+    private String temperaturatext;
+    private String pulsoText;
+    private Date fecha_consulta;
+
+    Button btn_guardar;
 
     public SignosVitalesFragment() {
         // Required empty public constructor
@@ -77,7 +78,7 @@ public class SignosVitalesFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         //Registar el receiver para sincronizar datos
-        //Objects.requireNonNull(getContext()).registerReceiver(new NetworkStateChecker(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        //Objects.requireNonNull(getContext()).registerReceiver(new SincronizacionInmediata(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_signos_vitales, container, false);
@@ -94,12 +95,15 @@ public class SignosVitalesFragment extends Fragment {
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         //Recibe el id de consulta medica desde Historial de consulta medica
 
-        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-        //Recibe el id del empleado
-        id_empleado = extras.getString("ID_EMPLEADO");
-        cargo = extras.getString("CARGO");
-        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
-        id_empleado_Servidor = empleado.getId_serv();
+        if (extras != null) {
+            id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+            //Recibe el id del empleado
+            id_empleado = extras.getString("ID_EMPLEADO");
+            cargo = extras.getString("CARGO");
+            empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+            id_empleado_Servidor = empleado.getId_serv();
+        }
+
 
         //Ingresa a nueva consulta medica
         if(id_consulta_medica!=null) {
@@ -117,13 +121,14 @@ public class SignosVitalesFragment extends Fragment {
         }
 
         //Crea un adapter de dicha lista y la muestra en un listview
-        adapterSignosVitales = new AdapterSignosVitales(getContext(), (ArrayList<SignosVitales>) signosVitalesList);
+        adapterSignosVitales = new AdapterSignosVitales(getContext(), signosVitalesList);
         lvSignosVitales.setAdapter(adapterSignosVitales);
 
         //BOTON GUARDAR SIGNOS VITALES
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btn_guardar.setEnabled(false);
                 //Recibe los datos de signos vitales
                 presionSistolicaText = etPSistolica.getText().toString();
                 presionDistolicaText = etPDistolica.getText().toString();
@@ -131,7 +136,7 @@ public class SignosVitalesFragment extends Fragment {
                 pulsoText = etPulso.getText().toString();
 
                 signos = new SignosVitales();
-                int res = signos.validarSignos(presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText);
+                int res = signos.validarSignos(presionSistolicaText, presionDistolicaText, pulsoText, temperaturatext);
                 if(res == 0) {
                     Toast.makeText(getContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
                     SignosVitales.delete(signos);
@@ -142,6 +147,7 @@ public class SignosVitalesFragment extends Fragment {
                     //Si es la primera vez que crea la consulta medica
                     if (consultaMedica.getEmpleado() == null) {
                         fecha_consulta = new Date();
+                        Log.d("HEREEE", "1");
                         postConsultaMedica(fecha_consulta);
                     } else{
                         postSignosVitales(String.valueOf(consultaMedica.getId_serv()));
@@ -187,6 +193,7 @@ public class SignosVitalesFragment extends Fragment {
         signos.setTemperatura(Float.parseFloat(temperaturatext));
         signos.setStatus(status);
         signos.setConsultaMedica(consultaMedica);
+        signos.setEmpleado(empleado);
         signos.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
@@ -195,6 +202,7 @@ public class SignosVitalesFragment extends Fragment {
             Toast.makeText(getContext(),"No hay conexión a internet. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
         }
         limpiarCampos();
+        btn_guardar.setEnabled(true);
         cargarSignosVitales(signos.getConsultaMedica().getId());
     }
 
@@ -207,6 +215,8 @@ public class SignosVitalesFragment extends Fragment {
         consultaMedica.setFechaConsulta(fechaConsulta);
         consultaMedica.setStatus(status);
         consultaMedica.save();
+
+        postSignosVitales(String.valueOf(id_servidor));
     }
     /*
      * Limpia los campos luego de haber ingresado los signos vitales
@@ -224,6 +234,7 @@ public class SignosVitalesFragment extends Fragment {
      * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
      * */
     void initRequestCallback(final String TAG){
+        Log.d("HEREEE", "3");
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
@@ -234,7 +245,7 @@ public class SignosVitalesFragment extends Fragment {
                         Date fecha = convertirFecha(fechaConsulta);
                         String pk = response.getString("pk");
                         guardarConsultaMedicaLocal(fecha,Integer.parseInt(pk), NAME_SYNCED_WITH_SERVER);
-                        postSignosVitales(pk);
+                        //postSignosVitales(pk);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -257,7 +268,6 @@ public class SignosVitalesFragment extends Fragment {
                     guardarSignosVitalesLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
                 Log.e("ERROR", String.valueOf(error));
-                Toast.makeText(getContext(),String.valueOf(error),Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -265,11 +275,12 @@ public class SignosVitalesFragment extends Fragment {
                 Log.d("HEREMSJERROR", String.valueOf(error));
                 if(TAG.equalsIgnoreCase("tagconsulta")){
                     guardarConsultaMedicaLocal(fecha_consulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
+                    Log.d("HEREEE", "4");
                 }else {
+                    Log.d("HEREEE", "5");
                     guardarSignosVitalesLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
                 Log.e("ERROR", String.valueOf(error));
-                Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -283,6 +294,7 @@ public class SignosVitalesFragment extends Fragment {
      * Envía datos de Consulta médica al servidor
      * */
     public void postConsultaMedica(final Date fecha_consulta){
+        Log.d("HERE", "2");
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
         JSONObject sendObj = ConsultaMedica.getJSONConsultaMedica(String.valueOf(id_empleado_Servidor), fecha_consulta,"","","","","");

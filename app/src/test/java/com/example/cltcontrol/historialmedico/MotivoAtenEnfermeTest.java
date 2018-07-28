@@ -1,7 +1,6 @@
 package com.example.cltcontrol.historialmedico;
 
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
-import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 
 import junit.framework.Assert;
 

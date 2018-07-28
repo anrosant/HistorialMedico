@@ -1,11 +1,9 @@
 package com.example.cltcontrol.historialmedico.models;
 
-import com.orm.SugarApp;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
 public class PatologiasFamiliares extends SugarRecord {
-    @Unique
     private int id_serv, id_ficha;
 
     private int status;

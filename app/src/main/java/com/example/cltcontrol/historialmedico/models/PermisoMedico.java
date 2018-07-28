@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class PermisoMedico extends SugarRecord{
-    @Unique
     private int id_serv;
     private Diagnostico diagnostico;
     private Date fecha_inicio, fecha_fin;

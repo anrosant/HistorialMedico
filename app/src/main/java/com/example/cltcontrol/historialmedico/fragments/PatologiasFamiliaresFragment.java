@@ -7,14 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.adapter.AdapterPatologiasFamiliares;
-import com.example.cltcontrol.historialmedico.adapter.AdapterPatologiasPersonales;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.PatologiasFamiliares;
-import com.example.cltcontrol.historialmedico.models.PatologiasPersonales;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,21 +34,21 @@ public class PatologiasFamiliaresFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_patologias_familiares, container, false);;
+        view = inflater.inflate(R.layout.fragment_patologias_familiares, container, false);
         lvPatologiasFamiliares = view.findViewById(R.id.lvPatologiasFamiliares);
 
         //Obtiene datos desde desde Historial de consulta medica
         final Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
-        id_empleado = extras.getString("ID_EMPLEADO");
-        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
-        Log.d("EMPLEADOO", String.valueOf(empleado.getFicha_actual()));
-        //Obtenemos la lista de patologias personales que existan
-        patologiasFamiliaresList = PatologiasFamiliares.find(PatologiasFamiliares.class, "idficha = ?", String.valueOf(empleado.getFicha_actual()));
-        Log.d("LISTAPATOLO", String.valueOf(patologiasFamiliaresList.size()));
-        //Crea un adapter de dicha lista y la muestra en un listview
-        adapterPatologiaFamiliares = new AdapterPatologiasFamiliares(getContext(), patologiasFamiliaresList);
-        lvPatologiasFamiliares.setAdapter(adapterPatologiaFamiliares);
+        if (extras != null) {
+            id_empleado = extras.getString("ID_EMPLEADO");
+            empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+            //Obtenemos la lista de patologias personales que existan
+            patologiasFamiliaresList = PatologiasFamiliares.find(PatologiasFamiliares.class, "idficha = ?", String.valueOf(empleado.getFicha_actual()));
 
+            //Crea un adapter de dicha lista y la muestra en un listview
+            adapterPatologiaFamiliares = new AdapterPatologiasFamiliares(getContext(), patologiasFamiliaresList);
+            lvPatologiasFamiliares.setAdapter(adapterPatologiaFamiliares);
+        }
         return view;
 
     }

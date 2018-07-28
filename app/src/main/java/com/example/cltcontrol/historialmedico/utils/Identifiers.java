@@ -1,5 +1,7 @@
 package com.example.cltcontrol.historialmedico.utils;
 
+import android.annotation.SuppressLint;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,7 +35,7 @@ public class Identifiers {
      * */
     public static Date convertirFecha(String fecha){
         //Fechas
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-mmm");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-mmm");
         Date fechaNueva = null;
         try {
             fechaNueva = formatter.parse(fecha);

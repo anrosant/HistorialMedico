@@ -13,9 +13,9 @@ import com.example.cltcontrol.historialmedico.fragments.DiagnosticoEnfermeriaFra
 import com.example.cltcontrol.historialmedico.fragments.MotivoAtencionEnfermeriaFragment;
 import com.example.cltcontrol.historialmedico.fragments.PlanCuidadosFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesEnfermeriaFragment;
-import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
+import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.orm.util.NamingHelper;
@@ -51,6 +51,11 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements Comu
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AtencionEnfermeria atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Integer.parseInt(idAtencion));
+                if(atencionEnfermeria.getFecha_atencion()==null){
+                    atencionEnfermeria.delete();
+                }
+
                 ArrayList<AtencionEnfermeria> atencionEnfermerias = (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class,
                         "empleado = ?", idEmpleado);
                 HistorialAtencionEnfermeria.adapter.actualizarAtencionEnfermeriaList(atencionEnfermerias);

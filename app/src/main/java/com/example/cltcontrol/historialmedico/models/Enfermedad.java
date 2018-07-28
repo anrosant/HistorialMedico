@@ -4,7 +4,6 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
 public class Enfermedad extends SugarRecord{
-    @Unique
     private int id_serv;
     private String codigo;
     private String nombre;

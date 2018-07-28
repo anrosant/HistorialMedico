@@ -1,7 +1,6 @@
 package com.example.cltcontrol.historialmedico.models;
 
 import com.orm.SugarRecord;
-import com.orm.dsl.Column;
 import com.orm.dsl.Unique;
 
 import org.json.JSONException;
@@ -10,7 +9,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Diagnostico extends SugarRecord{
-    @Unique
     private int id_serv;
     private ConsultaMedica consulta_medica;
     private Enfermedad enfermedad;
@@ -76,7 +74,7 @@ public class Diagnostico extends SugarRecord{
             sendObj = new JSONObject("{" +
                     "'consulta_medica': "+id_consulta+", " +
                     "'enfermedad': '"+id_enfermedad+"', "+
-                    "'tipo': "+tipo_enfermedad+
+                    "'tipo': '"+tipo_enfermedad+"'"+
                     "}");
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,12 +1,17 @@
 package com.example.cltcontrol.historialmedico.models;
 
+import android.util.Log;
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 public class AtencionEnfermeria extends SugarRecord {
-    @Unique
     private int id_serv;
     private Date fechaAtencion;
     //private String cedulaEmpleado;
@@ -88,5 +93,28 @@ public class AtencionEnfermeria extends SugarRecord {
             return 1;
         }
         return 2;
+    }
+
+    public ArrayList<AtencionEnfermeria> getAtencionEnfermeriaUnsynced(){
+        return (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class, "status = ?", String.valueOf(0));
+    }
+
+    public static JSONObject getJSONAtencionEnfermeria(String id_empleado_servidor, Date fecha_consulta,
+                                                       String motivo, String diagnostico, String plan){
+        JSONObject sendObj = null;
+        try {
+            sendObj = new JSONObject("{" +
+                    "'empleado': "+String.valueOf(id_empleado_servidor)+", " +
+                    "'fecha': '"+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta))+"', " +
+                    "'motivo': '"+motivo+"', "+
+                    "'diagnostico': '"+diagnostico+"',"+
+                    "'plan_cuidados': '"+plan+"'"+
+                    "}");
+            Log.d("ENDOBJ", String.valueOf(sendObj));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return sendObj;
+
     }
 }

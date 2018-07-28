@@ -39,7 +39,8 @@
                     android:id="@+id/sp_enfermedades_diagnostico"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginVertical="5dp"/>
+                    android:layout_marginVertical="5dp"
+                    tools:targetApi="o" />
 
                 <TextView
                     android:id="@+id/txt_fecha_desde"
@@ -58,7 +59,7 @@
                     android:clickable="true"
                     android:drawableStart="@drawable/calendario"
                     android:enabled="false"
-                    android:focusable="false"
+                    android:focusable="true"
                     android:hint="Fecha de fin"
                     android:inputType="date"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse" />
@@ -67,7 +68,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginVertical="10dp">
+                    android:layout_marginVertical="10dp"
+                    tools:targetApi="o">
 
                     <TextView
                         android:id="@+id/tvDias"

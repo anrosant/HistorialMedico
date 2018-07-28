@@ -66,7 +66,7 @@
             android:label="@string/consulta_medica_nuevo"
             android:configChanges="screenSize|orientation" />
 
-        <receiver android:name=".utils.NetworkStateChecker">
+        <receiver android:name=".utils.SincronizacionInmediata">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
                     tools:ignore="BatteryLife" />

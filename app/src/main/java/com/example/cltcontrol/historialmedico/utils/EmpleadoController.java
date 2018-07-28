@@ -1,15 +1,12 @@
 package com.example.cltcontrol.historialmedico.utils;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
+
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.models.Usuario;
-import com.orm.util.NamingHelper;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;

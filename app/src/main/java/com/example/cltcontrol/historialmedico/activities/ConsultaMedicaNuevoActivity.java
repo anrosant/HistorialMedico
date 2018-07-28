@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -81,6 +80,11 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
             @Override
             public void onClick(View v) {
                 //Guardar
+                ConsultaMedica consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Integer.parseInt(idConsultaMedica));
+                if(consultaMedica.getFechaConsulta()==null){
+                    consultaMedica.delete();
+                }
+
                 ArrayList<ConsultaMedica> consultaMedicas = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class,
                         "empleado = ?", String.valueOf(empleado.getId()));
                 HistorialConsultaMedica.adapterItemConsultaMedica.actualizarConsultaMedicaList(consultaMedicas);

@@ -274,6 +274,8 @@ public class DiagnosticoFragment extends Fragment {
         consultaMedica.setFechaConsulta(fechaConsulta);
         consultaMedica.setStatus(status);
         consultaMedica.save();
+
+        postDiagnostico(String.valueOf(id_servidor));
     }
 
     /*
@@ -302,7 +304,7 @@ public class DiagnosticoFragment extends Fragment {
                         Date fecha = convertirFecha(fechaConsulta);
                         String pk = response.getString("pk");
                         guardarConsultaMedicaLocal(fecha,Integer.parseInt(pk), NAME_SYNCED_WITH_SERVER);
-                        postDiagnostico(pk);
+                        //postDiagnostico(pk);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -324,8 +326,6 @@ public class DiagnosticoFragment extends Fragment {
                 }else {
                     guardarDiagnosticoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
-                Log.e("ERROR", String.valueOf(error));
-                Toast.makeText(getContext(),String.valueOf(error),Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -336,8 +336,6 @@ public class DiagnosticoFragment extends Fragment {
                 }else {
                     guardarDiagnosticoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
-                Log.e("ERROR", String.valueOf(error));
-                Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
             }
 
             @Override

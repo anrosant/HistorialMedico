@@ -26,14 +26,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_guardar_consulta"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:background="@drawable/my_style"
+            android:drawableRight="@drawable/ic_assignment_turned_in_green_24dp"
             android:padding="10dp"
             android:text="Consulta Médica"
             android:textColor="@color/colorPrimary"
@@ -52,8 +53,7 @@
             android:textAlignment="center" />
     </LinearLayout>
 
-
-    <android.support.design.widget.CoordinatorLayout
+    <FrameLayout
         android:id="@+id/contenedor_detalle_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -62,13 +62,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:weightSum="4">
+            android:weightSum="4" >
 
             <LinearLayout
                 android:id="@+id/linearMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2">
+                android:layout_weight="0.8">
                 <fragment
                     android:id="@+id/menuConsultaMedica"
                     android:layout_width="wrap_content"
@@ -76,31 +76,19 @@
                     android:name="com.example.cltcontrol.historialmedico.fragments.MenuConsultaMedicaFragment"
                     tools:layout="@layout/fragment_menu_consulta_medica">
                 </fragment>
-
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/contenedorConsultaMedica"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2.8"
+                android:layout_weight="3.2"
                 app:layout_anchor="@+id/menuConsultaMedica"
                 android:orientation="horizontal">
             </LinearLayout>
 
         </LinearLayout>
-<!--
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_mostrar_ocultar_menu"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:src="@android:drawable/ic_media_rew"
-            app:layout_anchor="@+id/menuConsultaMedica"
-            app:layout_anchorGravity="center|end"
-            app:backgroundTint="#a3b45f"
-            android:clickable="true"/>-->
 
-    </android.support.design.widget.CoordinatorLayout>
+    </FrameLayout>
 
 </LinearLayout>

@@ -20,78 +20,111 @@
                 android:id="@+id/btnSignosVitales"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:background="#eff7fc"
+                android:textAlignment="textStart"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
                 android:text="Signos Vitales" />
 
             <Button
                 android:id="@+id/btnMotivoAtencion"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="10sp"
+                android:layout_height="wrap_content"
+                android:background="#eff7fc"
+                android:textAlignment="textStart"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
                 android:text="Motivo Consulta"/>
 
             <Button
                 android:id="@+id/btnAntecedentesPatologicosPersonales"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Patologías Personales"
-                android:textSize="10sp" />
+                android:background="#eff7fc"
+                android:textAlignment="textStart"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Patologías Personales" />
 
             <Button
                 android:id="@+id/btnAntecedentesPatologicosFamiliares"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Patologías Familiares "
-                android:textSize="10sp" />
+                android:background="#eff7fc"
+                android:textAlignment="textStart"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Patologías Familiares " />
 
             <Button
                 android:id="@+id/btnProblemaActual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:background="#eff7fc"
+                android:textAlignment="textStart"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
                 android:text="Problema Actual" />
 
             <Button
                 android:id="@+id/btnRevisionMedica"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Revisión Médica"
-                android:textSize="10sp" />
+                android:background="#eff7fc"
+                android:textAlignment="textStart"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Revisión Médica" />
 
             <Button
                 android:id="@+id/btnExamenFisico"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Examen Físico"
-                android:textSize="10sp" />
+                android:background="#eff7fc"
+                android:textAlignment="textStart"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Examen Físico" />
 
             <Button
                 android:id="@+id/btnAnexarExamenes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Anexar Exámenes"
-                android:textSize="10sp" />
+                android:background="#eff7fc"
+                android:textAlignment="textStart"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Anexar Exámenes" />
 
             <Button
                 android:id="@+id/btnDiagnostico"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Diagnósticos"
-                android:textSize="10sp" />
-
-            <Button
-                android:id="@+id/btnPrescripcion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Prescripción"
-                android:textSize="10sp" />
+                android:background="#eff7fc"
+                android:textAlignment="textStart"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Diagnósticos" />
 
             <Button
                 android:id="@+id/btnPermisosMedicos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Permiso Médico"
-                android:textSize="10sp" />
+                android:background="#eff7fc"
+                android:textAlignment="textStart"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Permiso Médico" />
+
+            <Button
+                android:id="@+id/btnPrescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#eff7fc"
+                android:textAlignment="textStart"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Prescripción" />
 
         </LinearLayout>
 

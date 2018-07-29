@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,6 +35,8 @@ import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.service.RequestService;
+import com.example.cltcontrol.historialmedico.utils.BuscarTexto;
+import com.example.cltcontrol.historialmedico.utils.ListaEnfermedades;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,25 +54,26 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
 
 public class DiagnosticoFragment extends Fragment {
 
-    private static List<Enfermedad> enfermedadList;
     private RecyclerView recyclerEnfermedades;
+    private AdapterItemDiagnostico adapterItemDiagnostico;
     private AdapterEnfermedades adaptadorEnfermedades;
     private EditText etBuscarEnfermedades;
-    private Enfermedad enfermedad;
-    private Diagnostico diagnostico;
-    private String tipo_enfermedad,id_consulta_medica, id_empleado, cargo;
-    private AdapterItemDiagnostico adapterItemDiagnostico;
     private Button btn_guardar;
-    private ConsultaMedica consultaMedica;
     private RadioGroup rg_tipo_enfermedad;
     private RadioButton radioButton;
-    private Empleado empleado;
     private ListView lvDiagnostico;
     private LinearLayout ly_diagnostico;
     private ImageButton ib_mostrar_ocultar_contendido;
-    private List<Diagnostico> diagnosticoList;
-    private List<Enfermedad> newList;
     private TextView tvTitulo;
+
+    private static List<Enfermedad> enfermedadList;
+    private String tipo_enfermedad,id_consulta_medica, id_empleado, cargo;
+    private ConsultaMedica consultaMedica;
+    private Empleado empleado;
+    private List<Diagnostico> diagnosticoList;
+    private Diagnostico diagnostico;
+    private List<Enfermedad> newList;
+    private Enfermedad enfermedad;
 
     private IResult mResultCallback = null;
     private RequestService requestService;
@@ -90,7 +96,7 @@ public class DiagnosticoFragment extends Fragment {
         lvDiagnostico = view.findViewById(R.id.lvDiagnostico);
         ib_mostrar_ocultar_contendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         ly_diagnostico = view.findViewById(R.id.ly_diagnostico);
-        tvTitulo = view.findViewById(R.id.tvTitulo);
+        tvTitulo = view.findViewById(R.id.tv_titulo);
 
         final Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
@@ -108,15 +114,16 @@ public class DiagnosticoFragment extends Fragment {
             ly_diagnostico.setVisibility(View.GONE);
             ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
             tvTitulo.setVisibility(View.GONE);
-
         }
+
         //Muestra la lista de diagnosticos
         diagnosticoList = Diagnostico.find(Diagnostico.class, "consultamedica = ?", id_consulta_medica);
         //Crea un adapter de dicha lista y la muestra en un listview
         adapterItemDiagnostico = new AdapterItemDiagnostico(getContext(), diagnosticoList);
         lvDiagnostico.setAdapter(adapterItemDiagnostico);
 
-        readEnfermedadesAll();
+        enfermedadList = ListaEnfermedades.readEnfermedadesAll();
+
         recyclerEnfermedades = view.findViewById(R.id.rvListaEnfermedades);
         recyclerEnfermedades.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
         etBuscarEnfermedades = view.findViewById(R.id.etBuscarEnfermedades);
@@ -144,16 +151,19 @@ public class DiagnosticoFragment extends Fragment {
 
                 String newTest;
                 if(charSequence.length() != 0){
-                    newTest = etBuscarEnfermedades.getText().toString().toLowerCase();
+                    etBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_cancel_grey_24dp,0);
+                    newTest = BuscarTexto.quitaDiacriticos(etBuscarEnfermedades.getText().toString().toLowerCase());
                     newList = new ArrayList<>();
                     for (Enfermedad enfermedad:enfermedadList){
                         String nombre = enfermedad.getNombre().toLowerCase();
+                        String codigo = enfermedad.getCodigo().toString().toLowerCase();
                         if(nombre.contains(newTest)){
                             newList.add(enfermedad);
                         }
                     }
                     adaptadorEnfermedades.setFilter(newList);
                 }else{
+                    etBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
                     adaptadorEnfermedades.setFilter(enfermedadList);
                 }
             }
@@ -167,15 +177,41 @@ public class DiagnosticoFragment extends Fragment {
                     public void onItemClick(View view, int position) {
                         Toast.makeText(getContext(), "Se ha escogido " + adaptadorEnfermedades.getListaEnfermedades().get(position).getNombre(), Toast.LENGTH_SHORT).show();
                         enfermedad = adaptadorEnfermedades.getListaEnfermedades().get(position);
+                        etBuscarEnfermedades.setText(enfermedad.getNombre());
                         Log.d("ENFERMEDAD", String.valueOf(enfermedad.getId()));
                     }
-
                     @Override
                     public void onLongItemClick(View view, int position) {
 
                     }
                 })
         );
+
+        etBuscarEnfermedades.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    try{
+                        if (motionEvent.getX() >= (etBuscarEnfermedades.getRight() - etBuscarEnfermedades.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            // your action here
+                            etBuscarEnfermedades.setText("");
+                            etBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                        }
+                    }catch(NullPointerException e){
+                        etBuscarEnfermedades.requestFocus();
+                        //Llamada al teclado
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(etBuscarEnfermedades, InputMethodManager.SHOW_IMPLICIT);
+                    }
+                }
+                return true;
+            }
+        });
 
         //Escoge el tipo de enfermedad
         rg_tipo_enfermedad.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -276,17 +312,6 @@ public class DiagnosticoFragment extends Fragment {
         consultaMedica.save();
 
         postDiagnostico(String.valueOf(id_servidor));
-    }
-
-    /*
-     * Guarda las enfermedades que están en la base de datos, en una lista
-     * */
-    private void readEnfermedadesAll(){
-        try{
-            enfermedadList = Enfermedad.listAll(Enfermedad.class);
-        }catch (Exception e){
-            Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-        }
     }
 
     /*

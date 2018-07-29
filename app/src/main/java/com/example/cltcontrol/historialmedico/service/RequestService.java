@@ -57,16 +57,13 @@ public class RequestService {
                         dialog.dismiss();
                 }
             });
-
             queue.add(jsonObj);
-
         }catch(Exception e){
             if(mResultCallback != null) {
                 mResultCallback.notifyMsjError(requestType, "No tiene conexión");
             }
             if(dialog!=null)
                 dialog.dismiss();
-
         }
     }
 
@@ -125,8 +122,6 @@ public class RequestService {
             if(dialog!=null)
                 dialog.dismiss();
         }
-
-
     }
 
 }

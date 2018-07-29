@@ -62,7 +62,7 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
         View v = convertView;
 
         if (v == null) {
-            v = LayoutInflater.from(getContext()).inflate(R.layout.item_consulta_medica, parent, false);
+            v = LayoutInflater.from(getContext()).inflate(R.layout.listview_item_row_consulta_medica, parent, false);
         }
 
         ConsultaMedica consultaMedica = consultaMedicasList.get(position);

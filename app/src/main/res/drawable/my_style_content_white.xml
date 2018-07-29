@@ -1,0 +1,22 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:left="3px" android:top="3px" android:right="3px">
+        <!-- dibuja background y shadow-->
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:shape="rectangle">
+            <solid android:color="#bdbddb"/>
+
+        </shape>
+    </item>
+
+    <item android:left="1px" android:top="1px" android:right="1px" android:bottom="1px">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:shape="rectangle">
+            <solid android:color="#FFFFFF"/>
+            <stroke android:width="2px"
+                android:color="#bdbdbd">
+            </stroke>
+
+        </shape>
+    </item>
+
+</layer-list>

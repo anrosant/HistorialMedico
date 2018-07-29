@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:descendantFocusability="blocksDescendants">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="5sp"
+        android:layout_marginVertical="3sp"
+        android:padding="10dp"
+        android:background="@drawable/my_style">
+
+        <TextView
+            android:id="@+id/textViewFecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha de atención:" />
+
+        <TextView
+            android:id="@+id/tvFechaAtencion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/textViewMotivo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Motivo" />
+
+        <TextView
+            android:id="@+id/tvMotivo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -7,133 +7,396 @@
     android:weightSum="4"
     android:orientation="vertical" >
 
-    <fragment
-        android:id="@+id/frDatosEmpleado"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="com.example.cltcontrol.historialmedico.fragments.DatosEmpleadoFragment"
-        tools:layout="@layout/fragment_datos_empleado">
-    </fragment>
+        android:layout_height="match_parent"
+        android:layout_weight="4">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center">
+                <LinearLayout
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#FFFFFF">
+                    <ImageView
+                        android:id="@+id/ivFotoEmpleado"
+                        android:layout_width="170dp"
+                        android:layout_height="170dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_account_box_black_48dp"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvApellidosNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:gravity="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24dp"
+                    android:text="Apellidos-Nombres"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvDatosPersonales"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/my_style_title"
+                android:padding="10dp"
+                android:text="DATOS PERSONALES"
+                android:drawableRight="@drawable/ic_keyboard_arrow_up_cyan_24dp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:id="@+id/lyDatosPersonales"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                android:layout_marginTop="-3dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/my_style_content_white">
+                android:paddingTop="10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12dp"
+                    android:text="Cedula de Identidad"/>
+
+                <TextView
+                    android:id="@+id/tvCi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textSize="14dp"
+                    android:textColor="#000"
+                    android:text="#Cedula"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="#BDBDBD"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12dp"
+                    android:text="Lugar, Fecha de Nacimiento"/>
+
+                <TextView
+                    android:id="@+id/tvLugarFechaNacimiento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textColor="#000"
+                    android:textSize="14dp"
+                    android:text="Lugar, Fecha de Nacimiento"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="#BDBDBD"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="Sexo"/>
+
+                <TextView
+                    android:id="@+id/tvSexo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textColor="#000"
+                    android:textSize="14dp"
+                    android:text="Sexo"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="#BDBDBD"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="Edad"/>
+
+                <TextView
+                    android:id="@+id/tvEdad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:layout_marginTop="3dp"
+                    android:textSize="14dp"
+                    android:text="Edad"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="#BDBDBD"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="Profesion"/>
+
+                <TextView
+                    android:id="@+id/tvProfesion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:layout_marginTop="3dp"
+                    android:textSize="14dp"
+                    android:text="Profesion"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="#BDBDBD"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="Estado Civil"/>
+
+                <TextView
+                    android:id="@+id/tvEstadoCivil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="14dp"
+                    android:text="EstadoCivil"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvDatosDeEmpresa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/my_style_title"
+                android:padding="10dp"
+                android:text="DATOS EN LA EMPRESA"
+                android:drawableRight="@drawable/ic_keyboard_arrow_up_cyan_24dp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/lyDatosDeEmpresa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                android:layout_marginTop="-3dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/my_style_content_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12dp"
+                    android:text="Id Empleado"/>
+
+                <TextView
+                    android:id="@+id/tvIdEmpleado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textSize="14dp"
+                    android:textColor="#000"
+                    android:text="#Id"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="#BDBDBD"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12dp"
+                    android:text="Fecha de Ingreso"/>
+
+                <TextView
+                    android:id="@+id/tvFechaIngreso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textColor="#000"
+                    android:textSize="14dp"
+                    android:text="fecha-Ingreso"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="#BDBDBD"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12dp"
+                    android:text="Ocupacion"/>
+
+                <TextView
+                    android:id="@+id/tvOcupacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="#000"
+                    android:textSize="14dp"
+                    android:text="Ocupacion"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/menuEmpleado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_horizontal"
+        android:gravity="center"
+        android:baselineAligned="false"
         android:layout_weight="1"
-        android:weightSum="2"
-        android:baselineAligned="false">
-
+        android:weightSum="4">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_margin="3dp"
-            android:background="#FFFFFF"
+            android:clickable="true"
+            android:onClick="aperturaHistorialConsultaMedica"
+            android:background="#eff7fc"
             android:layout_weight="1"
             android:weightSum="2">
             <ImageButton
-                android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:background="#FFFFFF"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
                 android:onClick="aperturaHistorialConsultaMedica"
-                android:src="@drawable/consultamedica"
-                android:contentDescription="TODO" />
-
+                android:background="@drawable/effect_menu"
+                android:layout_weight="2"
+                android:src="@drawable/doctor"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Consulta Médica"
-                android:textSize="15dp" />
-
+                android:textColor="@color/colorPrimary"
+                android:gravity="center" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_margin="3dp"
-            android:background="#FFFFFF"
+            android:clickable="true"
+            android:onClick="aperturaHistorialAtencionEnfermeria"
+            android:background="#eff7fc"
             android:layout_weight="1"
-            android:weightSum="2" >
+            android:weightSum="2">
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:background="#FFFFFF"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#eff7fc"
+                android:layout_weight="2"
                 android:onClick="aperturaHistorialAtencionEnfermeria"
-                android:src="@drawable/consultaenfermeria"
-                android:contentDescription="TODO" />
-
+                android:src="@drawable/enfermera"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Atención Enfermería"
-                android:textSize="15dp" />
-
+                android:textColor="@color/colorPrimary"
+                android:gravity="center" />
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:layout_weight="1"
-        android:weightSum="2"
-        android:baselineAligned="false">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_margin="3dp"
-            android:background="#FFFFFF"
-            android:layout_weight="1"
-            android:weightSum="2">
-
+            android:clickable="true"
+            android:weightSum="2"
+            android:background="#eff7fc"
+            android:layout_weight="1">
             <ImageButton
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="#FFFFFF"
-                android:onClick="aperturaSignos"
-                android:src="@drawable/signosvitales"
-                android:contentDescription="TODO" />
+                android:layout_weight="2"
+                android:background="#eff7fc"
+                android:src="@drawable/signosvitales" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Signos Vitales"
-                android:textSize="15dp" />
-
+                android:text=" Signos  Vitales "
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_margin="3dp"
-            android:background="#FFFFFF"
+            android:clickable="true"
+            android:onClick="aperturaPermisosMedicos"
+            android:background="#eff7fc"
             android:layout_weight="1"
             android:weightSum="2" >
             <ImageButton
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="#FFFFFF"
-                android:layout_weight="1"
-                android:src="@drawable/permisomedico"
-                android:contentDescription="TODO" />
-
+                android:background="#eff7fc"
+                android:layout_weight="2"
+                android:onClick="aperturaPermisosMedicos"
+                android:src="@drawable/permiso"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Permisos Médicos"
-                android:textSize="15dp" />
-
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"/>
         </LinearLayout>
     </LinearLayout>
 

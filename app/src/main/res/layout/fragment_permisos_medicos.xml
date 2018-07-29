@@ -17,17 +17,6 @@
             android:orientation="vertical"
             android:padding="5dp">
 
-            <Switch
-                android:id="@+id/sw_generar_permiso"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:padding="5dp"
-                android:text="GENERAR PERMISO MÉDICO"
-                android:textColor="#FFFFFF"
-                android:textOff="No"
-                android:textOn="Yes" />
-
             <LinearLayout
                 android:id="@+id/ly_contenedor_permiso_medico"
                 android:layout_width="match_parent"
@@ -35,12 +24,31 @@
                 android:orientation="vertical"
                 android:background="#FFFFFF">
 
+                <TextView
+                    android:id="@+id/txt_titulo_permiso_medico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:padding="5dp"
+                    android:layout_marginVertical="5dp"
+                    android:text="DIAGNOSTICO MEDICO"
+                    android:textColor="#FFFFFF" />
+
+                <Switch
+                    android:id="@+id/sw_generar_permiso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_marginVertical="5dp"
+                    android:text="Agregar Permiso Medico"
+                    android:textOff="No"
+                    android:textOn="Yes" />
+
                 <Spinner
                     android:id="@+id/sp_enfermedades_diagnostico"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginVertical="5dp"
-                    tools:targetApi="o" />
+                    android:layout_marginVertical="5dp"/>
 
                 <TextView
                     android:id="@+id/txt_fecha_desde"
@@ -59,7 +67,7 @@
                     android:clickable="true"
                     android:drawableStart="@drawable/calendario"
                     android:enabled="false"
-                    android:focusable="true"
+                    android:focusable="false"
                     android:hint="Fecha de fin"
                     android:inputType="date"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse" />
@@ -68,8 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginVertical="10dp"
-                    tools:targetApi="o">
+                    android:layout_marginVertical="10dp">
 
                     <TextView
                         android:id="@+id/tvDias"

@@ -91,10 +91,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         inMenu.putExtra("ID_CONSULTA_MEDICA", consultaMedica.getId().toString());
         inMenu.putExtra("PRECEDENCIA", "crear");
         inMenu.putExtra("CARGO", cargo);
-
         startActivity(inMenu);
-
-
     }
 
     public void aperturaConsultaMedica(View v){

@@ -16,7 +16,7 @@ public class PermisoMedico extends SugarRecord{
     private Diagnostico diagnostico;
     private Date fecha_inicio, fecha_fin;
     private int dias_permiso;
-    private String obsevaciones_permiso;
+    private String obsevaciones_permiso,doctor;
     private ConsultaMedica consulta_medica;
     private Empleado empleado;
     private int status;
@@ -39,6 +39,25 @@ public class PermisoMedico extends SugarRecord{
         this.fecha_fin = fecha_fin;
         this.dias_permiso = dias_permiso;
         this.obsevaciones_permiso = obsevaciones_permiso;
+    }
+
+    //Usado para un permiso medico otorgado por un Doctor Particular
+    public PermisoMedico(Diagnostico diagnostico, Date fecha_inicio, Date fecha_fin, int dias_permiso, String observaciones_permiso, String doctor, Empleado empleado) {
+        this.diagnostico = diagnostico;
+        this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
+        this.dias_permiso = dias_permiso;
+        this.obsevaciones_permiso = observaciones_permiso;
+        this.doctor = doctor;
+        this.empleado = empleado;
+    }
+
+    public String getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(String doctor) {
+        this.doctor = doctor;
     }
 
     public Empleado getEmpleado() {

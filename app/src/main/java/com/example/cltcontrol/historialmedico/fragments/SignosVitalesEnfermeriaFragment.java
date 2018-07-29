@@ -91,7 +91,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
         ib_mostrar_ocultar_contendido =  view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         ly_signos_vitales = view.findViewById(R.id.ly_signos_vitales);
         ListView lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
-        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
+        TextView tvTitulo = view.findViewById(R.id.tv_titulo);
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity

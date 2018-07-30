@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -24,18 +25,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.android.volley.VolleyError;
 import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.adapter.AdapterEnfermedades;
+import com.example.cltcontrol.historialmedico.interfaces.IResult;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.PermisoMedico;
+import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.example.cltcontrol.historialmedico.models.Usuario;
+import com.example.cltcontrol.historialmedico.service.RequestService;
 import com.example.cltcontrol.historialmedico.utils.BuscarTexto;
 import com.example.cltcontrol.historialmedico.utils.CalculoDias;
 import com.example.cltcontrol.historialmedico.utils.ListaEnfermedades;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,6 +52,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SIGNOS;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertirFecha;
 
 public class PermisosMedicosActivity extends FragmentActivity {
 
@@ -207,6 +221,27 @@ public class PermisosMedicosActivity extends FragmentActivity {
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+/*
+                String enfermedadPrincipalText;
+                if(!sw_generar_diagnostico_particular.isChecked()){
+                    enfermedadPrincipalText = txt_buscar_enfermedades.getText().toString();
+                }else{
+                    enfermedadPrincipalText = "Sin diagnostico medico ";
+                }
+
+                //Recibe los datos de signos vitales
+                String fechaInicioText = fecha_desde.getText().toString();
+                String fechaFinText = fecha_hasta.getText().toString();
+                String diasPermisoText = numero_dias.getText().toString();
+                String observacionesPermisoText = txt_observaciones.getText().toString();
+                String doctorPermisoText = txt_doctor.getText().toString();
+
+                if (!sw_generar_diagnostico_particular.isChecked() || enfermedadPrincipalText.equals("") || fechaInicioText.equals("") ||
+                        fechaFinText.equals("") || diasPermisoText.equals("") || observacionesPermisoText.equals("") ||
+                        doctorPermisoText.equals("")) {
+                    Toast.makeText(getApplicationContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
+                    return;
+                }*/
                 guardarPermisoMedico();
             }
         });
@@ -418,4 +453,9 @@ public class PermisosMedicosActivity extends FragmentActivity {
             numero_dias.setText(Long.toString(num + 1));
         }
     }
+
+    //------------------------------------------------------------------
+
+
+
 }

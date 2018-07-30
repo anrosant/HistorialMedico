@@ -17,11 +17,14 @@ import com.example.cltcontrol.historialmedico.interfaces.IResult;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.service.RequestService;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
@@ -142,11 +145,13 @@ public class ExamenFisicoFragment extends Fragment {
      * Envía datos de Consulta médica al servidor
      * */
     private void postConsultaMedica(final Date fechaConsulta){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback();
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         // 5) PASAR LOS DATOS A LA FUNCIÓN
-        JSONObject sendObj = ConsultaMedica.getJSONConsultaMedica(id_empleado_servidor,fechaConsulta, "","","","",examen_fisico);
-        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj);
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado_servidor,fechaConsulta, "","","","",examen_fisico);
+        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 
     /*

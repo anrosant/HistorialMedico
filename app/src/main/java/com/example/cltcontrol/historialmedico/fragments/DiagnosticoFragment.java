@@ -32,13 +32,16 @@ import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.service.RequestService;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
@@ -231,10 +234,12 @@ public class DiagnosticoFragment extends Fragment {
         }
         Log.d("IDSERV", id_serv);
         mResultCallback = null;
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback(TAGDIAGNOSTICO);
         requestService = new RequestService(mResultCallback, getActivity());
-        JSONObject sendObj = Diagnostico.getJSONDiagnostico(id_consulta, tipo_enfermedad, id_serv);
-        requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj);
+        Map<String, String> sendObj = Diagnostico.getHashMapDiagnostico(id_consulta, tipo_enfermedad, id_serv);
+        requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj, token);
     }
 
     /*
@@ -349,10 +354,12 @@ public class DiagnosticoFragment extends Fragment {
      * Envía datos de Consulta médica al servidor
      * */
     private void postConsultaMedica(final Date fecha_consulta){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
-        JSONObject sendObj = ConsultaMedica.getJSONConsultaMedica(String.valueOf(id_empleado_servidor), fecha_consulta, "","","","","");
-        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj);
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(id_empleado_servidor), fecha_consulta, "","","","","");
+        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 
 }

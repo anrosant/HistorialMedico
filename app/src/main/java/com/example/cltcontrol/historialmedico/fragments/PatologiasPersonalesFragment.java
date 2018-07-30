@@ -25,6 +25,7 @@ import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.PatologiasPersonales;
 import com.example.cltcontrol.historialmedico.service.RequestService;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
@@ -265,23 +267,27 @@ public class PatologiasPersonalesFragment extends Fragment {
      * Envía datos de Consulta médica al servidor
      * */
     public void postConsultaMedica(final Date fecha_consulta){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
-        JSONObject sendObj = ConsultaMedica.getJSONConsultaMedica(String.valueOf(id_empleado_Servidor), fecha_consulta,"","","","","");
-        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj);
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(id_empleado_Servidor), fecha_consulta,"","","","","");
+        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 
     /*
      * Envía datos de Signos vitales al servidor
      * */
     public void postPatologiasPersonales(String id_consulta_medica){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback(TAGPATOLOGIA);
         requestService = new RequestService(mResultCallback, getActivity());
         String id_ficha_actual = "";
         Log.d("EMPLEADOFICHA",String.valueOf(empleado.getFicha_actual()));
         if(empleado.getFicha_actual()!=0)
             id_ficha_actual = String.valueOf(empleado.getFicha_actual());
-        JSONObject sendObj = PatologiasPersonales.getJSONPatologiasPersonales(id_ficha_actual,id_consulta_medica,lugar, detalle);
-        requestService.postDataRequest("POSTCALL", URL_PATOLOGIAS_PERSONALES, sendObj);
+        Map<String, String> sendObj = PatologiasPersonales.getHashMapPatologiasPersonales(id_ficha_actual,id_consulta_medica,lugar, detalle);
+        requestService.postDataRequest("POSTCALL", URL_PATOLOGIAS_PERSONALES, sendObj, token);
     }
 }

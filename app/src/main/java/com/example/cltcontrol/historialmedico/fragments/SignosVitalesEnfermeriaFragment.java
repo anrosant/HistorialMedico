@@ -3,7 +3,6 @@ package com.example.cltcontrol.historialmedico.fragments;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -27,6 +26,7 @@ import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.example.cltcontrol.historialmedico.service.RequestService;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,9 +34,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.DATA_SAVED_BROADCAST;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_ATENCION_ENFERMERIA;
@@ -326,20 +326,24 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
      * Envía datos de Consulta médica al servidor
      * */
     public void postAtencionEnfermeria(final Date fecha_atencion){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback(TAGATENCION);
         requestService = new RequestService(mResultCallback, getActivity());
-        JSONObject sendObj = AtencionEnfermeria.getJSONAtencionEnfermeria(String.valueOf(id_empleado_Servidor), fecha_atencion,"","","");
-        requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj);
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(String.valueOf(id_empleado_Servidor), fecha_atencion,"","","");
+        requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj, token);
     }
 
     /*
      * Envía datos de Signos vitales al servidor
      * */
     public void postSignosVitales(String id_atencion_enfermeria){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback(TAGSIGNOS);
         requestService = new RequestService(mResultCallback, getActivity());
-        JSONObject sendObj = SignosVitales.getJSONSignosVitales(String.valueOf(id_empleado_Servidor),"",id_atencion_enfermeria,presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext);
-        requestService.postDataRequest("POSTCALL", URL_SIGNOS, sendObj);
+        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(String.valueOf(id_empleado_Servidor),"",id_atencion_enfermeria,presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext);
+        requestService.postDataRequest("POSTCALL", URL_SIGNOS, sendObj, token);
     }
 
 

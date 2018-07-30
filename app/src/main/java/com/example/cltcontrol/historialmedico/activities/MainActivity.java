@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -106,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     String msj = response.getString("msj");
                     if(msj.equalsIgnoreCase("Ingreso exitoso")){
+                        String token = response.getString("token");
+
+
                         String usuario = response.getString("usuarioId");
                         guardarUsuario(usuario);
 
@@ -136,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                         String permisoMedico = response.getString("permisoMedico");
                         guardarPermisoMedico(permisoMedico);
 
-                        crearSesion();
+                        crearSesion(token);
                         siguienteActivity();
 
                     }else{
@@ -542,11 +546,12 @@ public class MainActivity extends AppCompatActivity {
     /*
     * Crea una sesión y guarda el usuario
     * */
-    private void crearSesion(){
+    private void crearSesion(String token){
+        Log.d("TOKEEN", token);
         SessionManager sesion = new SessionManager(getApplicationContext());
         Long id = Usuario.find(Usuario.class, "usuario = ? ",
                 usuario).get(0).getId();
-        sesion.crearSesion(id);
+        sesion.crearSesion(id, token);
     }
 
     /*

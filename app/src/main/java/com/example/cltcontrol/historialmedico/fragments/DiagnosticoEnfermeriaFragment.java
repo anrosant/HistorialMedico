@@ -16,12 +16,15 @@ import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.interfaces.IResult;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.example.cltcontrol.historialmedico.service.RequestService;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
@@ -136,10 +139,13 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
      * */
     private void postAtencionEnfermeria(final Date fechaConsulta){
         initRequestCallback();
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
+
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         // 5) PASAR LOS DATOS A LA FUNCIÓN
-        JSONObject sendObj = AtencionEnfermeria.getJSONAtencionEnfermeria(id_empleado_servidor,fechaConsulta, "",diagnostico,"");
-        requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj);
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(id_empleado_servidor,fechaConsulta, "",diagnostico,"");
+        requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj, token);
     }
 
     /*

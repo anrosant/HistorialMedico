@@ -22,6 +22,7 @@ import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.example.cltcontrol.historialmedico.service.RequestService;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +30,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
@@ -294,21 +296,25 @@ public class SignosVitalesFragment extends Fragment {
      * Envía datos de Consulta médica al servidor
      * */
     public void postConsultaMedica(final Date fecha_consulta){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
         Log.d("HERE", "2");
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
-        JSONObject sendObj = ConsultaMedica.getJSONConsultaMedica(String.valueOf(id_empleado_Servidor), fecha_consulta,"","","","","");
-        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj);
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(id_empleado_Servidor), fecha_consulta,"","","","","");
+        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 
     /*
      * Envía datos de Signos vitales al servidor
      * */
     public void postSignosVitales(String id_consulta_medica){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback(TAGSIGNOS);
         requestService = new RequestService(mResultCallback, getActivity());
-        JSONObject sendObj = SignosVitales.getJSONSignosVitales(String.valueOf(id_empleado_Servidor),id_consulta_medica,"",presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext);
-        requestService.postDataRequest("POSTCALL", URL_SIGNOS, sendObj);
+        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(String.valueOf(id_empleado_Servidor),id_consulta_medica,"",presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext);
+        requestService.postDataRequest("POSTCALL", URL_SIGNOS, sendObj, token);
     }
 
 }

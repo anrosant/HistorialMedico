@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AtencionEnfermeria extends SugarRecord {
     private int id_serv;
@@ -116,5 +118,20 @@ public class AtencionEnfermeria extends SugarRecord {
         }
         return sendObj;
 
+    }
+
+    public static Map<String, String> getHashMapAtencionEnfermeria(String id_empleado_servidor, Date fecha_consulta,
+                                                                   String motivo, String diagnostico, String plan){
+        Map<String, String> params = new HashMap<>();
+        if(motivo.equals("")){
+            motivo="''";
+        }
+        params.put("empleado", id_empleado_servidor);
+        params.put("fecha", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta)));
+        params.put("motivo", motivo);
+        params.put("diagnostico", diagnostico);
+        params.put("plan_cuidados", plan);
+
+        return params;
     }
 }

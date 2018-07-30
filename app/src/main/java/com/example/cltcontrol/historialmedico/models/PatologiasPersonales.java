@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PatologiasPersonales extends SugarRecord {
     private int id_serv;
@@ -96,6 +98,16 @@ public class PatologiasPersonales extends SugarRecord {
             e.printStackTrace();
         }
         return sendObj;
+
+    }
+    public static Map<String,String> getHashMapPatologiasPersonales(String id_ficha, String id_consulta, String lugar, String detalle){
+        Map<String, String> params = new HashMap<>();
+        params.put("ficha_medica", id_ficha);
+        params.put("consulta_medica", id_consulta);
+        params.put("lugar_patologia", lugar);
+        params.put("detalle_patologia", detalle);
+
+        return params;
 
     }
 }

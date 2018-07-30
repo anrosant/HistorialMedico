@@ -4,13 +4,14 @@ import android.content.Context;
 import android.util.Log;
 
 import com.orm.SugarRecord;
-import com.orm.dsl.Unique;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConsultaMedica extends SugarRecord {
     private int id_serv;
@@ -140,6 +141,23 @@ public class ConsultaMedica extends SugarRecord {
             e.printStackTrace();
         }
         return sendObj;
+
+    }
+
+    public static Map<String, String> getHashMapConsultaMedica(String id_empleado_servidor, Date fecha_consulta,
+                                                               String motivo, String prob_actual, String revision_medica,
+                                                               String prescripcion, String examen_fisico){
+
+        Map<String, String> params = new HashMap<>();
+        params.put("empleado", id_empleado_servidor);
+        params.put("fecha", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta)));
+        params.put("motivo", motivo);
+        params.put("problema_actual", prob_actual);
+        params.put("revision", revision_medica);
+        params.put("prescripcion", prescripcion);
+        params.put("examen_fisico", examen_fisico);
+
+        return params;
 
     }
 }

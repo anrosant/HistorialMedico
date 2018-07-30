@@ -20,6 +20,7 @@ public class SessionManager {
     private static final String LOGGED_IN_PREF = "logged_in_status";
     public static final String PREFS_NAME = "PREFS";
     private static int PRIVATE_MODE = 0;
+    private static final String TOKEN = "token";
     private static final String SESION = "sesion";
     private static final String NOMBRE_USUARIO = "nombre_usuario";
 
@@ -32,11 +33,12 @@ public class SessionManager {
         editor = sharedPrefer.edit();
     }
 
-    public void crearSesion(Long usu_id) {
+    public void crearSesion(Long usu_id, String token) {
         List<Empleado> empleado = Empleado.find(Empleado.class, "usuario = ?", String.valueOf(usu_id));
         if(empleado.size()!=0){
             editor.putString(NOMBRE_USUARIO, empleado.get(0).getUsuario().getUsuario());
             editor.putString(CARGO, empleado.get(0).getOcupacion());
+            editor.putString(TOKEN, token);
             editor.apply();
             //editor.commit();
             setLoggedIn(context,true);
@@ -48,6 +50,7 @@ public class SessionManager {
         HashMap<String, String> usuario = new HashMap<String, String>();
         usuario.put("nombre_usuario",sharedPrefer.getString(NOMBRE_USUARIO, null));
         usuario.put("cargo",sharedPrefer.getString(CARGO, null));
+        usuario.put("token",sharedPrefer.getString(TOKEN, null));
         return usuario;
     }
 

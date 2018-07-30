@@ -379,12 +379,6 @@ public class SincronizacionInmediata extends BroadcastReceiver {
     public void recorrerSignos(String id_consulta, String id_enf){
         for(SignosVitales signos : signosVitalesUnsynced){
             String id_empleado="";
-            /*if(signos.getConsultaMedica()!=null && signos.getConsultaMedica().getId_serv()!=0){
-                id_consulta = String.valueOf(signos.getConsultaMedica().getId_serv());
-            }
-            if(signos.getAtencion_enfermeria()!=null && signos.getAtencion_enfermeria().getId_serv()!=0){
-                id_atencion = String.valueOf(signos.getAtencion_enfermeria().getId_serv());
-            }*/
             if(signos.getEmpleado()!=null && signos.getEmpleado().getId_serv()!=0){
                 id_empleado = String.valueOf(signos.getEmpleado().getId_serv());
             }

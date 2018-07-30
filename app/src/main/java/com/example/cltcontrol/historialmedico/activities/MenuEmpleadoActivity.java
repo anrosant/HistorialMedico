@@ -151,13 +151,11 @@ public class MenuEmpleadoActivity extends FragmentActivity {
     }
 
     /*
-     * Lleva a la ventana de PermisoMedicosParticulares y envia el id del empleado
+     * Lleva a la ventana de historialPermisoMedicosParticulares y envia el id del empleado
      */
-    public void aperturaPermisosMedicos(View v){
-        //Envia el id del empleado a HistorialAtencionEnfermeria
-        Intent inPermisosMedicos = new Intent(getApplicationContext(), PermisosMedicosActivity.class);
-        //inHistorialAtencionEnfermeria.putExtra("CEDULA", cedulaEmpleado);
-        inPermisosMedicos.putExtra("ID_EMPLEADO", idEmpleado);
-        startActivity(inPermisosMedicos);
+    public void aperturaHistorialPermisosMedicos(View v){
+        Intent inHistorialPermisosMedicos = new Intent(getApplicationContext(), HistorialPermisoMedicoParticular.class);
+        inHistorialPermisosMedicos.putExtra("ID_EMPLEADO", idEmpleado);
+        startActivity(inHistorialPermisosMedicos);
     }
 }

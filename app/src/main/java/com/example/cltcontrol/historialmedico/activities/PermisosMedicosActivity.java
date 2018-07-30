@@ -44,7 +44,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class PermisosMedicosActivity extends FragmentActivity {
 
@@ -73,7 +72,7 @@ public class PermisosMedicosActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_permisos_medicos_externos);
+        setContentView(R.layout.activity_permiso_medico_particular);
 
         sw_generar_diagnostico_particular = findViewById(R.id.sw_generar_diagnostico_particular);
         rg_tipo_enfermedad = findViewById(R.id.rg_tipo_enfermedad);
@@ -109,7 +108,7 @@ public class PermisosMedicosActivity extends FragmentActivity {
                     txt_buscar_enfermedades.setEnabled(true);
                 }else{
                     ly_enfermedad.setVisibility(View.GONE);
-                    txt_buscar_enfermedades.setHint("No refiere enfermedad");
+                    txt_buscar_enfermedades.setText("No refiere enfermedad");
                     txt_buscar_enfermedades.setEnabled(false);
                 }
             }
@@ -314,7 +313,9 @@ public class PermisosMedicosActivity extends FragmentActivity {
                     e.printStackTrace();
                 }
                 fecha_desde.setText(simpleDateFormat.format(date));
-                calcNumDias();
+                //calcNumDias()
+                long num = CalculoDias.calcNumDias(fecha_desde,fecha_hasta);
+                numero_dias.setText(Long.toString(num+1));
             }
         };
         DatePickerDialog dpDialog = new DatePickerDialog(this, listener, anio, mes, dia);
@@ -356,24 +357,6 @@ public class PermisosMedicosActivity extends FragmentActivity {
             dpDialog.show();
         }catch (Exception e){
             Toast.makeText(this,"No ha asignado fecha de inicio",Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void calcNumDias() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String string_fecha_ini = fecha_desde.getText().toString();
-        String string_fecha_fin = fecha_hasta.getText().toString();
-
-        if (!string_fecha_ini.equals("") && !string_fecha_fin.equals("")) {
-            try {
-                fecha_ini = simpleDateFormat.parse(string_fecha_ini);
-                fecha_fin = simpleDateFormat.parse(string_fecha_fin);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            long dias_mili = Math.abs(fecha_fin.getTime() - fecha_ini.getTime());
-            long numDias = TimeUnit.DAYS.convert(dias_mili, TimeUnit.MILLISECONDS);
-            numero_dias.setText(Long.toString(numDias + 1));
         }
     }
 

@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
+import com.example.cltcontrol.historialmedico.models.PermisoMedico;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,17 +19,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
+public class AdapterItemPermisoMedico extends ArrayAdapter<PermisoMedico>{
 
     private Activity activity;
-    private List<ConsultaMedica> consultaMedicasList;
+    private List<PermisoMedico> permisoMedicoList;
     private final Context context;
     SimpleDateFormat simpleDateFormat;
 
-    public AdapterItemConsultaMedica(Context context, List<ConsultaMedica> consultaMedicaList) {
-        super(context, 0, consultaMedicaList);
+    public AdapterItemPermisoMedico(Context context, List<PermisoMedico> permisoMedicoList) {
+        super(context, 0, permisoMedicoList);
         this.context = context;
-        this.consultaMedicasList = consultaMedicaList;
+        this.permisoMedicoList = permisoMedicoList;
     }
 
     /*
@@ -37,19 +37,19 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
      * */
     @Override
     public int getCount() {
-        return consultaMedicasList.size();
+        return permisoMedicoList.size();
     }
 
     /*
-     * Retorna una ConsultaMedica dentro de la lista dada una posición
+     * Retorna un PermisoMedico dentro de la lista dada una posición
      * */
     @Override
-    public ConsultaMedica getItem(int position) {
-        return consultaMedicasList.get(position);
+    public PermisoMedico getItem(int position) {
+        return permisoMedicoList.get(position);
     }
 
     /*
-     * Retorna la posicion de una ConsultaMedica
+     * Retorna la posicion de una PermisoMedico
      * */
     @Override
     public long getItemId(int position) {
@@ -63,18 +63,18 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
         View v = convertView;
 
         if (v == null) {
-            v = LayoutInflater.from(getContext()).inflate(R.layout.listview_item_row_consulta_medica, parent, false);
+            v = LayoutInflater.from(getContext()).inflate(R.layout.listview_item_row_permiso_medico, parent, false);
         }
 
-        ConsultaMedica consultaMedica = consultaMedicasList.get(position);
-        TextView tvfechaConsulta = v.findViewById(R.id.tvFechaConsulta);
+        PermisoMedico permisoMedico = permisoMedicoList.get(position);
+        TextView tvfechaPermiso = v.findViewById(R.id.tvFechaPermiso);
 
         simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
         try {
-            Date fecha_consulta = simpleDateFormat.parse(consultaMedica.getFechaConsulta().toString());
+            Date fecha_consulta = simpleDateFormat.parse(permisoMedico.getFecha_inicio().toString());
             simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            tvfechaConsulta.setText(simpleDateFormat.format(fecha_consulta));
-            tvfechaConsulta.setEnabled(false);
+            tvfechaPermiso.setText(simpleDateFormat.format(fecha_consulta));
+            tvfechaPermiso.setEnabled(false);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -82,11 +82,11 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
     }
 
     /*
-     * Actualiza la lista de ConsultaMedica cuando ya ha almacenado una
+     * Actualiza la lista de Permiso Medico cuando ya ha almacenado una
      * */
-    public void actualizarConsultaMedicaList(List<ConsultaMedica> consultaMedicaListNuevo) {
-        this.consultaMedicasList.clear();
-        this.consultaMedicasList.addAll(consultaMedicaListNuevo);
+    public void actualizarPermisoMedicoList(List<PermisoMedico> permisoMedicoListNuevo) {
+        this.permisoMedicoList.clear();
+        this.permisoMedicoList.addAll(permisoMedicoListNuevo);
         notifyDataSetChanged();
     }
 }

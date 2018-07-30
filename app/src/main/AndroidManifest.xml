@@ -54,9 +54,14 @@
             android:name=".activities.SigVitalRapidoActivity"
             android:label="Signos vitales"/>
         <activity
-            android:name=".activities.PermisosMedicosActivity"
+            android:name=".activities.HistorialPermisoMedicoParticular"
             android:label="Permisos Medicos"
             android:configChanges="screenSize|orientation" />
+        <activity
+            android:name=".activities.PermisosMedicosActivity"
+            android:label="@string/consulta_medica_nuevo"
+            android:configChanges="screenSize|orientation"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activities.GaleriaFragmentActivity"
             android:label="Galeria"/>

@@ -380,7 +380,7 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
-            android:onClick="aperturaPermisosMedicos"
+            android:onClick="aperturaHistorialPermisosMedicos"
             android:background="#eff7fc"
             android:layout_weight="1"
             android:weightSum="2" >
@@ -389,7 +389,7 @@
                 android:layout_height="0dp"
                 android:background="#eff7fc"
                 android:layout_weight="2"
-                android:onClick="aperturaPermisosMedicos"
+                android:onClick="aperturaHistorialPermisosMedicos"
                 android:src="@drawable/permiso"/>
             <TextView
                 android:layout_width="wrap_content"

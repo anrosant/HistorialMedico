@@ -171,10 +171,10 @@ public class SignosVitalesFragment extends Fragment {
                         // your action here
                         if (!ly_signos_vitales.isShown()){
                             ly_signos_vitales.setVisibility(view.VISIBLE);
-                            tv_titulo.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_up_white_24dp,0);
+                            tv_titulo.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.flecha_arriba,0);
                         }else {
                             ly_signos_vitales.setVisibility(view.GONE);
-                            tv_titulo.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_down_white_24dp,0);
+                            tv_titulo.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.flecha_abajo,0);
                         }
                     }
                 }

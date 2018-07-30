@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <fragment
+            android:id="@+id/frDatosEmpleado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.example.cltcontrol.historialmedico.fragments.DatosEmpleadoFragment"
+            tools:layout="@layout/fragment_datos_empleado">
+        </fragment>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/my_style_title"
+                android:drawableRight="@drawable/ic_save_green_24dp"
+                android:padding="5dp"
+                android:text="PERMISO MEDICO PARTICULAR"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/ly_contenedor_permiso_medico_particular"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-2dp"
+                android:background="@drawable/my_style_content_white"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="#FFFFFF"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_titulo_permiso_medico"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:layout_marginVertical="5dp"
+                        android:text="DIAGNOSTICO MEDICO"
+                        android:textColor="#FFFFFF" />
+
+                    <Switch
+                        android:id="@+id/sw_generar_diagnostico_particular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_marginVertical="5dp"
+                        android:text="Agregar Diagnostico Medico"
+                        android:textOff="No"
+                        android:textOn="Yes" />
+
+                    <LinearLayout
+                        android:id="@+id/ly_enfermedad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-2dp"
+                        android:background="@drawable/my_style_content_white"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/txt_buscar_enfermedades"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:hint="No refiere enfermedad"
+                            android:enabled="false"
+                            android:singleLine="true" />
+
+                        <LinearLayout
+                            android:id="@+id/ly_lista_enfermedades"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginVertical="5dp"
+                                android:layout_marginHorizontal="10dp"
+                                android:orientation="horizontal">
+
+                                <android.support.v4.widget.NestedScrollView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="#FFFFFF">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="2"
+                                        android:gravity="center_horizontal"
+                                        android:orientation="vertical">
+
+                                        <android.support.v7.widget.RecyclerView
+                                            android:id="@+id/rv_lista_enfermedades"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="180dp"
+                                            android:background="#FFFFFF">
+                                        </android.support.v7.widget.RecyclerView>
+
+                                    </LinearLayout>
+
+                                </android.support.v4.widget.NestedScrollView>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:orientation="horizontal">
+
+                                <RadioGroup
+                                    android:id="@+id/rg_tipo_enfermedad"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <RadioButton
+                                        android:id="@+id/rb_presuntorio"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginHorizontal="10sp"
+                                        android:text="Presuntorio" />
+
+                                    <RadioButton
+                                        android:id="@+id/rb_definitorio"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Definitorio" />
+
+                                </RadioGroup>
+
+                            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/btn_guardar_diagnostico_permiso"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Guardar"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="DIAS DE PERMISO MEDICO"
+                        android:textColor="#FFFFFF" />
+
+                    <LinearLayout
+                        android:id="@+id/ly_dias_permiso"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/my_style_content_white"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/txt_permiso_fecha_desde"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:drawableStart="@drawable/calendario"
+                            android:focusable="false"
+                            android:hint="Fecha de inicio"
+                            android:inputType="date"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse" />
+
+                        <EditText
+                            android:id="@+id/txt_permiso_fecha_hasta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:drawableStart="@drawable/calendario"
+                            android:focusable="false"
+                            android:hint="Fecha de fin"
+                            android:inputType="date"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginVertical="5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvDias"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="5dp"
+                                android:text="Dias de permiso: " />
+
+                            <TextView
+                                android:id="@+id/tv_numero_dias"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="OBSERVACIONES"
+                        android:textColor="#FFFFFF" />
+
+                    <LinearLayout
+                        android:id="@+id/ly_observacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/my_style_content_white"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/txt_observacion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Agregar observación"
+                            android:inputType="textMultiLine"
+                            android:singleLine="false" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="MEDICO / INSTITUCION"
+                        android:textColor="#FFFFFF" />
+
+                    <LinearLayout
+                        android:id="@+id/ly_doctor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/my_style_content_white"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/txt_doctor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Medico/Institucion que emite el certificado"
+                            android:inputType="textMultiLine"
+                            android:singleLine="false" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_guardar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Guardar" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

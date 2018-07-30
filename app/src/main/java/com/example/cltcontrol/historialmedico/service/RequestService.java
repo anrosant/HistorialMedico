@@ -117,14 +117,12 @@ public class RequestService {
                 }
             };
             queue.add(jsonObj);
-
         }catch(Exception e){
             if(mResultCallback != null) {
                 mResultCallback.notifyMsjError(requestType, "No tiene conexión");
             }
             if(dialog!=null)
                 dialog.dismiss();
-
         }
     }
 

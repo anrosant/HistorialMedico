@@ -9,25 +9,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:background="@color/colorPrimary" >
 
-        <EditText
-            android:id="@+id/etBusquedaUsuario"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@android:drawable/ic_menu_search"
-            android:textCursorDrawable="@drawable/text_color"
-            android:textColor="#FFFFFF"
-            android:hint="Buscar empleados"
-            android:inputType="text"
-            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXYZáéíóúÁÉÍÓÚ"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:textSize="18sp"
-            android:singleLine="true" />
+            android:layout_margin="10dp"
+            android:background="#FFFFFF">
+
+            <ImageView
+                android:id="@+id/ivFlechaLimpiar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/ic_keyboard_backspace_cyan_36dp"/>
+
+            <EditText
+                android:id="@+id/etBusquedaUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textCursorDrawable="@drawable/text_color"
+                android:hint="Buscar empleados por apellidos"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXYZáéíóúÁÉÍÓÚ"
+                android:inputType="text"
+                android:layout_marginRight="15dp"
+                android:textSize="18sp"
+                android:singleLine="true" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

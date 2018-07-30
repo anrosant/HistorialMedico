@@ -40,6 +40,7 @@ public class EmpleadoController {
         }*/
     }
 
+    //Metodos
     //Getter de registros Usuarios y Empleados
     public Iterator<Empleado> getLista_empleados() {
         return lista_empleados;
@@ -78,7 +79,7 @@ public class EmpleadoController {
                 "jorergar@espol.edu.ec", "FAE",
                 "Analista de datos", "Soltero",
                 "Masculino", "Guayaquil",
-                "Doctor", new Date(), new Date(), 30, R.drawable.modelo, usuario_doctor);
+                "Doctor", new Date(), new Date(), 30, R.drawable.ic_account_box_black_48dp);
         empleado_doctor.save();
 
         /*empleado_enfermera = new Empleado("0967547365","Anni","Santacruz Hernández",
@@ -112,11 +113,12 @@ public class EmpleadoController {
     public void llenadoEnfermedades() {
         List<Enfermedad> enfermedades = Enfermedad.find(Enfermedad.class, "CODIGO = ?", "A00");
         if (enfermedades.isEmpty()) {
-            /*try {
+            try {
                 Enfermedad.executeQuery(EnfermedadesSQL.REGISTRO_ENFERMEDADES);
-            } catch (Exception e) {}*/
+            } catch (Exception e) {}
         }
     }
+
     /*
      * Valida el ingreso al sistema
      * */

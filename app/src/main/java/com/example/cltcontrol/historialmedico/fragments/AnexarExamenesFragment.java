@@ -37,8 +37,10 @@ import com.example.cltcontrol.historialmedico.utils.ImageOrientation;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.util.Objects;
 
 import static android.Manifest.permission.CAMERA;
@@ -233,8 +235,10 @@ public class AnexarExamenesFragment extends Fragment {
                         final ExifInterface exif = new ExifInterface(path);
                         final int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
                         matrix = ImageOrientation.orientacionImagen(exifOrientation);
-                        final Bitmap transformedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                        idImage.setImageBitmap(transformedBitmap);
+                        Bitmap transformedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                        int nh = (int) ( transformedBitmap.getHeight() * (512.0 / transformedBitmap.getWidth()) );
+                        Bitmap scaled = Bitmap.createScaledBitmap(transformedBitmap, 512, nh, true);
+                        idImage.setImageBitmap(scaled);
                     }catch(Exception e){
                         e.printStackTrace();
                     }

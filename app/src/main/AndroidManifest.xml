@@ -54,6 +54,10 @@
             android:name=".activities.SigVitalRapidoActivity"
             android:label="Signos vitales"/>
         <activity
+            android:name=".activities.PermisosMedicosActivity"
+            android:label="Permisos Medicos"
+            android:configChanges="screenSize|orientation" />
+        <activity
             android:name=".activities.GaleriaFragmentActivity"
             android:label="Galeria"/>
         <activity

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -43,18 +44,19 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
  * A simple {@link Fragment} subclass.
  */
 public class SignosVitalesFragment extends Fragment {
+
     private EditText etPSistolica, etPDistolica, etTemperatura, etPulso;
+    private LinearLayout ly_signos_vitales;
+    private TextView tv_titulo;
+    private Button btn_guardar;
+
     private String id_consulta_medica, id_empleado, cargo;
+    private AdapterSignosVitales adapterSignosVitales;
+    private List<SignosVitales> signosVitalesList;
     private ConsultaMedica consultaMedica;
     private ListView lvSignosVitales;
-    private AdapterSignosVitales adapterSignosVitales;
-    private Empleado empleado;
-    private List<SignosVitales> signosVitalesList;
-    private ImageButton ib_mostrar_ocultar_contendido;
-    LinearLayout ly_signos_vitales;
-    private TextView tvTitulo;
-
     private SignosVitales signos;
+    private Empleado empleado;
 
     //POST
     private IResult mResultCallback = null;
@@ -67,8 +69,6 @@ public class SignosVitalesFragment extends Fragment {
     private String temperaturatext;
     private String pulsoText;
     private Date fecha_consulta;
-
-    Button btn_guardar;
 
     public SignosVitalesFragment() {
         // Required empty public constructor
@@ -84,15 +84,15 @@ public class SignosVitalesFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_signos_vitales, container, false);
+
         etPSistolica = view.findViewById(R.id.etPSistolica);
         etPDistolica = view.findViewById(R.id.etPDistolica);
         etTemperatura = view.findViewById(R.id.etTemperatura);
         etPulso = view.findViewById(R.id.etPulso);
         lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
         btn_guardar = view.findViewById(R.id.btnGuardar);
-        ib_mostrar_ocultar_contendido =  view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         ly_signos_vitales = view.findViewById(R.id.ly_signos_vitales);
-        tvTitulo = view.findViewById(R.id.tvTitulo);
+        tv_titulo = view.findViewById(R.id.tv_titulo);
         //
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         //Recibe el id de consulta medica desde Historial de consulta medica
@@ -111,9 +111,8 @@ public class SignosVitalesFragment extends Fragment {
         if(id_consulta_medica!=null) {
             if(cargo.equals("Enfermera")){
                 btn_guardar.setVisibility(View.GONE);
-                ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
                 ly_signos_vitales.setVisibility(View.GONE);
-                tvTitulo.setVisibility(View.GONE);
+                tv_titulo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
             //Historial de Signos vitales
@@ -161,16 +160,27 @@ public class SignosVitalesFragment extends Fragment {
             }
         });
 
-        ib_mostrar_ocultar_contendido.setOnClickListener(new View.OnClickListener() {
+        tv_titulo.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                if (!ly_signos_vitales.isShown()){
-                    ly_signos_vitales.setVisibility(view.VISIBLE);
-                    ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_arriba);
-                }else {
-                    ly_signos_vitales.setVisibility(view.GONE);
-                    ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_abajo);
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if(motionEvent.getRawX() >= (tv_titulo.getRight() - tv_titulo.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        if (!ly_signos_vitales.isShown()){
+                            ly_signos_vitales.setVisibility(view.VISIBLE);
+                            tv_titulo.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_up_white_24dp,0);
+                        }else {
+                            ly_signos_vitales.setVisibility(view.GONE);
+                            tv_titulo.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_down_white_24dp,0);
+                        }
+                    }
                 }
+                return true;
             }
         });
 

@@ -56,7 +56,7 @@ public class AdapterItemDiagnostico extends ArrayAdapter<Diagnostico> {
         View v = convertView;
 
         if (v == null) {
-            v = LayoutInflater.from(getContext()).inflate(R.layout.item_diagnostivo, parent, false);
+            v = LayoutInflater.from(getContext()).inflate(R.layout.listview_item_row_diagnostico, parent, false);
         }
 
         Diagnostico diagnostico = diagnosticoList.get(position);

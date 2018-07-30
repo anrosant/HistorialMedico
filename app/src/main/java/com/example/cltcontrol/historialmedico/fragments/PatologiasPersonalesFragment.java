@@ -78,7 +78,7 @@ public class PatologiasPersonalesFragment extends Fragment {
         etDetalleEnfermedad = view.findViewById(R.id.etDetalleEnfermedad);
         ListView lvPatologiasPersonales = view.findViewById(R.id.lvPatologiasPersonales);
         Button btn_guardar = view.findViewById(R.id.btnGuardar);
-        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
+        TextView tvTitulo = view.findViewById(R.id.tv_titulo);
 
         Spinner spPatologias = view.findViewById(R.id.spPatologia);
         adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()).getBaseContext(), R.array.patologias, android.R.layout.simple_spinner_dropdown_item);

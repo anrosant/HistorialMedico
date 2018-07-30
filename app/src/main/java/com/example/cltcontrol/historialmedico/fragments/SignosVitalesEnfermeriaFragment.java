@@ -88,10 +88,10 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
         etPulso = view.findViewById(R.id.etPulso);
         etTemperatura = view.findViewById(R.id.etTemperatura);
         Button btn_guardar = view.findViewById(R.id.btnGuardar);
-        ib_mostrar_ocultar_contendido =  view.findViewById(R.id.ib_mostrar_ocultar_contendido);
+        //ib_mostrar_ocultar_contendido =  view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         ly_signos_vitales = view.findViewById(R.id.ly_signos_vitales);
         ListView lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
-        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
+        TextView tvTitulo = view.findViewById(R.id.tv_titulo);
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
@@ -110,7 +110,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
         if(id_atencion!=null) {
             if(cargo.equals("Doctor")){
                 btn_guardar.setVisibility(View.GONE);
-                ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
+                //ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
                 ly_signos_vitales.setVisibility(View.GONE);
                 tvTitulo.setVisibility(View.GONE);
             }
@@ -179,7 +179,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
             }
         });
 
-        ib_mostrar_ocultar_contendido.setOnClickListener(new View.OnClickListener() {
+        /*ib_mostrar_ocultar_contendido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!ly_signos_vitales.isShown()){
@@ -190,7 +190,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
                     ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_abajo);
                 }
             }
-        });
+        });*/
 
         return view;
     }

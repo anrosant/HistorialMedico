@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -30,7 +30,7 @@
                     android:weightSum="2">
 
                     <TextView
-                        android:id="@+id/tvTitulo"
+                        android:id="@+id/tv_titulo"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.3"
@@ -47,8 +47,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimary"
                         android:layout_weight="1.7"
-                        android:src="@drawable/flecha_arriba"
-                        android:contentDescription="TODO" />
+                        android:src="@drawable/flecha_arriba"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -80,8 +79,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:inputType="textMultiLine"
-                            tools:ignore="LabelFor" />
+                            android:inputType="textMultiLine" />
                         <EditText
                             android:id="@+id/etDetalleEnfermedad"
                             android:layout_width="match_parent"

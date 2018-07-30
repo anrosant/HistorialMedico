@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,15 +33,18 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ComunicadorMenu{
+
     private Fragment[] misFragmentos;
     private Empleado empleado;
     String idConsultaMedica, idEmpleado, precedencia, cargo;
-    Button btn_ok;
+    private TextView tv_guardar_consulta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_consulta_medica);
+
+        tv_guardar_consulta = findViewById(R.id.tv_guardar_consulta);
 
         misFragmentos = new Fragment[11];
         misFragmentos[0] = new SignosVitalesFragment();
@@ -56,7 +60,7 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         misFragmentos[10] = new PermisosMedicosFragment();
 
         //Permite regresar al historial
-        btn_ok = findViewById(R.id.btn_ok);
+
 
         Bundle extras = this.getIntent().getExtras();
 
@@ -69,29 +73,35 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements Com
         cargo = extras.getString("CARGO");
 
         if(cargo.equalsIgnoreCase("Enfermera")){
-            btn_ok.setVisibility(View.GONE);
+            tv_guardar_consulta.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
         //Coloca los datos del empleado en el fragment de informacion
         TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
         empleado = Empleado.findById(Empleado.class, Long.parseLong(id_empleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
 
-        btn_ok.setOnClickListener(new View.OnClickListener() {
+        tv_guardar_consulta.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                //Guardar
-                ConsultaMedica consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Integer.parseInt(idConsultaMedica));
-                if(consultaMedica.getFechaConsulta()==null){
-                    consultaMedica.delete();
-                }
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
 
-                ArrayList<ConsultaMedica> consultaMedicas = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class,
-                        "empleado = ?", String.valueOf(empleado.getId()));
-                HistorialConsultaMedica.adapterItemConsultaMedica.actualizarConsultaMedicaList(consultaMedicas);
-                ConsultaMedicaNuevoActivity.super.onBackPressed();
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if(motionEvent.getRawX() >= (tv_guardar_consulta.getRight() - tv_guardar_consulta.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        ArrayList<ConsultaMedica> consultaMedicas = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class,
+                                "empleado = ?", String.valueOf(empleado.getId()));
+                        HistorialConsultaMedica.adapterItemConsultaMedica.actualizarConsultaMedicaList(consultaMedicas);
+                        ConsultaMedicaNuevoActivity.super.onBackPressed();
+                    }
+                }
+                return true;
             }
         });
     }
+
     /*
      * si presiona el botón de ir atrás valida si desea salir sin guardar datos o permanecer
      * */

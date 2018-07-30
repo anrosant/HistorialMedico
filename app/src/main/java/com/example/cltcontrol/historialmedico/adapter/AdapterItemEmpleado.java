@@ -24,9 +24,11 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        @SuppressLint("InflateParams") View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_buscar_empleados_recyclerview, null, false);
+        @SuppressLint("InflateParams")
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_item_row_buscar_empleados_recyclerview, null, false);
         return new ViewHolder(view);
     }
+
     /*
      * Retorna la lista de empleados que hay
      * */
@@ -38,7 +40,6 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tv_nombres_items.setText(listaEmpleados.get(position).getApellido()+" "+listaEmpleados.get(position).getNombre());
         holder.tv_cedula_items.setText(listaEmpleados.get(position).getCedula());
-        holder.tv_profesion_items.setText(listaEmpleados.get(position).getProfesion());
         holder.tv_ocupacion_items.setText(listaEmpleados.get(position).getOcupacion());
         holder.ivfotoitems.setImageResource(listaEmpleados.get(position).getFoto());
     }
@@ -53,16 +54,16 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivfotoitems;
-        TextView tv_nombres_items, tv_cedula_items, tv_profesion_items, tv_ocupacion_items;
+        TextView tv_nombres_items, tv_cedula_items, tv_ocupacion_items;
         ViewHolder(View itemView) {
             super(itemView);
             tv_nombres_items = itemView.findViewById(R.id.tv_nombres_items);
             tv_cedula_items =itemView.findViewById(R.id.tv_cedula_items);
-            tv_profesion_items =itemView.findViewById(R.id.tv_profesion_items);
             tv_ocupacion_items = itemView.findViewById(R.id.tv_ocupacion_items);
             ivfotoitems = itemView.findViewById(R.id.ivfotoitems);
         }
     }
+
     /*
      * Setea la lista de la nueva búsqueda
      * */
@@ -71,6 +72,7 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
         listaEmpleados.addAll(newList);
         notifyDataSetChanged();
     }
+
     /*
      * Valida que los caracteres para realizar la búsque sean válidos
      * */

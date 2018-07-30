@@ -11,11 +11,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.example.cltcontrol.historialmedico.adapter.AdapterItemEmpleado;
 import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.utils.BuscarTexto;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import java.util.ArrayList;
@@ -25,24 +27,39 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
     private static List<Empleado> empleadosList;
     private AdapterItemEmpleado adaptadorEmpleados;
     private EditText buscar;
+    private ImageView ivFlechaLimpiar;
+    private RecyclerView recyclerEmpleados;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar_empleados);
-        readEmpleadosAll();
+
+        buscar = findViewById(R.id.etBusquedaUsuario);
+        ivFlechaLimpiar = findViewById(R.id.ivFlechaLimpiar);
         RecyclerView recyclerEmpleados = findViewById(R.id.rvlistaempleados);
         recyclerEmpleados.setLayoutManager(new LinearLayoutManager(this));
-        buscar = findViewById(R.id.etBusquedaUsuario);
+
+        readEmpleadosAll();
+
+        ivFlechaLimpiar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buscar.setText("");
+            }
+        });
 
         buscar.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {}
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            /*
+             * Funcion que escucha caracter a caracter que se ingresa en el Edittext de busqueda de nombres empleados
+             */
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String newText = buscar.getText().toString().toLowerCase();
+                String newText = BuscarTexto.quitaDiacriticos(buscar.getText().toString().toLowerCase());
                 if(newText.length() != 0 && adaptadorEmpleados.validarBusqueda(newText)){
                     List<Empleado> newList = new ArrayList<>();
                     for(Empleado empleado:empleadosList){
@@ -66,7 +83,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                 new RecyclerItemClickListener(getApplicationContext(), recyclerEmpleados,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         Long id_empleado = adaptadorEmpleados.getListaEmpleados().get(position).getId();
-                        //Envia el id del empleado a MenuEmpleadoActivity
+                        //Intent envia el id del empleado a MenuEmpleadoActivity
                         Intent i = new Intent(getApplicationContext(), MenuEmpleadoActivity.class);
                         i.putExtra("ID_EMPLEADO", String.valueOf(id_empleado));
                         startActivity(i);
@@ -77,9 +94,10 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                 })
         );
     }
+
     /*
-    * Guada todos los empleados que se encuentran en la base de datos en una lista
-    * */
+     * Guada todos los empleados que se encuentran en la base de datos en una lista
+     * */
     private void readEmpleadosAll(){
         try{
             empleadosList = Empleado.listAll(Empleado.class);
@@ -89,8 +107,8 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
     }
 
     /*
-    * Si presiona atrás puede salir de la sesión
-    * */
+     * Si presiona atrás puede salir de la sesión
+     * */
     @Override
     public void onBackPressed() {
         AlertDialog.Builder alertbox = new AlertDialog.Builder(this);

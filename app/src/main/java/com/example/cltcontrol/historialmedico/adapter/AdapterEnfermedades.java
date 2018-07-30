@@ -35,8 +35,8 @@ public class AdapterEnfermedades extends RecyclerView.Adapter<AdapterEnfermedade
      * */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        @SuppressLint("InflateParams") View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_enfermedades,null,false);
-
+        @SuppressLint("InflateParams")
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_item_row_enfermedades,null,false);
         return new ViewHolder(view);
     }
 
@@ -44,8 +44,8 @@ public class AdapterEnfermedades extends RecyclerView.Adapter<AdapterEnfermedade
     public void onBindViewHolder(AdapterEnfermedades.ViewHolder holder, int position) {
         holder.tvNombreCie10items.setText(listaEnfermedades.get(position).getNombre());
         holder.tvCodigoCie10items.setText(listaEnfermedades.get(position).getCodigo());
-
     }
+
     /*
      * Retorna el número de elementos en la lista
      * */
@@ -62,9 +62,9 @@ public class AdapterEnfermedades extends RecyclerView.Adapter<AdapterEnfermedade
             super(itemView);
             tvNombreCie10items = itemView.findViewById(R.id.tvNombreCie10items);
             tvCodigoCie10items = itemView.findViewById(R.id.tvCodigoCie10items);
-
         }
     }
+
     /*
      * Setea un nuevo filtro con la lista actual
      * */

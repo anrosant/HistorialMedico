@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,17 +7,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="#FFFFFF"
+        android:orientation="vertical"
         android:gravity="center"
-        android:orientation="vertical">
+        android:background="#FFFFFF"
+        android:layout_margin="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,18 +27,17 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/flechas_visto"
-                    android:contentDescription="TODO" />
+                    android:src="@drawable/flechas_visto"/>
 
                 <TextView
                     android:id="@+id/etPresionSistolica"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:hint="Sist"
-                    android:maxLength="3"
                     android:singleLine="true"
+                    android:maxLength="3"
                     android:textAlignment="center"
+                    android:hint="Sist"
                     android:textColor="@android:color/black" />
 
                 <TextView
@@ -54,19 +52,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:hint="Dist"
-                    android:maxLength="3"
                     android:singleLine="true"
+                    android:maxLength="3"
                     android:textAlignment="center"
+                    android:hint="Dist"
                     android:textColor="@android:color/black" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_eliminar_item"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:drawableRight="@drawable/ic_cancel_red_24dp"
                     android:layout_marginHorizontal="5dp"
-                    android:gravity="center"
-                    android:text="mmHg"
-                    tools:targetApi="o" />
+                    android:text="mmHg" />
             </LinearLayout>
 
         </LinearLayout>
@@ -79,17 +78,16 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/corazon_visto"
-                android:contentDescription="TODO" />
+                android:src="@drawable/corazon_visto"/>
 
             <TextView
                 android:id="@+id/etPulso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:hint="Pulso"
-                android:maxLength="3"
                 android:singleLine="true"
+                android:maxLength="3"
+                android:hint="Pulso"
                 android:textColor="@android:color/black" />
 
             <TextView
@@ -97,8 +95,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:gravity="center"
-                android:text="ppm"
-                tools:targetApi="o" />
+                android:text="ppm"/>
 
         </LinearLayout>
 
@@ -110,18 +107,17 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/temperatura_visto"
-                android:contentDescription="TODO" />
+                android:src="@drawable/temperatura_visto"/>
 
             <TextView
                 android:id="@+id/etTemperatura"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:hint="Temp"
-                android:maxLength="4"
                 android:singleLine="true"
+                android:maxLength="4"
                 android:textAlignment="center"
+                android:hint="Temp"
                 android:textColor="@android:color/black" />
 
             <TextView
@@ -129,8 +125,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:gravity="center"
-                android:text="°C"
-                tools:targetApi="o" />
+                android:text="°C"/>
 
         </LinearLayout>
 

@@ -157,7 +157,6 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
                 try {
-                    //Log.d("HERECONSULTA", String.valueOf(response));
                     //Si ha realizado post en ConsultaMedica
                     //PASO 6) FINAL
                     String fechaConsulta = response.getString("fecha");

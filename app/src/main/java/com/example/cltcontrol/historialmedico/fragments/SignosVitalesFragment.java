@@ -141,9 +141,11 @@ public class SignosVitalesFragment extends Fragment {
                 if(res == 0) {
                     Toast.makeText(getContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
                     SignosVitales.delete(signos);
+                    btn_guardar.setEnabled(true);
                 } else if(res == 1) {
                     Toast.makeText(getContext(), "Los valores están fuera de rango", Toast.LENGTH_SHORT).show();
                     SignosVitales.delete(signos);
+                    btn_guardar.setEnabled(true);
                 }else{
                     //Si es la primera vez que crea la consulta medica
                     if (consultaMedica.getEmpleado() == null) {
@@ -207,6 +209,7 @@ public class SignosVitalesFragment extends Fragment {
         signos.setStatus(status);
         signos.setConsultaMedica(consultaMedica);
         signos.setEmpleado(empleado);
+        signos.setFecha(fecha_signo);
         signos.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();

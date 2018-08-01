@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"usuario" + sessionManager.obtenerInfoUsuario().get("nombre_usuario"),Toast.LENGTH_SHORT).show();
             siguienteActivity();
         }else{
-            miController = new EmpleadoController(getApplicationContext());
-            miController.llenadoEnfermedades();
+            //miController = new EmpleadoController(getApplicationContext());
+            //miController.llenadoEnfermedades();
             //Si el usuario es correcto, lleva a la siguiente pantalla, caso contrario muestra mensaje
             btnIngresoSistema.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                 codigo = fields.getString("codigo");
                 nombre = fields.getString("nombre");
                 grupo = fields.getString("grupo");
-                Enfermedad enfermedad = new Enfermedad(codigo, nombre);
+                Enfermedad enfermedad = new Enfermedad(codigo, nombre, grupo);
                 enfermedad.setId_serv(Integer.parseInt(objectJSON.getString("pk")));
                 enfermedad.setStatus(1);
                 enfermedad.save();

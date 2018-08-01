@@ -29,18 +29,6 @@ public class EmpleadoController {
 
     public EmpleadoController(Context miActivity) {
         this.miActivity = miActivity;
-        /*Iterator<Empleado> lista_empleados = Empleado.findAll(Empleado.class);
-        Iterator<Usuario> lista_usuarios = Usuario.findAll(Usuario.class);
-        if(!lista_empleados.hasNext() && !lista_usuarios.hasNext()){
-            this.llenadoUsuarios();
-            this.llenadoEmpleados();
-
-        }*/
-    }
-
-
-    public void setLista_usuarios(List<Usuario> lista_usuarios) {
-        this.lista_usuarios = lista_usuarios;
     }
 
     //Metodos

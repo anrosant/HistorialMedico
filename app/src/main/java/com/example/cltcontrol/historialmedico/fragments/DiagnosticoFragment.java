@@ -183,7 +183,6 @@ public class DiagnosticoFragment extends Fragment {
                         Toast.makeText(getContext(), "Se ha escogido " + adaptadorEnfermedades.getListaEnfermedades().get(position).getNombre(), Toast.LENGTH_SHORT).show();
                         enfermedad = adaptadorEnfermedades.getListaEnfermedades().get(position);
                         etBuscarEnfermedades.setText(enfermedad.getNombre());
-                        Log.d("ENFERMEDAD", String.valueOf(enfermedad.getId()));
                     }
                     @Override
                     public void onLongItemClick(View view, int position) {
@@ -317,7 +316,6 @@ public class DiagnosticoFragment extends Fragment {
         consultaMedica.setFechaConsulta(fechaConsulta);
         consultaMedica.setStatus(status);
         consultaMedica.save();
-
         postDiagnostico(String.valueOf(id_servidor));
     }
 

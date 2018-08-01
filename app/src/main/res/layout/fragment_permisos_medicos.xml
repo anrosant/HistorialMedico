@@ -86,7 +86,7 @@
                         android:text="DÍAS CON PERMISO MÉDICO: " />
 
                     <TextView
-                        android:id="@+id/tv_numero_dias"
+                        android:id="@+id/txt_numero_dias"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

@@ -173,4 +173,11 @@ public class PermisoMedico extends SugarRecord{
 
         return params;
     }
+
+    public int validarPermisoMedico(String enfermedad, String fecha_inicio, String fecha_fin, String numero_dias, String observaciones){
+        if (enfermedad.equals("") || fecha_inicio.equals("") || fecha_fin.equals("") ||
+                numero_dias.equals("") || observaciones.equals(""))
+            return 0;
+        return 1;
+    }
 }

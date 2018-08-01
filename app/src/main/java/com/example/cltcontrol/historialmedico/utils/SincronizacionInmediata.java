@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ReceiverCallNotAllowedException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -14,9 +13,6 @@ import com.example.cltcontrol.historialmedico.interfaces.IResult;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
-import com.example.cltcontrol.historialmedico.models.Empleado;
-import com.example.cltcontrol.historialmedico.models.Enfermedad;
-import com.example.cltcontrol.historialmedico.models.ExamenImagen;
 import com.example.cltcontrol.historialmedico.models.PatologiasPersonales;
 import com.example.cltcontrol.historialmedico.models.PermisoMedico;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
@@ -28,14 +24,13 @@ import org.json.JSONObject;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_ATENCION_ENFERMERIA;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_DIAGNOSTICO;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_PATOLOGIAS_PERSONALES;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_PERMISO;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_PERMISO_MEDICO;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SIGNOS;
 
 public class SincronizacionInmediata extends BroadcastReceiver {
@@ -234,7 +229,7 @@ public class SincronizacionInmediata extends BroadcastReceiver {
 
         Map<String, String> sendObj = PermisoMedico.getHashMapPermisoMedico(id_empleado_servidor, id_diagnostico,
                 id_consulta, fecha_inicio, fecha_fin, String.valueOf(dias), observaciones, nombre_doctor);
-        requestService.postDataRequest("POSTCALL", URL_PERMISO, sendObj, token);
+        requestService.postDataRequest("POSTCALL", URL_PERMISO_MEDICO, sendObj, token);
     }
 
     /*

@@ -14,7 +14,7 @@ public class Identifiers {
     public static final String URL_CONSULTA_MEDICA = "http://historialmedico.pythonanywhere.com/api/consultaMedica/";
     public static final String URL_ATENCION_ENFERMERIA = "http://historialmedico.pythonanywhere.com/api/atencionEnfermeria/";
     public static final String URL_DIAGNOSTICO = "http://historialmedico.pythonanywhere.com/api/diagnostico/";
-    public static final String URL_PERMISO = "http://historialmedico.pythonanywhere.com/api/permisoMedico/";
+    public static final String URL_PERMISO_MEDICO = "http://historialmedico.pythonanywhere.com/api/permisoMedico/";
     public static final String URL_PATOLOGIAS_PERSONALES = "http://historialmedico.pythonanywhere.com/api/antecedentePatologicoPersonal/";
     public static final String URL_PATOLOGIAS_FAMILIARES = "http://historialmedico.pythonanywhere.com/api/antecedentePatologicoFamiliar/";
     public static final String URL_AUTH_JWT = "http://historialmedico.pythonanywhere.com/auth-jwt/";

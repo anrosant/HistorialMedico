@@ -68,7 +68,7 @@ public class SignosVitalesFragment extends Fragment {
     private String presionDistolicaText;
     private String temperaturatext;
     private String pulsoText;
-    private Date fecha_consulta;
+    private Date fecha_consulta, fecha_signo;
 
     public SignosVitalesFragment() {
         // Required empty public constructor
@@ -151,6 +151,7 @@ public class SignosVitalesFragment extends Fragment {
                         Log.d("HEREEE", "1");
                         postConsultaMedica(fecha_consulta);
                     } else{
+                        fecha_signo = new Date();
                         postSignosVitales(String.valueOf(consultaMedica.getId_serv()));
 
                     }
@@ -228,6 +229,7 @@ public class SignosVitalesFragment extends Fragment {
         consultaMedica.setStatus(status);
         consultaMedica.save();
 
+        fecha_signo = new Date();
         postSignosVitales(String.valueOf(id_servidor));
     }
     /*
@@ -253,7 +255,7 @@ public class SignosVitalesFragment extends Fragment {
                 if(TAG.equalsIgnoreCase("tagconsulta")){
                     try {
                         //Si ha realizado post en ConsultaMedica
-                        String fechaConsulta = response.getString("fecha");
+                        String fechaConsulta = response.getString("fechaConsulta4");
                         Date fecha = convertirFecha(fechaConsulta);
                         String pk = response.getString("pk");
                         guardarConsultaMedicaLocal(fecha,Integer.parseInt(pk), NAME_SYNCED_WITH_SERVER);
@@ -279,7 +281,6 @@ public class SignosVitalesFragment extends Fragment {
                 }else {
                     guardarSignosVitalesLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
-                Log.e("ERROR", String.valueOf(error));
             }
 
             @Override
@@ -287,12 +288,9 @@ public class SignosVitalesFragment extends Fragment {
                 Log.d("HEREMSJERROR", String.valueOf(error));
                 if(TAG.equalsIgnoreCase("tagconsulta")){
                     guardarConsultaMedicaLocal(fecha_consulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
-                    Log.d("HEREEE", "4");
                 }else {
-                    Log.d("HEREEE", "5");
                     guardarSignosVitalesLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
-                Log.e("ERROR", String.valueOf(error));
             }
 
             @Override
@@ -323,7 +321,7 @@ public class SignosVitalesFragment extends Fragment {
         String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback(TAGSIGNOS);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(String.valueOf(id_empleado_Servidor),id_consulta_medica,"",presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext);
+        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(String.valueOf(id_empleado_Servidor),id_consulta_medica,"",presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext, fecha_signo);
         requestService.postDataRequest("POSTCALL", URL_SIGNOS, sendObj, token);
     }
 

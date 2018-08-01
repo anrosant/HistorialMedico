@@ -109,15 +109,15 @@ public class MainActivity extends AppCompatActivity {
                     if(msj.equalsIgnoreCase("Ingreso exitoso")){
                         String token = response.getString("token");
 
+                        String empleados = response.getString("empleado");
+                        guardarEmpleado(empleados);
 
                         String usuario = response.getString("usuarioId");
-                        guardarUsuario(usuario);
+                        String id_empleado = response.getString("empleadoId");
+                        guardarUsuario(usuario, id_empleado);
 
                         String enfermedad = response.getString("enfermedad");
                         guardarEnfermedad(enfermedad);
-
-                        String empleados = response.getString("empleado");
-                        guardarEmpleado(empleados);
 
                         String atencionEnf = response.getString("atencionEnfermeria");
                         guardarAtencionEnfermeria(atencionEnf);
@@ -193,12 +193,14 @@ public class MainActivity extends AppCompatActivity {
     /*
      * Función que guarda usuario localmente
      * */
-    public void guardarUsuario(String response){
+    public void guardarUsuario(String id_usuario, String id_empelado){
         int idServ;
         Usuario nuevoUsuario = new Usuario();
-        idServ = Integer.parseInt(response);
+        Empleado empleado = Empleado.find(Empleado.class, "idserv = ?", id_empelado).get(0);
+        idServ = Integer.parseInt(id_usuario);
         nuevoUsuario.setUsuario(usuario);
         nuevoUsuario.setStatus(1);
+        nuevoUsuario.setEmpleado(empleado);
         nuevoUsuario.setId_serv(idServ);
         nuevoUsuario.save();
     }
@@ -207,9 +209,9 @@ public class MainActivity extends AppCompatActivity {
      * Función que guarda empleado localmente
      * */
     private void guardarEmpleado(String  response) {
-        int idServ, edad, foto;
+        int idServ, edad;
         String cedula, nombre, apellido, correo, direccion, profesion, estado_civil, sexo,
-                lugar_nacimiento, ocupacion_actual;
+                lugar_nacimiento, ocupacion_actual, foto;
         Date fecha_nacimiento, fecha_registro;
         Empleado nuevoEmpleado;
 
@@ -222,18 +224,18 @@ public class MainActivity extends AppCompatActivity {
                 idServ = Integer.parseInt(objectJSON.getString("pk"));
                 cedula = fields.getString("cedula");
                 edad = Integer.parseInt(fields.getString("edad"));
-                foto = Integer.parseInt(fields.getString("foto"));
+                foto = fields.getString("foto");
                 nombre = fields.getString("nombre");
                 apellido = fields.getString("apellido");
                 correo = fields.getString("correo");
                 direccion = fields.getString("direccion");
                 profesion = fields.getString("profesion");
-                estado_civil = fields.getString("estado_civil");
+                estado_civil = fields.getString("estadoCivil");
                 sexo = fields.getString("sexo");
-                lugar_nacimiento = fields.getString("lugar_nacimiento");
-                ocupacion_actual = fields.getString("ocupacion_actual");
-                String fecha_nacimiento_string = fields.getString("fecha_nacimiento");
-                String fecha_registro_string = fields.getString("fecha_nacimiento");
+                lugar_nacimiento = fields.getString("lugarNacimiento");
+                ocupacion_actual = fields.getString("ocupacion");
+                String fecha_nacimiento_string = fields.getString("fechaNacimiento");
+                String fecha_registro_string = fields.getString("fechaRegistro");
                 fecha_nacimiento = convertirFecha(fecha_nacimiento_string);
                 fecha_registro = convertirFecha(fecha_registro_string);
                 nuevoEmpleado = new Empleado(cedula, nombre, apellido, correo, direccion, profesion,
@@ -242,14 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
                 nuevoEmpleado.setId_serv(idServ);
                 nuevoEmpleado.setStatus(1);
-                nuevoEmpleado.setFicha_actual(Integer.parseInt(fields.getString("actual_ficha_medica")));
-                List<Usuario> userList = Usuario.find(Usuario.class, "idserv = ?",fields.getString("nombre_usuario"));
-
-                if(userList.size()!=0){
-                    Usuario usuarioEmpl = userList.get(0);
-                    nuevoEmpleado.setUsuario(usuarioEmpl);
-                }
-
+                nuevoEmpleado.setFicha_actual(Integer.parseInt(fields.getString("ficha_actual")));
                 nuevoEmpleado.save();
             }
         } catch (JSONException e) {
@@ -262,8 +257,7 @@ public class MainActivity extends AppCompatActivity {
      * Función que guarda enfermedades localmente
      * */
     private void guardarEnfermedad(String response) {
-        String codigo;
-        String nombre;
+        String codigo, nombre, grupo;
         JSONArray obj;
         try {
             obj = new JSONArray(response);
@@ -272,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
                 codigo = fields.getString("codigo");
                 nombre = fields.getString("nombre");
+                grupo = fields.getString("grupo");
                 Enfermedad enfermedad = new Enfermedad(codigo, nombre);
                 enfermedad.setId_serv(Integer.parseInt(objectJSON.getString("pk")));
                 enfermedad.setStatus(1);
@@ -297,10 +292,10 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
 
-                motivoAtencion = fields.getString("motivo");
-                diagnosticoEnfermeria = fields.getString("diagnostico");
-                planCuidados = fields.getString("plan_cuidados");
-                fechaAtencion = convertirFecha(fields.getString("fecha"));
+                motivoAtencion = fields.getString("motivoAtencion");
+                diagnosticoEnfermeria = fields.getString("diagnosticoEnfermeria");
+                planCuidados = fields.getString("planCuidados");
+                fechaAtencion = convertirFecha(fields.getString("fechaAtencion"));
                 List<Empleado> empleadoList = Empleado.find(Empleado.class, "idserv = ?",fields.getString("empleado"));
 
                 if(empleadoList.size()!=0){
@@ -332,12 +327,12 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < obj.length(); i++) {
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
-                prob_actual = fields.getString("problema_actual");
+                prob_actual = fields.getString("prob_actual");
                 prescripcion = fields.getString("prescripcion");
                 motivo = fields.getString("motivo");
-                revision_medica = fields.getString("revision");
+                revision_medica = fields.getString("revision_medica");
                 examen_fisico = fields.getString("examen_fisico");
-                fechaConsulta = convertirFecha(fields.getString("fecha"));
+                fechaConsulta = convertirFecha(fields.getString("fechaConsulta"));
                 List<Empleado> empleadoList = Empleado.find(Empleado.class, "idserv = ?",fields.getString("empleado"));
 
                 if(empleadoList.size()!=0){
@@ -367,8 +362,8 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < obj.length(); i++) {
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
-                lugar = fields.getString("lugar_patologia");
-                detalle = fields.getString("detalle_patologia");
+                lugar = fields.getString("lugar");
+                detalle = fields.getString("detalle");
                 List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?", fields.getString("consulta_medica"));
 
                 if (consultaMedicaList.size() != 0) {
@@ -376,6 +371,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 PatologiasPersonales patologiasPersonales = new PatologiasPersonales(consulta_medica, lugar, detalle);
                 patologiasPersonales.setId_serv(Integer.parseInt(objectJSON.getString("pk")));
+                patologiasPersonales.setId_ficha(Integer.parseInt(fields.getString("ficha")));
                 patologiasPersonales.setStatus(1);
                 patologiasPersonales.save();
             }
@@ -440,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
      * Función que guarda Patologia Familiares localmente
      * */
     private void guardarPatologiaFamiliares(String response) {
-        String parentesco;
+        String parentesco, patologia, detalle;
         JSONArray obj;
         try {
             obj = new JSONArray(response);
@@ -448,15 +444,18 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
                 parentesco = fields.getString("parentesco");
+                patologia = fields.getString("patologia");
+                detalle = fields.getString("detalle");
                 PatologiasFamiliares patologiasFamilires = new PatologiasFamiliares();
                 patologiasFamilires.setId_serv(Integer.parseInt(objectJSON.getString("pk")));
-                patologiasFamilires.setId_ficha(Integer.parseInt(fields.getString("ficha_medica")));
                 List<Enfermedad> enfermedadList = Enfermedad.find(Enfermedad.class, "idserv = ?",fields.getString("enfermedad"));
                 if(enfermedadList.size()!=0){
                     Enfermedad enfermedad = enfermedadList.get(0);
                     patologiasFamilires.setEnfermedad(enfermedad);
                 }
                 patologiasFamilires.setParentesco(parentesco);
+                patologiasFamilires.setPatologia(patologia);
+                patologiasFamilires.setDetalle(detalle);
                 patologiasFamilires.setStatus(1);
                 patologiasFamilires.save();
             }
@@ -481,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
                 Diagnostico diagnostico = new Diagnostico();
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
-                tipoEnfermedad = fields.getString("tipo");
+                tipoEnfermedad = fields.getString("tipoEnfermedad");
                 List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?",fields.getString("consulta_medica"));
                 List<Enfermedad> enfermedadList = Enfermedad.find(Enfermedad.class, "idserv = ?",fields.getString("enfermedad"));
                 if(consultaMedicaList.size()!=0){
@@ -507,7 +506,7 @@ public class MainActivity extends AppCompatActivity {
     private void guardarPermisoMedico(String response) {
         Date fecha_inicio, fecha_fin;
         int dias_permiso;
-        String obsevaciones_permiso, fecha_inicio_string, fecha_fin_string;
+        String obsevaciones_permiso, fecha_inicio_string, fecha_fin_string, doctor;
         JSONArray obj;
         try {
             obj = new JSONArray(response);
@@ -515,13 +514,14 @@ public class MainActivity extends AppCompatActivity {
                 PermisoMedico permisoMedico;
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
-                dias_permiso = Integer.parseInt(fields.getString("dias"));
-                obsevaciones_permiso = fields.getString("observaciones");
+                dias_permiso = Integer.parseInt(fields.getString("dias_permiso"));
+                obsevaciones_permiso = fields.getString("observaciones_permiso");
                 fecha_inicio_string = fields.getString("fecha_inicio");
                 fecha_fin_string = fields.getString("fecha_fin");
+                doctor = fields.getString("doctor");
                 fecha_inicio = convertirFecha(fecha_inicio_string);
                 fecha_fin = convertirFecha(fecha_fin_string);
-                permisoMedico = new PermisoMedico(fecha_inicio, fecha_fin, dias_permiso, obsevaciones_permiso);
+                permisoMedico = new PermisoMedico(fecha_inicio, fecha_fin, dias_permiso, obsevaciones_permiso, doctor);
                 List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?",fields.getString("consulta_medica"));
                 List<Empleado> empleadoList = Empleado.find(Empleado.class, "idserv = ?",fields.getString("empleado"));
                 List<Diagnostico> diagnosticoList = Diagnostico.find(Diagnostico.class, "idserv = ?",fields.getString("diagnostico"));

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ReceiverCallNotAllowedException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -26,6 +27,8 @@ import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_ATENCION_ENFERMERIA;
@@ -42,9 +45,6 @@ public class SincronizacionInmediata extends BroadcastReceiver {
     private ConsultaMedica consultaMedica= new ConsultaMedica();
     private SignosVitales signosVitales=new SignosVitales();
     private Diagnostico diagnostico = new Diagnostico();
-    private Empleado empleado = new Empleado();
-    private Enfermedad enfermedad = new Enfermedad();
-    private ExamenImagen examenImagen = new ExamenImagen();
     private PatologiasPersonales patologiasPersonales = new PatologiasPersonales();
     private PermisoMedico permisoMedico = new PermisoMedico();
 
@@ -57,15 +57,19 @@ public class SincronizacionInmediata extends BroadcastReceiver {
 
     private IResult mResultCallback;
     private String TAGATENCION="atencion", TAGCONSULTA="consulta",
-            TAGDIAGNOSTICO="diagnostico", TAGEMPLEADO="empleado", TAGENFERMEDAD="enfermedad",
-            TAGEXAMENIMAGEN="imagen", TAGPATOLOGIASPERS="patpersonales", TAGPERMISO="permiso",
+            TAGDIAGNOSTICO="diagnostico", TAGPATOLOGIASPERS="patpersonales", TAGPERMISO="permiso",
             TAGSIGNOS="signos";
+
+    private SessionManager sesion;
+    private String token;
 
 
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
+        sesion = new SessionManager(context);
+        token = sesion.obtenerInfoUsuario().get("token");
 
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = null;
@@ -90,8 +94,19 @@ public class SincronizacionInmediata extends BroadcastReceiver {
                 diagnosticosUnsynced = diagnostico.getDiagnosticoUnsynced();
                 //Obtiene todos las patologías personales unsynced
                 patologiasPersonalesUnsynced = patologiasPersonales.getPatologiasPersonalesUnsynced();
+                if(atencionesUnsynced.size()==0 && consultaMedicasUnsynced.size()==0){
+                    recorrerSignos("no","no");
+                }
+                if(consultaMedicasUnsynced.size()==0){
+                    if(diagnosticosUnsynced.size()==0)
+                        recorrerPermisos("no","no");
+                    else
+                        recorrerDiagnostico("no");
+                    recorrerPatologias("no");
+                }
 
                 recorrerConsultas();
+                recorrerAtenciones();
 
 
             }
@@ -115,9 +130,9 @@ public class SincronizacionInmediata extends BroadcastReceiver {
 
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        JSONObject sendObj = PatologiasPersonales.getJSONPatologiasPersonales(id_ficha_servidor,
+        Map<String, String> sendObj = PatologiasPersonales.getHashMapPatologiasPersonales(id_ficha_servidor,
                 id_consulta_medica,lugar,detalle);
-        requestService.postDataRequest("POSTCALL", URL_PATOLOGIAS_PERSONALES, sendObj);
+        requestService.postDataRequest("POSTCALL", URL_PATOLOGIAS_PERSONALES, sendObj, token);
     }
 
     /*
@@ -129,9 +144,9 @@ public class SincronizacionInmediata extends BroadcastReceiver {
 
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        JSONObject sendObj = Diagnostico.getJSONDiagnostico(id_consulta,
+        Map<String, String> sendObj = Diagnostico.getHashMapDiagnostico(id_consulta,
                 tipo_enfermedad, id_enfermedad);
-        requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj);
+        requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj, token);
     }
 
     /*
@@ -140,14 +155,14 @@ public class SincronizacionInmediata extends BroadcastReceiver {
      * */
     private void guardarSignosVitalesLocal(SignosVitales signosVit, String id_empleado, String presionDistolica,
                                            String presionSistolica, String pulso,  String temperatura,
-                                           String id_atencion, String  id_consulta) {
+                                           String id_atencion, String  id_consulta, Date fecha_signos) {
         initRequestCallback(TAGSIGNOS, null, null, null, null, null, signosVit);
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        JSONObject sendObj = SignosVitales.getJSONSignosVitales(id_empleado,id_consulta,
-                id_atencion,presionSistolica,presionDistolica,pulso,temperatura);
+        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(id_empleado,id_consulta,
+                id_atencion,presionSistolica,presionDistolica,pulso,temperatura, fecha_signos);
         Log.d("SENDOBJ", String.valueOf(sendObj));
-        requestService.postDataRequest("POSTCALL", URL_SIGNOS, sendObj);
+        requestService.postDataRequest("POSTCALL", URL_SIGNOS, sendObj, token);
     }
 
     /*
@@ -176,8 +191,8 @@ public class SincronizacionInmediata extends BroadcastReceiver {
 
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        JSONObject sendObj = ConsultaMedica.getJSONConsultaMedica(id_empleado,fecha_consulta, motivo, problema_actual, revision_medica, prescripcion, examen_fisico);
-        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj);
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado,fecha_consulta, motivo, problema_actual, revision_medica, prescripcion, examen_fisico);
+        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 
     /*
@@ -195,12 +210,13 @@ public class SincronizacionInmediata extends BroadcastReceiver {
         if (plan == null) {
             plan = "";
         }
+        Log.d("HERE", "ATENCION");
         initRequestCallback(TAGATENCION, atencionEnf, null, null, null, null, null);
 
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        JSONObject sendObj = AtencionEnfermeria.getJSONAtencionEnfermeria(id_empleado,fecha_consulta, motivo, diagnostico, plan);
-        requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj);
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(id_empleado,fecha_consulta, motivo, diagnostico, plan);
+        requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj, token);
     }
 
     /*
@@ -208,7 +224,7 @@ public class SincronizacionInmediata extends BroadcastReceiver {
      * Los almacena en el servidor
      * */
     private void guardarPermisoMedicoLocal(PermisoMedico permisoMed, int id_empleado, String id_diagnostico, String id_consulta,Date fecha_inicio,
-                                           Date fecha_fin, int dias, String observaciones) {
+                                           Date fecha_fin, int dias, String observaciones, String nombre_doctor) {
         initRequestCallback(TAGPERMISO,null, null, null, null, permisoMed, null);
         String id_empleado_servidor = "";
 
@@ -216,9 +232,9 @@ public class SincronizacionInmediata extends BroadcastReceiver {
             id_empleado_servidor = String.valueOf(id_empleado);
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        JSONObject sendObj = PermisoMedico.getJSONPermisoMedico(id_empleado_servidor, id_diagnostico,
-                id_consulta, fecha_inicio, fecha_fin, String.valueOf(dias), observaciones);
-        requestService.postDataRequest("POSTCALL", URL_PERMISO, sendObj);
+        Map<String, String> sendObj = PermisoMedico.getHashMapPermisoMedico(id_empleado_servidor, id_diagnostico,
+                id_consulta, fecha_inicio, fecha_fin, String.valueOf(dias), observaciones, nombre_doctor);
+        requestService.postDataRequest("POSTCALL", URL_PERMISO, sendObj, token);
     }
 
     /*
@@ -231,6 +247,7 @@ public class SincronizacionInmediata extends BroadcastReceiver {
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
+                Log.d("NOTIFY", "SUCCESSSSS");
                     try {
                         String pk = response.getString("pk");
                         if(TAG.equalsIgnoreCase(TAGATENCION)){
@@ -250,7 +267,7 @@ public class SincronizacionInmediata extends BroadcastReceiver {
                             }else{
                                 recorrerAtenciones();
                             }
-                            recorrerPatologias();
+                            recorrerPatologias(pk);
                             if(diagnosticosUnsynced.size()==0){
                                 recorrerPermisos(pk, "");
                             }else{
@@ -306,7 +323,6 @@ public class SincronizacionInmediata extends BroadcastReceiver {
     * */
     public void recorrerConsultas(){
         for(ConsultaMedica consultas : consultaMedicasUnsynced) {
-            Log.d("CONSULTA", "HEREE");
             //Si se ha creado una consulta médica
             if (consultas.getFechaConsulta()!=null) {
                 String id_empleado = "";
@@ -345,6 +361,11 @@ public class SincronizacionInmediata extends BroadcastReceiver {
                 id_enfermedad = String.valueOf(diagnosticos.getEnfermedad().getId_serv());
             }
 
+            //si la consulta ya existe en el servidor
+            if(id_consulta.equals("no")){
+                id_consulta = String.valueOf(diagnosticos.getConsulta_medica().getId_serv());
+            }
+
             guardarDiagnosticoLocal(diagnosticos, id_consulta, id_enfermedad, diagnosticos.getTipoEnfermedad());
 
         }
@@ -353,8 +374,13 @@ public class SincronizacionInmediata extends BroadcastReceiver {
      * Recorre la lista de patologías no sincronizadas
      * Guarda en la db local
      * */
-    public void recorrerPatologias(){
+    public void recorrerPatologias(String id_consulta){
+
         for(PatologiasPersonales patologias : patologiasPersonalesUnsynced){
+            //si la consulta ya existe en el servidor
+            if(id_consulta.equals("no")){
+                id_consulta = String.valueOf(patologias.getConsultaMedica().getId_serv());
+            }
             guardarPatologiaPersonal(patologias, patologias.getId_ficha(), patologias.getConsultaMedica().getId_serv(),
                     patologias.getLugar(), patologias.getDetalle());
 
@@ -366,9 +392,17 @@ public class SincronizacionInmediata extends BroadcastReceiver {
      * */
     public void recorrerPermisos(String id_consulta, String id_diagnostico){
         for(PermisoMedico permisosMedico : permisoMedicoUnsynced){
+            //si la consulta ya existe en el servidor
+            if(id_consulta.equals("no")){
+                id_consulta = String.valueOf(permisosMedico.getConsulta_medica().getId_serv());
+            }
+            //si el diagnóstico ya existe en el servidor
+            if(id_diagnostico.equals("no")){
+                id_consulta = String.valueOf(permisosMedico.getDiagnostico().getId_serv());
+            }
             guardarPermisoMedicoLocal(permisosMedico, permisosMedico.getEmpleado().getId_serv(), id_diagnostico,
                     id_consulta, permisosMedico.getFecha_inicio(), permisosMedico.getFecha_fin(),
-                    permisosMedico.getDias_permiso(), permisosMedico.getObsevaciones_permiso());
+                    permisosMedico.getDias_permiso(), permisosMedico.getObsevaciones_permiso(), permisosMedico.getDoctor());
 
         }
     }
@@ -382,11 +416,19 @@ public class SincronizacionInmediata extends BroadcastReceiver {
             if(signos.getEmpleado()!=null && signos.getEmpleado().getId_serv()!=0){
                 id_empleado = String.valueOf(signos.getEmpleado().getId_serv());
             }
+            //si la consulta ya existe en el servidor
+            if(id_consulta.equals("no")){
+                id_consulta = String.valueOf(signos.getConsultaMedica().getId_serv());
+            }
+            //si la atención ya existe en el servidor
+            if(id_enf.equals("no")){
+                id_consulta = String.valueOf(signos.getAtencion_enfermeria().getId_serv());
+            }
 
             guardarSignosVitalesLocal(signos, id_empleado, String.valueOf(signos.getPresion_distolica()),
                     String.valueOf(signos.getPresion_sistolica()), String.valueOf(signos.getPulso()),
                     String.valueOf(signos.getTemperatura()), id_enf,
-                    id_consulta);
+                    id_consulta, signos.getFecha());
         }
     }
 

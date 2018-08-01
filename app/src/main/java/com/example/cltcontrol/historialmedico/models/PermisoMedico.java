@@ -10,13 +10,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PermisoMedico extends SugarRecord{
     private int id_serv;
     private Diagnostico diagnostico;
     private Date fecha_inicio, fecha_fin;
     private int dias_permiso;
-    private String obsevaciones_permiso,doctor;
+    private String obsevaciones_permiso, doctor;
     private ConsultaMedica consulta_medica;
     private Empleado empleado;
     private int status;
@@ -32,13 +34,14 @@ public class PermisoMedico extends SugarRecord{
         this.obsevaciones_permiso = obsevaciones_permiso;
     }
 
-    public PermisoMedico(Date fecha_inicio, Date fecha_fin, int dias_permiso, String obsevaciones_permiso) {
+    public PermisoMedico(Date fecha_inicio, Date fecha_fin, int dias_permiso, String obsevaciones_permiso, String doctor) {
         this.consulta_medica = consulta_medica;
         this.diagnostico = diagnostico;
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.dias_permiso = dias_permiso;
         this.obsevaciones_permiso = obsevaciones_permiso;
+        this.doctor = doctor;
     }
 
     //Usado para un permiso medico otorgado por un Doctor Particular
@@ -154,5 +157,20 @@ public class PermisoMedico extends SugarRecord{
         }
         return sendObj;
 
+    }
+
+    public static Map<String, String> getHashMapPermisoMedico(String id_empleado_servidor, String id_diagnostico, String id_consulta,Date fecha_inicio,
+                                                              Date fecha_fin, String dias, String observaciones, String doctor){
+        Map<String, String> params = new HashMap<>();
+        params.put("diagnostico", id_diagnostico);
+        params.put("empleado", id_empleado_servidor);
+        params.put("consulta_medica", id_consulta);
+        params.put("fecha_inicio", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_inicio)));
+        params.put("fecha_fin", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_fin)));
+        params.put("dias_permiso", dias);
+        params.put("observaciones_permiso", observaciones);
+        params.put("doctor", doctor);
+
+        return params;
     }
 }

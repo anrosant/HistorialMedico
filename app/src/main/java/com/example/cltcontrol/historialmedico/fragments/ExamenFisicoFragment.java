@@ -166,7 +166,7 @@ public class ExamenFisicoFragment extends Fragment {
                     //Log.d("HERECONSULTA", String.valueOf(response));
                     //Si ha realizado post en ConsultaMedica
                     //PASO 6) FINAL
-                    String fechaConsulta = response.getString("fecha");
+                    String fechaConsulta = response.getString("fechaConsulta");
                     Date fecha = convertirFecha(fechaConsulta);
                     String pk = response.getString("pk");
                     guardarConsultaLocal(fecha, NAME_SYNCED_WITH_SERVER,Integer.parseInt(pk));

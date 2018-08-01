@@ -55,7 +55,7 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
 
 
-        if(cargo.equals("Doctor")){
+        if(cargo.equalsIgnoreCase("Doctor")){
             btnAgregarAtencionEnfermeria.setVisibility(View.GONE);
         }
 

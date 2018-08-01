@@ -8,7 +8,7 @@ public class PatologiasFamiliares extends SugarRecord {
 
     private int status;
     private Enfermedad enfermedad;
-    private String parentesco;
+    private String parentesco, patologia, detalle;
 
     public PatologiasFamiliares() {
     }
@@ -16,6 +16,22 @@ public class PatologiasFamiliares extends SugarRecord {
     public PatologiasFamiliares(Enfermedad enfermedad, String parentesco) {
         this.enfermedad = enfermedad;
         this.parentesco = parentesco;
+    }
+
+    public String getPatologia() {
+        return patologia;
+    }
+
+    public void setPatologia(String patologia) {
+        this.patologia = patologia;
+    }
+
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
     }
 
     public int getId_ficha() {

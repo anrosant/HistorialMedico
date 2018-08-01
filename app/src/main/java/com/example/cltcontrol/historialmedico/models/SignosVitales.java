@@ -1,5 +1,7 @@
 package com.example.cltcontrol.historialmedico.models;
 
+import android.util.Log;
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
@@ -18,6 +20,7 @@ public class SignosVitales extends SugarRecord {
     private ConsultaMedica consulta_medica;
     private AtencionEnfermeria atencion_enfermeria;
     private Empleado empleado;
+    private Date fecha;
 
     private int status;
 
@@ -53,6 +56,14 @@ public class SignosVitales extends SugarRecord {
         this.temperatura = temperatura;
         this.atencion_enfermeria = atencion_enfermeria;
         this.status = status;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     public int getId_serv() {
@@ -171,7 +182,7 @@ public class SignosVitales extends SugarRecord {
 
     public static Map<String, String> getHashMapSignosVitales(String id_empleado_servidor, String id_consulta_medica, String id_atencion,
                                                               String presionSistolicaText, String presionDistolicaText,
-                                                              String pulsoText, String temperaturatext){
+                                                              String pulsoText, String temperaturatext,Date fecha){
 
         Map<String, String> params = new HashMap<>();
         params.put("consulta_medica", id_consulta_medica);
@@ -181,7 +192,9 @@ public class SignosVitales extends SugarRecord {
         params.put("presion_distolica", presionDistolicaText);
         params.put("pulso", pulsoText);
         params.put("temperatura", temperaturatext);
+        params.put("fecha", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha)));
 
+        Log.d("PARAMSSIGNOS", String.valueOf(params));
         return params;
 
     }

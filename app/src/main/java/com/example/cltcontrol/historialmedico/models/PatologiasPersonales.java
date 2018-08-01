@@ -88,10 +88,10 @@ public class PatologiasPersonales extends SugarRecord {
         JSONObject sendObj = null;
         try {
             sendObj = new JSONObject("{" +
-                    "'ficha_medica': '"+id_ficha+"', " +
+                    "'ficha': '"+id_ficha+"', " +
                     "'consulta_medica': '"+id_consulta+"', "+
-                    "'lugar_patologia': '"+lugar+"',"+
-                    "'detalle_patologia': '"+detalle+"'"+
+                    "'lugar': '"+lugar+"',"+
+                    "'detalle': '"+detalle+"'"+
                     "}");
             Log.d("ENDOBJ", String.valueOf(sendObj));
         } catch (JSONException e) {
@@ -102,11 +102,12 @@ public class PatologiasPersonales extends SugarRecord {
     }
     public static Map<String,String> getHashMapPatologiasPersonales(String id_ficha, String id_consulta, String lugar, String detalle){
         Map<String, String> params = new HashMap<>();
-        params.put("ficha_medica", id_ficha);
+        params.put("ficha", id_ficha);
         params.put("consulta_medica", id_consulta);
-        params.put("lugar_patologia", lugar);
-        params.put("detalle_patologia", detalle);
+        params.put("lugar", lugar);
+        params.put("detalle", detalle);
 
+        Log.d("PARAMSPATOPER", String.valueOf(params));
         return params;
 
     }

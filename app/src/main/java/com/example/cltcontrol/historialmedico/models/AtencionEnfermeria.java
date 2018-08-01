@@ -108,9 +108,9 @@ public class AtencionEnfermeria extends SugarRecord {
             sendObj = new JSONObject("{" +
                     "'empleado': "+String.valueOf(id_empleado_servidor)+", " +
                     "'fecha': '"+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta))+"', " +
-                    "'motivo': '"+motivo+"', "+
-                    "'diagnostico': '"+diagnostico+"',"+
-                    "'plan_cuidados': '"+plan+"'"+
+                    "'motivoAtencion': '"+motivo+"', "+
+                    "'diagnosticoEnfermeria': '"+diagnostico+"',"+
+                    "'planCuidados': '"+plan+"'"+
                     "}");
             Log.d("ENDOBJ", String.valueOf(sendObj));
         } catch (JSONException e) {
@@ -125,10 +125,12 @@ public class AtencionEnfermeria extends SugarRecord {
         Map<String, String> params = new HashMap<>();
 
         params.put("empleado", id_empleado_servidor);
-        params.put("fecha", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta)));
-        params.put("motivo", motivo);
-        params.put("diagnostico", diagnostico);
-        params.put("plan_cuidados", plan);
+        params.put("fechaAtencion", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta)));
+        params.put("motivoAtencion", motivo);
+        params.put("diagnosticoEnfermeria", diagnostico);
+        params.put("planCuidados", plan);
+
+        Log.d("PARAMSATENCION", String.valueOf(params));
 
         return params;
     }

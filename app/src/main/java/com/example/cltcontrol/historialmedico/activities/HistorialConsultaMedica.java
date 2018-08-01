@@ -41,7 +41,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         //Obtener el cargo del usuario que inició sesión
         SessionManager sesion = new SessionManager(getApplicationContext());
         cargo = sesion.obtenerInfoUsuario().get("cargo");
-        if(cargo.equals("Enfermera")){
+        if(cargo.equalsIgnoreCase("Enfermera")){
             btnAgregarConsultaMedica.setVisibility(View.GONE);
         }
         //Recibe el id del empleado desde MenuEmpleadoActivity

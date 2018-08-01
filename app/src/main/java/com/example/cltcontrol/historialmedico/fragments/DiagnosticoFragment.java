@@ -332,7 +332,7 @@ public class DiagnosticoFragment extends Fragment {
                 if(TAG.equalsIgnoreCase("tagconsulta")){
                     try {
                         //Si ha realizado post en ConsultaMedica
-                        String fechaConsulta = response.getString("fecha");
+                        String fechaConsulta = response.getString("fechaConsulta");
                         Date fecha = convertirFecha(fechaConsulta);
                         String pk = response.getString("pk");
                         guardarConsultaMedicaLocal(fecha,Integer.parseInt(pk), NAME_SYNCED_WITH_SERVER);

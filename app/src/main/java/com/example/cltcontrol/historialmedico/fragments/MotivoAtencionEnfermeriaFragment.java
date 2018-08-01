@@ -162,9 +162,9 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
             public void notifySuccess(String requestType,JSONObject response) {
                 try {
                     //Log.d("HERECONSULTA", String.valueOf(response));
-                    //Si ha realizado post en ConsultaMedica
+                    //Si ha realizado post en Atencion enfermería
                     //PASO 6) FINAL
-                    String fechaConsulta = response.getString("fecha");
+                    String fechaConsulta = response.getString("fechaAtencion");
                     Date fecha = convertirFecha(fechaConsulta);
                     String pk = response.getString("pk");
                     guardarAtencionLocal(fecha, NAME_SYNCED_WITH_SERVER,Integer.parseInt(pk));

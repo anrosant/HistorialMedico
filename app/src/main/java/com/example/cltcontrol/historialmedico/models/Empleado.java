@@ -12,10 +12,9 @@ public class Empleado extends SugarRecord {
     private String cedula;
 
     private String nombre, apellido, correo, direccion,profesion, estadoCivil, sexo,
-            lugarNacimiento, ocupacion;
+            lugarNacimiento, ocupacion, foto;
     private Date fechaNacimiento, fechaRegistro;
-    private int edad,foto, status, ficha_actual;
-    private Usuario usuario;
+    private int edad, status, ficha_actual;
     private Context context;
     private int id_serv;
 
@@ -26,7 +25,7 @@ public class Empleado extends SugarRecord {
     public Empleado(String cedula, String nombre, String apellido, String correo,
                     String direccion, String profesion, String estadoCivil, String sexo,
                     String lugarNacimiento, String ocupacion, Date fechaNacimiento,
-                    Date fechaRegistro, int edad, int foto) {
+                    Date fechaRegistro, int edad, String foto) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -43,27 +42,6 @@ public class Empleado extends SugarRecord {
         this.foto = foto;
     }
 
-    //Constructor con foreignkey Usuario
-    public Empleado(String cedula, String nombre, String apellido, String correo,
-                    String direccion, String profesion, String estadoCivil, String sexo,
-                    String lugarNacimiento, String ocupacion, Date fechaNacimiento,
-                    Date fechaRegistro, int edad, int foto, Usuario usuario) {
-        this.cedula = cedula;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.correo = correo;
-        this.direccion = direccion;
-        this.profesion = profesion;
-        this.estadoCivil = estadoCivil;
-        this.sexo = sexo;
-        this.lugarNacimiento = lugarNacimiento;
-        this.ocupacion = ocupacion;
-        this.fechaNacimiento = fechaNacimiento;
-        this.fechaRegistro = fechaRegistro;
-        this.edad = edad;
-        this.foto = foto;
-        this.usuario=usuario;
-    }
 
     public int getFicha_actual() {
         return ficha_actual;
@@ -95,14 +73,6 @@ public class Empleado extends SugarRecord {
 
     public void setContext(Context context) {
         this.context = context;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
     public String getCedula() {
@@ -209,11 +179,11 @@ public class Empleado extends SugarRecord {
         this.edad = edad;
     }
 
-    public int getFoto() {
+    public String getFoto() {
         return foto;
     }
 
-    public void setFoto(int foto) {
+    public void setFoto(String foto) {
         this.foto = foto;
     }
 

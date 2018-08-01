@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.models.Usuario;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,18 +35,19 @@ public class SessionManager {
     }
 
     public void crearSesion(Long usu_id, String token) {
-        List<Empleado> empleado = Empleado.find(Empleado.class, "usuario = ?", String.valueOf(usu_id));
-        if(empleado.size()!=0){
-            editor.putString(NOMBRE_USUARIO, empleado.get(0).getUsuario().getUsuario());
-            editor.putString(CARGO, empleado.get(0).getOcupacion());
-            editor.putString(TOKEN, token);
-            editor.apply();
-            //editor.commit();
-            setLoggedIn(context,true);
-        }
+        Usuario usuario = Usuario.findById(Usuario.class, usu_id);
+        editor.putString(NOMBRE_USUARIO, usuario.getUsuario());
+        editor.putString(CARGO, usuario.getEmpleado().getOcupacion());
+        editor.putString(TOKEN, token);
+        editor.apply();
+        //editor.commit();
+        setLoggedIn(context,true);
+
 
     }
-
+    /*
+    * Permite obtener los datos del usuario almacenado en las preferencias
+    * */
     public HashMap<String, String> obtenerInfoUsuario() {
         HashMap<String, String> usuario = new HashMap<String, String>();
         usuario.put("nombre_usuario",sharedPrefer.getString(NOMBRE_USUARIO, null));
@@ -57,6 +59,7 @@ public class SessionManager {
     private static SharedPreferences getPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
+
     /**
      * Cambia el status de login
      */

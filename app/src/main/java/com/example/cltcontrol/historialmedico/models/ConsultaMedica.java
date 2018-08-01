@@ -129,10 +129,10 @@ public class ConsultaMedica extends SugarRecord {
         try {
             sendObj = new JSONObject("{" +
                     "'empleado': "+String.valueOf(id_empleado_servidor)+", " +
-                    "'fecha': '"+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta))+"', " +
+                    "'fechaConsulta': '"+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta))+"', " +
                     "'motivo': '"+motivo+"', "+
-                    "'problema_actual': '"+prob_actual+"',"+
-                    "'revision': '"+revision_medica+"', "+
+                    "'prob_actual': '"+prob_actual+"',"+
+                    "'revision_medica': '"+revision_medica+"', "+
                     "'prescripcion': '"+prescripcion+"',"+
                     "'examen_fisico': '"+examen_fisico+"'"+
                     "}");
@@ -150,13 +150,14 @@ public class ConsultaMedica extends SugarRecord {
 
         Map<String, String> params = new HashMap<>();
         params.put("empleado", id_empleado_servidor);
-        params.put("fecha", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta)));
+        params.put("fechaConsulta", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta)));
         params.put("motivo", motivo);
-        params.put("problema_actual", prob_actual);
-        params.put("revision", revision_medica);
+        params.put("prob_actual", prob_actual);
+        params.put("revision_medica", revision_medica);
         params.put("prescripcion", prescripcion);
         params.put("examen_fisico", examen_fisico);
 
+        Log.d("PARAMSCONSULTA", String.valueOf(params));
         return params;
 
     }

@@ -1,5 +1,7 @@
 package com.example.cltcontrol.historialmedico.models;
 
+import android.util.Log;
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
@@ -77,7 +79,7 @@ public class Diagnostico extends SugarRecord{
             sendObj = new JSONObject("{" +
                     "'consulta_medica': "+id_consulta+", " +
                     "'enfermedad': '"+id_enfermedad+"', "+
-                    "'tipo': '"+tipo_enfermedad+"'"+
+                    "'tipoEnfermedad': '"+tipo_enfermedad+"'"+
                     "}");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -91,8 +93,9 @@ public class Diagnostico extends SugarRecord{
         Map<String, String> params = new HashMap<>();
         params.put("consulta_medica", id_consulta);
         params.put("enfermedad", id_enfermedad);
-        params.put("tipo", tipo_enfermedad);
+        params.put("tipoEnfermedad", tipo_enfermedad);
 
+        Log.d("PARAMSDIAGNOSTICO", String.valueOf(params));
         return params;
 
     }

@@ -41,7 +41,7 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
         holder.tv_nombres_items.setText(listaEmpleados.get(position).getApellido()+" "+listaEmpleados.get(position).getNombre());
         holder.tv_cedula_items.setText(listaEmpleados.get(position).getCedula());
         holder.tv_ocupacion_items.setText(listaEmpleados.get(position).getOcupacion());
-        holder.ivfotoitems.setImageResource(listaEmpleados.get(position).getFoto());
+        //holder.ivfotoitems.setImageResource(listaEmpleados.get(position).getFoto());
     }
 
     /*

@@ -213,6 +213,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
         signos.setStatus(status);
         signos.setAtencion_enfermeria(atencionEnfermeria);
         signos.setEmpleado(empleado);
+        signos.setFecha(new Date());
         signos.save();
 
         if(status==NAME_SYNCED_WITH_SERVER) {

@@ -12,7 +12,9 @@ import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+
 
 public class AdapterSignosVitales extends ArrayAdapter<SignosVitales> {
     private final Context context;
@@ -67,12 +69,24 @@ public class AdapterSignosVitales extends ArrayAdapter<SignosVitales> {
         TextView etPresionDistolica = v.findViewById(R.id.etPresionDistolica);
         TextView etPulso = v.findViewById(R.id.etPulso);
         TextView etTemperatura = v.findViewById(R.id.etTemperatura);
+        TextView etFecha = v.findViewById(R.id.etFecha);
 
         //Muestra los valores
         etPresionSistolica.setText(String.valueOf(signosVitales.getPresion_sistolica()));
         etPresionDistolica.setText(String.valueOf(signosVitales.getPresion_distolica()));
         etPulso.setText(String.valueOf(signosVitales.getPulso()));
         etTemperatura.setText(String.valueOf(signosVitales.getTemperatura()));
+        SimpleDateFormat simpleDate =  new SimpleDateFormat("EEEE dd MMMM, yyyy");
+        try{
+            String strFecha = simpleDate.format(signosVitales.getFecha());
+            etFecha.setText(String.valueOf(strFecha));
+        }catch (Exception e){
+            e.getMessage();
+        }
+
+
+
+
 
         //Desabilita la edicion
         etPresionSistolica.setEnabled(false);

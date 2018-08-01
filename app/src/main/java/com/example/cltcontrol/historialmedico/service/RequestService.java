@@ -183,4 +183,54 @@ public class RequestService {
         }
     }
 
+    public void putDataRequest(final String requestType, String url, Map<String, String> sendObj, final String token){
+        if (mContext instanceof Activity){
+            dialog=new ProgressDialog(mContext);
+            dialog.setMessage("Cargando...");
+            dialog.show();
+        }
+        try {
+            final RequestQueue queue = Volley.newRequestQueue(mContext);
+
+            final JsonObjectRequest jsonObj = new JsonObjectRequest(url,new JSONObject(sendObj), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    if(mResultCallback != null){
+                        mResultCallback.notifySuccess(requestType,response);
+                    }
+                    if(dialog!=null)
+                        dialog.dismiss();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if(mResultCallback != null){
+                        mResultCallback.notifyMsjError(requestType,String.valueOf(error));
+                    }
+                    if(dialog!=null)
+                        dialog.dismiss();
+                }
+            }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> headers = new HashMap<>();
+                    headers.put("Authorization","JWT "+token);
+
+                    return headers;
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+            };
+            queue.add(jsonObj);
+        }catch(Exception e){
+            if(mResultCallback != null) {
+                mResultCallback.notifyMsjError(requestType, "No tiene conexión");
+            }
+            if(dialog!=null)
+                dialog.dismiss();
+        }
+    }
 }

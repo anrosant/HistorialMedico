@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +26,7 @@ public class MenuEmpleadoActivity extends FragmentActivity {
     private String idEmpleado;
     private Empleado empleado;
 
+    @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +69,7 @@ public class MenuEmpleadoActivity extends FragmentActivity {
         tvEstadoCivil.setText(empleado.getEstadoCivil());
         tvIdEmpleado.setText(empleado.getId().toString());
         String fechaRegisto = DateFormat.getDateInstance().format(empleado.getFechaRegistro());
-        tvFechaIngreso.setText(fechaRegisto.toString());
+        tvFechaIngreso.setText(fechaRegisto);
         //tvCargo.setText(empleado.getCargo);
         tvOcupacion.setText(empleado.getOcupacion());
 
@@ -83,10 +85,10 @@ public class MenuEmpleadoActivity extends FragmentActivity {
                     if(motionEvent.getRawX() >= (tvDatosPersonales.getRight() - tvDatosPersonales.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         // your action here
                         if (!lyDatosPersonales.isShown()){
-                            lyDatosPersonales.setVisibility(view.VISIBLE);
+                            lyDatosPersonales.setVisibility(View.VISIBLE);
                             tvDatosPersonales.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_up_cyan_24dp,0);
                         }else {
-                            lyDatosPersonales.setVisibility(view.GONE);
+                            lyDatosPersonales.setVisibility(View.GONE);
                             tvDatosPersonales.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_down_cyan_24dp,0);
                         }
                     }
@@ -95,29 +97,6 @@ public class MenuEmpleadoActivity extends FragmentActivity {
             }
         });
 
-        tvDatosDeEmpresa.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                final int DRAWABLE_LEFT = 0;
-                final int DRAWABLE_TOP = 1;
-                final int DRAWABLE_RIGHT = 2;
-                final int DRAWABLE_BOTTOM = 3;
-
-                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    if(motionEvent.getRawX() >= (tvDatosDeEmpresa.getRight() - tvDatosDeEmpresa.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        // your action here
-                        if (!lyDatosDeEmpresa.isShown()){
-                            lyDatosDeEmpresa.setVisibility(view.VISIBLE);
-                            tvDatosDeEmpresa.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_up_cyan_24dp,0);
-                        }else {
-                            lyDatosDeEmpresa.setVisibility(view.GONE);
-                            tvDatosDeEmpresa.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_down_cyan_24dp,0);
-                        }
-                    }
-                }
-                return true;
-            }
-        });
     }
 
     /*

@@ -222,9 +222,8 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
             Toast.makeText(getContext(),"No hay conexión a internet. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
         }
         limpiarCampos();
-        long id_atencion= atencionEnfermeria.getId();
-        if(id_atencion!=0){
-            cargarSignosVitales(id_atencion);
+        if(atencionEnfermeria!=null){
+            cargarSignosVitales(atencionEnfermeria.getId());
         }else{
             cargarSignosVitalesSin();
         }

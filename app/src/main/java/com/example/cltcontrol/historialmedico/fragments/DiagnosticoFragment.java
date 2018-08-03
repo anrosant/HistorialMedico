@@ -45,7 +45,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -58,23 +57,18 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
 
 public class DiagnosticoFragment extends Fragment {
 
-    private RecyclerView recyclerEnfermedades;
     private AdapterItemDiagnostico adapterItemDiagnostico;
     private AdapterEnfermedades adaptadorEnfermedades;
     private EditText etBuscarEnfermedades;
-    private Button btn_guardar;
-    private RadioGroup rg_tipo_enfermedad;
     private RadioButton radioButton;
-    private ListView lvDiagnostico;
     private LinearLayout ly_diagnostico;
     private ImageButton ib_mostrar_ocultar_contendido;
-    private TextView tvTitulo;
 
     private static List<Enfermedad> enfermedadList;
-    private String tipo_enfermedad,id_consulta_medica, id_empleado, cargo;
+    private String tipo_enfermedad;
+    private String id_consulta_medica;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
-    private List<Diagnostico> diagnosticoList;
     private Diagnostico diagnostico;
     private List<Enfermedad> newList;
     private Enfermedad enfermedad;
@@ -84,8 +78,6 @@ public class DiagnosticoFragment extends Fragment {
     private int id_empleado_servidor;
 
     private Date fecha_consulta;
-    private final String TAGDIAGNOSTICO = "tagdiagnostico";
-    private final String TAGCONSULTA="tagconsulta";
 
     public DiagnosticoFragment() {}
 
@@ -96,22 +88,22 @@ public class DiagnosticoFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_diagnostico, container, false);
 
-        btn_guardar = view.findViewById(R.id.btn_guardar);
-        rg_tipo_enfermedad = view.findViewById(R.id.rgTipoEnfer);
-        lvDiagnostico = view.findViewById(R.id.lvDiagnostico);
+        Button btn_guardar = view.findViewById(R.id.btn_guardar);
+        RadioGroup rg_tipo_enfermedad = view.findViewById(R.id.rgTipoEnfer);
+        ListView lvDiagnostico = view.findViewById(R.id.lvDiagnostico);
         ib_mostrar_ocultar_contendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         ly_diagnostico = view.findViewById(R.id.ly_diagnostico);
-        tvTitulo = view.findViewById(R.id.tvTitulo);
+        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
 
         final Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         //Recibe el id de consulta medica desde Historial de consulta medica
         assert extras != null;
         id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-        id_empleado = extras.getString("ID_EMPLEADO");
+        String id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
         id_empleado_servidor = empleado.getId_serv();
-        cargo = extras.getString("CARGO");
+        String cargo = extras.getString("CARGO");
 
         assert cargo != null;
         if(cargo.equals("Enfermera")){
@@ -122,14 +114,14 @@ public class DiagnosticoFragment extends Fragment {
         }
 
         //Muestra la lista de diagnosticos
-        diagnosticoList = Diagnostico.find(Diagnostico.class, "consultamedica = ?", id_consulta_medica);
+        List<Diagnostico> diagnosticoList = Diagnostico.find(Diagnostico.class, "consultamedica = ?", id_consulta_medica);
         //Crea un adapter de dicha lista y la muestra en un listview
         adapterItemDiagnostico = new AdapterItemDiagnostico(getContext(), diagnosticoList);
         lvDiagnostico.setAdapter(adapterItemDiagnostico);
 
         enfermedadList = ListaEnfermedades.readEnfermedadesAll();
 
-        recyclerEnfermedades = view.findViewById(R.id.rvListaEnfermedades);
+        RecyclerView recyclerEnfermedades = view.findViewById(R.id.rvListaEnfermedades);
         recyclerEnfermedades.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
         etBuscarEnfermedades = view.findViewById(R.id.etBuscarEnfermedades);
 
@@ -161,7 +153,7 @@ public class DiagnosticoFragment extends Fragment {
                     newList = new ArrayList<>();
                     for (Enfermedad enfermedad:enfermedadList){
                         String nombre = enfermedad.getNombre().toLowerCase();
-                        String codigo = enfermedad.getCodigo().toString().toLowerCase();
+                        String codigo = enfermedad.getCodigo().toLowerCase();
                         if(nombre.contains(newTest)){
                             newList.add(enfermedad);
                         }
@@ -194,10 +186,7 @@ public class DiagnosticoFragment extends Fragment {
         etBuscarEnfermedades.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                final int DRAWABLE_LEFT = 0;
-                final int DRAWABLE_TOP = 1;
                 final int DRAWABLE_RIGHT = 2;
-                final int DRAWABLE_BOTTOM = 3;
 
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     try{
@@ -273,6 +262,7 @@ public class DiagnosticoFragment extends Fragment {
         mResultCallback = null;
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
+        String TAGDIAGNOSTICO = "tagdiagnostico";
         initRequestCallback(TAGDIAGNOSTICO);
         requestService = new RequestService(mResultCallback, getActivity());
         Map<String, String> sendObj = Diagnostico.getHashMapDiagnostico(id_consulta, tipo_enfermedad, id_serv);
@@ -381,6 +371,7 @@ public class DiagnosticoFragment extends Fragment {
     private void postConsultaMedica(final Date fecha_consulta){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
+        String TAGCONSULTA = "tagconsulta";
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
         Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(id_empleado_servidor), fecha_consulta, "","","","","");

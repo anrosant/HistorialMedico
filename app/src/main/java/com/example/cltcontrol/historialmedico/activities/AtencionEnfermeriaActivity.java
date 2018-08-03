@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,24 +16,20 @@ import com.example.cltcontrol.historialmedico.fragments.PlanCuidadosFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesEnfermeriaFragment;
 import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
-import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
-import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.orm.util.NamingHelper;
 import java.util.ArrayList;
 
 public class AtencionEnfermeriaActivity extends FragmentActivity implements ComunicadorMenu {
     private Fragment[] misFragmentos;
     private String idAtencion, idEmpleado, precedencia, cargo;
-    private Empleado empleado;
-    TextView tvNombresEmpleado;
-    Button btn_ok;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_atencion_enfermeria);
-        btn_ok = findViewById(R.id.btn_ok);
+        Button btn_ok = findViewById(R.id.btn_ok);
 
         //Recibe el id de atencion desde el HistorialAtencionEnfermeria
         idAtencion = getIntent().getStringExtra("ID_ATENCION");
@@ -44,9 +41,9 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements Comu
             btn_ok.setVisibility(View.GONE);
         }
         //Coloca los datos del empleado en el fragment de informacion
-        tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
-        empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
-        tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
+        TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+        Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
+        tvNombresEmpleado.setText(empleado.getApellido()+" "+ empleado.getNombre());
 
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,25 +83,28 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements Comu
             AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
             if (precedencia.equals("crear")) {
                 //seleccionamos la cadena a mostrar
-                alertbox.setMessage("No se guardara la consulta. Desea salir?");
+                alertbox.setMessage("¿Está seguro que desea salir?");
                 //elegimos un positivo SI
                 alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     //Funcion llamada cuando se pulsa el boton Si
                     public void onClick(DialogInterface arg0, int arg1) {
                         //Elimina la consulta vacía
                         AtencionEnfermeria atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Long.parseLong(idAtencion));
-                        //Elimina en cascada
-                        SignosVitales.deleteAll(SignosVitales.class, "atencionenfermeria = ?", idAtencion);
+
+                        if(atencionEnfermeria.getEmpleado()==null || atencionEnfermeria.getFecha_atencion()==null){
+                            atencionEnfermeria.delete();
+                        }
+
                         //Reset el autoincrement
                         AtencionEnfermeria.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + NamingHelper.toSQLName(AtencionEnfermeria.class) + "'");
-                        atencionEnfermeria.delete();
+
                         AtencionEnfermeriaActivity.super.onBackPressed();
                     }
                 });
                 //Si editó una consulta
             } else {
                 //seleccionamos la cadena a mostrar
-                alertbox.setMessage("Los datos que no ha guardado se descartarán. Desea salir?");
+                alertbox.setMessage("¿Está seguro que desea salir?");
                 //elegimos un positivo SI
                 alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     //Funcion llamada cuando se pulsa el boton Si

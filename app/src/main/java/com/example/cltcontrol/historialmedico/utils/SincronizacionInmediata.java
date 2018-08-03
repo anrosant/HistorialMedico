@@ -91,6 +91,7 @@ public class SincronizacionInmediata extends BroadcastReceiver {
                 patologiasPersonalesUnsynced = patologiasPersonales.getPatologiasPersonalesUnsynced();
                 if(atencionesUnsynced.size()==0 && consultaMedicasUnsynced.size()==0){
                     recorrerSignos("no","no");
+
                 }
                 if(consultaMedicasUnsynced.size()==0){
                     if(diagnosticosUnsynced.size()==0)
@@ -205,7 +206,6 @@ public class SincronizacionInmediata extends BroadcastReceiver {
         if (plan == null) {
             plan = "";
         }
-        Log.d("HERE", "ATENCION");
         initRequestCallback(TAGATENCION, atencionEnf, null, null, null, null, null);
 
         RequestService requestService = new RequestService(mResultCallback, context);
@@ -256,8 +256,6 @@ public class SincronizacionInmediata extends BroadcastReceiver {
                             consulta.setStatus(NAME_SYNCED_WITH_SERVER);
                             consulta.save();
                             if(atencionesUnsynced.size()==0){
-                                Log.d("CONSULTAAIDSER", String.valueOf(consulta.getId_serv()));
-                                Log.d("CONSULTAAID", String.valueOf(consulta.getId()));
                                 recorrerSignos(pk, "");
                             }else{
                                 recorrerAtenciones();
@@ -286,7 +284,6 @@ public class SincronizacionInmediata extends BroadcastReceiver {
                             permiso.save();
                         }else if(TAG.equalsIgnoreCase(TAGSIGNOS)){
                             signosV.setId_serv(Integer.parseInt(pk));
-                            Log.d("SIGNOS", String.valueOf(signosV.getId()));
                             signosV.setStatus(NAME_SYNCED_WITH_SERVER);
                             signosV.save();
                         }
@@ -417,7 +414,7 @@ public class SincronizacionInmediata extends BroadcastReceiver {
             }
             //si la atención ya existe en el servidor
             if(id_enf.equals("no")){
-                id_consulta = String.valueOf(signos.getAtencion_enfermeria().getId_serv());
+                id_enf = String.valueOf(signos.getAtencion_enfermeria().getId_serv());
             }
 
             guardarSignosVitalesLocal(signos, id_empleado, String.valueOf(signos.getPresion_distolica()),

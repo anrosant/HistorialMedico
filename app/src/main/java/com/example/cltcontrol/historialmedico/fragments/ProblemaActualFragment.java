@@ -3,6 +3,7 @@ package com.example.cltcontrol.historialmedico.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,8 +38,8 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
  */
 public class ProblemaActualFragment extends Fragment {
     private EditText et_problema_actual;
-    private Button btn_guardar;
-    private String id_consulta_medica, precedencia, id_empleado, cargo;
+    private String precedencia;
+    private String cargo;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
     private String id_empleado_servidor; //1) Declarar id_empelado_servidor y mResultCallback
@@ -52,21 +53,21 @@ public class ProblemaActualFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_problema_actual, container, false);
 
         et_problema_actual = view.findViewById(R.id.et_problema_actual);
-        btn_guardar = view.findViewById(R.id.btn_guardar);
+        Button btn_guardar = view.findViewById(R.id.btn_guardar);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         //Recibe el id de consulta medica desde Historial de consulta medica
         if (extras != null) {
-            id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+            String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
             precedencia = extras.getString("PRECEDENCIA");
-            id_empleado = extras.getString("ID_EMPLEADO");
+            String id_empleado = extras.getString("ID_EMPLEADO");
             empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
             id_empleado_servidor = String.valueOf(empleado.getId_serv());
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));

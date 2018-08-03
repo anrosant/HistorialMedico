@@ -9,19 +9,15 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.fragments.PatologiasPersonalesFragment;
 import com.example.cltcontrol.historialmedico.models.PatologiasPersonales;
 
 import java.util.List;
 
 public class AdapterPatologiasPersonales extends ArrayAdapter<PatologiasPersonales> {
-    private final Context context;
-    private List<PatologiasPersonales> patologiasPersonalesList;
-    private PatologiasPersonalesFragment activity;
+    private final List<PatologiasPersonales> patologiasPersonalesList;
 
     public AdapterPatologiasPersonales(Context context, List<PatologiasPersonales> patologiasPersonalesList) {
         super(context, 0, patologiasPersonalesList);
-        this.context = context;
         this.patologiasPersonalesList = patologiasPersonalesList;
     }
 
@@ -51,7 +47,7 @@ public class AdapterPatologiasPersonales extends ArrayAdapter<PatologiasPersonal
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
 
         if (v == null) {

@@ -1,7 +1,9 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -38,8 +39,6 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
 public class ExamenFisicoFragment extends Fragment {
 
     private EditText et_examen_fisico;
-    private Button btn_guardar;
-    private String id_consulta_medica, precedencia, id_empleado, cargo;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
     private String id_empleado_servidor; //1) Declarar id_empelado_servidor y mResultCallback
@@ -51,34 +50,36 @@ public class ExamenFisicoFragment extends Fragment {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_examen_fisico, container, false);
         et_examen_fisico = view.findViewById(R.id.et_examen_fisico);
-        btn_guardar = view.findViewById(R.id.btn_guardar);
+        Button btn_guardar = view.findViewById(R.id.btn_guardar);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
-        precedencia = extras.getString("PRECEDENCIA");
+        assert extras != null;
+        String precedencia = extras.getString("PRECEDENCIA");
         //Recibe el id de consulta medica desde Historial de consulta medica
-        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
-        id_empleado = extras.getString("ID_EMPLEADO");
+        String id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
         id_empleado_servidor = String.valueOf(empleado.getId_serv());
 
         //Validar quien ingresa Enfermera o Doctor
-        cargo = extras.getString("CARGO");
+        String cargo = extras.getString("CARGO");
         //En caso de ser enfermera no puede crear ni editar
-        if(cargo.equals("Enfermera")){
+        if (cargo != null && cargo.equals("Enfermera")) {
             btn_guardar.setVisibility(View.GONE);
             et_examen_fisico.setEnabled(false);
         }
 
-        if(precedencia.equals("consultar")) {
+        if (precedencia != null && precedencia.equals("consultar")) {
             et_examen_fisico.setText(consultaMedica.getExamen_fisico());
             btn_guardar.setText("Editar");
         }

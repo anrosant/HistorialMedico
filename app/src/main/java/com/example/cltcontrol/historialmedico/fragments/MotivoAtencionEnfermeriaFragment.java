@@ -1,6 +1,7 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -36,9 +37,6 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
  */
 public class MotivoAtencionEnfermeriaFragment extends Fragment {
 
-    private String idAtencion=null, precedencia, idEmpleado, cargo;
-    private Bundle bun;
-    private Button boton;
     private EditText etMotivo;
     private Empleado empleado;
     private AtencionEnfermeria atencion;
@@ -50,37 +48,44 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Inflate y vinculaciones de las variables globales
         View view = inflater.inflate(R.layout.fragment_motivo_atencion, container, false);
-        boton = view.findViewById(R.id.btnGuardar);
+        Button boton = view.findViewById(R.id.btnGuardar);
         etMotivo = view.findViewById(R.id.txt_motivo);
-        bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
+        Bundle bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
-        idAtencion = bun.getString("ID_ATENCION");
-        precedencia = bun.getString("PRECEDENCIA");
-        idEmpleado = bun.getString("ID_EMPLEADO");
+        String idAtencion = null;
+        if (bun != null) {
+            idAtencion = bun.getString("ID_ATENCION");
+            String precedencia = bun.getString("PRECEDENCIA");
+            String idEmpleado = bun.getString("ID_EMPLEADO");
 
-        atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
-        empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
-        id_empleado_servidor = String.valueOf(empleado.getId_serv());
+            atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
+            empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
+            id_empleado_servidor = String.valueOf(empleado.getId_serv());
 
-        cargo = bun.getString("CARGO");
-        if(cargo.equals("Doctor")){
-            boton.setVisibility(View.GONE);
-            etMotivo.setEnabled(false);
+            String cargo = bun.getString("CARGO");
+            if (cargo != null && cargo.equals("Doctor")) {
+                boton.setVisibility(View.GONE);
+                etMotivo.setEnabled(false);
 
+            }
+
+            if (precedencia != null && precedencia.equals("consultar")) {
+                ////funcionalidad para cargar un signo vital con el id de Atencion
+                etMotivo.setText(atencion.getMotivoAtencion());
+                boton.setText("Editar");
+            }
         }
 
-        if(precedencia.equals("consultar")) {
-            ////funcionalidad para cargar un signo vital con el id de Atencion
-            etMotivo.setText(atencion.getMotivoAtencion());
-            boton.setText("Editar");
-        }
+
+
         /*
          * Guarda los datos de un motivo atención
          * */

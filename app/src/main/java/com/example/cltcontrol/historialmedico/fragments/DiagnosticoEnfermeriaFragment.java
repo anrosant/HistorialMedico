@@ -2,6 +2,7 @@ package com.example.cltcontrol.historialmedico.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.interfaces.IResult;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.Empleado;
-import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.example.cltcontrol.historialmedico.service.RequestService;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
@@ -37,10 +37,8 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
  */
 public class DiagnosticoEnfermeriaFragment extends Fragment {
 
-    private String idAtencion=null;
-    private String precedencia, idEmpleado,cargo;
-    private Bundle bun;
-    private Button boton;
+    private String precedencia;
+    private String cargo;
     private EditText etDiagnostico;
     private Empleado empleado;
     private AtencionEnfermeria atencion;
@@ -52,20 +50,20 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Inflate y vinculaciones de las variables globales
         View view = inflater.inflate(R.layout.fragment_diagnotico_enfermeria, container, false);
-        boton = view.findViewById(R.id.btnGuardar);
+        Button boton = view.findViewById(R.id.btnGuardar);
         etDiagnostico = view.findViewById(R.id.txt_prescripcion);
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
-        bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
+        Bundle bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         if (bun != null) {
-            idAtencion = bun.getString("ID_ATENCION");
+            String idAtencion = bun.getString("ID_ATENCION");
             precedencia = bun.getString("PRECEDENCIA");
-            idEmpleado = bun.getString("ID_EMPLEADO");
+            String idEmpleado = bun.getString("ID_EMPLEADO");
             cargo = bun.getString("CARGO");
             atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
             empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));

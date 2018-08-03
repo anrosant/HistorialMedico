@@ -49,10 +49,8 @@ import java.util.concurrent.TimeUnit;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_ATENCION_ENFERMERIA;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_PERMISO_MEDICO;
-import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SIGNOS;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertirFecha;
 
 public class PermisosMedicosFragment extends Fragment {
@@ -392,60 +390,6 @@ public class PermisosMedicosFragment extends Fragment {
             }
         };
     }
-
-    /*
-     * Guarda los datos de un permiso médico
-     * */
-    /*
-    public void guardarPermisoMedico(){
-
-        if(diagnosticosList.size()!=0) {
-            String enfermedadPrincipalText = sp_enfermedades_diagnostico.getSelectedItem().toString();
-            String fechaInicioText = txt_fecha_desde.getText().toString();
-            String fechaFinText = txt_fecha_hasta.getText().toString();
-            String diasPermisoText = txt_numero_dias.getText().toString();
-            String observacionesPermisoText = txt_observaciones.getText().toString();
-
-            if (!switch_generar_permiso.isChecked() || enfermedadPrincipalText.equals("") || fechaInicioText.equals("") ||
-                    fechaFinText.equals("") || diasPermisoText.equals("") || observacionesPermisoText.equals("")) {
-                Toast.makeText(getContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            Date fecha_inicio = null;
-            Date fecha_fin = null;
-            try {
-                fecha_inicio = format.parse(fechaInicioText);
-                fecha_fin = format.parse(fechaFinText);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            int dias_permiso = Integer.parseInt(diasPermisoText);
-
-            if (consultaMedica.getEmpleado() == null) {
-                //Guarda el id del empleado en la consulta y la fecha de consulta
-                consultaMedica.setEmpleado(empleado);
-                consultaMedica.setFechaConsulta(new Date());
-            }
-            if (permisoMedico == null) {
-                PermisoMedico permisoMed = new PermisoMedico(diagnostico, fecha_inicio, fecha_fin, dias_permiso, observacionesPermisoText, consultaMedica);
-                permisoMed.save();
-            } else {
-                permisoMedico.setDiagnostico(diagnostico);
-                permisoMedico.setFecha_inicio(fecha_inicio);
-                permisoMedico.setFecha_fin(fecha_fin);
-                permisoMedico.setDias_permiso(dias_permiso);
-                permisoMedico.setObsevaciones_permiso(observacionesPermisoText);
-                permisoMedico.setConsulta_medica(consultaMedica);
-                permisoMedico.save();
-            }
-            Toast.makeText(getContext(), "Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
-        }
-        else
-            Toast.makeText(getContext(), "No existen diagnosticos para generar permiso medico", Toast.LENGTH_SHORT).show();
-    }
-    */
 
     public void DateDialogFin() {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {

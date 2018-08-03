@@ -1,7 +1,6 @@
 package com.example.cltcontrol.historialmedico.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -20,14 +19,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
-    private Activity activity;
-    private List<ConsultaMedica> consultaMedicasList;
-    private final Context context;
-    SimpleDateFormat simpleDateFormat;
+    private final List<ConsultaMedica> consultaMedicasList;
 
     public AdapterItemConsultaMedica(Context context, List<ConsultaMedica> consultaMedicaList) {
         super(context, 0, consultaMedicaList);
-        this.context = context;
         this.consultaMedicasList = consultaMedicaList;
     }
 
@@ -58,7 +53,7 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
     @SuppressLint("SimpleDateFormat")
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
 
         if (v == null) {
@@ -68,7 +63,7 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
         ConsultaMedica consultaMedica = consultaMedicasList.get(position);
         TextView tvfechaConsulta = v.findViewById(R.id.tvFechaConsulta);
 
-        simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
         try {
             Date fecha_consulta = simpleDateFormat.parse(consultaMedica.getFechaConsulta().toString());
             simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");

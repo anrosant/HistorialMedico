@@ -1,7 +1,9 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,8 +40,6 @@ public class PlanCuidadosFragment extends Fragment {
 
 
     private String idAtencion=null, precedencia, idEmpleado, cargo;
-    private Bundle bun;
-    private Button boton;
     private EditText etPlan;
     private Empleado empleado;
     private AtencionEnfermeria atencion;
@@ -52,15 +52,16 @@ public class PlanCuidadosFragment extends Fragment {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Inflate y vinculaciones de las variables globales
         View view = inflater.inflate(R.layout.fragment_plan_cuidados, container, false);
-        boton = view.findViewById(R.id.btnGuardar);
+        Button boton = view.findViewById(R.id.btnGuardar);
         etPlan = view.findViewById(R.id.etPlanCuidados);
-        bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
+        Bundle bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
         if (bun != null) {

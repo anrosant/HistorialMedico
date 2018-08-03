@@ -1,6 +1,8 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,11 +51,11 @@ public class SignosVitalesFragment extends Fragment {
     private TextView tv_titulo;
     private Button btn_guardar;
 
-    private String id_consulta_medica, id_empleado, cargo;
+    private String id_consulta_medica;
+    private String cargo;
     private AdapterSignosVitales adapterSignosVitales;
     private List<SignosVitales> signosVitalesList;
     private ConsultaMedica consultaMedica;
-    private ListView lvSignosVitales;
     private SignosVitales signos;
     private Empleado empleado;
 
@@ -62,7 +63,6 @@ public class SignosVitalesFragment extends Fragment {
     private IResult mResultCallback = null;
     private RequestService requestService;
     private int id_empleado_Servidor;
-    private String TAGSIGNOS = "tagsignos", TAGCONSULTA="tagconsulta";
 
     private String presionSistolicaText;
     private String presionDistolicaText;
@@ -74,8 +74,9 @@ public class SignosVitalesFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -89,7 +90,7 @@ public class SignosVitalesFragment extends Fragment {
         etPDistolica = view.findViewById(R.id.etPDistolica);
         etTemperatura = view.findViewById(R.id.etTemperatura);
         etPulso = view.findViewById(R.id.etPulso);
-        lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
+        ListView lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
         btn_guardar = view.findViewById(R.id.btnGuardar);
         ly_signos_vitales = view.findViewById(R.id.ly_signos_vitales);
         tv_titulo = view.findViewById(R.id.tv_titulo);
@@ -100,7 +101,7 @@ public class SignosVitalesFragment extends Fragment {
         if (extras != null) {
             id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
             //Recibe el id del empleado
-            id_empleado = extras.getString("ID_EMPLEADO");
+            String id_empleado = extras.getString("ID_EMPLEADO");
             cargo = extras.getString("CARGO");
             empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
             id_empleado_Servidor = empleado.getId_serv();
@@ -138,26 +139,30 @@ public class SignosVitalesFragment extends Fragment {
 
                 signos = new SignosVitales();
                 int res = signos.validarSignos(presionSistolicaText, presionDistolicaText, pulsoText, temperaturatext);
-                if(res == 0) {
-                    Toast.makeText(getContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
-                    SignosVitales.delete(signos);
-                    btn_guardar.setEnabled(true);
-                } else if(res == 1) {
-                    Toast.makeText(getContext(), "Los valores están fuera de rango", Toast.LENGTH_SHORT).show();
-                    SignosVitales.delete(signos);
-                    btn_guardar.setEnabled(true);
-                }else{
-                    //Si es la primera vez que crea la consulta medica
-                    if (consultaMedica.getEmpleado() == null) {
-                        fecha_consulta = new Date();
-                        Log.d("HEREEE", "1");
-                        postConsultaMedica(fecha_consulta);
-                    } else{
-                        fecha_signo = new Date();
-                        postSignosVitales(String.valueOf(consultaMedica.getId_serv()));
+                switch (res) {
+                    case 0:
+                        Toast.makeText(getContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
+                        SignosVitales.delete(signos);
+                        btn_guardar.setEnabled(true);
+                        break;
+                    case 1:
+                        Toast.makeText(getContext(), "Los valores están fuera de rango", Toast.LENGTH_SHORT).show();
+                        SignosVitales.delete(signos);
+                        btn_guardar.setEnabled(true);
+                        break;
+                    default:
+                        //Si es la primera vez que crea la consulta medica
+                        if (consultaMedica.getEmpleado() == null) {
+                            fecha_consulta = new Date();
+                            Log.d("HEREEE", "1");
+                            postConsultaMedica(fecha_consulta);
+                        } else {
+                            fecha_signo = new Date();
+                            postSignosVitales(String.valueOf(consultaMedica.getId_serv()));
 
-                    }
+                        }
 
+                        break;
                 }
                 cargarSignosVitales(consultaMedica.getId());
             }
@@ -175,10 +180,10 @@ public class SignosVitalesFragment extends Fragment {
                     if(motionEvent.getRawX() >= (tv_titulo.getRight() - tv_titulo.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         // your action here
                         if (!ly_signos_vitales.isShown()){
-                            ly_signos_vitales.setVisibility(view.VISIBLE);
+                            ly_signos_vitales.setVisibility(View.VISIBLE);
                             tv_titulo.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_up_white_24dp,0);
                         }else {
-                            ly_signos_vitales.setVisibility(view.GONE);
+                            ly_signos_vitales.setVisibility(View.GONE);
                             tv_titulo.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_down_white_24dp,0);
                         }
                     }
@@ -192,7 +197,7 @@ public class SignosVitalesFragment extends Fragment {
     /*
     * Función que carga los signos vitales en la lista
     * */
-    public void cargarSignosVitales(Long id){
+    private void cargarSignosVitales(Long id){
         ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
                 "consultamedica = ?", String.valueOf(id));
         adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
@@ -200,7 +205,7 @@ public class SignosVitalesFragment extends Fragment {
     /*
     * Función que guarda los signos vitales localmente
     * */
-    public void guardarSignosVitalesLocal(int id_serv, int status){
+    private void guardarSignosVitalesLocal(int id_serv, int status){
         signos.setId_serv(id_serv);
         signos.setPresion_sistolica(Integer.parseInt(presionSistolicaText));
         signos.setPresion_distolica(Integer.parseInt(presionDistolicaText));
@@ -225,7 +230,7 @@ public class SignosVitalesFragment extends Fragment {
     /*
     * Función que guarda una consulta médica localmente
     * */
-    public void guardarConsultaMedicaLocal(Date fechaConsulta, int id_servidor, int status){
+    private void guardarConsultaMedicaLocal(Date fechaConsulta, int id_servidor, int status){
         consultaMedica.setId_serv(id_servidor);
         consultaMedica.setEmpleado(empleado);
         consultaMedica.setFechaConsulta(fechaConsulta);
@@ -250,7 +255,7 @@ public class SignosVitalesFragment extends Fragment {
      * Inicializar las llamadas a Request
      * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
      * */
-    void initRequestCallback(final String TAG){
+    private void initRequestCallback(final String TAG){
         Log.d("HEREEE", "3");
         mResultCallback = new IResult() {
             @Override
@@ -306,10 +311,11 @@ public class SignosVitalesFragment extends Fragment {
     /*
      * Envía datos de Consulta médica al servidor
      * */
-    public void postConsultaMedica(final Date fecha_consulta){
+    private void postConsultaMedica(final Date fecha_consulta){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
         Log.d("HERE", "2");
+        String TAGCONSULTA = "tagconsulta";
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
         Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(id_empleado_Servidor), fecha_consulta,"","","","","");
@@ -319,9 +325,10 @@ public class SignosVitalesFragment extends Fragment {
     /*
      * Envía datos de Signos vitales al servidor
      * */
-    public void postSignosVitales(String id_consulta_medica){
+    private void postSignosVitales(String id_consulta_medica){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
+        String TAGSIGNOS = "tagsignos";
         initRequestCallback(TAGSIGNOS);
         requestService = new RequestService(mResultCallback, getActivity());
         Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(String.valueOf(id_empleado_Servidor),id_consulta_medica,"",presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext, fecha_signo);

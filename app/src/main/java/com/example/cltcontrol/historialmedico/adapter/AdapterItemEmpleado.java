@@ -1,6 +1,7 @@
 package com.example.cltcontrol.historialmedico.adapter;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +23,9 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
         this.listaEmpleados = listaEmpleados;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         @SuppressLint("InflateParams")
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_item_row_buscar_empleados_recyclerview, null, false);
         return new ViewHolder(view);
@@ -36,8 +38,9 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
         return listaEmpleados;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_nombres_items.setText(listaEmpleados.get(position).getApellido()+" "+listaEmpleados.get(position).getNombre());
         holder.tv_cedula_items.setText(listaEmpleados.get(position).getCedula());
         holder.tv_ocupacion_items.setText(listaEmpleados.get(position).getOcupacion());
@@ -52,9 +55,11 @@ public class AdapterItemEmpleado extends RecyclerView.Adapter<AdapterItemEmplead
         return listaEmpleados.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivfotoitems;
-        TextView tv_nombres_items, tv_cedula_items, tv_ocupacion_items;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        final ImageView ivfotoitems;
+        final TextView tv_nombres_items;
+        final TextView tv_cedula_items;
+        final TextView tv_ocupacion_items;
         ViewHolder(View itemView) {
             super(itemView);
             tv_nombres_items = itemView.findViewById(R.id.tv_nombres_items);

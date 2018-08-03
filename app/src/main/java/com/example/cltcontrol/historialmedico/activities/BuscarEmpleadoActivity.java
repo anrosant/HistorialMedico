@@ -27,8 +27,6 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
     private static List<Empleado> empleadosList;
     private AdapterItemEmpleado adaptadorEmpleados;
     private EditText buscar;
-    private ImageView ivFlechaLimpiar;
-    private RecyclerView recyclerEmpleados;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +34,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
         setContentView(R.layout.activity_buscar_empleados);
 
         buscar = findViewById(R.id.etBusquedaUsuario);
-        ivFlechaLimpiar = findViewById(R.id.ivFlechaLimpiar);
+        ImageView ivFlechaLimpiar = findViewById(R.id.ivFlechaLimpiar);
         RecyclerView recyclerEmpleados = findViewById(R.id.rvlistaempleados);
         recyclerEmpleados.setLayoutManager(new LinearLayoutManager(this));
 

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.example.cltcontrol.historialmedico.R;
 
 public class ImageAdapter extends BaseAdapter {
-    private Context mContext;
+    private final Context mContext;
 
     public ImageAdapter(Context c){
         mContext = c;
@@ -37,7 +37,7 @@ public class ImageAdapter extends BaseAdapter {
         return imageView;
     }
 
-    private Integer[] mThumbsIds = {
+    private final Integer[] mThumbsIds = {
             R.drawable.perrito1,
             R.drawable.perrito2,
             R.drawable.perrito1,

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
+import com.example.cltcontrol.historialmedico.interfaces.IComunicadorMenu;
 
 import java.util.Objects;
 
@@ -55,7 +55,7 @@ public class MenuConsultaMedicaFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     FragmentActivity estaActividad = getActivity();
-                    ((ComunicadorMenu) Objects.requireNonNull(estaActividad)).menuPulsado(queBoton);
+                    ((IComunicadorMenu) Objects.requireNonNull(estaActividad)).menuPulsado(queBoton);
                 }
             });
         }

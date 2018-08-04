@@ -309,6 +309,9 @@ public class SignosVitalesFragment extends Fragment {
     }
 
     /*
+     * Obtiene el token
+     * Inicia un requerimiento
+     * Obtiene un hashmap con los datos enviados por parámetros
      * Envía datos de Consulta médica al servidor
      * */
     private void postConsultaMedica(final Date fecha_consulta){
@@ -323,6 +326,9 @@ public class SignosVitalesFragment extends Fragment {
     }
 
     /*
+     * Obtiene el token
+     * Inicia un requerimiento
+     * Obtiene un hashmap con los datos enviados por parámetros
      * Envía datos de Signos vitales al servidor
      * */
     private void postSignosVitales(String id_consulta_medica){

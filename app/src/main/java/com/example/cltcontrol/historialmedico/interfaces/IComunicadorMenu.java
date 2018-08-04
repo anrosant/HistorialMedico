@@ -1,5 +1,5 @@
 package com.example.cltcontrol.historialmedico.interfaces;
 
-public interface ComunicadorMenu {
+public interface IComunicadorMenu {
     void menuPulsado(int opcionMenu);
 }

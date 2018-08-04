@@ -323,15 +323,8 @@ public class PermisosMedicosFragment extends Fragment {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(getContext(),"No hay conexión a internet. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
-        }/*
-        limpiarCampos();
-        long id_atencion= atencionEnfermeria.getId();
-        if(id_atencion!=0){
-            cargarSignosVitales(id_atencion);
-        }else{
-            cargarSignosVitalesSin();
-        }*/
+            Toast.makeText(getContext(),"Hubo un error de conexión. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
+        }
 
     }
 

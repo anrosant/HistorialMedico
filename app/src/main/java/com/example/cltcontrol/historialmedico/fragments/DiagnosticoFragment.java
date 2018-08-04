@@ -292,7 +292,7 @@ public class DiagnosticoFragment extends Fragment {
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
         }else {
-            Toast.makeText(getContext(), "No hay conexión a internet. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Hubo un error de conexión. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
         }
         cargarDiagnosticos(consultaMedica.getId());
     }

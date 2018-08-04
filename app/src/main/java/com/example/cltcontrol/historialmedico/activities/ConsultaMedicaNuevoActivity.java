@@ -21,15 +21,14 @@ import com.example.cltcontrol.historialmedico.fragments.PrescripcionFragment;
 import com.example.cltcontrol.historialmedico.fragments.ProblemaActualFragment;
 import com.example.cltcontrol.historialmedico.fragments.RevisionMedicaFragment;
 import com.example.cltcontrol.historialmedico.fragments.SignosVitalesFragment;
-import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
-import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
+import com.example.cltcontrol.historialmedico.interfaces.IComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.orm.util.NamingHelper;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ComunicadorMenu{
+public class ConsultaMedicaNuevoActivity extends FragmentActivity implements IComunicadorMenu {
 
     private Fragment[] misFragmentos;
     private Empleado empleado;

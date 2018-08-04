@@ -3,6 +3,7 @@ package com.example.cltcontrol.historialmedico.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,12 +38,12 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
  */
 public class RevisionMedicaFragment extends Fragment {
 
-    private EditText et_revision_medica;
+    private EditText etRevisionMedica;
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
-    private String id_empleado_servidor; //1) Declarar id_empelado_servidor y mResultCallback
+    private String idEmpleadoServidor;
     private IResult mResultCallback;
-    private String revision_medica;
+    private String revisionMedica;
 
     public RevisionMedicaFragment() {
         // Required empty public constructor
@@ -51,12 +52,12 @@ public class RevisionMedicaFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_revision_medica, container, false);
-        et_revision_medica = view.findViewById(R.id.et_revision_medica);
-        Button btn_guardar = view.findViewById(R.id.btn_guardar);
+        etRevisionMedica = view.findViewById(R.id.et_revision_medica);
+        Button btnGuardar = view.findViewById(R.id.btn_guardar);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
@@ -66,24 +67,25 @@ public class RevisionMedicaFragment extends Fragment {
             //Recibe el id de consulta medica desde Historial de consulta medica
             String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
-            String id_empleado = extras.getString("ID_EMPLEADO");
-            empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
-            id_empleado_servidor = String.valueOf(empleado.getId_serv());
+            Log.d("CONSULTAHERE", String.valueOf(consultaMedica.getId_serv()));
+            String idEmpleado = extras.getString("ID_EMPLEADO");
+            empleado = Empleado.findById(Empleado.class, Long.valueOf(idEmpleado));
+            idEmpleadoServidor = String.valueOf(empleado.getId_serv());
 
             String cargo = extras.getString("CARGO");
             if (cargo != null && cargo.equals("Enfermera")) {
-                btn_guardar.setVisibility(View.GONE);
-                et_revision_medica.setEnabled(false);
+                btnGuardar.setVisibility(View.GONE);
+                etRevisionMedica.setEnabled(false);
             }
 
             if (precedencia != null && precedencia.equals("consultar")) {
-                et_revision_medica.setText(consultaMedica.getRevision_medica());
-                btn_guardar.setText("Editar");
+                etRevisionMedica.setText(consultaMedica.getRevision_medica());
+                btnGuardar.setText("Editar");
             }
         }
 
 
-        btn_guardar.setOnClickListener(new View.OnClickListener() {
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 guardarConsulta();
@@ -93,17 +95,13 @@ public class RevisionMedicaFragment extends Fragment {
         return view;
     }
 
-
-
-
-
     /*
      * Verifica si ha ingresado texto y guarda en consulta medica, caso contrario imprime un mensaje
      **/
     private void guardarConsulta() {
         //Valida lo que se ingresa  (2 lineas)
-        revision_medica = et_revision_medica.getText().toString();
-        int res = consultaMedica.validarCampoTexto(revision_medica);
+        revisionMedica = etRevisionMedica.getText().toString();
+        int res = consultaMedica.validarCampoTexto(revisionMedica);
         switch (res) {
             case 0:
                 Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
@@ -114,26 +112,28 @@ public class RevisionMedicaFragment extends Fragment {
             default:
                 //Si aun no ha creado la consulta, la crea y añade los datos
                 if (consultaMedica.getEmpleado() == null) {
-                    //4) Comentar las funciones de abajo y hacer post y enviar new Date()
                     postConsultaMedica(new Date());
                 } else {
                     //HACER PUT
+                    putSignosVitales();
                 }
 
                 break;
         }
     }
 
-    //3) Copiar los funciones init y post
     /*
      * Guardar motivo localmento
+     * @param fecha fecha de la consulta
+     * @param status estatus si fue enviado al servidor o no
+     * @param id_serv id del servidor de la consulta médica
      * */
     private void guardarConsultaLocal(Date fecha, int status, int id_serv){
         consultaMedica.setEmpleado(empleado);
         consultaMedica.setId_serv(id_serv);
         consultaMedica.setFechaConsulta(fecha);
         consultaMedica.setStatus(status);
-        consultaMedica.setRevision_medica(revision_medica); //setea lo que quieres
+        consultaMedica.setRevision_medica(revisionMedica); //setea lo que quieres
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
@@ -145,55 +145,98 @@ public class RevisionMedicaFragment extends Fragment {
 
     /*
      * Envía datos de Consulta médica al servidor
+     * @param fechaConsulta fecha de la consulta
      * */
     private void postConsultaMedica(final Date fechaConsulta){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
-        initRequestCallback();
+        initRequestCallback("POST");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
-        // 5) PASAR LOS DATOS A LA FUNCIÓN
-        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado_servidor,fechaConsulta, "","",revision_medica,"","");
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleadoServidor,fechaConsulta, "","", revisionMedica,"","");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
+    }
+    /*
+    * Actualiza los datos localmente
+    * */
+    private void actualizarConsutaLocal(int status){
+        consultaMedica.setStatus(status);
+        consultaMedica.setRevision_medica(revisionMedica);
+        consultaMedica.save();
+        if(status==NAME_SYNCED_WITH_SERVER) {
+            Toast.makeText(getContext(), "Se han editado los datos", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getContext(),"Hubo un error de conexión. Los datos se guardarán localmente",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     /*
      * Inicializar las llamadas a Request
      * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
+     * @param metodo_request String que indica si se realizó post o put
      * */
-    private void initRequestCallback(){
+    private void initRequestCallback(final String metodo_request){
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
                 try {
-                    //Log.d("HERECONSULTA", String.valueOf(response));
-                    //Si ha realizado post en ConsultaMedica
-                    //PASO 6) FINAL
-                    String fechaConsulta = response.getString("fechaConsulta");
-                    Date fecha = convertirFecha(fechaConsulta);
-                    String pk = response.getString("pk");
-                    guardarConsultaLocal(fecha, NAME_SYNCED_WITH_SERVER,Integer.parseInt(pk));
+                    if(metodo_request.equalsIgnoreCase("POST")){
+                        String fechaConsulta = response.getString("fechaConsulta");
+                        Date fecha = convertirFecha(fechaConsulta);
+                        String pk = response.getString("pk");
+                        guardarConsultaLocal(fecha, NAME_SYNCED_WITH_SERVER,Integer.parseInt(pk));
+                    }else{
+                        actualizarConsutaLocal(NAME_SYNCED_WITH_SERVER);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
             @Override
             public void notifyError(String requestType,VolleyError error) {
-                Log.d("HEREERROR", String.valueOf(error));
-                guardarConsultaLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
+                Log.e("VOLLEY ERROR", String.valueOf(error));
+                if(metodo_request.equalsIgnoreCase("POST"))
+                    guardarConsultaLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
+                else
+                    actualizarConsutaLocal(NAME_NOT_SYNCED_WITH_SERVER);
             }
 
             @Override
             public void notifyMsjError(String requestType, String error) {
-                Log.d("HEREMSJERROR", String.valueOf(error));
-                guardarConsultaLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
+                Log.e("STRING ERROR", String.valueOf(error));
+                if(metodo_request.equalsIgnoreCase("POST"))
+                    guardarConsultaLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
+                else
+                    actualizarConsutaLocal(NAME_NOT_SYNCED_WITH_SERVER);
             }
 
             @Override
-            public void notifyJSONError(String requestType, JSONException error) {
-                String error2 = "hubo error";
-            }
+            public void notifyJSONError(String requestType, JSONException error) { }
         };
 
+    }
+
+    /*
+     * putSignosVitales
+     * Obtiene el token
+     * Inicia un requerimiento
+     * Obtiene un hashmap con los datos enviados por parámetros
+     * realiza PUT para editar datos del servidor
+     * */
+
+    private void putSignosVitales(){
+        String idConsultaServidor= String.valueOf(consultaMedica.getId_serv());
+        String idEmpleadoServidor = String.valueOf(consultaMedica.getEmpleado().getId_serv());
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
+        initRequestCallback("PUT");
+        RequestService requestService = new RequestService(mResultCallback, getActivity());
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleadoServidor,
+                new Date(),consultaMedica.getMotivo(),consultaMedica.getProb_actual(), revisionMedica,
+                consultaMedica.getPrescripcion(), consultaMedica.getExamen_fisico());
+        requestService.putDataRequest("PUTCALL", URL_CONSULTA_MEDICA+idConsultaServidor+"/", sendObj, token);
     }
 
 }

@@ -14,13 +14,13 @@ import android.widget.TextView;
 import com.example.cltcontrol.historialmedico.adapter.AdapterItemConsultaMedica;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
+import com.example.cltcontrol.historialmedico.interfaces.IComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
 import java.util.List;
 
-public class HistorialConsultaMedica extends FragmentActivity implements ComunicadorMenu{
+public class HistorialConsultaMedica extends FragmentActivity implements IComunicadorMenu {
 
     private String idEmpleado, idConsultaMedica, cargo;
     private List<ConsultaMedica> consultaMedicaList;

@@ -21,13 +21,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class RequestService {
 
-    private IResult mResultCallback;
-    private Context mContext;
+    private final IResult mResultCallback;
+    private final Context mContext;
     private ProgressDialog dialog=null;
 
     public RequestService(IResult resultCallback, Context context){
@@ -104,7 +103,7 @@ public class RequestService {
                 }
             }){
                 @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
+                public Map<String, String> getHeaders() {
                     Map<String,String> headers = new HashMap<>();
                     headers.put("Authorization","JWT "+token);
 
@@ -145,7 +144,8 @@ public class RequestService {
                                 JSONObject objectJSON = obj.getJSONObject(i);
                                 if(mResultCallback != null)
                                     Log.d("HERE-RESPONSE", String.valueOf(objectJSON));
-                                    mResultCallback.notifySuccess(requestType, objectJSON);
+                                assert mResultCallback != null;
+                                mResultCallback.notifySuccess(requestType, objectJSON);
                             }
                             if(dialog!=null)
                                 dialog.dismiss();
@@ -192,7 +192,7 @@ public class RequestService {
         try {
             final RequestQueue queue = Volley.newRequestQueue(mContext);
 
-            final JsonObjectRequest jsonObj = new JsonObjectRequest(url,new JSONObject(sendObj), new Response.Listener<JSONObject>() {
+            final JsonObjectRequest jsonObj = new JsonObjectRequest(Request.Method.PUT, url,new JSONObject(sendObj), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     if(mResultCallback != null){
@@ -212,7 +212,7 @@ public class RequestService {
                 }
             }){
                 @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
+                public Map<String, String> getHeaders() {
                     Map<String,String> headers = new HashMap<>();
                     headers.put("Authorization","JWT "+token);
 

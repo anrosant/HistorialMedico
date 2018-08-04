@@ -3,11 +3,11 @@ package com.example.cltcontrol.historialmedico.models;
 import android.util.Log;
 
 import com.orm.SugarRecord;
-import com.orm.dsl.Unique;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,8 +36,8 @@ public class SignosVitales extends SugarRecord {
         this.status = status;
     }
     /*
-    * Constructor con Consulta Medica
-    * */
+     * Constructor con Consulta Medica
+     * */
     public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, float temperatura, ConsultaMedica consultaMedica, int status) {
         this.presion_sistolica = presion_sistolica;
         this.presion_distolica = presion_distolica;
@@ -47,8 +47,8 @@ public class SignosVitales extends SugarRecord {
         this.status = status;
     }
     /*
-    * Constructor con Atencion enfermeria
-    * */
+     * Constructor con Atencion enfermeria
+     * */
     public SignosVitales(int presion_sistolica, int presion_distolica, int pulso, float temperatura, AtencionEnfermeria atencion_enfermeria, int status) {
         this.presion_sistolica = presion_sistolica;
         this.presion_distolica = presion_distolica;
@@ -146,8 +146,32 @@ public class SignosVitales extends SugarRecord {
             int presionDistolica = Integer.parseInt(presion_distolica);
             float temp = Float.parseFloat(temperatura);
             int pul = Integer.parseInt(pulso);
+
             if(presionSistolica < 100 || presionSistolica > 135 || presionDistolica < 70 || presionDistolica > 90 ||
                     pul < 60 || pul > 100 || temp < 34 || temp > 43)
+                return 1;
+        } catch(Exception e){
+            return 2;
+        }
+        return 3;
+    }
+
+    public int validarSignosTest(String presion_sistolica, String presion_distolica, String pulso, String temperatura, String fecha_signos){
+
+        if(presion_sistolica.equals("") || presion_distolica.equals("") || temperatura.equals("") || pulso.equals("")
+                || fecha_signos.equals(""))
+            return 0;
+        try {
+            int presionSistolica = Integer.parseInt(presion_sistolica);
+            int presionDistolica = Integer.parseInt(presion_distolica);
+            float temp = Float.parseFloat(temperatura);
+            int pul = Integer.parseInt(pulso);
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+            fecha = new Date();
+            String fechaText = formato.format(fecha);
+
+            if(presionSistolica < 100 || presionSistolica > 135 || presionDistolica < 70 || presionDistolica > 90 ||
+                    pul < 60 || pul > 100 || temp < 34 || temp > 43 || !(fechaText.equals(fecha_signos)))
                 return 1;
         } catch(Exception e){
             return 2;
@@ -160,8 +184,8 @@ public class SignosVitales extends SugarRecord {
     }
 
     public static JSONObject getJSONSignosVitales(String id_empleado_servidor, String id_consulta_medica, String id_atencion,
-                                                   String presionSistolicaText, String presionDistolicaText,
-                                                   String pulsoText, String temperaturatext){
+                                                  String presionSistolicaText, String presionDistolicaText,
+                                                  String pulsoText, String temperaturatext){
         JSONObject sendObj = null;
         try {
             sendObj = new JSONObject("{" +

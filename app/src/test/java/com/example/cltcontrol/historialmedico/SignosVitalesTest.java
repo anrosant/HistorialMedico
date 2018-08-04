@@ -160,5 +160,4 @@ public class SignosVitalesTest {
                 "36", "");
         Assert.assertEquals(0, res);
     }
-
 }

@@ -222,5 +222,4 @@ public class SignosVitales extends SugarRecord {
         return params;
 
     }
-
 }

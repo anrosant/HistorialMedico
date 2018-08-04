@@ -170,7 +170,7 @@ public class PermisoMedico extends SugarRecord{
         params.put("dias_permiso", dias);
         params.put("observaciones_permiso", observaciones);
         params.put("doctor", doctor);
-
+        Log.d("PERMISOHERE", String.valueOf(params));
         return params;
     }
 

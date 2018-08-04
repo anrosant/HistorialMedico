@@ -114,7 +114,6 @@ public class RevisionMedicaFragment extends Fragment {
                 if (consultaMedica.getEmpleado() == null) {
                     postConsultaMedica(new Date());
                 } else {
-                    //HACER PUT
                     putSignosVitales();
                 }
 

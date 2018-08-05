@@ -25,11 +25,6 @@ public class Identifiers {
     public static final int NAME_SYNCED_WITH_SERVER = 1;
     public static final int NAME_NOT_SYNCED_WITH_SERVER = 0;
 
-
-
-    //un broadcast para saber si la data está sincronizada o no
-    public static final String DATA_SAVED_BROADCAST = "net.simplifiedcoding.datasaved";
-
     //Sesion
     public static final String CARGO = "cargo";
 
@@ -59,30 +54,32 @@ public class Identifiers {
 
     /*
     * Calcula el número de días que hay entre una fecha
-    * @params fecha_desde fecha de tipo TextView desde donde inicia la fecha
-    * @params fecha_hasta fecha de tipo TextView hasta donde termina la fecha
+    * @params fechaDesdeText fecha de tipo TextView desde donde inicia la fecha
+    * @params fechaHastaText fecha de tipo TextView hasta donde termina la fecha
     * @return numDias (long) retorna el número de días transcurridos entre esas fechas
     * */
-    public static long calcNumDias(TextView fecha_desde, TextView fecha_hasta) {
+    public static long calcNumDias(TextView fechaDesdeText, TextView fechaHastaText) {
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat =
+                new SimpleDateFormat("dd/MM/yyyy");
 
         long numDias=0;
 
-        Date fecha_ini=null, fecha_fin=null;
-        String string_fecha_ini = fecha_desde.getText().toString();
-        String string_fecha_fin = fecha_hasta.getText().toString();
+        Date fechaIni=null, fechaFin=null;
+        String stringFechaIni = fechaDesdeText.getText().toString();
+        String stringFechaFin = fechaHastaText.getText().toString();
 
-        if (!string_fecha_ini.equals("") && !string_fecha_fin.equals("")) {
+        if (!stringFechaIni.equals("") && !stringFechaFin.equals("")) {
             try {
-                fecha_ini = simpleDateFormat.parse(string_fecha_ini);
-                fecha_fin = simpleDateFormat.parse(string_fecha_fin);
+                fechaIni = simpleDateFormat.parse(stringFechaIni);
+                fechaFin = simpleDateFormat.parse(stringFechaFin);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            assert fecha_fin != null;
-            long dias_mili = Math.abs(fecha_fin.getTime() - fecha_ini.getTime());
-            numDias = TimeUnit.DAYS.convert(dias_mili, TimeUnit.MILLISECONDS);
+            assert fechaFin != null;
+            long diasMili = Math.abs(fechaFin.getTime() - fechaIni.getTime());
+            numDias = TimeUnit.DAYS.convert(diasMili
+                    , TimeUnit.MILLISECONDS);
             //numero_dias.setText(Long.toString(numDias + 1));
         }
         return numDias;

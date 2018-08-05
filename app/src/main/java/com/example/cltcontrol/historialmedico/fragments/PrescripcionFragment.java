@@ -38,12 +38,11 @@ public class PrescripcionFragment extends Fragment {
     private IResult mResultCallback;
     //Variables de view
     private EditText et_prescripcion;
-    private Button btn_guardar_preescripcion;
     //Variables de Clases
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
-    private String descripcion_preescripcion, id_empleado_servidor;
+    private String descripcionPreescripcion, idEmpleadoServidor;
 
     //constructor por defecto
     public PrescripcionFragment() {
@@ -59,7 +58,7 @@ public class PrescripcionFragment extends Fragment {
 
         //referencia de variables de views
         et_prescripcion = view.findViewById(R.id.et_preescripcion);
-        btn_guardar_preescripcion = view.findViewById(R.id.btn_guardar_preescripcion);
+        Button btnGuardarPreescripcion = view.findViewById(R.id.btn_guardar_preescripcion);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         //Recibe el datos desde Historial de consulta medica
@@ -71,21 +70,21 @@ public class PrescripcionFragment extends Fragment {
             String id_empleado = extras.getString("ID_EMPLEADO");
             empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
-            id_empleado_servidor = String.valueOf(empleado.getId_serv());
+            idEmpleadoServidor = String.valueOf(empleado.getId_serv());
 
             String cargo = extras.getString("CARGO");
             if(Objects.equals(cargo, "Enfermera")){
-                btn_guardar_preescripcion.setVisibility(View.GONE);
+                btnGuardarPreescripcion.setVisibility(View.GONE);
                 et_prescripcion.setEnabled(false);
             }
             //Si va a consultar que muestre los datos
-            if(precedencia.equals("consultar")) {
+            if (precedencia != null && precedencia.equals("consultar")) {
                 et_prescripcion.setText(consultaMedica.getPrescripcion());
-                btn_guardar_preescripcion.setText("Editar");
+                btnGuardarPreescripcion.setText("Editar");
             }
         }
 
-        btn_guardar_preescripcion.setOnClickListener(new View.OnClickListener() {
+        btnGuardarPreescripcion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 guardarConsulta();
@@ -99,8 +98,8 @@ public class PrescripcionFragment extends Fragment {
      * */
     private void guardarConsulta() {
         //Valida lo que se ingresa  (2 lineas)
-        descripcion_preescripcion = et_prescripcion.getText().toString();
-        int res = consultaMedica.validarCampoTexto(descripcion_preescripcion);
+        descripcionPreescripcion = et_prescripcion.getText().toString();
+        int res = consultaMedica.validarCampoTexto(descripcionPreescripcion);
         switch (res) {
             case 0:
                 Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
@@ -129,7 +128,7 @@ public class PrescripcionFragment extends Fragment {
         consultaMedica.setId_serv(id_serv);
         consultaMedica.setFechaConsulta(fecha);
         consultaMedica.setStatus(status);
-        consultaMedica.setPrescripcion(descripcion_preescripcion); //setea lo que quieres
+        consultaMedica.setPrescripcion(descripcionPreescripcion); //setea lo que quieres
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
@@ -148,7 +147,7 @@ public class PrescripcionFragment extends Fragment {
         initRequestCallback("POST");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         // 5) PASAR LOS DATOS A LA FUNCIÓN
-        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado_servidor,fechaConsulta, "","","", descripcion_preescripcion,"");
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleadoServidor,fechaConsulta, "","","", descripcionPreescripcion,"");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 
@@ -164,7 +163,7 @@ public class PrescripcionFragment extends Fragment {
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleadoServidor,
                 new Date(),consultaMedica.getMotivo(),consultaMedica.getProb_actual(), consultaMedica.getRevision_medica(),
-                descripcion_preescripcion,consultaMedica.getExamen_fisico());
+                descripcionPreescripcion,consultaMedica.getExamen_fisico());
         requestService.putDataRequest("PUTCALL", URL_CONSULTA_MEDICA+idConsultaServidor+"/", sendObj, token);
     }
 
@@ -174,7 +173,7 @@ public class PrescripcionFragment extends Fragment {
      * */
     private void actualizarConsutaLocal(int status){
         consultaMedica.setStatus(status);
-        consultaMedica.setPrescripcion(descripcion_preescripcion);
+        consultaMedica.setPrescripcion(descripcionPreescripcion);
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han editado los datos", Toast.LENGTH_SHORT).show();
@@ -226,7 +225,7 @@ public class PrescripcionFragment extends Fragment {
             }
             @Override
             public void notifyJSONError(String requestType, JSONException error) {
-                String error2 = "hubo error";
+
             }
         };
 

@@ -22,7 +22,7 @@ class AdapterDiagnosticos extends ArrayAdapter<Diagnostico> {
 
     private final Context context;
     private final int layoutResourceId;
-    private ArrayList<Diagnostico> data=null;
+    private ArrayList<Diagnostico> data;
 
     //Constructor
     public AdapterDiagnosticos(Context context, int layaoutResouceId, ArrayList<Diagnostico> data) {
@@ -36,7 +36,7 @@ class AdapterDiagnosticos extends ArrayAdapter<Diagnostico> {
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent){
         View row =convertView;
-        DiagnosticoHolder holder = null;
+        DiagnosticoHolder holder;
 
         if (row==null){
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();

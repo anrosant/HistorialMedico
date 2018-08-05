@@ -26,7 +26,7 @@ import java.util.List;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.quitaDiacriticos;
 
 public class BuscarEmpleadoActivity extends FragmentActivity {
-    private static List<Empleado> empleadosList;
+    private static List<Empleado> empleadoList;
     private AdapterItemEmpleado adaptadorEmpleados;
     private EditText etBuscar;
 
@@ -69,7 +69,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                 String newText = quitaDiacriticos(etBuscar.getText().toString().toLowerCase());
                 if(newText.length() != 0 && adaptadorEmpleados.validarBusqueda(newText)){
                     List<Empleado> newList = new ArrayList<>();
-                    for(Empleado empleado:empleadosList){
+                    for(Empleado empleado: empleadoList){
                         String nombre = empleado.getNombre().toLowerCase();
                         String apellido = empleado.getApellido().toLowerCase();
                         if(nombre.contains(newText) || apellido.contains(newText)){
@@ -78,12 +78,12 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                     }
                     adaptadorEmpleados.setFilter(newList);
                 } else {
-                    adaptadorEmpleados.setFilter(empleadosList);
+                    adaptadorEmpleados.setFilter(empleadoList);
                 }
             }
         });
 
-        adaptadorEmpleados = new AdapterItemEmpleado(empleadosList);
+        adaptadorEmpleados = new AdapterItemEmpleado(empleadoList);
         recyclerEmpleados.setAdapter(adaptadorEmpleados);
 
         recyclerEmpleados.addOnItemTouchListener(
@@ -107,7 +107,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
      * */
     private void readEmpleadosAll(){
         try{
-            empleadosList = Empleado.listAll(Empleado.class);
+            empleadoList = Empleado.listAll(Empleado.class);
         }catch (Exception e){
             Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
         }

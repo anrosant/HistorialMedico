@@ -37,13 +37,12 @@ public class RevisionMedicaFragment extends Fragment {
     //Interface
     private IResult mResultCallback;
     //Variables de view
-    private EditText et_revision_medica;
-    private Button btn_guardar_revision_medica;
+    private EditText etRevisionMedica;
     //Variables de Clases
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
-    private String descripcion_revision_medica, id_empleado_servidor;
+    private String descripcionRevisionMedica, idEmpleadoServidor;
 
     //constructor por defecto
     public RevisionMedicaFragment() {
@@ -58,8 +57,8 @@ public class RevisionMedicaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_revision_medica, container, false);
 
         //referencia de variables de views
-        et_revision_medica = view.findViewById(R.id.et_revision_medica);
-        btn_guardar_revision_medica = view.findViewById(R.id.btn_guardar_revision_medica);
+        etRevisionMedica = view.findViewById(R.id.et_revision_medica);
+        Button btnGuardarRevisionMedica = view.findViewById(R.id.btn_guardar_revision_medica);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         if (extras != null) {
@@ -70,19 +69,19 @@ public class RevisionMedicaFragment extends Fragment {
             String idEmpleado = extras.getString("ID_EMPLEADO");
             empleado = Empleado.findById(Empleado.class, Long.valueOf(idEmpleado));
 
-            id_empleado_servidor = String.valueOf(empleado.getId_serv());
+            idEmpleadoServidor = String.valueOf(empleado.getId_serv());
 
             String cargo = extras.getString("CARGO");
             if (cargo != null && cargo.equals("Enfermera")) {
-                btn_guardar_revision_medica.setVisibility(View.GONE);
-                et_revision_medica.setEnabled(false);
+                btnGuardarRevisionMedica.setVisibility(View.GONE);
+                etRevisionMedica.setEnabled(false);
             }
             if (precedencia != null && precedencia.equals("consultar")) {
-                et_revision_medica.setText(consultaMedica.getRevision_medica());
-                btn_guardar_revision_medica.setText("Editar");
+                etRevisionMedica.setText(consultaMedica.getRevision_medica());
+                btnGuardarRevisionMedica.setText("Editar");
             }
         }
-        btn_guardar_revision_medica.setOnClickListener(new View.OnClickListener() {
+        btnGuardarRevisionMedica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 guardarConsulta();
@@ -96,8 +95,8 @@ public class RevisionMedicaFragment extends Fragment {
      **/
     private void guardarConsulta() {
         //Valida lo que se ingresa  (2 lineas)
-        descripcion_revision_medica = et_revision_medica.getText().toString();
-        int res = consultaMedica.validarCampoTexto(descripcion_revision_medica);
+        descripcionRevisionMedica = etRevisionMedica.getText().toString();
+        int res = consultaMedica.validarCampoTexto(descripcionRevisionMedica);
         switch (res) {
             case 0:
                 Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
@@ -127,7 +126,7 @@ public class RevisionMedicaFragment extends Fragment {
         consultaMedica.setId_serv(id_serv);
         consultaMedica.setFechaConsulta(fecha);
         consultaMedica.setStatus(status);
-        consultaMedica.setRevision_medica(descripcion_revision_medica); //setea lo que quieres
+        consultaMedica.setRevision_medica(descripcionRevisionMedica); //setea lo que quieres
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
@@ -146,7 +145,7 @@ public class RevisionMedicaFragment extends Fragment {
         String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback("POST");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado_servidor,fechaConsulta, "","", descripcion_revision_medica,"","");
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleadoServidor,fechaConsulta, "","", descripcionRevisionMedica,"","");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
     /*
@@ -154,7 +153,7 @@ public class RevisionMedicaFragment extends Fragment {
     * */
     private void actualizarConsultaLocal(int status){
         consultaMedica.setStatus(status);
-        consultaMedica.setRevision_medica(descripcion_revision_medica);
+        consultaMedica.setRevision_medica(descripcionRevisionMedica);
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han editado los datos", Toast.LENGTH_SHORT).show();
@@ -227,7 +226,7 @@ public class RevisionMedicaFragment extends Fragment {
         initRequestCallback("PUT");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleadoServidor,
-                new Date(),consultaMedica.getMotivo(),consultaMedica.getProb_actual(), descripcion_revision_medica,
+                new Date(),consultaMedica.getMotivo(),consultaMedica.getProb_actual(), descripcionRevisionMedica,
                 consultaMedica.getPrescripcion(), consultaMedica.getExamen_fisico());
         requestService.putDataRequest("PUTCALL", URL_CONSULTA_MEDICA+idConsultaServidor+"/", sendObj, token);
     }

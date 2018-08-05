@@ -51,24 +51,20 @@ public class SignosVitalesFragment extends Fragment {
     private TextView tvTitulo;
     private Button btnGuardar;
 
-    private String idConsultaMedica;
-    private String cargo;
     private AdapterSignosVitales adapterSignosVitales;
     private List<SignosVitales> signosVitalesList;
     private ConsultaMedica consultaMedica;
     private SignosVitales signos;
     private Empleado empleado;
+    private Date fechaConsulta, fechaSigno;
+    private String idConsultaMedica, cargo,presionDistolicaText, presionSistolicaText,
+            temperaturatext, pulsoText ;
+    private int idEmpleadoServidor;
 
     //POST
     private IResult mResultCallback = null;
     private RequestService requestService;
-    private int idEmpleadoServidor;
 
-    private String presionSistolicaText;
-    private String presionDistolicaText;
-    private String temperaturatext;
-    private String pulsoText;
-    private Date fechaConsulta, fechaSigno;
 
     public SignosVitalesFragment() {
         // Required empty public constructor
@@ -122,7 +118,7 @@ public class SignosVitalesFragment extends Fragment {
 
         }
 
-        //Crea un adapter de dicha lista y la muestra en un listview
+        //Crea un adapterItemAtencionEnfermeria de dicha lista y la muestra en un listview
         adapterSignosVitales = new AdapterSignosVitales(getContext(), signosVitalesList);
         lvSignosVitales.setAdapter(adapterSignosVitales);
 
@@ -171,10 +167,8 @@ public class SignosVitalesFragment extends Fragment {
         tvTitulo.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                final int DRAWABLE_LEFT = 0;
-                final int DRAWABLE_TOP = 1;
+
                 final int DRAWABLE_RIGHT = 2;
-                final int DRAWABLE_BOTTOM = 3;
 
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     if(motionEvent.getRawX() >= (tvTitulo.getRight() - tvTitulo.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {

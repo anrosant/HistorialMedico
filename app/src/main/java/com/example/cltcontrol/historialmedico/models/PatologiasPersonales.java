@@ -81,11 +81,7 @@ public class PatologiasPersonales extends SugarRecord {
         this.detalle = detalle;
     }
 
-    public ArrayList<PatologiasPersonales> getPatologiasPersonalesCreadosUnsynced(){
-        return (ArrayList<PatologiasPersonales>) PatologiasPersonales.find(PatologiasPersonales.class, "status = ? and idserv = ?", String.valueOf(0), String.valueOf(0));
-    }
-
-    public ArrayList<PatologiasPersonales> getPatologiasPersonalesEditadosUnsynced(){
+    public ArrayList<PatologiasPersonales> getPatologiasPersonalesUnsynced(){
         return (ArrayList<PatologiasPersonales>) PatologiasPersonales.find(PatologiasPersonales.class, "status = ?", String.valueOf(0));
     }
 

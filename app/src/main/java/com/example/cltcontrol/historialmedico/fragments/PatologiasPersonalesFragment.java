@@ -46,10 +46,10 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
 
 public class PatologiasPersonalesFragment extends Fragment {
 
-    private ImageButton ib_mostrar_ocultar_contendido;
-    private LinearLayout ly_patologias_personales;
+    private ImageButton ibMostrarOcultarContendido;
+    private LinearLayout lyPatologiasPersonales;
     private EditText etDetalleEnfermedad;
-    private String id_consulta_medica;
+    private String idConsultaMedica;
     private String lugar;
     private String detalle;
     private String cargo;
@@ -58,7 +58,7 @@ public class PatologiasPersonalesFragment extends Fragment {
     private List<String> lugarList;
     private Empleado empleado;
 
-    private int id_empleado_Servidor;
+    private int idEmpleadoServidor;
     private IResult mResultCallback;
     private RequestService requestService;
     private Date fecha_consulta;
@@ -73,8 +73,8 @@ public class PatologiasPersonalesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_patologias_personales, container, false);
 
-        ly_patologias_personales = view.findViewById(R.id.ly_patologias_personales);
-        ib_mostrar_ocultar_contendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
+        lyPatologiasPersonales = view.findViewById(R.id.ly_patologias_personales);
+        ibMostrarOcultarContendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         etDetalleEnfermedad = view.findViewById(R.id.etDetalleEnfermedad);
         ListView lvPatologiasPersonales = view.findViewById(R.id.lvPatologiasPersonales);
         Button btn_guardar = view.findViewById(R.id.btnGuardar);
@@ -91,20 +91,20 @@ public class PatologiasPersonalesFragment extends Fragment {
 
         //Recibe el id de consulta medica y de empleado desde Historial de consulta medica
         if (extras != null) {
-            id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
-            consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+            idConsultaMedica = extras.getString("ID_CONSULTA_MEDICA");
+            consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(idConsultaMedica));
 
             String id_empleado = extras.getString("ID_EMPLEADO");
             empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
-            id_empleado_Servidor = empleado.getId_serv();
+            idEmpleadoServidor = empleado.getId_serv();
 
             cargo = extras.getString("CARGO");
         }
 
         if(Objects.requireNonNull(cargo).equals("Enfermera")){
             btn_guardar.setVisibility(View.GONE);
-            ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
-            ly_patologias_personales.setVisibility(View.GONE);
+            ibMostrarOcultarContendido.setVisibility(View.GONE);
+            lyPatologiasPersonales.setVisibility(View.GONE);
             tvTitulo.setVisibility(View.GONE);
 
         }
@@ -120,21 +120,21 @@ public class PatologiasPersonalesFragment extends Fragment {
         });
 
         //Obtenemos la lista de patologias personales que existan
-        List<PatologiasPersonales> patologiasPersonalesList = PatologiasPersonales.find(PatologiasPersonales.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
+        List<PatologiasPersonales> patologiasPersonalesList = PatologiasPersonales.find(PatologiasPersonales.class, "consultamedica = ?", String.valueOf(idConsultaMedica));
 
-        //Crea un adapter de dicha lista y la muestra en un listview
+        //Crea un adapterItemAtencionEnfermeria de dicha lista y la muestra en un listview
         adapterPatologiaPers = new AdapterPatologiasPersonales(getContext(), patologiasPersonalesList);
         lvPatologiasPersonales.setAdapter(adapterPatologiaPers);
 
-        ib_mostrar_ocultar_contendido.setOnClickListener(new View.OnClickListener() {
+        ibMostrarOcultarContendido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!ly_patologias_personales.isShown()){
-                    ly_patologias_personales.setVisibility(View.VISIBLE);
-                    ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_arriba);
+                if (!lyPatologiasPersonales.isShown()){
+                    lyPatologiasPersonales.setVisibility(View.VISIBLE);
+                    ibMostrarOcultarContendido.setImageResource(R.drawable.flecha_arriba);
                 }else {
-                    ly_patologias_personales.setVisibility(View.GONE);
-                    ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_abajo);
+                    lyPatologiasPersonales.setVisibility(View.GONE);
+                    ibMostrarOcultarContendido.setImageResource(R.drawable.flecha_abajo);
                 }
             }
         });
@@ -271,7 +271,7 @@ public class PatologiasPersonalesFragment extends Fragment {
         String TAGCONSULTA = "tagconsulta";
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(id_empleado_Servidor), fecha_consulta,"","","","","");
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(idEmpleadoServidor), fecha_consulta,"","","","","");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 

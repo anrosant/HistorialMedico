@@ -34,6 +34,13 @@ public class RequestService {
         mContext = context;
     }
 
+    /*
+    * Realiza el POST sin token
+    * @param requestType es el nombre de tipo de request tipo String
+    * @param url url a donde se va a realizar el POST, tipo String
+    * @param sendObj es el JSON con los datos a enviar al servidor
+    * */
+
     public void postDataRequest(final String requestType, String url, JSONObject sendObj){
         if (mContext instanceof Activity){
             dialog=new ProgressDialog(mContext);
@@ -73,6 +80,14 @@ public class RequestService {
 
         }
     }
+
+    /*
+     * Realiza el POST con token
+     * @param requestType es el nombre de tipo de request tipo String
+     * @param url url a donde se va a realizar el POST, tipo String
+     * @param sendObj es el HashMap con los datos a enviar al servidor
+     * @param token es el token con el que autentica el servidor para hacer el POST
+     * */
 
     public void postDataRequest(final String requestType, String url, Map<String, String> sendObj, final String token){
         if (mContext instanceof Activity){
@@ -139,13 +154,10 @@ public class RequestService {
                     public void onResponse(String response) {
                         try {
                             JSONArray obj = new JSONArray(response);
-                            Log.d("HERELENGTH", String.valueOf(obj.length()));
                             for (int i = 0; i < obj.length(); i++) {
                                 JSONObject objectJSON = obj.getJSONObject(i);
                                 if(mResultCallback != null)
-                                    Log.d("HERE-RESPONSE", String.valueOf(objectJSON));
-                                assert mResultCallback != null;
-                                mResultCallback.notifySuccess(requestType, objectJSON);
+                                    mResultCallback.notifySuccess(requestType, objectJSON);
                             }
                             if(dialog!=null)
                                 dialog.dismiss();
@@ -182,6 +194,14 @@ public class RequestService {
                 dialog.dismiss();
         }
     }
+
+    /*
+    * Realiza PUT con token
+    * @param requestType es el nombre de tipo de request tipo String
+    * @param url url a donde se va a realizar el PUT, tipo String
+    * @param sendObj es el HashMap con los datos a enviar al servidor
+    * @param token es el token con el que autentica el servidor para hacer el PUT
+    * */
 
     public void putDataRequest(final String requestType, String url, Map<String, String> sendObj, final String token){
         if (mContext instanceof Activity){

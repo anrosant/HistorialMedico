@@ -56,28 +56,26 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.quitaDiacriticos;
 
 public class DiagnosticoFragment extends Fragment {
-
-    private AdapterItemDiagnostico adapterItemDiagnostico;
-    private AdapterEnfermedades adaptadorEnfermedades;
     private EditText etBuscarEnfermedades;
     private RadioButton radioButton;
-    private LinearLayout ly_diagnostico;
-    private ImageButton ib_mostrar_ocultar_contendido;
+    private LinearLayout lyDiagnostico;
+    private ImageButton ibMostrarOcultarContendido;
 
-    private static List<Enfermedad> enfermedadList;
-    private String tipo_enfermedad;
-    private String id_consulta_medica;
+    private static List<Enfermedad> ENFERMEDADES_LIST;
+    private List<Enfermedad> newList;
+    private AdapterItemDiagnostico adapterItemDiagnostico;
+    private AdapterEnfermedades adaptadorEnfermedades;
+
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
     private Diagnostico diagnostico;
-    private List<Enfermedad> newList;
     private Enfermedad enfermedad;
+    private Date fechaConsulta;
+    private String tipoEnfermedad, idConsultaMedica;
+    private int idEmpleadoServidor;
 
     private IResult mResultCallback = null;
     private RequestService requestService;
-    private int id_empleado_servidor;
-
-    private Date fecha_consulta;
 
     public DiagnosticoFragment() {}
 
@@ -91,42 +89,42 @@ public class DiagnosticoFragment extends Fragment {
         Button btn_guardar = view.findViewById(R.id.btn_guardar);
         RadioGroup rg_tipo_enfermedad = view.findViewById(R.id.rgTipoEnfer);
         ListView lvDiagnostico = view.findViewById(R.id.lvDiagnostico);
-        ib_mostrar_ocultar_contendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
-        ly_diagnostico = view.findViewById(R.id.ly_diagnostico);
+        ibMostrarOcultarContendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
+        lyDiagnostico = view.findViewById(R.id.ly_diagnostico);
         TextView tvTitulo = view.findViewById(R.id.tvTitulo);
 
         final Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         //Recibe el id de consulta medica desde Historial de consulta medica
         assert extras != null;
-        id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        idConsultaMedica = extras.getString("ID_CONSULTA_MEDICA");
         String id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
-        id_empleado_servidor = empleado.getId_serv();
+        idEmpleadoServidor = empleado.getId_serv();
         String cargo = extras.getString("CARGO");
 
         assert cargo != null;
         if(cargo.equals("Enfermera")){
             btn_guardar.setVisibility(View.GONE);
-            ly_diagnostico.setVisibility(View.GONE);
-            ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
+            lyDiagnostico.setVisibility(View.GONE);
+            ibMostrarOcultarContendido.setVisibility(View.GONE);
             tvTitulo.setVisibility(View.GONE);
         }
 
         //Muestra la lista de diagnosticos
-        List<Diagnostico> diagnosticoList = Diagnostico.find(Diagnostico.class, "consultamedica = ?", id_consulta_medica);
-        //Crea un adapter de dicha lista y la muestra en un listview
+        List<Diagnostico> diagnosticoList = Diagnostico.find(Diagnostico.class, "consultamedica = ?", idConsultaMedica);
+        //Crea un adapterItemAtencionEnfermeria de dicha lista y la muestra en un listview
         adapterItemDiagnostico = new AdapterItemDiagnostico(getContext(), diagnosticoList);
         lvDiagnostico.setAdapter(adapterItemDiagnostico);
 
-        enfermedadList = ListaEnfermedades.readEnfermedadesAll();
+        ENFERMEDADES_LIST = ListaEnfermedades.readEnfermedadesAll();
 
         RecyclerView recyclerEnfermedades = view.findViewById(R.id.rvListaEnfermedades);
         recyclerEnfermedades.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
         etBuscarEnfermedades = view.findViewById(R.id.etBuscarEnfermedades);
 
         //Muestra la lsita de enfermedades
-        adaptadorEnfermedades = new AdapterEnfermedades(enfermedadList);
+        adaptadorEnfermedades = new AdapterEnfermedades(ENFERMEDADES_LIST);
         recyclerEnfermedades.setAdapter(adaptadorEnfermedades);
 
         etBuscarEnfermedades.addTextChangedListener(new TextWatcher() {
@@ -151,7 +149,7 @@ public class DiagnosticoFragment extends Fragment {
                     etBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_cancel_grey_24dp,0);
                     newTest = quitaDiacriticos(etBuscarEnfermedades.getText().toString().toLowerCase());
                     newList = new ArrayList<>();
-                    for (Enfermedad enfermedad:enfermedadList){
+                    for (Enfermedad enfermedad: ENFERMEDADES_LIST){
                         String nombre = enfermedad.getNombre().toLowerCase();
                         String codigo = enfermedad.getCodigo().toLowerCase();
                         if(nombre.contains(newTest)){
@@ -161,7 +159,7 @@ public class DiagnosticoFragment extends Fragment {
                     adaptadorEnfermedades.setFilter(newList);
                 }else{
                     etBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
-                    adaptadorEnfermedades.setFilter(enfermedadList);
+                    adaptadorEnfermedades.setFilter(ENFERMEDADES_LIST);
                 }
             }
         });
@@ -211,7 +209,7 @@ public class DiagnosticoFragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 radioButton = view.findViewById(checkedId);
-                tipo_enfermedad = (String) radioButton.getText();
+                tipoEnfermedad = (String) radioButton.getText();
             }
         });
 
@@ -220,16 +218,16 @@ public class DiagnosticoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 diagnostico = new Diagnostico();
-                if (enfermedad == null || tipo_enfermedad == null) {
+                if (enfermedad == null || tipoEnfermedad == null) {
                     Toast.makeText(getContext(), "No ha seleccionado todos los datos", Toast.LENGTH_SHORT).show();
                     Diagnostico.delete(diagnostico);
                 } else {
-                    consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+                    consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(idConsultaMedica));
 
                     //Si es la primera vez que crea la consulta medica
                     if (consultaMedica.getEmpleado() == null) {
-                        fecha_consulta = new Date();
-                        postConsultaMedica(fecha_consulta);
+                        fechaConsulta = new Date();
+                        postConsultaMedica(fechaConsulta);
                     } else {
                         postDiagnostico(String.valueOf(consultaMedica.getId_serv()));
                     }
@@ -238,15 +236,15 @@ public class DiagnosticoFragment extends Fragment {
             }
         });
 
-        ib_mostrar_ocultar_contendido.setOnClickListener(new View.OnClickListener() {
+        ibMostrarOcultarContendido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!ly_diagnostico.isShown()){
-                    ly_diagnostico.setVisibility(View.VISIBLE);
-                    ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_arriba);
+                if (!lyDiagnostico.isShown()){
+                    lyDiagnostico.setVisibility(View.VISIBLE);
+                    ibMostrarOcultarContendido.setImageResource(R.drawable.flecha_arriba);
                 }else {
-                    ly_diagnostico.setVisibility(View.GONE);
-                    ib_mostrar_ocultar_contendido.setImageResource(R.drawable.flecha_abajo);
+                    lyDiagnostico.setVisibility(View.GONE);
+                    ibMostrarOcultarContendido.setImageResource(R.drawable.flecha_abajo);
                 }
             }
         });
@@ -265,7 +263,7 @@ public class DiagnosticoFragment extends Fragment {
         String TAGDIAGNOSTICO = "tagdiagnostico";
         initRequestCallback(TAGDIAGNOSTICO);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = Diagnostico.getHashMapDiagnostico(id_consulta, tipo_enfermedad, id_serv);
+        Map<String, String> sendObj = Diagnostico.getHashMapDiagnostico(id_consulta, tipoEnfermedad, id_serv);
         requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj, token);
     }
 
@@ -283,7 +281,7 @@ public class DiagnosticoFragment extends Fragment {
     * */
     private void guardarDiagnosticoLocal(int id_serv, int status) {
         diagnostico.setEnfermedad(enfermedad);
-        diagnostico.setTipoEnfermedad(tipo_enfermedad);
+        diagnostico.setTipoEnfermedad(tipoEnfermedad);
         diagnostico.setId_serv(id_serv);
         diagnostico.setStatus(status);
         diagnostico.setConsulta_medica(consultaMedica);
@@ -342,7 +340,7 @@ public class DiagnosticoFragment extends Fragment {
             public void notifyError(String requestType,VolleyError error) {
                 Log.d("HEREERROR", String.valueOf(error));
                 if(TAG.equalsIgnoreCase("tagconsulta")){
-                    guardarConsultaMedicaLocal(fecha_consulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
+                    guardarConsultaMedicaLocal(fechaConsulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
                 }else {
                     guardarDiagnosticoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
@@ -352,7 +350,7 @@ public class DiagnosticoFragment extends Fragment {
             public void notifyMsjError(String requestType, String error) {
                 Log.d("HEREMSJERROR", String.valueOf(error));
                 if(TAG.equalsIgnoreCase("tagconsulta")){
-                    guardarConsultaMedicaLocal(fecha_consulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
+                    guardarConsultaMedicaLocal(fechaConsulta, 0,NAME_NOT_SYNCED_WITH_SERVER);
                 }else {
                     guardarDiagnosticoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
@@ -374,7 +372,7 @@ public class DiagnosticoFragment extends Fragment {
         String TAGCONSULTA = "tagconsulta";
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(id_empleado_servidor), fecha_consulta, "","","","","");
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(idEmpleadoServidor), fecha_consulta, "","","","","");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 

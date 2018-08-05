@@ -69,11 +69,7 @@ public class Diagnostico extends SugarRecord{
         this.tipoEnfermedad = tipoEnfermedad;
     }
 
-    public ArrayList<Diagnostico> getDiagnosticoCreadoUnsynced(){
-        return (ArrayList<Diagnostico>) Diagnostico.find(Diagnostico.class, "status = ? and idserv = ?", String.valueOf(0), String.valueOf(0));
-    }
-
-    public ArrayList<Diagnostico> getDiagnosticoEditadoUnsynced(){
+    public ArrayList<Diagnostico> getDiagnosticoUnsynced(){
         return (ArrayList<Diagnostico>) Diagnostico.find(Diagnostico.class, "status = ?", String.valueOf(0));
     }
 

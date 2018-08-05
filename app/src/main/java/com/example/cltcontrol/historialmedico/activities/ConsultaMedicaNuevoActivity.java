@@ -35,7 +35,7 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ICo
     private String idConsultaMedica;
     private String precedencia;
     private String cargo;
-    private TextView tv_guardar_consulta;
+    private TextView tvGuardarConsulta;
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
@@ -43,7 +43,7 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ICo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_consulta_medica);
 
-        tv_guardar_consulta = findViewById(R.id.tv_guardar_consulta);
+        tvGuardarConsulta = findViewById(R.id.tv_guardar_consulta);
 
         misFragmentos = new Fragment[11];
         misFragmentos[0] = new SignosVitalesFragment();
@@ -66,26 +66,26 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ICo
         menuPulsado(Objects.requireNonNull(extras).getInt("BOTONPULSADO"));
 
         //Recibe el id del empleado desde el HistorialConsultaMedica
-        final String id_empleado = extras.getString("ID_EMPLEADO");
+        final String idEmpleado = extras.getString("ID_EMPLEADO");
         idConsultaMedica = extras.getString("ID_CONSULTA_MEDICA");
         precedencia = extras.getString("PRECEDENCIA");
         cargo = extras.getString("CARGO");
 
         if (cargo != null && cargo.equalsIgnoreCase("Enfermera")) {
-            tv_guardar_consulta.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            tvGuardarConsulta.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
         //Coloca los datos del empleado en el fragment de informacion
         TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
-        empleado = Empleado.findById(Empleado.class, Long.parseLong(id_empleado));
+        empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
 
-        tv_guardar_consulta.setOnTouchListener(new View.OnTouchListener() {
+        tvGuardarConsulta.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 final int DRAWABLE_RIGHT = 2;
 
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    if(motionEvent.getRawX() >= (tv_guardar_consulta.getRight() - tv_guardar_consulta.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                    if(motionEvent.getRawX() >= (tvGuardarConsulta.getRight() - tvGuardarConsulta.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         // your action here
                         ConsultaMedica consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Integer.parseInt(idConsultaMedica));
                         if(consultaMedica.getFechaConsulta()==null){
@@ -146,7 +146,6 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ICo
             alertbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 //Funcion llamada cuando se pulsa el boton No
                 public void onClick(DialogInterface arg0, int arg1) {
-                    //Toast.makeText(getApplicationContext(),"Pulsaste NO",Toast.LENGTH_LONG).show();
                 }
             });
             //mostramos el alertbox

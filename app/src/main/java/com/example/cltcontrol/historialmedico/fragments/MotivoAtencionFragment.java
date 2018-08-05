@@ -37,12 +37,12 @@ public class MotivoAtencionFragment extends Fragment {
     //Interface
     private IResult mResultCallback;
     //Variables de view
-    private EditText et_motivo_atencion;
+    private EditText etMotivoAtencion;
     //Variables de Clases
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
-    private String descripcion_motivo_consulta, id_empleado_servidor;
+    private String descripcionMotivoConsulta, idEmpleadoServidor;
 
     //constructor por defecto
     public MotivoAtencionFragment() {
@@ -57,7 +57,7 @@ public class MotivoAtencionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_motivo_atencion, container, false);
 
         //referencia de variables de views
-        et_motivo_atencion = view.findViewById(R.id.et_motivo_atencion);
+        etMotivoAtencion = view.findViewById(R.id.et_motivo_atencion);
         Button btn_guardar_motivo_atencion = view.findViewById(R.id.btn_guardar_motivo_atencion);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
@@ -69,17 +69,17 @@ public class MotivoAtencionFragment extends Fragment {
         String id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
-        id_empleado_servidor = String.valueOf(empleado.getId_serv());
+        idEmpleadoServidor = String.valueOf(empleado.getId_serv());
 
         //Validar quien ingresa Enfermera o Doctor
         String cargo = extras.getString("CARGO");
         //En caso de ser enfermera no puede crear ni editar
         if(cargo != null && cargo.equals("Enfermera")){
             btn_guardar_motivo_atencion.setVisibility(View.GONE);
-            et_motivo_atencion.setEnabled(false);
+            etMotivoAtencion.setEnabled(false);
         }
         if (precedencia != null && precedencia.equals("consultar")) {
-            et_motivo_atencion.setText(consultaMedica.getMotivo());
+            etMotivoAtencion.setText(consultaMedica.getMotivo());
             btn_guardar_motivo_atencion.setText("Editar");
         }
         btn_guardar_motivo_atencion.setOnClickListener(new View.OnClickListener() {
@@ -95,8 +95,8 @@ public class MotivoAtencionFragment extends Fragment {
     * Verifica si ha ingresado texto y guarda en consulta medica, caso contrario imprime un mensaje
     **/
     private void guardarConsulta() {
-        descripcion_motivo_consulta = et_motivo_atencion.getText().toString();
-        int res = consultaMedica.validarCampoTexto(descripcion_motivo_consulta);//Valida lo que se ingresa (difiere)
+        descripcionMotivoConsulta = etMotivoAtencion.getText().toString();
+        int res = consultaMedica.validarCampoTexto(descripcionMotivoConsulta);//Valida lo que se ingresa (difiere)
         switch (res) {
             case 0:
                 Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
@@ -124,7 +124,7 @@ public class MotivoAtencionFragment extends Fragment {
         consultaMedica.setId_serv(id_serv);
         consultaMedica.setFechaConsulta(fecha);
         consultaMedica.setStatus(status);
-        consultaMedica.setMotivo(descripcion_motivo_consulta);
+        consultaMedica.setMotivo(descripcionMotivoConsulta);
         consultaMedica.setEmpleado(empleado);
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
@@ -140,7 +140,7 @@ public class MotivoAtencionFragment extends Fragment {
      * */
     private void actualizarConsutaLocal(int status){
         consultaMedica.setStatus(status);
-        consultaMedica.setMotivo(descripcion_motivo_consulta);
+        consultaMedica.setMotivo(descripcionMotivoConsulta);
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han editado los datos", Toast.LENGTH_SHORT).show();
@@ -160,7 +160,7 @@ public class MotivoAtencionFragment extends Fragment {
         initRequestCallback("POST");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         // 5) PASAR LOS DATOS A LA FUNCIÓN
-        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado_servidor,fechaConsulta, descripcion_motivo_consulta,"","","","");
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleadoServidor,fechaConsulta, descripcionMotivoConsulta,"","","","");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 
@@ -175,7 +175,7 @@ public class MotivoAtencionFragment extends Fragment {
         initRequestCallback("PUT");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleadoServidor,
-                new Date(), descripcion_motivo_consulta,consultaMedica.getProb_actual(), consultaMedica.getRevision_medica(),
+                new Date(), descripcionMotivoConsulta,consultaMedica.getProb_actual(), consultaMedica.getRevision_medica(),
                 consultaMedica.getPrescripcion(), consultaMedica.getExamen_fisico());
         requestService.putDataRequest("PUTCALL", URL_CONSULTA_MEDICA+idConsultaServidor+"/", sendObj, token);
     }

@@ -33,6 +33,19 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_PATOL
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_PERMISO_MEDICO;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_SIGNOS;
 
+/*
+* Esta clase se ejecuta cuando detecta conexión a internet
+* Para sincronizar los datos hace lo siguiente:
+* 1. Valida si existen atenciones enfermerías o consultas médicas que no hayan sido enviadas al servidor
+* En caso de que no existan, recorre signos vitales directamente.
+* 2. Valida si no existen consultas para sincronizar, en caso de que existan, recorre los diagnósticos
+* y luego las patologías y diagnósticos (En caso de que hayan diagnósticos sin sincronizar).
+* Caso contrario, recorre las patologías directamente, y si existen diagnósticos sin sincronizar,
+* primero recorre los diagnósticos y luego los permisos. Caso contrario recorre directamente los permisos.
+* 3. Si no entra en ningún caso, recorre las consultas y atenciones y dentro de cada uno recorre
+* signos, patologías, diagnóstico y permisos médicos en caso de que hayan.
+* */
+
 public class SincronizacionInmediata extends BroadcastReceiver {
 
     private Context context;
@@ -77,28 +90,30 @@ public class SincronizacionInmediata extends BroadcastReceiver {
             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI ||
                     activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
 
-                //Obtiene todas las consultas medicas creadas que no han sido sincronizadas
-                consultaMedicasUnsynced = consultaMedica.getConsultaMedicaCreadaUnsynced();
-                //Obtiene todas las atenciones enfermería creadas que no han sido sincronizadas
-                atencionesUnsynced = atencionEnfermeria.getAtencionEnfermeriaCreadaUnsynced();
-                //Obtiene todos los signos vitales creados unsynced
-                signosVitalesUnsynced = signosVitales.getSignosVitalesCreadosUnsynced();
-                //Obtiene todos los diagnósticos creados unsynced
-                permisoMedicoUnsynced = permisoMedico.getPermisoMedicoCreadoUnsynced();
-                //Obtiene todos los diagnósticos creados unsynced
-                diagnosticosUnsynced = diagnostico.getDiagnosticoCreadoUnsynced();
-                //Obtiene todos las patologías personales creados unsynced
-                patologiasPersonalesUnsynced = patologiasPersonales.getPatologiasPersonalesCreadosUnsynced();
+                /*
+                 * Obtiene todas las clases que no han sido sincronizadas
+                 * */
+                consultaMedicasUnsynced = consultaMedica.getConsultaMedicaUnsynced();
+                atencionesUnsynced = atencionEnfermeria.getAtencionEnfermeriaUnsynced();
+                signosVitalesUnsynced = signosVitales.getSignosVitalesUnsynced();
+                permisoMedicoUnsynced = permisoMedico.getPermisoMedicoUnsynced();
+                diagnosticosUnsynced = diagnostico.getDiagnosticoUnsynced();
+                patologiasPersonalesUnsynced = patologiasPersonales.getPatologiasPersonalesUnsynced();
 
+                //Si no existen atenciones creadas sin sincronizar ni consultas sin sincronizar
                 if(atencionesUnsynced.size()==0 && consultaMedicasUnsynced.size()==0){
+                    //Recorrer directamente los signos vitales
                     recorrerSignos("no","no");
 
                 }
+                //Si no existen consultas sin sincronizar
                 if(consultaMedicasUnsynced.size()==0){
+                    //Si no existen diagnósticos sin sincronizar
                     if(diagnosticosUnsynced.size()==0)
                         recorrerPermisos("no","no");
                     else
                         recorrerDiagnostico("no");
+
                     recorrerPatologias("no");
                 }
 
@@ -110,13 +125,223 @@ public class SincronizacionInmediata extends BroadcastReceiver {
         }
     }
 
-    //------------------------GUARDAR LOCALMENTE----------------------------------------------------------
+    //-----------------------------------------RECORRE LAS CLASES----------------------------------------
+
     /*
-     * Toma todos los argumentos de las patologias personales
-     * Los almacena en el servidor
+     * Recorre la lista de consultas no sincronizadas
+     * Si consultas.getId_serv() es igual a cero, quiere decir que no existe en el servidor, por lo tanto
+     * va a realizar POST. Caso contrario, va a realizar PUT
+     * @see enviarConsultaMedicaAlServidor
      * */
-    private void guardarPatologiaPersonal(PatologiasPersonales patPers, int id_ficha, int id_consulta,
-                                          String lugar, String detalle) {
+
+    public void recorrerConsultas(){
+        for(ConsultaMedica consultas : consultaMedicasUnsynced) {
+            //Si se ha creado una consulta médica
+            if (consultas.getFechaConsulta()!=null) {
+                String id_empleado = "";
+                if(consultas.getEmpleado()!=null && consultas.getEmpleado().getId_serv()!=0)
+                    id_empleado = String.valueOf(consultas.getEmpleado().getId_serv());
+                if(consultas.getId_serv()==0){
+                    enviarConsultaMedicaAlServidor(consultas, id_empleado, consultas.getFechaConsulta(),
+                            consultas.getProb_actual(), consultas.getRevision_medica(),
+                            consultas.getPrescripcion(), consultas.getExamen_fisico(),
+                            consultas.getMotivo(), "POST");
+                }
+                else{
+                    enviarConsultaMedicaAlServidor(consultas, id_empleado, consultas.getFechaConsulta(),
+                            consultas.getProb_actual(), consultas.getRevision_medica(),
+                            consultas.getPrescripcion(), consultas.getExamen_fisico(),
+                            consultas.getMotivo(), "PUT");
+                }
+
+            }
+        }
+    }
+
+    /*
+     * Recorre la lista de atenciones no sincronizadas
+     * Si consultas.getId_serv() es igual a cero, quiere decir que no existe en el servidor, por lo tanto
+     * va a realizar POST. Caso contrario, va a realizar PUT
+     * @see enviarAtencionEnfermeriaAlServidor
+     * */
+
+    public void recorrerAtenciones(){
+        for(AtencionEnfermeria atenciones : atencionesUnsynced) {
+            //Si se ha creado una atención enfermería
+            if (atenciones.getFecha_atencion()!=null) {
+                String id_empleado="";
+
+                if(atenciones.getEmpleado()!=null && atenciones.getEmpleado().getId_serv()!=0)
+                    id_empleado = String.valueOf(atenciones.getEmpleado().getId_serv());
+
+                if(atenciones.getId_serv()==0) {
+                    enviarAtencionEnfermeriaAlServidor(atenciones, id_empleado, atenciones.getFecha_atencion(),
+                            atenciones.getMotivoAtencion(), atenciones.getDiagnosticoEnfermeria(),
+                            atenciones.getPlanCuidados(), "POST");
+                }else{
+                    enviarAtencionEnfermeriaAlServidor(atenciones, id_empleado, atenciones.getFecha_atencion(),
+                            atenciones.getMotivoAtencion(), atenciones.getDiagnosticoEnfermeria(),
+                            atenciones.getPlanCuidados(), "PUT");
+                }
+            }
+        }
+    }
+
+    /*
+     * Recorre la lista de diagnóstico no sincronizados
+     * @param idConsulta id de la consulta en la que se realizó el diagnóstico, puede ser " ", "no"
+     * o un número tipo string,
+     * Si es "no", quiere decir que la consulta ya existe en el servidor, y no fue recorrida,
+     * Si es un número quiere decir que primero recorrí la consulta, hice POST y obtuve el id del servidor
+     * @see enviarDiagnosticoAlServidor
+     * */
+
+    public void recorrerDiagnostico(String id_consulta){
+        for(Diagnostico diagnosticos : diagnosticosUnsynced){
+            String idEnfermedad="";
+            if(diagnosticos.getEnfermedad()!=null && diagnosticos.getEnfermedad().getId_serv()!=0){
+                idEnfermedad = String.valueOf(diagnosticos.getEnfermedad().getId_serv());
+            }
+
+            //si la consulta ya existe en el servidor
+            if(id_consulta.equals("no")){
+                id_consulta = String.valueOf(diagnosticos.getConsulta_medica().getId_serv());
+            }
+
+            if(diagnosticos.getId_serv()==0){
+                enviarDiagnosticoAlServidor(diagnosticos, id_consulta, idEnfermedad,
+                        diagnosticos.getTipoEnfermedad(), "POST");
+            }else{
+                enviarDiagnosticoAlServidor(diagnosticos, id_consulta, idEnfermedad,
+                        diagnosticos.getTipoEnfermedad(), "PUT");
+            }
+
+
+        }
+    }
+
+    /*
+     * Recorre la lista de patologías no sincronizadas
+     * @param idConsulta id de la consulta en la que se registró la patología, puede ser " ", "no"
+     * o un número tipo string,
+     * Si es "no", quiere decir que la consulta ya existe en el servidor, y no fue recorrida,
+     * Si es un número quiere decir que primero recorrí la consulta, hice POST y obtuve el id del servidor
+     * @see enviarPatologiaPersonalAlServidor
+     * */
+
+    public void recorrerPatologias(String id_consulta){
+
+        for(PatologiasPersonales patologias : patologiasPersonalesUnsynced){
+            //si la consulta ya existe en el servidor obtengo el id del servidor
+            if(id_consulta.equals("no")){
+                id_consulta = String.valueOf(patologias.getConsultaMedica().getId_serv());
+            }
+            enviarPatologiaPersonalAlServidor(patologias, patologias.getId_ficha(),
+                    patologias.getConsultaMedica().getId_serv(),
+                    patologias.getLugar(), patologias.getDetalle());
+
+        }
+    }
+
+    /*
+     * Recorre la lista de permisos no sincronizados
+     * @param idConsulta id de la consulta en la que se realizó el permiso, puede ser " ", "no" o un
+     * número tipo string,
+     * Si es "no", quiere decir que la consulta ya existe en el servidor, y no fue recorrida,
+     * Si es un número quiere decir que primero recorrí la consulta, hice POST y obtuve el id del servidor
+     * @param idDiagnostico id del diagnóstico realizado previo al permiso, puede ser " ", "no" o un
+     * número tipo string,
+     * Si es "no", quiere decir que el diagnóstico ya existe en el servidor, y no fue recorrido,
+     * Si es un número quiere decir que primero recorrí el diagnóstico, hice POST y obtuve el id del servidor
+     * @see enviarPermisoMedicoAlservidor
+     * */
+
+    public void recorrerPermisos(String idConsulta, String idDiagnostico){
+        for(PermisoMedico permisosMedico : permisoMedicoUnsynced){
+            //si la consulta ya existe en el servidor obtiene el id del servidor
+            if(idConsulta.equals("no")){
+                idConsulta = String.valueOf(permisosMedico.getConsulta_medica().getId_serv());
+            }
+            //si el diagnóstico ya existe en el servidor obtiene el id del servidor
+            if(idDiagnostico.equals("no")){
+                idConsulta = String.valueOf(permisosMedico.getDiagnostico().getId_serv());
+            }
+            if(permisosMedico.getId_serv()==0){
+                enviarPermisoMedicoAlservidor(permisosMedico, permisosMedico.getEmpleado().getId_serv(),
+                        idDiagnostico, idConsulta, permisosMedico.getFecha_inicio(),
+                        permisosMedico.getFecha_fin(), permisosMedico.getDias_permiso(),
+                        permisosMedico.getObsevaciones_permiso(), permisosMedico.getDoctor(), "POST");
+            }else{
+                enviarPermisoMedicoAlservidor(permisosMedico, permisosMedico.getEmpleado().getId_serv(),
+                        idDiagnostico, idConsulta, permisosMedico.getFecha_inicio(),
+                        permisosMedico.getFecha_fin(), permisosMedico.getDias_permiso(),
+                        permisosMedico.getObsevaciones_permiso(), permisosMedico.getDoctor(), "PUT");
+            }
+
+
+        }
+    }
+
+    /*
+     * Recorre la lista de signos no sincronizados
+     * @param idConsulta id de la consulta a la que pertenece el signo, puede ser " ", "no" o un
+     * número tipo string,
+     * Si es "no", quiere decir que la consulta ya existe en el servidor, y no fue recorrida,
+     * Si es un número quiere decir que primero recorrí la consulta, hice POST y obtuve el id del servidor
+     * @param idAtencion id de la atención a la que pertenece el signo, puede ser " ", "no" o un
+     * número tipo string,
+     * Si es "no", quiere decir que la consulta ya existe en el servidor, y no fue recorrida,
+     * Si es un número quiere decir que primero recorrí la atención, hice POST y obtuve el id del servidor
+     * @see enviarSignosVitalesAlServidor
+     * */
+
+    public void recorrerSignos(String idConsulta, String idAtencion){
+        for(SignosVitales signos : signosVitalesUnsynced){
+            String id_empleado="";
+            if(signos.getEmpleado()!=null && signos.getEmpleado().getId_serv()!=0){
+                id_empleado = String.valueOf(signos.getEmpleado().getId_serv());
+            }
+            if(idConsulta.equals("no")){
+                idConsulta = String.valueOf(signos.getConsultaMedica().getId_serv());
+            }
+            if(idAtencion.equals("no")){
+                idAtencion = String.valueOf(signos.getAtencion_enfermeria().getId_serv());
+            }
+            //Si desea crear un signo el id del servidor es 0
+            if(signos.getId_serv()==0){
+                enviarSignosVitalesAlServidor(signos, id_empleado, String.valueOf(signos.getPresion_distolica()),
+                        String.valueOf(signos.getPresion_sistolica()), String.valueOf(signos.getPulso()),
+                        String.valueOf(signos.getTemperatura()), idAtencion,
+                        idConsulta, signos.getFecha(), "POST");
+            }
+            //Si desea editar un signo ya tiene un id del servidor
+            else{
+                enviarSignosVitalesAlServidor(signos, id_empleado, String.valueOf(signos.getPresion_distolica()),
+                        String.valueOf(signos.getPresion_sistolica()), String.valueOf(signos.getPulso()),
+                        String.valueOf(signos.getTemperatura()), idAtencion,
+                        idConsulta, signos.getFecha(), "PUT");
+            }
+
+        }
+    }
+
+    //---------------------------------ENVÍA DATOS AL SERVIDOR--------------------------------------------------
+
+    /*
+     * Método que realiza POST o PUT de las patologías personales al servidor
+     * @param patPers la patología personal que recorro de tipo PatologiaPersonal
+     * @param id_ficha id de la ficha actual del empleado de tipo entero
+     * @param id_consulta id de la consulta a la que pertenece la patología personal de tipo entero
+     * @param lugar lugar en que tiene la patología de tipo String
+     * @param detalle detalle de la patología de tipo String
+     * Con esos datos realiza el hashmap para enviarlos en formato JSON al servidor
+     * Inicializa el request con la función initRequestCallback y
+     * realiza POST con la función postDataRequest y PUT con la función putDataRequest
+     * @see initRequestCallback la respuesta del servidor la vemos en esta función
+     * */
+
+    private void enviarPatologiaPersonalAlServidor(PatologiasPersonales patPers, int id_ficha, int id_consulta,
+                                                   String lugar, String detalle) {
         initRequestCallback(TAGPATOLOGIASPERS, null, null, null,
                 patPers, null, null);
         String id_ficha_servidor="";
@@ -137,11 +362,21 @@ public class SincronizacionInmediata extends BroadcastReceiver {
     }
 
     /*
-     * Toma todos los argumentos de los diagnósticos
-     * Los almacena en el servidor
+     * Método que realiza POST o PUT de los diagnósticos no sincronizados al servidor
+     * @param diagnóstico el diagnóstico que recorro de tipo Diagnóstico
+     * @param id_consulta id de la consulta a la que pertenece el diagnóstico de tipo string
+     * @param id_enfermdad id de la enfermedad detectada en el diagnóstico de tipo string
+     * @param tipo_enfermedad tipo de la enfermedad de tipo String
+     * @param metodo puede ser PUT o POST
+     * Con esos datos realiza el hashmap para enviarlos en formato JSON al servidor
+     * Inicializa el request con la función initRequestCallback y
+     * realiza POST con la función postDataRequest y PUT con la función putDataRequest
+     * @see initRequestCallback la respuesta del servidor la vemos en esta función
      * */
-    public void guardarDiagnosticoLocal(Diagnostico diagnostico, String id_consulta,
-                                        String id_enfermedad, String tipo_enfermedad){
+
+    public void enviarDiagnosticoAlServidor(Diagnostico diagnostico, String id_consulta,
+                                            String id_enfermedad, String tipo_enfermedad,
+                                            String metodo){
         initRequestCallback(TAGDIAGNOSTICO, null, null, diagnostico,
                 null, null, null);
 
@@ -149,22 +384,41 @@ public class SincronizacionInmediata extends BroadcastReceiver {
 
         Map<String, String> sendObj = Diagnostico.getHashMapDiagnostico(id_consulta,
                 tipo_enfermedad, id_enfermedad);
-        requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj, token);
+
+        if(metodo.equalsIgnoreCase("POST"))
+            requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj, token);
+        else
+            requestService.putDataRequest("PUTCALL", URL_DIAGNOSTICO+
+                    String.valueOf(diagnostico.getId_serv())+"/", sendObj, token);
     }
 
     /*
-     * Toma todos los argumentos de los signos vitales
-     * Los almacena en el servidor
+     * Método que realiza POST o PUT de los signos vitales no sincronizados al servidor
+     * @param signosVit el signos vital que recorro de tipo SignosVitales
+     * @param idEmpleado el id del empleado al que pertenece el signo vital de tipo String
+     * @param presionDistolica presion distólica tomada de tipo String
+     * @param presionSistolica presion sistólica tomada de tipo String
+     * @param pulso pulso tomado de tipo String
+     * @param temperatura temperatura tomada de tipo String
+     * @param idConsulta id de la consulta a la que pertenece el signo vital de tipo string
+     * @param idAtencion id de la atención a la que pertenece el signo vital de tipo string
+     * @param fechaSigno fecha en la que se tomaron los signos de tipo Date
+     * @param metodo puede ser POST o PUT de tipo string
+     * Con esos datos realiza el hashmap para enviarlos en formato JSON al servidor
+     * Inicializa el request con la función initRequestCallback y
+     * realiza POST o PUT con la función postDataRequest y putDataRequest
+     * @see initRequestCallback la respuesta del servidor la vemos en esta función
      * */
-    private void guardarSignosVitalesLocal(SignosVitales signosVit, String id_empleado,
-                                           String presionDistolica, String presionSistolica,
-                                           String pulso,  String temperatura, String id_atencion,
-                                           String  id_consulta, Date fecha_signos, String metodo) {
+
+    private void enviarSignosVitalesAlServidor(SignosVitales signosVit, String idEmpleado,
+                                               String presionDistolica, String presionSistolica,
+                                               String pulso, String temperatura, String idAtencion,
+                                               String  idConsulta, Date fechaSignos, String metodo) {
         initRequestCallback(TAGSIGNOS, null, null, null,
                 null, null, signosVit);
         RequestService requestService = new RequestService(mResultCallback, context);
-        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(id_empleado,id_consulta,
-                id_atencion,presionSistolica,presionDistolica,pulso,temperatura, fecha_signos);
+        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(idEmpleado,idConsulta,
+                idAtencion,presionSistolica,presionDistolica,pulso,temperatura, fechaSignos);
         Log.d("SENDOBJ", String.valueOf(sendObj));
         if(metodo.equalsIgnoreCase("POST")){
             requestService.postDataRequest("POSTCALL", URL_SIGNOS, sendObj, token);
@@ -176,24 +430,37 @@ public class SincronizacionInmediata extends BroadcastReceiver {
     }
 
     /*
-     * Toma todos los argumentos de los consulta médica
-     * Los almacena en el servidor
+     * Método que realiza POST o PUT de las consultas médicas no sincronizadas al servidor
+     * @param consultaMed la consulta médica que recorro de tipo ConsultaMedica
+     * @param idEmpleado id del empleado en el servidor, al que pertenece la consulta de tipo string
+     * @param fechaConsulta fecha en que se realizó la consulta de tipo Date
+     * @param problemaActual proble actual descrita en la consulta tipo string
+     * @param revisionMedica revisión médica descrita en la consulta tipo string
+     * @param prescripcion prescripción del doctor descrita en la consulta tipo string
+     * @param examenFisico examen físico realizado por el doctor en la consulta tipo string
+     * @param motivo motivo de la consulta tipo string
+     * @param metodo puede ser "PUT" o "POST" tipo String
+     * Con esos datos realiza el hashmap para enviarlos en formato JSON al servidor
+     * Inicializa el request con la función initRequestCallback y
+     * realiza POST con la función postDataRequest y PUT con la función putDataRequest
+     * @see initRequestCallback la respuesta del servidor la vemos en esta función
      * */
-    private void guardarConsultaMedicaLocal(ConsultaMedica consultaMed, String id_empleado,
-                                            Date fecha_consulta, String problema_actual,
-                                       String revision_medica, String prescripcion,
-                                            String examen_fisico, String motivo) {
-        if (problema_actual == null) {
-            problema_actual = "";
+
+    private void enviarConsultaMedicaAlServidor(ConsultaMedica consultaMed, String idEmpleado,
+                                                Date fechaConsulta, String problemaActual,
+                                                String revisionMedica, String prescripcion,
+                                                String examenFisico, String motivo, String metodo) {
+        if (problemaActual == null) {
+            problemaActual = "";
         }
-        if (revision_medica == null) {
-            revision_medica = "";
+        if (revisionMedica == null) {
+            revisionMedica = "";
         }
         if (prescripcion == null) {
             prescripcion = "";
         }
-        if (examen_fisico == null) {
-            examen_fisico = "";
+        if (examenFisico == null) {
+            examenFisico = "";
         }
         if (motivo == null) {
             motivo = "";
@@ -203,18 +470,32 @@ public class SincronizacionInmediata extends BroadcastReceiver {
 
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado,
-                fecha_consulta, motivo, problema_actual, revision_medica, prescripcion, examen_fisico);
-        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleado,
+                fechaConsulta, motivo, problemaActual, revisionMedica, prescripcion, examenFisico);
+        if(metodo.equalsIgnoreCase("POST"))
+            requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
+        else
+            requestService.putDataRequest("PUTCALL", URL_CONSULTA_MEDICA+
+                    String.valueOf(consultaMed.getId_serv())+"/", sendObj, token);
     }
 
     /*
-     * Toma todos los argumentos de los consulta médica
-     * Los almacena en el servidor
+     * Método que realiza POST o PUT de las atenciones de enfermería no sincronizadas al servidor
+     * @param atencionEnf la atención enfermería que recorro de tipo AtencionEnfermeria
+     * @param idEmpleado id del empleado en el servidor, al que pertenece la atención de tipo string
+     * @param fechaAtencion fecha en que se realizó la atención a enfermería de tipo Date
+     * @param diagnóstico diagnóstico dado por la enfermera en la atención tipo string
+     * @param plan plan de cuidados establecido por la enfermera en la atención tipo string
+     * @param motivo motivo de la atencón tipo string
+     * @param metodo puede ser PUT o POST tipo string
+     * Con esos datos realiza el hashmap para enviarlos en formato JSON al servidor
+     * Inicializa el request con la función initRequestCallback y
+     * realiza POST con la función postDataRequest y PUT con la función putDataRequest
+     * @see initRequestCallback la respuesta del servidor la vemos en esta función
      * */
-    private void guardarAtencionEnfermeriaLocal(AtencionEnfermeria atencionEnf, String id_empleado,
-                                                Date fecha_consulta, String motivo, String diagnostico,
-                                                String plan) {
+    private void enviarAtencionEnfermeriaAlServidor(AtencionEnfermeria atencionEnf, String idEmpleado,
+                                                    Date fechaAtencion, String motivo, String diagnostico,
+                                                    String plan, String metodo) {
         if (motivo == null) {
             motivo = "";
         }
@@ -229,37 +510,72 @@ public class SincronizacionInmediata extends BroadcastReceiver {
 
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(id_empleado,
-                fecha_consulta, motivo, diagnostico, plan);
-        requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj, token);
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(idEmpleado,
+                fechaAtencion, motivo, diagnostico, plan);
+        if(metodo.equalsIgnoreCase("POST"))
+            requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj, token);
+        else
+            requestService.putDataRequest("PUTCALL", URL_ATENCION_ENFERMERIA+
+                    String.valueOf(atencionEnf.getId_serv())+"/", sendObj, token);
     }
 
     /*
-     * Toma todos los argumentos de los consulta médica
-     * Los almacena en el servidor
+     * Método que realiza POST o PUT de los permisos médicos no sincronizados al servidor
+     * @param permisoMed el permiso médico que recorro de tipo PermisoMedico
+     * @param idEmpleado el id del empleado al que pertenece el permiso médico de tipo entero
+     * @param idDiagnostico del diagnóstico dado previo al permiso de tipo String
+     * @param idConsulta id de la consulta a la que pertenece el permiso médico de tipo string
+     * @param fechaInicio fecha desde que inicia el permiso del paciente de tipo Date
+     * @param fechaFin fecha en que termina el permiso del paciente de tipo Date
+     * @param dias días de permiso que tiene el empleado de tipo entero
+     * @param observaciones observaciones realizadas en el permiso de tipo String
+     * @param nombreDoctor nombre del doctor que emite el permiso (puede ser externo) de tipo string
+     * @param metodo puede ser POST o PUT
+     * Con esos datos realiza el hashmap para enviarlos en formato JSON al servidor
+     * Inicializa el request con la función initRequestCallback y
+     * realiza POST o PUT con la función postDataRequest o putDataRequest
+     * @see initRequestCallback la respuesta del servidor la vemos en esta función
      * */
-    private void guardarPermisoMedicoLocal(PermisoMedico permisoMed, int id_empleado,
-                                           String id_diagnostico, String id_consulta,Date fecha_inicio,
-                                           Date fecha_fin, int dias, String observaciones,
-                                           String nombre_doctor) {
+    private void enviarPermisoMedicoAlservidor(PermisoMedico permisoMed, int idEmpleado,
+                                               String idDiagnostico, String idConsulta, Date fechaInicio,
+                                               Date fechaFin, int dias, String observaciones,
+                                               String nombreDoctor, String metodo) {
         initRequestCallback(TAGPERMISO,null, null, null,
                 null, permisoMed, null);
         String id_empleado_servidor = "";
 
-        if(id_empleado!=0)
-            id_empleado_servidor = String.valueOf(id_empleado);
+        if(idEmpleado!=0)
+            id_empleado_servidor = String.valueOf(idEmpleado);
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        Map<String, String> sendObj = PermisoMedico.getHashMapPermisoMedico(id_empleado_servidor, id_diagnostico,
-                id_consulta, fecha_inicio, fecha_fin, String.valueOf(dias), observaciones, nombre_doctor);
-        requestService.postDataRequest("POSTCALL", URL_PERMISO_MEDICO, sendObj, token);
+        Map<String, String> sendObj = PermisoMedico.getHashMapPermisoMedico(id_empleado_servidor, idDiagnostico,
+                idConsulta, fechaInicio, fechaFin, String.valueOf(dias), observaciones, nombreDoctor);
+        if(metodo.equalsIgnoreCase("POST")) {
+            requestService.postDataRequest("POSTCALL", URL_PERMISO_MEDICO, sendObj, token);
+        }else{
+            requestService.putDataRequest("PUTCALL",
+                    URL_PERMISO_MEDICO+String.valueOf(permisoMed.getId_serv())+"/", sendObj, token);
+        }
+
     }
 
     //------------------------------------------------------------------------------------------------------------
 
     /*
-     * Inicializar las llamadas a Request
+     * Inicializa las llamadas a Request
      * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
+     * @param TAG me permite identificar a qué clase pertenece la respuesta (SignosVitales,
+     * Diagnóstico, ..) tipo String
+     * @param atencionEnf la atención enfermería que recorro de tipo AtencionEnfermeria
+     * @param consulta la consulta médica que recorro de tipo ConsultaMedica
+     * @param diagnosticoI el diagnóstico que recorro de tipo Diagnostico
+     * @param patologias la patología personale que recorro de tipo PatologiasPersonales
+     * @param permiso el permiso médico que recorro de tipo PermisoMedico
+     * @param signosV el signo vital que recorro de tipo SignosVitales
+     * @see notifySuccess si la respuesta fue exitosa ingresa en esta función
+     * @see notifyError si hubo un error de conexión y el mensaje es tipo Error, ingresa en esta función
+     * @see notifyMsjError si hubo un error de conexión y el mensaje es String, ingresa en esta función
+     * @see notifyJSONError si hubo un error al ralizar el JSON, ingresa en esta función
      * */
     private void initRequestCallback(final String TAG, final AtencionEnfermeria atencionEnf,
                                      final ConsultaMedica consulta, final Diagnostico diagnosticoI,
@@ -268,7 +584,6 @@ public class SincronizacionInmediata extends BroadcastReceiver {
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
-                Log.d("NOTIFY", "SUCCESSSSS");
                     try {
                         String pk = response.getString("pk");
                         if(TAG.equalsIgnoreCase(TAGATENCION)){
@@ -326,146 +641,15 @@ public class SincronizacionInmediata extends BroadcastReceiver {
 
             @Override
             public void notifyMsjError(String requestType, String error) {
-                Log.d("HEREMSJERROR", String.valueOf(error));
+                Log.e("HEREMSJERROR", String.valueOf(error));
             }
 
             @Override
             public void notifyJSONError(String requestType, JSONException error) {
-                Log.d("HEREJSONERROR", String.valueOf(error));
+                Log.e("HEREJSONERROR", String.valueOf(error));
             }
         };
 
-    }
-    /*
-    * Recorre la lista de consultas no sincronizadas
-    * Guarda en la db local
-    * */
-    public void recorrerConsultas(){
-        for(ConsultaMedica consultas : consultaMedicasUnsynced) {
-            //Si se ha creado una consulta médica
-            if (consultas.getFechaConsulta()!=null) {
-                String id_empleado = "";
-                if(consultas.getEmpleado()!=null && consultas.getEmpleado().getId_serv()!=0)
-                    id_empleado = String.valueOf(consultas.getEmpleado().getId_serv());
-
-                guardarConsultaMedicaLocal(consultas, id_empleado, consultas.getFechaConsulta(),
-                        consultas.getProb_actual(), consultas.getRevision_medica(),
-                        consultas.getPrescripcion(), consultas.getExamen_fisico(),
-                        consultas.getMotivo());
-            }
-        }
-    }
-    /*
-     * Recorre la lista de atenciones no sincronizadas
-     * Guarda en la db local
-     * */
-    public void recorrerAtenciones(){
-        for(AtencionEnfermeria atenciones : atencionesUnsynced) {
-            //Si se ha creado una consulta médica
-            if (atenciones.getFecha_atencion()!=null) {
-                String id_empleado="";
-                if(atenciones.getEmpleado()!=null && atenciones.getEmpleado().getId_serv()!=0)
-                    id_empleado = String.valueOf(atenciones.getEmpleado().getId_serv());
-
-                guardarAtencionEnfermeriaLocal(atenciones, id_empleado, atenciones.getFecha_atencion(),
-                        atenciones.getMotivoAtencion(), atenciones.getDiagnosticoEnfermeria(),
-                        atenciones.getPlanCuidados());
-            }
-        }
-    }
-    /*
-     * Recorre la lista de diagnóstico no sincronizados
-     * Guarda en la db local
-     * */
-    public void recorrerDiagnostico(String id_consulta){
-        for(Diagnostico diagnosticos : diagnosticosUnsynced){
-            String id_enfermedad="";
-            if(diagnosticos.getEnfermedad()!=null && diagnosticos.getEnfermedad().getId_serv()!=0){
-                id_enfermedad = String.valueOf(diagnosticos.getEnfermedad().getId_serv());
-            }
-
-            //si la consulta ya existe en el servidor
-            if(id_consulta.equals("no")){
-                id_consulta = String.valueOf(diagnosticos.getConsulta_medica().getId_serv());
-            }
-
-            guardarDiagnosticoLocal(diagnosticos, id_consulta, id_enfermedad,
-                    diagnosticos.getTipoEnfermedad());
-
-        }
-    }
-    /*
-     * Recorre la lista de patologías no sincronizadas
-     * Guarda en la db local
-     * */
-    public void recorrerPatologias(String id_consulta){
-
-        for(PatologiasPersonales patologias : patologiasPersonalesUnsynced){
-            //si la consulta ya existe en el servidor
-            if(id_consulta.equals("no")){
-                id_consulta = String.valueOf(patologias.getConsultaMedica().getId_serv());
-            }
-            guardarPatologiaPersonal(patologias, patologias.getId_ficha(),
-                    patologias.getConsultaMedica().getId_serv(),
-                    patologias.getLugar(), patologias.getDetalle());
-
-        }
-    }
-    /*
-     * Recorre la lista de permisos no sincronizados
-     * Guarda en la db local
-     * */
-    public void recorrerPermisos(String id_consulta, String id_diagnostico){
-        for(PermisoMedico permisosMedico : permisoMedicoUnsynced){
-            //si la consulta ya existe en el servidor
-            if(id_consulta.equals("no")){
-                id_consulta = String.valueOf(permisosMedico.getConsulta_medica().getId_serv());
-            }
-            //si el diagnóstico ya existe en el servidor
-            if(id_diagnostico.equals("no")){
-                id_consulta = String.valueOf(permisosMedico.getDiagnostico().getId_serv());
-            }
-            guardarPermisoMedicoLocal(permisosMedico, permisosMedico.getEmpleado().getId_serv(),
-                    id_diagnostico, id_consulta, permisosMedico.getFecha_inicio(),
-                    permisosMedico.getFecha_fin(), permisosMedico.getDias_permiso(),
-                    permisosMedico.getObsevaciones_permiso(), permisosMedico.getDoctor());
-
-        }
-    }
-    /*
-     * Recorre la lista de signos no sincronizados
-     * Guarda en la db local
-     * */
-    public void recorrerSignos(String id_consulta, String id_enf){
-        for(SignosVitales signos : signosVitalesUnsynced){
-            String id_empleado="";
-            if(signos.getEmpleado()!=null && signos.getEmpleado().getId_serv()!=0){
-                id_empleado = String.valueOf(signos.getEmpleado().getId_serv());
-            }
-            //si la consulta ya existe en el servidor
-            if(id_consulta.equals("no")){
-                id_consulta = String.valueOf(signos.getConsultaMedica().getId_serv());
-            }
-            //si la atención ya existe en el servidor
-            if(id_enf.equals("no")){
-                id_enf = String.valueOf(signos.getAtencion_enfermeria().getId_serv());
-            }
-            //Si desea crear un signo
-            if(signos.getId_serv()==0){
-                guardarSignosVitalesLocal(signos, id_empleado, String.valueOf(signos.getPresion_distolica()),
-                        String.valueOf(signos.getPresion_sistolica()), String.valueOf(signos.getPulso()),
-                        String.valueOf(signos.getTemperatura()), id_enf,
-                        id_consulta, signos.getFecha(), "POST");
-            }
-            //Si desea editar un signo
-            else{
-                guardarSignosVitalesLocal(signos, id_empleado, String.valueOf(signos.getPresion_distolica()),
-                        String.valueOf(signos.getPresion_sistolica()), String.valueOf(signos.getPulso()),
-                        String.valueOf(signos.getTemperatura()), id_enf,
-                        id_consulta, signos.getFecha(), "PUT");
-            }
-
-        }
     }
 
 }

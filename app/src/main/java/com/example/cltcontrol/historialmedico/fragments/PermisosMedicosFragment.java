@@ -68,22 +68,19 @@ public class PermisosMedicosFragment extends Fragment {
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
-    private String id_consulta_medica;
+    private String idConsultaMedica;
     private String cargo;
     private String enfermedadPrincipalText;
     private String fechaInicioText;
     private String fechaFinText;
     private String diasPermisoText;
     private String observacionesPermisoText;
-    private Date fecha_inicio, fecha_fin, fecha_consulta_medica;
-    private int dia, mes, anio;
+    private Date fechaInicio, fechaFin, fechaConsultaMedica;
+    private int dia, mes, anio, idEmpleadoServidor;
 
     //POST
     private IResult mResultCallback = null;
     private RequestService requestService;
-    private int id_empleado_Servidor;
-
-    private BroadcastReceiver broadcastReceiver;
 
     public PermisosMedicosFragment() {}
 
@@ -129,10 +126,10 @@ public class PermisosMedicosFragment extends Fragment {
         // extraccion del bundle {clave,valor} de los campos necesitados
         if (extras != null) {
             cargo = extras.getString("CARGO");
-            id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+            idConsultaMedica = extras.getString("ID_CONSULTA_MEDICA");
             String id_empleado = extras.getString("ID_EMPLEADO");
             empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
-            id_empleado_Servidor = empleado.getId_serv();
+            idEmpleadoServidor = empleado.getId_serv();
         }
 
         //Se verifica si el rol es el de la enfermera para deshabilitar el boton de agregar nueva consulta medica
@@ -141,10 +138,10 @@ public class PermisosMedicosFragment extends Fragment {
             switch_generar_permiso.setVisibility(View.GONE);
         }
 
-        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(idConsultaMedica));
 
         //Obtiene el permiso medico
-        ArrayList<PermisoMedico> permisoMedicoList = (ArrayList<PermisoMedico>) PermisoMedico.find(PermisoMedico.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
+        ArrayList<PermisoMedico> permisoMedicoList = (ArrayList<PermisoMedico>) PermisoMedico.find(PermisoMedico.class, "consultamedica = ?", String.valueOf(idConsultaMedica));
         if(permisoMedicoList.size()==0){
             permisoMedico = null;
         }else{
@@ -152,7 +149,7 @@ public class PermisosMedicosFragment extends Fragment {
         }
 
         // se obtiene la lista de Diagnosticos del empleado
-        diagnosticosList = Diagnostico.find(Diagnostico.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
+        diagnosticosList = Diagnostico.find(Diagnostico.class, "consultamedica = ?", String.valueOf(idConsultaMedica));
         //se crea un nueva lista con los nombres de las enfermedades
         ArrayList<String> lista_enfermedades_diagnostico = new ArrayList<>();
         //se llena la lista de los nombres de las enfermedades
@@ -210,11 +207,11 @@ public class PermisosMedicosFragment extends Fragment {
                     observacionesPermisoText = txt_observaciones.getText().toString();
 
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-                    fecha_inicio = null;
-                    fecha_fin = null;
+                    fechaInicio = null;
+                    fechaFin = null;
                     try {
-                        fecha_inicio = format.parse(fechaInicioText);
-                        fecha_fin = format.parse(fechaFinText);
+                        fechaInicio = format.parse(fechaInicioText);
+                        fechaFin = format.parse(fechaFinText);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -229,29 +226,19 @@ public class PermisosMedicosFragment extends Fragment {
                         PermisoMedico.delete(permisoMedico);
                     } else if(res == 1) {
                         //Si ingresa desde consulta medica y es la primera vez que la crea
-                        if (id_consulta_medica!=null && consultaMedica.getEmpleado() == null) {
+                        if (idConsultaMedica !=null && consultaMedica.getEmpleado() == null) {
 
-                            fecha_consulta_medica = new Date();
-                            Log.d("FECHA", String.valueOf(fecha_consulta_medica));
+                            fechaConsultaMedica = new Date();
+                            Log.d("FECHA", String.valueOf(fechaConsultaMedica));
 
                             //Guarda el id del empleado en la atención y la fecha de atención
-                            postConsultaMedica(fecha_consulta_medica);
+                            postConsultaMedica(fechaConsultaMedica);
                         }else{
                             Log.d("ELSE", "else");
                             //Toast.makeText(getContext(), "estoy aqui permi", Toast.LENGTH_SHORT).show();
                             postPermisoMedico(String.valueOf(consultaMedica.getId_serv()));
                         }
                     }
-                    //cargarSignosVitales(atencionEnfermeria.getId());
-                    //Broadcast receiver to know the sync status
-                    broadcastReceiver = new BroadcastReceiver() {
-                        @Override
-                        public void onReceive(Context context, Intent intent) {
-                            //Confirmar que se ha guardado
-                            Toast.makeText(getContext(),"Datos enviados al servidor ",Toast.LENGTH_SHORT).show();
-                            //cargarSignosVitales(atencionEnfermeria.getId());
-                        }
-                    };
                 }
                 else
                     Toast.makeText(getContext(), "No existen diagnosticos para generar permiso medico", Toast.LENGTH_SHORT).show();
@@ -270,7 +257,7 @@ public class PermisosMedicosFragment extends Fragment {
         String TAGCONSULTA = "tagconsulta";
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(id_empleado_Servidor), fecha_consulta,"","","","","");
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(idEmpleadoServidor), fecha_consulta,"","","","","");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 
@@ -283,7 +270,7 @@ public class PermisosMedicosFragment extends Fragment {
         String TAGPERMISO = "tagpermiso";
         initRequestCallback(TAGPERMISO);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = PermisoMedico.getHashMapPermisoMedico(String.valueOf(id_empleado_Servidor),String.valueOf(diagnostico.getId_serv()),id_consulta_medica,fecha_inicio,fecha_fin,diasPermisoText,observacionesPermisoText,"dario");
+        Map<String, String> sendObj = PermisoMedico.getHashMapPermisoMedico(String.valueOf(idEmpleadoServidor),String.valueOf(diagnostico.getId_serv()),id_consulta_medica, fechaInicio, fechaFin,diasPermisoText,observacionesPermisoText,"dario");
         requestService.postDataRequest("POSTCALL", URL_PERMISO_MEDICO, sendObj, token);
     }
 
@@ -307,8 +294,8 @@ public class PermisosMedicosFragment extends Fragment {
         permisoMedico.setId_serv(id_serv);
         permisoMedico.setDiagnostico(diagnostico);
         permisoMedico.setConsulta_medica(consultaMedica);
-        permisoMedico.setFecha_inicio(fecha_inicio);
-        permisoMedico.setFecha_fin(fecha_fin);
+        permisoMedico.setFecha_inicio(fechaInicio);
+        permisoMedico.setFecha_fin(fechaFin);
         permisoMedico.setDias_permiso(Integer.parseInt(diasPermisoText));
         permisoMedico.setObsevaciones_permiso(observacionesPermisoText);
         permisoMedico.setEmpleado(empleado);
@@ -357,7 +344,7 @@ public class PermisosMedicosFragment extends Fragment {
             public void notifyError(String requestType,VolleyError error) {
                 Log.d("HEREERROR", String.valueOf(error));
                 if(TAG.equalsIgnoreCase("tagconsulta")){
-                    guardarConsultaMedicaLocal(fecha_consulta_medica, 0,NAME_NOT_SYNCED_WITH_SERVER);
+                    guardarConsultaMedicaLocal(fechaConsultaMedica, 0,NAME_NOT_SYNCED_WITH_SERVER);
                 }else {
                     guardarPermisoMedicoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
@@ -366,7 +353,7 @@ public class PermisosMedicosFragment extends Fragment {
             public void notifyMsjError(String requestType, String error) {
                 Log.d("HEREMSJERROR", String.valueOf(error));
                 if(TAG.equalsIgnoreCase("tagconsulta")){
-                    guardarConsultaMedicaLocal(fecha_consulta_medica, 0,NAME_NOT_SYNCED_WITH_SERVER);
+                    guardarConsultaMedicaLocal(fechaConsultaMedica, 0,NAME_NOT_SYNCED_WITH_SERVER);
                 }else {
                     guardarPermisoMedicoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
@@ -408,12 +395,12 @@ public class PermisosMedicosFragment extends Fragment {
         String string_fecha_fin = txt_fecha_hasta.getText().toString();
         if (!string_fecha_ini.equals("") && !string_fecha_fin.equals("")) {
             try {
-                fecha_inicio = simpleDateFormat.parse(string_fecha_ini);
-                fecha_fin = simpleDateFormat.parse(string_fecha_fin);
+                fechaInicio = simpleDateFormat.parse(string_fecha_ini);
+                fechaFin = simpleDateFormat.parse(string_fecha_fin);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            long dias_mili = Math.abs(fecha_fin.getTime() - fecha_inicio.getTime());
+            long dias_mili = Math.abs(fechaFin.getTime() - fechaInicio.getTime());
             long numDias = TimeUnit.DAYS.convert(dias_mili, TimeUnit.MILLISECONDS);
             txt_numero_dias.setText(Long.toString(numDias + 1));
         }

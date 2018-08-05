@@ -150,7 +150,6 @@ public class PatologiasPersonalesFragment extends Fragment {
                 else{
                     //Si es la primera entrada
                     if(consultaMedica.getEmpleado()==null){
-
                         fecha_consulta = new Date();
                         //Dentro de guardar Consulta Medica, almacena las patologías personales
                         postConsultaMedica(fecha_consulta);
@@ -289,6 +288,7 @@ public class PatologiasPersonalesFragment extends Fragment {
         Log.d("EMPLEADOFICHA",String.valueOf(empleado.getFicha_actual()));
         if(empleado.getFicha_actual()!=0)
             id_ficha_actual = String.valueOf(empleado.getFicha_actual());
+
         Map<String, String> sendObj = PatologiasPersonales.getHashMapPatologiasPersonales(id_ficha_actual,id_consulta_medica,lugar, detalle);
         requestService.postDataRequest("POSTCALL", URL_PATOLOGIAS_PERSONALES, sendObj, token);
     }

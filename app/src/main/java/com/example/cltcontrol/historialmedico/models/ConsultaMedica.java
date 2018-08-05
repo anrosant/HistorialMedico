@@ -151,6 +151,16 @@ public class ConsultaMedica extends SugarRecord {
     public static Map<String, String> getHashMapConsultaMedica(String id_empleado_servidor, Date fecha_consulta,
                                                                String motivo, String prob_actual, String revision_medica,
                                                                String prescripcion, String examen_fisico){
+        if(motivo==null)
+            motivo = "";
+        if(prob_actual==null)
+            prob_actual="";
+        if(revision_medica==null)
+            revision_medica = "";
+        if(prescripcion==null)
+            prescripcion="";
+        if(examen_fisico==null)
+            examen_fisico = "";
 
         Map<String, String> params = new HashMap<>();
         params.put("empleado", id_empleado_servidor);

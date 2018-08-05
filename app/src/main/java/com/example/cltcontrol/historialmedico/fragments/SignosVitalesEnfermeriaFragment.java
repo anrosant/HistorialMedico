@@ -269,8 +269,8 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
             public void notifySuccess(String requestType,JSONObject response) {
                 if(TAG.equalsIgnoreCase("tagatencion")){
                     try {
-                        //Si ha realizado post en ConsultaMedica
-                        String fechaConsulta = response.getString("fecha");
+                        //Si ha realizado post en Atención enfermería
+                        String fechaConsulta = response.getString("fechaAtencion");
                         Date fecha = convertirFecha(fechaConsulta);
                         String pk = response.getString("pk");
                         guardarAtencionEnfermeriaLocal(fecha,Integer.parseInt(pk), NAME_SYNCED_WITH_SERVER);

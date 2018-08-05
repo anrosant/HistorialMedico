@@ -38,7 +38,6 @@ public class MotivoAtencionFragment extends Fragment {
     private IResult mResultCallback;
     //Variables de view
     private EditText et_motivo_atencion;
-    private Button btn_guardar_motivo_atencion;
     //Variables de Clases
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
@@ -59,7 +58,7 @@ public class MotivoAtencionFragment extends Fragment {
 
         //referencia de variables de views
         et_motivo_atencion = view.findViewById(R.id.et_motivo_atencion);
-        btn_guardar_motivo_atencion = view.findViewById(R.id.btn_guardar_motivo_atencion);
+        Button btn_guardar_motivo_atencion = view.findViewById(R.id.btn_guardar_motivo_atencion);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         assert extras != null;

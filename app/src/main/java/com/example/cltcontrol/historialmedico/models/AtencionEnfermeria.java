@@ -127,6 +127,17 @@ public class AtencionEnfermeria extends SugarRecord {
                                                                    String motivo, String diagnostico, String plan){
         Map<String, String> params = new HashMap<>();
 
+        if(motivo==null){
+            motivo = "";
+        }
+        if(diagnostico==null){
+            diagnostico = "";
+        }
+        if(plan==null){
+            plan = "";
+        }
+
+
         params.put("empleado", id_empleado_servidor);
         params.put("fechaAtencion", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta)));
         params.put("motivoAtencion", motivo);

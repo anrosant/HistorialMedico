@@ -176,7 +176,7 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
         String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback("PUT");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = atencionEnfermeria.getHashMapAtencionEnfermeria(idEmpleadoServidor,
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(idEmpleadoServidor,
                 new Date(),atencionEnfermeria.getMotivoAtencion(), descripcion_diagnostico_enfermeria, atencionEnfermeria.getPlanCuidados());
         requestService.putDataRequest("PUTCALL", URL_ATENCION_ENFERMERIA+idConsultaServidor+"/", sendObj, token);
     }

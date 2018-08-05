@@ -34,14 +34,22 @@
 
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/etPlanCuidados"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:hint="No refiere plan de cuidados"
-                android:inputType="textMultiLine"
-                android:textSize="16sp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="#FFFFFF">
+
+                <EditText
+                    android:id="@+id/et_plan_cuidados"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    android:hint="No refiere plan de cuidados"
+                    android:inputType="textMultiLine"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -50,7 +58,7 @@
                 android:gravity="center">
 
                 <Button
-                    android:id="@+id/btnGuardar"
+                    android:id="@+id/btn_guardar_plan_cuidados"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Guardar" />

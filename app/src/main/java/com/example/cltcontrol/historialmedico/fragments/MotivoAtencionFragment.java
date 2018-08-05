@@ -33,52 +33,57 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSU
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertirFecha;
 
 public class MotivoAtencionFragment extends Fragment {
-    private EditText etMotivoAtencion;
-    private ConsultaMedica consultaMedica;
 
-    private String motivo, id_empleado_servidor; //1) Declarar id_empelado_servidor y la de abajo
+    //Interface
     private IResult mResultCallback;
+    //Variables de view
+    private EditText et_motivo_atencion;
+    private Button btn_guardar_motivo_atencion;
+    //Variables de Clases
+    private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
+    private String descripcion_motivo_consulta, id_empleado_servidor;
+
+    //constructor por defecto
     public MotivoAtencionFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_motivo_atencion, container, false);
 
-        etMotivoAtencion = view.findViewById(R.id.txt_motivo);
-        Button btn_guardar = view.findViewById(R.id.btnGuardar);
+        //referencia de variables de views
+        et_motivo_atencion = view.findViewById(R.id.et_motivo_atencion);
+        btn_guardar_motivo_atencion = view.findViewById(R.id.btn_guardar_motivo_atencion);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
-        //Recibe el id de consulta medica desde Historial de consulta medica
         assert extras != null;
-        String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
         String precedencia = extras.getString("PRECEDENCIA");
+        //Recibe el id de consulta medica desde Historial de consulta medica
+        String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
         String id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
-        id_empleado_servidor = String.valueOf(empleado.getId_serv()); //2) Obtenemos Id del servidor del empleado
+
+        id_empleado_servidor = String.valueOf(empleado.getId_serv());
+
+        //Validar quien ingresa Enfermera o Doctor
         String cargo = extras.getString("CARGO");
-        assert cargo != null;
-        if(cargo.equals("Enfermera")){
-            btn_guardar.setVisibility(View.GONE);
-            etMotivoAtencion.setEnabled(false);
-
+        //En caso de ser enfermera no puede crear ni editar
+        if(cargo != null && cargo.equals("Enfermera")){
+            btn_guardar_motivo_atencion.setVisibility(View.GONE);
+            et_motivo_atencion.setEnabled(false);
         }
-        //id_atencion_enfermeria = extras.getString("ID_ATENCION_ENFERMERIA");
-
-        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
-
-        if(Objects.equals(precedencia, "consultar")){
-            etMotivoAtencion.setText(consultaMedica.getMotivo());
-            btn_guardar.setText("Editar");
+        if (precedencia != null && precedencia.equals("consultar")) {
+            et_motivo_atencion.setText(consultaMedica.getMotivo());
+            btn_guardar_motivo_atencion.setText("Editar");
         }
-        //consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
-
-        btn_guardar.setOnClickListener(new View.OnClickListener() {
+        btn_guardar_motivo_atencion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 guardarConsulta();
@@ -91,8 +96,8 @@ public class MotivoAtencionFragment extends Fragment {
     * Verifica si ha ingresado texto y guarda en consulta medica, caso contrario imprime un mensaje
     **/
     private void guardarConsulta() {
-        motivo = etMotivoAtencion.getText().toString();
-        int res = consultaMedica.validarCampoTexto(motivo);//Valida lo que se ingresa (difiere)
+        descripcion_motivo_consulta = et_motivo_atencion.getText().toString();
+        int res = consultaMedica.validarCampoTexto(descripcion_motivo_consulta);//Valida lo que se ingresa (difiere)
         switch (res) {
             case 0:
                 Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
@@ -106,14 +111,12 @@ public class MotivoAtencionFragment extends Fragment {
                     //4) Comentar las funciones de abajo y hacer post y enviar new Date()
                     postConsultaMedica(new Date());
                 } else {
-                    //HACER PUT
+                    putMotivoConsulta();
                 }
-
                 break;
         }
     }
 
-    //3) Copiar los funciones init y post (Guardar motivo hay que crearla)
     /*
     * Guardar motivo localmento
     * */
@@ -122,7 +125,7 @@ public class MotivoAtencionFragment extends Fragment {
         consultaMedica.setId_serv(id_serv);
         consultaMedica.setFechaConsulta(fecha);
         consultaMedica.setStatus(status);
-        consultaMedica.setMotivo(motivo);
+        consultaMedica.setMotivo(descripcion_motivo_consulta);
         consultaMedica.setEmpleado(empleado);
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
@@ -132,41 +135,21 @@ public class MotivoAtencionFragment extends Fragment {
             Toast.makeText(getContext(),"Hubo un error de conexión. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
         }
     }
+
     /*
-     * Inicializar las llamadas a Request
-     * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
+     * Actualiza los datos localmente
      * */
-    private void initRequestCallback(){
-        mResultCallback = new IResult() {
-            @Override
-            public void notifySuccess(String requestType,JSONObject response) {
-                try {
-                    //Si ha realizado post en ConsultaMedica
-                    String fechaConsulta = response.getString("fechaConsulta");
-                    Date fecha = convertirFecha(fechaConsulta);
-                    String pk = response.getString("pk");
-                    guardarConsultaLocal(fecha, NAME_SYNCED_WITH_SERVER, Integer.parseInt(pk));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void notifyError(String requestType,VolleyError error) {
-                Log.d("HEREERROR", String.valueOf(error));
-                guardarConsultaLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
-            }
-
-            @Override
-            public void notifyMsjError(String requestType, String error) {
-                Log.d("HEREMSJERROR", String.valueOf(error));
-                guardarConsultaLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
-            }
-
-            @Override
-            public void notifyJSONError(String requestType, JSONException error) {
-            }
-        };
-
+    private void actualizarConsutaLocal(int status){
+        consultaMedica.setStatus(status);
+        consultaMedica.setMotivo(descripcion_motivo_consulta);
+        consultaMedica.save();
+        if(status==NAME_SYNCED_WITH_SERVER) {
+            Toast.makeText(getContext(), "Se han editado los datos", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getContext(),"Hubo un error de conexión. Los datos se guardarán localmente",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     /*
@@ -175,11 +158,72 @@ public class MotivoAtencionFragment extends Fragment {
     private void postConsultaMedica(final Date fechaConsulta){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
-        initRequestCallback();
+        initRequestCallback("POST");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         // 5) PASAR LOS DATOS A LA FUNCIÓN
-        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado_servidor,fechaConsulta, motivo,"","","","");
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado_servidor,fechaConsulta, descripcion_motivo_consulta,"","","","");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
+    }
+
+    /*
+     * Actualiza cambios en Motivo de Consulta Medica
+     * */
+    private void putMotivoConsulta(){
+        String idConsultaServidor= String.valueOf(consultaMedica.getId_serv());
+        String idEmpleadoServidor = String.valueOf(consultaMedica.getEmpleado().getId_serv());
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
+        initRequestCallback("PUT");
+        RequestService requestService = new RequestService(mResultCallback, getActivity());
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleadoServidor,
+                new Date(), descripcion_motivo_consulta,consultaMedica.getProb_actual(), consultaMedica.getRevision_medica(),
+                consultaMedica.getPrescripcion(), consultaMedica.getExamen_fisico());
+        requestService.putDataRequest("PUTCALL", URL_CONSULTA_MEDICA+idConsultaServidor+"/", sendObj, token);
+    }
+
+    /*
+     * Inicializar las llamadas a Request
+     * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
+     * */
+    private void initRequestCallback(final String metodo_request){
+        mResultCallback = new IResult() {
+            @Override
+            public void notifySuccess(String requestType,JSONObject response) {
+                try {
+                    if(metodo_request.equalsIgnoreCase("POST")){
+                        //Si ha realizado post en ConsultaMedica
+                        String fechaConsulta = response.getString("fechaConsulta");
+                        Date fecha = convertirFecha(fechaConsulta);
+                        String pk = response.getString("pk");
+                        guardarConsultaLocal(fecha, NAME_SYNCED_WITH_SERVER, Integer.parseInt(pk));
+                    }else{
+                        actualizarConsutaLocal(NAME_SYNCED_WITH_SERVER);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void notifyError(String requestType,VolleyError error) {
+                Log.d("HEREERROR", String.valueOf(error));
+                if(metodo_request.equalsIgnoreCase("POST"))
+                    guardarConsultaLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
+                else
+                    actualizarConsutaLocal(NAME_NOT_SYNCED_WITH_SERVER);
+            }
+            @Override
+            public void notifyMsjError(String requestType, String error) {
+                Log.e("STRING ERROR", String.valueOf(error));
+                if(metodo_request.equalsIgnoreCase("POST"))
+                    guardarConsultaLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
+                else
+                    actualizarConsutaLocal(NAME_NOT_SYNCED_WITH_SERVER);
+            }
+            @Override
+            public void notifyJSONError(String requestType, JSONException error) {
+            }
+        };
+
     }
 
 }

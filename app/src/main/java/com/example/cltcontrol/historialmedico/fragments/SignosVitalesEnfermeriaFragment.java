@@ -75,9 +75,6 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        Objects.requireNonNull(getContext()).registerReceiver(new SincronizacionInmediata(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-
-
         // Inflate y vinculaciones de las variables globales
         View view = inflater.inflate(R.layout.fragment_signos_vitales, container, false);
         etPresionSistolica = view.findViewById(R.id.etPSistolica);
@@ -187,6 +184,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
     }
     /*
      * Función que carga los signos vitales en la lista
+     * @param id id de la atención de enfermería en la que se encuentra, tipo long
      * */
     private void cargarSignosVitales(Long id){
         ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
@@ -204,9 +202,11 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
 
     /*
      * Función que guarda los signos vitales localmente
+     * @param idServidor id del signo vital en el servidor, tipo entero
+     * @param status si los datos se enviaron al servidor (1) o no (0) tipo entero
      * */
-    private void guardarSignosVitalesLocal(int id_serv, int status){
-        signos.setId_serv(id_serv);
+    private void guardarSignosVitalesLocal(int idServidor, int status){
+        signos.setId_serv(idServidor);
         signos.setPresion_sistolica(Integer.parseInt(presionSistolicaText));
         signos.setPresion_distolica(Integer.parseInt(presionDistolicaText));
         signos.setPulso(Integer.parseInt(pulsoText));
@@ -234,17 +234,20 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
     
     /*
     * Función que guarda una atencion enfermeria localmente
+    * @param fechaAtencion fecha en la que se realizó la atención, tipo Date
+    * @param idServidor id de la atención en el servidor, tipo entero
+    * @param status si los datos se enviaron al servidor (1) o no (0)
     * */
 
-    private void guardarAtencionEnfermeriaLocal(Date fecha_Atencion, int id_servidor, int status){
-        atencionEnfermeria.setId_serv(id_servidor);
+    private void guardarAtencionEnfermeriaLocal(Date fechaAtencion, int idServidor, int status){
+        atencionEnfermeria.setId_serv(idServidor);
         atencionEnfermeria.setEmpleado(empleado);
-        atencionEnfermeria.setFecha_atencion(fecha_Atencion);
+        atencionEnfermeria.setFecha_atencion(fechaAtencion);
         atencionEnfermeria.setStatus(status);
         atencionEnfermeria.save();
 
         fechaSigno = new Date();
-        postSignosVitales(String.valueOf(id_servidor));
+        postSignosVitales(String.valueOf(idServidor));
     }
     
     /*
@@ -261,6 +264,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
     /*
      * Inicializar las llamadas a Request
      * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
+     * @param TAG me indica a qué clase pertenece el request hecho, tipo String
      * */
     private void initRequestCallback(final String TAG){
         mResultCallback = new IResult() {
@@ -315,28 +319,36 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
     }
 
     /*
-     * Envía datos de Consulta médica al servidor
+     * Obtiene el token
+     * Inicia un requerimiento
+     * Obtiene un hashmap con los datos enviados por parámetros
+     * Envía datos de Atención enfermería al servidor
+     * @param fechaAtencion fecha en la que el paciente fue a la atención tipo Date
      * */
-    private void postAtencionEnfermeria(final Date fecha_atencion){
+    private void postAtencionEnfermeria(final Date fechaAtencion){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
         String TAGATENCION = "tagatencion";
         initRequestCallback(TAGATENCION);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(String.valueOf(idEmpleadoServidor), fecha_atencion,"","","");
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(String.valueOf(idEmpleadoServidor), fechaAtencion,"","","");
         requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj, token);
     }
 
     /*
+     * Obtiene el token
+     * Inicia un requerimiento
+     * Obtiene un hashmap con los datos enviados por parámetros
      * Envía datos de Signos vitales al servidor
+     * @param idAtencionEnfermeria id de la atención enfermería del servidor tipo string
      * */
-    private void postSignosVitales(String id_atencion_enfermeria){
+    private void postSignosVitales(String idAtencionEnfermeria){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
         String TAGSIGNOS = "tagsignos";
         initRequestCallback(TAGSIGNOS);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(String.valueOf(idEmpleadoServidor),"",id_atencion_enfermeria,presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext, fechaSigno);
+        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(String.valueOf(idEmpleadoServidor),"",idAtencionEnfermeria,presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext, fechaSigno);
         requestService.postDataRequest("POSTCALL", URL_SIGNOS, sendObj, token);
     }
 

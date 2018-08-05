@@ -2,6 +2,7 @@ package com.example.cltcontrol.historialmedico.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.interfaces.IResult;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.Empleado;
-import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.example.cltcontrol.historialmedico.service.RequestService;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
@@ -32,55 +32,59 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNC
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_ATENCION_ENFERMERIA;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertirFecha;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class DiagnosticoEnfermeriaFragment extends Fragment {
 
-    private String idAtencion=null;
-    private String precedencia, idEmpleado,cargo;
-    private Bundle bun;
-    private Button boton;
-    private EditText etDiagnostico;
-    private Empleado empleado;
-    private AtencionEnfermeria atencion;
-    private String id_empleado_servidor; //1) Declarar id_empelado_servidor y mResultCallback
+    //Interface
     private IResult mResultCallback;
-    private String diagnostico;
+    //Variables de view
+    private EditText et_diagnostico_enfermeria;
+    private Button btn_guardar_diagnostico_enfermeria;
+    //Variables de Clases
+    private AtencionEnfermeria atencionEnfermeria;
+    private Empleado empleado;
 
+    private String descripcion_diagnostico_enfermeria, id_empleado_servidor; //1) Declarar id_empelado_servidor y mResultCallback
+    private String precedencia;
+
+    //constructor por defecto
     public DiagnosticoEnfermeriaFragment() {}
 
     @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         // Inflate y vinculaciones de las variables globales
         View view = inflater.inflate(R.layout.fragment_diagnotico_enfermeria, container, false);
-        boton = view.findViewById(R.id.btnGuardar);
-        etDiagnostico = view.findViewById(R.id.txt_prescripcion);
+        et_diagnostico_enfermeria = view.findViewById(R.id.et_diagnostico_enfermeria);
+        btn_guardar_diagnostico_enfermeria = view.findViewById(R.id.btn_guardar_diagnostico_enfermeria);
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
-        bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
+        Bundle bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         if (bun != null) {
-            idAtencion = bun.getString("ID_ATENCION");
             precedencia = bun.getString("PRECEDENCIA");
-            idEmpleado = bun.getString("ID_EMPLEADO");
-            cargo = bun.getString("CARGO");
-            atencion = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(idAtencion));
-            empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
+            String id_atencion_enfemeria = bun.getString("ID_ATENCION");
+            atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(id_atencion_enfemeria));
+            String id_empleado = bun.getString("ID_EMPLEADO");
+            empleado = Empleado.findById(Empleado.class, Long.parseLong(id_empleado));
+
             id_empleado_servidor = String.valueOf(empleado.getId_serv());
+
+            String cargo = bun.getString("CARGO");
+            if(cargo.equals("Doctor")){
+                btn_guardar_diagnostico_enfermeria.setVisibility(View.GONE);
+                et_diagnostico_enfermeria.setEnabled(false);
+            }
+            //Si va a consultar, muestra los datos
+            if(precedencia.equals("consultar")) {
+                et_diagnostico_enfermeria.setText(atencionEnfermeria.getDiagnosticoEnfermeria());
+                btn_guardar_diagnostico_enfermeria.setText("Editar");
+            }
         }
-        //Si va a consultar, muestra los datos
-        if(precedencia.equals("consultar")) {
-            etDiagnostico.setText(atencion.getDiagnosticoEnfermeria());
-            boton.setText("Editar");
-        }
-        if(cargo.equals("Doctor")){
-            boton.setVisibility(View.GONE);
-            etDiagnostico.setEnabled(false);
-        }
-        boton.setOnClickListener(new View.OnClickListener() {
+
+        /*
+         * Guarda los datos de un motivo atención
+         * */
+        btn_guardar_diagnostico_enfermeria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {guardarAtencionEnfermeria();
             }
@@ -93,8 +97,8 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
      **/
     private void guardarAtencionEnfermeria() {
         //Valida lo que se ingresa  (2 lineas)
-        diagnostico = etDiagnostico.getText().toString();
-        int res = atencion.validarCampoTexto(diagnostico);
+        descripcion_diagnostico_enfermeria = et_diagnostico_enfermeria.getText().toString();
+        int res = atencionEnfermeria.validarCampoTexto(descripcion_diagnostico_enfermeria);
         switch (res) {
             case 0:
                 Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
@@ -104,13 +108,12 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
                 break;
             default:
                 //Si aun no ha creado la consulta, la crea y añade los datos
-                if (atencion.getEmpleado() == null) {
+                if (atencionEnfermeria.getEmpleado() == null) {
                     //4) Comentar las funciones de abajo y hacer post y enviar new Date()
                     postAtencionEnfermeria(new Date());
                 } else {
-                    //HACER PUT
+                    putDiagnosticoEnfermeria();
                 }
-
                 break;
         }
     }
@@ -120,49 +123,83 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
      * Guardar motivo localmento
      * */
     private void guardarAtencionLocal(Date fecha, int status, int id_serv){
-        atencion.setEmpleado(empleado);
-        atencion.setId_serv(id_serv);
-        atencion.setFecha_atencion(fecha);
-        atencion.setStatus(status);
-        atencion.setDiagnosticoEnfermeria(diagnostico); //setea lo que quieres
-        atencion.save();
+        atencionEnfermeria.setEmpleado(empleado);
+        atencionEnfermeria.setId_serv(id_serv);
+        atencionEnfermeria.setFecha_atencion(fecha);
+        atencionEnfermeria.setStatus(status);
+        atencionEnfermeria.setDiagnosticoEnfermeria(descripcion_diagnostico_enfermeria); //setea lo que quieres
+        atencionEnfermeria.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(getContext(),"No hay conexión a internet. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"Hubo un error de conexión. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
         }
     }
+
+    /*
+     * Actualiza los datos localmente
+     * */
+    private void actualizarAtencionLocal(int status){
+        atencionEnfermeria.setStatus(status);
+        atencionEnfermeria.setDiagnosticoEnfermeria(descripcion_diagnostico_enfermeria);
+        atencionEnfermeria.save();
+        if(status==NAME_SYNCED_WITH_SERVER) {
+            Toast.makeText(getContext(), "Se han editado los datos", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getContext(),"Hubo un error de conexión. Los datos se guardarán localmente",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     /*
      * Envía datos de Consulta médica al servidor
      * */
     private void postAtencionEnfermeria(final Date fechaConsulta){
-        initRequestCallback();
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
-
+        initRequestCallback("POST");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
-        // 5) PASAR LOS DATOS A LA FUNCIÓN
-        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(id_empleado_servidor,fechaConsulta, "",diagnostico,"");
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(id_empleado_servidor,fechaConsulta, "", descripcion_diagnostico_enfermeria,"");
         requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj, token);
     }
+
+    /*
+     * Actualiza cambios en Motivo de Atencion Enfermeria
+     * */
+    private void putDiagnosticoEnfermeria(){
+        String idConsultaServidor= String.valueOf(atencionEnfermeria.getId_serv());
+        String idEmpleadoServidor = String.valueOf(atencionEnfermeria.getEmpleado().getId_serv());
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
+        initRequestCallback("PUT");
+        RequestService requestService = new RequestService(mResultCallback, getActivity());
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(idEmpleadoServidor,
+                new Date(),atencionEnfermeria.getMotivoAtencion(), descripcion_diagnostico_enfermeria, atencionEnfermeria.getPlanCuidados());
+        requestService.putDataRequest("PUTCALL", URL_ATENCION_ENFERMERIA+idConsultaServidor+"/", sendObj, token);
+    }
+
 
     /*
      * Inicializar las llamadas a Request
      * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
      * */
-    private void initRequestCallback(){
+    private void initRequestCallback(final String metodo_request){
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
                 try {
-                    //Si ha realizado post en Atencion enfermería
-                    //PASO 6) FINAL
-                    String fechaConsulta = response.getString("fechaAtencion");
-                    Date fecha = convertirFecha(fechaConsulta);
-                    String pk = response.getString("pk");
-                    guardarAtencionLocal(fecha, NAME_SYNCED_WITH_SERVER,Integer.parseInt(pk));
+                    if(metodo_request.equalsIgnoreCase("POST")){
+                        //Si ha realizado post en Atencion enfermería
+                        String fechaConsulta = response.getString("fechaAtencion");
+                        Date fecha = convertirFecha(fechaConsulta);
+                        String pk = response.getString("pk");
+                        guardarAtencionLocal(fecha, NAME_SYNCED_WITH_SERVER,Integer.parseInt(pk));
+                    }else{
+                        actualizarAtencionLocal(NAME_SYNCED_WITH_SERVER);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -170,15 +207,19 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
             @Override
             public void notifyError(String requestType,VolleyError error) {
                 Log.d("HEREERROR", String.valueOf(error));
-                guardarAtencionLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
+                if(metodo_request.equalsIgnoreCase("POST"))
+                    guardarAtencionLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
+                else
+                    actualizarAtencionLocal(NAME_NOT_SYNCED_WITH_SERVER);
             }
-
             @Override
             public void notifyMsjError(String requestType, String error) {
-                Log.d("HEREMSJERROR", String.valueOf(error));
-                guardarAtencionLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
+                Log.e("STRING ERROR", String.valueOf(error));
+                if(metodo_request.equalsIgnoreCase("POST"))
+                    guardarAtencionLocal(new Date(),NAME_NOT_SYNCED_WITH_SERVER, 0);
+                else
+                    actualizarAtencionLocal(NAME_NOT_SYNCED_WITH_SERVER);
             }
-
             @Override
             public void notifyJSONError(String requestType, JSONException error) {
                 Toast.makeText(getContext(), error.toString(),Toast.LENGTH_SHORT).show();

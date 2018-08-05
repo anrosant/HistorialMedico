@@ -97,7 +97,10 @@ public class AtencionEnfermeria extends SugarRecord {
         return 2;
     }
 
-    public ArrayList<AtencionEnfermeria> getAtencionEnfermeriaUnsynced(){
+    public ArrayList<AtencionEnfermeria> getAtencionEnfermeriaCreadaUnsynced(){
+        return (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class, "status = ? and idserv = ?", String.valueOf(0),String.valueOf(0));
+    }
+    public ArrayList<AtencionEnfermeria> getAtencionEnfermeriaEditadaUnsynced(){
         return (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class, "status = ?", String.valueOf(0));
     }
 
@@ -123,6 +126,17 @@ public class AtencionEnfermeria extends SugarRecord {
     public static Map<String, String> getHashMapAtencionEnfermeria(String id_empleado_servidor, Date fecha_consulta,
                                                                    String motivo, String diagnostico, String plan){
         Map<String, String> params = new HashMap<>();
+
+        if(motivo==null){
+            motivo = "";
+        }
+        if(diagnostico==null){
+            diagnostico = "";
+        }
+        if(plan==null){
+            plan = "";
+        }
+
 
         params.put("empleado", id_empleado_servidor);
         params.put("fechaAtencion", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta)));

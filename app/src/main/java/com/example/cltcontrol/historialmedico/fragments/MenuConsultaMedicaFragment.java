@@ -2,6 +2,7 @@ package com.example.cltcontrol.historialmedico.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
+import com.example.cltcontrol.historialmedico.interfaces.IComunicadorMenu;
 
 import java.util.Objects;
 
@@ -35,7 +36,7 @@ public class MenuConsultaMedicaFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_consulta_medica, container, false);
@@ -54,7 +55,7 @@ public class MenuConsultaMedicaFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     FragmentActivity estaActividad = getActivity();
-                    ((ComunicadorMenu) Objects.requireNonNull(estaActividad)).menuPulsado(queBoton);
+                    ((IComunicadorMenu) Objects.requireNonNull(estaActividad)).menuPulsado(queBoton);
                 }
             });
         }

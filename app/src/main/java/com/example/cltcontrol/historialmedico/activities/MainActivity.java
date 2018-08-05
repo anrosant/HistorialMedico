@@ -2,6 +2,7 @@ package com.example.cltcontrol.historialmedico.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,29 +63,26 @@ public class MainActivity extends AppCompatActivity {
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
-
+        //Verifica si ya se encuentra con la sesión activa
         if(SessionManager.getLoggedStatus(getApplicationContext())) {
+
             SessionManager sessionManager = new SessionManager(getApplicationContext());
             Toast.makeText(getApplicationContext(),"usuario" + sessionManager.obtenerInfoUsuario().get("nombre_usuario"),Toast.LENGTH_SHORT).show();
             siguienteActivity();
-        }else{
-            //miController = new EmpleadoController(getApplicationContext());
-            //miController.llenadoEnfermedades();
-            //Si el usuario es correcto, lleva a la siguiente pantalla, caso contrario muestra mensaje
-            btnIngresoSistema.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    usuario = etUsuario.getText().toString();
-                    password = etContrasenia.getText().toString();
-
-                    if(!usuario.equals("") && !password.equals("")){
-                        iniciarSesion(usuario, password);
-                    }else{
-                        Toast.makeText(getApplicationContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
         }
+        btnIngresoSistema.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                usuario = etUsuario.getText().toString();
+                password = etContrasenia.getText().toString();
+
+                if(!usuario.equals("") && !password.equals("")){
+                    iniciarSesion(usuario, password);
+                }else{
+                    Toast.makeText(getApplicationContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         Button btnIngresoGaleria = findViewById(R.id.pruebaImagen);
         btnIngresoGaleria.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
-
+                    
                 }
             }
 

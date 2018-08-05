@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,30 +18,26 @@ import java.util.List;
 
 public class HistorialAtencionEnfermeria extends FragmentActivity {
     private String idEmpleado,cargo, idAtencion;
-    private TextView tvNombresEmpleado;
-    private FloatingActionButton btnAgregarAtencionEnfermeria;
-    private ListView lvAtencionEnf;
     private List<AtencionEnfermeria> atencionEnfermeriaList;
+    @SuppressLint("StaticFieldLeak")
     public static AdapterItemAtencionEnfermeria adapter;
-    private Empleado empleado;
-    private SessionManager sesion;
-    private Intent inMenuEmpleado;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial_atencion_enfermeria);
 
-        tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
-        btnAgregarAtencionEnfermeria = findViewById(R.id.btnAgregarAtencionEnfermeria);
-        lvAtencionEnf = findViewById(R.id.lvAtencionEnfermeria);
+        TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+        FloatingActionButton btnAgregarAtencionEnfermeria = findViewById(R.id.btnAgregarAtencionEnfermeria);
+        ListView lvAtencionEnf = findViewById(R.id.lvAtencionEnfermeria);
 
         //Obtener el cargo del usuario que inició sesión
-        sesion = new SessionManager(getApplicationContext());
+        SessionManager sesion = new SessionManager(getApplicationContext());
         cargo = sesion.obtenerInfoUsuario().get("cargo");
 
         //Recibe el id del empleado desde MenuEmpleadoActivity
-        inMenuEmpleado = getIntent();
+        Intent inMenuEmpleado = getIntent();
         idEmpleado = inMenuEmpleado.getStringExtra("ID_EMPLEADO");
 
         //Obtiene las atenciones de enfermeria de un empleado
@@ -51,8 +48,8 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
         lvAtencionEnf.setAdapter(adapter);
 
         //Busca al empleado con el id y muestra la informacion en el frgagment de informacion
-        empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
-        tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
+        Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
+        tvNombresEmpleado.setText(empleado.getApellido()+" "+ empleado.getNombre());
 
 
         if(cargo.equalsIgnoreCase("Doctor")){

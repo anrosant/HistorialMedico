@@ -15,10 +15,10 @@ import java.util.List;
 
 public class ImageAdapter extends BaseAdapter {
 
-    File imgFile;
+    private File imgFile;
     private List<Bitmap> misFotosBitmap;
 
-    private Context mContext;
+    private final Context mContext;
 
     public ImageAdapter(Context context, List<String> rutas){
         mContext = context;

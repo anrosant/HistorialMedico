@@ -1,6 +1,7 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,17 +49,16 @@ public class PatologiasPersonalesFragment extends Fragment {
     private ImageButton ib_mostrar_ocultar_contendido;
     private LinearLayout ly_patologias_personales;
     private EditText etDetalleEnfermedad;
-    private String id_consulta_medica, id_empleado, lugar, detalle, cargo;
+    private String id_consulta_medica;
+    private String lugar;
+    private String detalle;
+    private String cargo;
     private ConsultaMedica consultaMedica;
-    private ArrayAdapter<CharSequence> adapter;
     private AdapterPatologiasPersonales adapterPatologiaPers;
     private List<String> lugarList;
-    private List<PatologiasPersonales> patologiasPersonalesList;
     private Empleado empleado;
-    private PatologiasPersonales patologiasPersonales;
 
     private int id_empleado_Servidor;
-    private String TAGPATOLOGIA = "tagpatologias", TAGCONSULTA="tagconsulta";
     private IResult mResultCallback;
     private RequestService requestService;
     private Date fecha_consulta;
@@ -68,7 +68,7 @@ public class PatologiasPersonalesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_patologias_personales, container, false);
@@ -81,7 +81,7 @@ public class PatologiasPersonalesFragment extends Fragment {
         TextView tvTitulo = view.findViewById(R.id.tv_titulo);
 
         Spinner spPatologias = view.findViewById(R.id.spPatologia);
-        adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()).getBaseContext(), R.array.patologias, android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()).getBaseContext(), R.array.patologias, android.R.layout.simple_spinner_dropdown_item);
         spPatologias.setAdapter(adapter);
 
         //Obtenemos las patologias en un array list
@@ -94,7 +94,7 @@ public class PatologiasPersonalesFragment extends Fragment {
             id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
             consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
-            id_empleado = extras.getString("ID_EMPLEADO");
+            String id_empleado = extras.getString("ID_EMPLEADO");
             empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
             id_empleado_Servidor = empleado.getId_serv();
 
@@ -120,7 +120,7 @@ public class PatologiasPersonalesFragment extends Fragment {
         });
 
         //Obtenemos la lista de patologias personales que existan
-        patologiasPersonalesList = PatologiasPersonales.find(PatologiasPersonales.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
+        List<PatologiasPersonales> patologiasPersonalesList = PatologiasPersonales.find(PatologiasPersonales.class, "consultamedica = ?", String.valueOf(id_consulta_medica));
 
         //Crea un adapter de dicha lista y la muestra en un listview
         adapterPatologiaPers = new AdapterPatologiasPersonales(getContext(), patologiasPersonalesList);
@@ -150,7 +150,6 @@ public class PatologiasPersonalesFragment extends Fragment {
                 else{
                     //Si es la primera entrada
                     if(consultaMedica.getEmpleado()==null){
-
                         fecha_consulta = new Date();
                         //Dentro de guardar Consulta Medica, almacena las patologías personales
                         postConsultaMedica(fecha_consulta);
@@ -177,7 +176,7 @@ public class PatologiasPersonalesFragment extends Fragment {
     /*
      * Función que guarda una consulta médica localmente
      * */
-    public void guardarConsultaMedicaLocal(Date fechaConsulta, int id_servidor, int status){
+    private void guardarConsultaMedicaLocal(Date fechaConsulta, int id_servidor, int status){
         consultaMedica.setId_serv(id_servidor);
         consultaMedica.setEmpleado(empleado);
         consultaMedica.setFechaConsulta(fechaConsulta);
@@ -191,7 +190,7 @@ public class PatologiasPersonalesFragment extends Fragment {
      * Guarda los datos de una patologia personal localmente
      * */
     private void guardarPatologiasPersonalesLocal(int id_serv, int status) {
-        patologiasPersonales = new PatologiasPersonales(consultaMedica, lugar,detalle);
+        PatologiasPersonales patologiasPersonales = new PatologiasPersonales(consultaMedica, lugar, detalle);
         patologiasPersonales.setId_serv(id_serv);
         patologiasPersonales.setStatus(status);
         patologiasPersonales.setId_ficha(empleado.getFicha_actual());
@@ -201,7 +200,7 @@ public class PatologiasPersonalesFragment extends Fragment {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(getContext(),"No hay conexión a internet. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"Hubo un error de conexión. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
         }
 
         actualizarPatologiasPersonales();
@@ -211,7 +210,7 @@ public class PatologiasPersonalesFragment extends Fragment {
      * Inicializar las llamadas a Request
      * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
      * */
-    void initRequestCallback(final String TAG){
+    private void initRequestCallback(final String TAG){
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
@@ -266,9 +265,10 @@ public class PatologiasPersonalesFragment extends Fragment {
     /*
      * Envía datos de Consulta médica al servidor
      * */
-    public void postConsultaMedica(final Date fecha_consulta){
+    private void postConsultaMedica(final Date fecha_consulta){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
+        String TAGCONSULTA = "tagconsulta";
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
         Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(id_empleado_Servidor), fecha_consulta,"","","","","");
@@ -278,15 +278,17 @@ public class PatologiasPersonalesFragment extends Fragment {
     /*
      * Envía datos de Signos vitales al servidor
      * */
-    public void postPatologiasPersonales(String id_consulta_medica){
+    private void postPatologiasPersonales(String id_consulta_medica){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
+        String TAGPATOLOGIA = "tagpatologias";
         initRequestCallback(TAGPATOLOGIA);
         requestService = new RequestService(mResultCallback, getActivity());
         String id_ficha_actual = "";
         Log.d("EMPLEADOFICHA",String.valueOf(empleado.getFicha_actual()));
         if(empleado.getFicha_actual()!=0)
             id_ficha_actual = String.valueOf(empleado.getFicha_actual());
+
         Map<String, String> sendObj = PatologiasPersonales.getHashMapPatologiasPersonales(id_ficha_actual,id_consulta_medica,lugar, detalle);
         requestService.postDataRequest("POSTCALL", URL_PATOLOGIAS_PERSONALES, sendObj, token);
     }

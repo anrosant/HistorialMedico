@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
@@ -13,30 +14,28 @@ import android.widget.TextView;
 import com.example.cltcontrol.historialmedico.adapter.AdapterItemConsultaMedica;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.interfaces.ComunicadorMenu;
+import com.example.cltcontrol.historialmedico.interfaces.IComunicadorMenu;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 
 import java.util.List;
 
-public class HistorialConsultaMedica extends FragmentActivity implements ComunicadorMenu{
+public class HistorialConsultaMedica extends FragmentActivity implements IComunicadorMenu {
 
     private String idEmpleado, idConsultaMedica, cargo;
-    private TextView tvNombresEmpleado;
-    private ListView lvConsultasMedicas;
-    private Empleado empleado;
-    private FloatingActionButton btnAgregarConsultaMedica;
     private List<ConsultaMedica> consultaMedicaList;
+    @SuppressLint("StaticFieldLeak")
     public static AdapterItemConsultaMedica adapterItemConsultaMedica;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial_consulta_medica);
 
-        tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
-        lvConsultasMedicas = findViewById(R.id.lvConsultasMedicas);
-        btnAgregarConsultaMedica = findViewById(R.id.btnAgregarConsultaMedica);
+        TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+        ListView lvConsultasMedicas = findViewById(R.id.lvConsultasMedicas);
+        FloatingActionButton btnAgregarConsultaMedica = findViewById(R.id.btnAgregarConsultaMedica);
 
         //Obtener el cargo del usuario que inició sesión
         SessionManager sesion = new SessionManager(getApplicationContext());
@@ -54,8 +53,8 @@ public class HistorialConsultaMedica extends FragmentActivity implements Comunic
         adapterItemConsultaMedica = new AdapterItemConsultaMedica(this, consultaMedicaList);
         lvConsultasMedicas.setAdapter(adapterItemConsultaMedica);
 
-        empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
-        tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
+        Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
+        tvNombresEmpleado.setText(empleado.getApellido()+" "+ empleado.getNombre());
 
         lvConsultasMedicas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -9,20 +9,16 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.fragments.DiagnosticoFragment;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
 
 import java.util.List;
 
 public class AdapterItemDiagnostico extends ArrayAdapter<Diagnostico> {
-    private final Context context;
-    private List<Diagnostico> diagnosticoList;
-    private DiagnosticoFragment activity;
+    private final List<Diagnostico> diagnosticoList;
 
 
     public AdapterItemDiagnostico(Context context, List<Diagnostico> diagnosticoList) {
         super(context, 0, diagnosticoList);
-        this.context = context;
         this.diagnosticoList = diagnosticoList;
     }
 

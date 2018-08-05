@@ -1,7 +1,6 @@
 package com.example.cltcontrol.historialmedico.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -18,13 +17,10 @@ import java.util.List;
 
 public class AdapterItemAtencionEnfermeria extends ArrayAdapter<AtencionEnfermeria> {
 
-    private Activity activity;
-    private List<AtencionEnfermeria> atencionEnfermeriaList;
-    private final Context context;
+    private final List<AtencionEnfermeria> atencionEnfermeriaList;
 
     public AdapterItemAtencionEnfermeria(Context context, List<AtencionEnfermeria> atencionEnfermeriaList) {
         super(context, 0, atencionEnfermeriaList);
-        this.context = context;
         this.atencionEnfermeriaList = atencionEnfermeriaList;
     }
 

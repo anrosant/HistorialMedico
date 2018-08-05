@@ -11,8 +11,13 @@
     </string>
     <string name="consulta_medica_nuevo">Nueva consulta médica
     </string>
-    <string name="consultaMedica" tools:keep="@string/consultaMedica">Consulta médica
+    <string name="consulta_medica" tools:keep="@string/consultaMedica">Consulta médica
     </string>
+    <string name="inicio_sesion">Inicio de sesión</string>
+    <string name="contrasenia">CONTRASEÑA</string>
+    <string name="usuario">USUARIO</string>
+    <string name="ingresar">INGRESAR</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

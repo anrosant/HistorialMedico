@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".activities.MainActivity">
 
@@ -16,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:layout_marginTop="40dp"
-            android:text="Inicio de sesión"
+            android:text="@string/inicio_sesion"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
             android:textSize="24sp"
@@ -37,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="USUARIO" />
+                android:text="@string/usuario" />
 
             <EditText
                 android:id="@+id/etUsuario"
@@ -51,17 +52,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="CONTRASEÑA" />
-
-            <EditText
-                android:id="@+id/etContrasenia"
+                android:text="@string/contrasenia" />
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layout_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:ems="10"
-                android:inputType="textPassword"
-                android:singleLine="true"
-                tools:ignore="LabelFor" />
+                android:textColorHint="@color/colorHint"
+                app:passwordToggleEnabled = "true"
+                app:passwordToggleTint="@color/colorHint"
+                app:passwordToggleDrawable="@drawable/icons8_eye_24">
+                <EditText
+                    android:id="@+id/etContrasenia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    tools:ignore="LabelFor" />
+            </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
 
@@ -79,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
-                android:text="INGRESAR"
+                android:text="@string/ingresar"
                 android:textColor="#FFFFFF" />
 
         </LinearLayout>

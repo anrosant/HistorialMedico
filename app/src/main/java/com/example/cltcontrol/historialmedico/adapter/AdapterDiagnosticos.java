@@ -20,8 +20,8 @@ import java.util.ArrayList;
 
 class AdapterDiagnosticos extends ArrayAdapter<Diagnostico> {
 
-    private Context context;
-    private int layoutResourceId;
+    private final Context context;
+    private final int layoutResourceId;
     private ArrayList<Diagnostico> data=null;
 
     //Constructor

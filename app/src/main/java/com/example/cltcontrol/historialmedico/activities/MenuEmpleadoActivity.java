@@ -17,14 +17,10 @@ import java.text.DateFormat;
 
 public class MenuEmpleadoActivity extends FragmentActivity {
 
-    private ImageView FotoEmpleado;
-    private TextView tvCi, tvApellidosNombre, tvSexo, tvLugarFechaNacimiento,
-            tvEdad, tvProfesion, tvEstadoCivil, tvIdEmpleado, tvFechaIngreso,
-            tvOcupacion, tvDatosPersonales, tvDatosDeEmpresa;
-    private LinearLayout lyDatosPersonales,lyDatosDeEmpresa;
+    private TextView tvDatosPersonales;
+    private LinearLayout lyDatosPersonales;
 
     private String idEmpleado;
-    private Empleado empleado;
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
@@ -35,34 +31,32 @@ public class MenuEmpleadoActivity extends FragmentActivity {
         //Datos del empleado
         lyDatosPersonales = findViewById(R.id.lyDatosPersonales);
         tvDatosPersonales = findViewById(R.id.tvDatosPersonales);
-        tvCi =  findViewById(R.id.tvCi);
-        tvApellidosNombre =  findViewById(R.id.tvApellidosNombre);
-        tvSexo =  findViewById(R.id.tvSexo);
-        tvLugarFechaNacimiento =  findViewById(R.id.tvLugarFechaNacimiento);
-        tvEdad =  findViewById(R.id.tvEdad);
-        tvProfesion =  findViewById(R.id.tvProfesion);
-        tvEstadoCivil =  findViewById(R.id.tvEstadoCivil);
+        TextView tvCi = findViewById(R.id.tvCi);
+        TextView tvApellidosNombre = findViewById(R.id.tvApellidosNombre);
+        TextView tvSexo = findViewById(R.id.tvSexo);
+        TextView tvLugarFechaNacimiento = findViewById(R.id.tvLugarFechaNacimiento);
+        TextView tvEdad = findViewById(R.id.tvEdad);
+        TextView tvProfesion = findViewById(R.id.tvProfesion);
+        TextView tvEstadoCivil = findViewById(R.id.tvEstadoCivil);
 
         //Datos usados para la empresa
-        lyDatosDeEmpresa = findViewById(R.id.lyDatosDeEmpresa);
-        tvDatosDeEmpresa = findViewById(R.id.tvDatosDeEmpresa);
-        tvIdEmpleado = findViewById(R.id.tvIdEmpleado);
-        tvFechaIngreso =  findViewById(R.id.tvFechaIngreso);
-        tvOcupacion =  findViewById(R.id.tvOcupacion);
+        TextView tvIdEmpleado = findViewById(R.id.tvIdEmpleado);
+        TextView tvFechaIngreso = findViewById(R.id.tvFechaIngreso);
+        TextView tvOcupacion = findViewById(R.id.tvOcupacion);
 
         //Recibe la cedula del empleado desde BuscarEmpleadoActivity
         Intent inBuscarEmpleadoActivity = getIntent();
         idEmpleado = inBuscarEmpleadoActivity.getStringExtra("ID_EMPLEADO");
 
         //Busca al empleado por su cedula y muestra en un fragment los datos
-        empleado = Empleado.findById(Empleado.class,Long.parseLong(idEmpleado));
+        Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvCi.setText(empleado.getCedula());
-        tvApellidosNombre.setText(empleado.getApellido()+" "+empleado.getNombre());
+        tvApellidosNombre.setText(empleado.getApellido()+" "+ empleado.getNombre());
         //tvNombres.setText(empleado.getNombre());
         tvSexo.setText(empleado.getSexo());
 
         String fechaNacimiento = DateFormat.getDateInstance().format(empleado.getFechaNacimiento());
-        tvLugarFechaNacimiento.setText(empleado.getLugarNacimiento()+", "+fechaNacimiento.toString());
+        tvLugarFechaNacimiento.setText(empleado.getLugarNacimiento()+", "+ fechaNacimiento);
 
         tvEdad.setText(empleado.getEdad()+" años");
         tvProfesion.setText(empleado.getProfesion());
@@ -76,11 +70,7 @@ public class MenuEmpleadoActivity extends FragmentActivity {
         tvDatosPersonales.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                final int DRAWABLE_LEFT = 0;
-                final int DRAWABLE_TOP = 1;
                 final int DRAWABLE_RIGHT = 2;
-                final int DRAWABLE_BOTTOM = 3;
-
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     if(motionEvent.getRawX() >= (tvDatosPersonales.getRight() - tvDatosPersonales.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         // your action here

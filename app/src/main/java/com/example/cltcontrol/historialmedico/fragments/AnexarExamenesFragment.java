@@ -3,7 +3,6 @@ package com.example.cltcontrol.historialmedico.fragments;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,7 +23,6 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -36,6 +34,7 @@ import com.example.cltcontrol.historialmedico.adapter.ImageAdapter;
 import com.example.cltcontrol.historialmedico.models.ExamenImagen;
 import com.example.cltcontrol.historialmedico.utils.ImageOrientation;
 import com.github.chrisbanes.photoview.PhotoView;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -235,7 +234,6 @@ public class AnexarExamenesFragment extends Fragment {
         }
     }
 
-    //A esta funcion hay que agregarle que indique globalmente si se tomó correctamente la foto o si eligio una foto
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

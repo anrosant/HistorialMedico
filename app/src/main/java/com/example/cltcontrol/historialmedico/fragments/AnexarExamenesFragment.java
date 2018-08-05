@@ -1,6 +1,7 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,26 +20,28 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.example.cltcontrol.historialmedico.R;
-import com.example.cltcontrol.historialmedico.interfaces.IResult;
+import com.example.cltcontrol.historialmedico.adapter.ImageAdapter;
 import com.example.cltcontrol.historialmedico.models.ExamenImagen;
-import com.example.cltcontrol.historialmedico.service.RequestService;
 import com.example.cltcontrol.historialmedico.utils.ImageOrientation;
+import com.github.chrisbanes.photoview.PhotoView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static android.Manifest.permission.CAMERA;
@@ -50,7 +53,6 @@ public class AnexarExamenesFragment extends Fragment {
     private Button btnCargarImagen;
 
     private String path;
-    private IResult mResultCallback;
 
     //Constantes
     //Se define carpeta Raiz para las imagenes
@@ -61,7 +63,9 @@ public class AnexarExamenesFragment extends Fragment {
     private static final String DIRECTORIO = CARPETA_RAIZ + CARPETA_IMAGENES;
     private static final int COD_SELECCION = 10;
     private static final int COD_CAMARA = 20;
-    private Bitmap bitmap;
+
+    private GridView gridView;
+    private List<Bitmap> misFotosBitmap;
 
     public AnexarExamenesFragment() {
         // Required empty public constructor
@@ -76,6 +80,7 @@ public class AnexarExamenesFragment extends Fragment {
         //referencia hacia los views
         idImage = view.findViewById(R.id.idImage);
         btnCargarImagen = view.findViewById(R.id.btnCargarImagen);
+        gridView = view.findViewById(R.id.gridImagenes);
 
         if(validaPermisos()){
             btnCargarImagen.setEnabled(true);
@@ -89,6 +94,45 @@ public class AnexarExamenesFragment extends Fragment {
                 cargarImagen();
             }
         });
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////Empieza galeria de fotos///////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Obtener todas las rutas desde la base (Modificar)
+        List<String> rutas = new ArrayList<>();
+        rutas.add("/storage/emulated/0/Medicos/examenes/dado1.jpg");
+        rutas.add("/storage/emulated/0/Medicos/examenes/capitan.jpg");
+        rutas.add("/storage/emulated/0/Medicos/examenes/spider.jpg");
+        rutas.add("/storage/emulated/0/Medicos/examenes/civil.jpg");
+
+        //Se inicializa el adaptador enviandole el context y la lista de rutas
+        gridView.setAdapter(new ImageAdapter(getContext(), rutas));
+
+
+        //Funcionalidad de zoom cuando se le da click a alguna imagen de la galeria
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Se trae del adapter la lista de fotos
+                misFotosBitmap=((ImageAdapter)gridView.getAdapter()).getMisFotosBitmap();
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+                @SuppressLint("InflateParams") View mView = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+                PhotoView photoView = mView.findViewById(R.id.imageView);
+
+                //Se setea la imagen a la que se dio click en el photo view que se abre
+                photoView.setImageBitmap(misFotosBitmap.get(position));
+
+                mBuilder.setView(mView);
+                AlertDialog mDialog = mBuilder.create();
+                mDialog.show();
+            }
+        });
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////Termina galeria de fotos///////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
         return view;
     }
 
@@ -138,6 +182,7 @@ public class AnexarExamenesFragment extends Fragment {
         }
     }
 
+    //Funcion para seleccionar las opciones de tomar foto, cargar imagen o cerrar
     private void cargarImagen() {
         //Arreglo con opciones para el cuadro de dialogo
         final CharSequence[] opciones = {"Tomar foto","Seleccionar imagen","Cancelar"};
@@ -180,10 +225,6 @@ public class AnexarExamenesFragment extends Fragment {
             //Ruta completa con nombre de la imagen
             path = Environment.getExternalStorageDirectory() + File.separator + DIRECTORIO + File.separator + nombreImagen;
 
-            //GUARDA LA RUTA EN LA BD LOCAL
-            ExamenImagen examenImagen = new ExamenImagen(0, path);
-            examenImagen.save();
-
             //Archivo para tomar la foto
             File fileImagen = new File(path);
             //Lanzar la camara
@@ -204,9 +245,8 @@ public class AnexarExamenesFragment extends Fragment {
                     Uri miPath = data.getData();
                     ruta = Objects.requireNonNull(miPath).toString();
                     Toast.makeText(getContext(),"ruta: " + ruta,Toast.LENGTH_LONG).show();
-                    idImage .setImageURI(miPath);
+                    idImage.setImageURI(miPath);
 
-                    //postImagen(ruta);
                 }catch (Exception e){
                     //
                 }
@@ -222,6 +262,8 @@ public class AnexarExamenesFragment extends Fragment {
                                 //Log.d("Ruta de Almacenamiento","Path: "+path);
                             }
                         });
+
+                guardarImagen();
 
                 Bitmap bitmap = BitmapFactory.decodeFile(path);
                 Matrix matrix;
@@ -246,64 +288,58 @@ public class AnexarExamenesFragment extends Fragment {
 
     }
 
-    private void postImagen(String filename){
-        initRequestCallback();
-        RequestService requestService = new RequestService(mResultCallback, getActivity());
-        JSONObject sendObj = null;
 
-        //converting image to base64 string
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-        try {
-            sendObj = new JSONObject("{" +
-                    "'empleado': 2, "+
-                    "'chequeo': 1, "+
-                    "foto: '"+imageString+"'"+
-                    "}");
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+    //Guarda la foto en la base de datos
+    public void guardarImagen(){
+        String rutaCargar = path;
+        try{
+            String imagenBase64 = toStringBase64(rutaCargar); //Se manda a transformar la imagen a un String codificado en base 64
+        }catch (Exception e){
+            String error = e.getMessage();
         }
-        // 5) PASAR LOS DATOS A LA FUNCIÓN
-        requestService.postDataRequest("POSTCALL", "http://historialmedico.pythonanywhere.com/api/fichaMedica", sendObj);
+
+
+
+        //GUARDA LA RUTA EN LA BD LOCAL
+        ExamenImagen examenImagen = new ExamenImagen(0, path);
+        examenImagen.save();
     }
 
-    private void initRequestCallback(){
-        mResultCallback = new IResult() {
-            @Override
-            public void notifySuccess(String requestType,JSONObject response) {
-                try {
-                    //Log.d("HERECONSULTA", String.valueOf(response));
-                    //Si ha realizado post en ConsultaMedica
-                    //PASO 6) FINAL
-                    String fechaConsulta = response.getString("fecha");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void notifyError(String requestType,VolleyError error) {
-                Log.d("HEREERROR", String.valueOf(error));
 
+    //Transforma (pasando la ruta) la imagen a un string codificado en base64
+    private String toStringBase64(String rutaArchivo) throws IOException {
 
-                Log.e("ERROR", String.valueOf(error));
-                Toast.makeText(getContext(),String.valueOf(error),Toast.LENGTH_SHORT).show();
-            }
+        File file = new File(rutaArchivo);
+        byte[] bytes = transformaArchivo(file);
+        String encodedString = Base64.encodeToString(bytes, Base64.DEFAULT);;
 
-            @Override
-            public void notifyMsjError(String requestType, String error) {
-                Log.d("HEREMSJERROR", String.valueOf(error));
-            }
-
-            @Override
-            public void notifyJSONError(String requestType, JSONException error) {
-            }
-        };
-
+        return encodedString;
     }
+
+    //Transforma un archivo a un arreglo de bytes
+    private static byte[] transformaArchivo(File file) throws IOException {
+        InputStream is = new FileInputStream(file);
+
+        long length = file.length();
+        if (length > Integer.MAX_VALUE) {
+            // File is too large
+        }
+        byte[] bytes = new byte[(int)length];
+
+        int offset = 0;
+        int numRead = 0;
+        while (offset < bytes.length
+                && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+            offset += numRead;
+        }
+
+        if (offset < bytes.length) {
+            throw new IOException("Could not completely read file "+file.getName());
+        }
+
+        is.close();
+        return bytes;
+    }
+
 
 }

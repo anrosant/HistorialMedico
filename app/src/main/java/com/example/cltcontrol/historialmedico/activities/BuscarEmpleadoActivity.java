@@ -12,42 +12,51 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.cltcontrol.historialmedico.adapter.AdapterItemEmpleado;
 import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Empleado;
-import com.example.cltcontrol.historialmedico.utils.BuscarTexto;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.quitaDiacriticos;
+
 public class BuscarEmpleadoActivity extends FragmentActivity {
     private static List<Empleado> empleadosList;
     private AdapterItemEmpleado adaptadorEmpleados;
-    private EditText buscar;
+    private EditText etBuscar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar_empleados);
 
-        buscar = findViewById(R.id.etBusquedaUsuario);
+        etBuscar = findViewById(R.id.etBusquedaUsuario);
         ImageView ivFlechaLimpiar = findViewById(R.id.ivFlechaLimpiar);
         RecyclerView recyclerEmpleados = findViewById(R.id.rvlistaempleados);
         recyclerEmpleados.setLayoutManager(new LinearLayoutManager(this));
+        TextView etNombreUsuario = findViewById(R.id.tv_usuario);
+
+
+        //Obtener el nombre del usuario que inició sesión
+        SessionManager sesion = new SessionManager(getApplicationContext());
+        String nombreUsuario = sesion.obtenerInfoUsuario().get("nombre_usuario");
+        etNombreUsuario.setText(nombreUsuario);
 
         readEmpleadosAll();
 
         ivFlechaLimpiar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buscar.setText("");
+                etBuscar.setText("");
             }
         });
 
-        buscar.addTextChangedListener(new TextWatcher() {
+        etBuscar.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {}
             @Override
@@ -57,7 +66,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
              */
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String newText = BuscarTexto.quitaDiacriticos(buscar.getText().toString().toLowerCase());
+                String newText = quitaDiacriticos(etBuscar.getText().toString().toLowerCase());
                 if(newText.length() != 0 && adaptadorEmpleados.validarBusqueda(newText)){
                     List<Empleado> newList = new ArrayList<>();
                     for(Empleado empleado:empleadosList){
@@ -105,6 +114,22 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
     }
 
     /*
+    * Cierra sesión desde el botón
+    * */
+    public void cerrarSesionBoton(View view){
+        cerrarSesion();
+    }
+
+    /*
+    * Cierra la sesión
+    * */
+    public void cerrarSesion(){
+        SessionManager sesion = new SessionManager(getApplicationContext());
+        sesion.cerrarSesion(getApplicationContext());
+        finish();
+    }
+
+    /*
      * Si presiona atrás puede salir de la sesión
      * */
     @Override
@@ -116,9 +141,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
         alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             //Funcion llamada cuando se pulsa el boton Si
             public void onClick(DialogInterface arg0, int arg1) {
-                SessionManager sesion = new SessionManager(getApplicationContext());
-                sesion.cerrarSesion(getApplicationContext());
-                BuscarEmpleadoActivity.super.onBackPressed();
+                cerrarSesion();
             }
         });
         //elegimos un positivo NO

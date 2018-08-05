@@ -56,7 +56,7 @@ public class RequestService {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     if(mResultCallback != null){
-                        mResultCallback.notifyMsjError(requestType,"No tiene conexión");
+                        mResultCallback.notifyMsjError(requestType,"No se puede iniciar sesión. Comprueba tu conexión de red");
                     }
                     if(dialog!=null)
                         dialog.dismiss();
@@ -66,7 +66,7 @@ public class RequestService {
 
         }catch(Exception e){
             if(mResultCallback != null) {
-                mResultCallback.notifyMsjError(requestType, "No tiene conexión");
+                mResultCallback.notifyMsjError(requestType, "Hubo un error de conexión");
             }
             if(dialog!=null)
                 dialog.dismiss();

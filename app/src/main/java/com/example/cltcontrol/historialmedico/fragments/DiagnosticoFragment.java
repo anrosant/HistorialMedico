@@ -37,7 +37,6 @@ import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.service.RequestService;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
-import com.example.cltcontrol.historialmedico.utils.BuscarTexto;
 import com.example.cltcontrol.historialmedico.utils.ListaEnfermedades;
 
 import org.json.JSONException;
@@ -54,6 +53,7 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNC
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_DIAGNOSTICO;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertirFecha;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.quitaDiacriticos;
 
 public class DiagnosticoFragment extends Fragment {
 
@@ -149,7 +149,7 @@ public class DiagnosticoFragment extends Fragment {
                 String newTest;
                 if(charSequence.length() != 0){
                     etBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_cancel_grey_24dp,0);
-                    newTest = BuscarTexto.quitaDiacriticos(etBuscarEnfermedades.getText().toString().toLowerCase());
+                    newTest = quitaDiacriticos(etBuscarEnfermedades.getText().toString().toLowerCase());
                     newList = new ArrayList<>();
                     for (Enfermedad enfermedad:enfermedadList){
                         String nombre = enfermedad.getNombre().toLowerCase();

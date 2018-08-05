@@ -24,7 +24,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.adapter.AdapterEnfermedades;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
@@ -33,9 +32,6 @@ import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.PermisoMedico;
-import com.example.cltcontrol.historialmedico.models.Usuario;
-import com.example.cltcontrol.historialmedico.utils.BuscarTexto;
-import com.example.cltcontrol.historialmedico.utils.CalculoDias;
 import com.example.cltcontrol.historialmedico.utils.ListaEnfermedades;
 
 import java.text.ParseException;
@@ -46,6 +42,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.calcNumDias;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.quitaDiacriticos;
 
 public class PermisosMedicosActivity extends FragmentActivity {
 
@@ -153,10 +152,10 @@ public class PermisosMedicosActivity extends FragmentActivity {
                 String newTest;
                 if(charSequence.length() != 0){
                     txt_buscar_enfermedades.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_cancel_grey_24dp,0);
-                    newTest = BuscarTexto.quitaDiacriticos(txt_buscar_enfermedades.getText().toString().toLowerCase());
+                    newTest = quitaDiacriticos(txt_buscar_enfermedades.getText().toString().toLowerCase());
                     newListEnfermedades = new ArrayList<>();
                     for (Enfermedad enfermedad:listEnfermedades){
-                        String nombre = BuscarTexto.quitaDiacriticos(enfermedad.getNombre().toLowerCase());
+                        String nombre = quitaDiacriticos(enfermedad.getNombre().toLowerCase());
                         String codigo = enfermedad.getCodigo().toLowerCase();
                         if(nombre.contains(newTest) || codigo.contains(newTest)){
                             newListEnfermedades.add(enfermedad);
@@ -310,7 +309,7 @@ public class PermisosMedicosActivity extends FragmentActivity {
                     e.printStackTrace();
                 }
                 fecha_desde.setText(simpleDateFormat.format(date));
-                calcNumDias();
+                calcularNumDias();
             }
         };
         DatePickerDialog dpDialog = new DatePickerDialog(this, listener, anio, mes, dia);
@@ -339,7 +338,7 @@ public class PermisosMedicosActivity extends FragmentActivity {
                     e.printStackTrace();
                 }
                 fecha_hasta.setText(simpleDateFormat.format(date));
-                long num = CalculoDias.calcNumDias(fecha_desde,fecha_hasta);
+                long num = calcNumDias(fecha_desde,fecha_hasta);
                 numero_dias.setText(Long.toString(num+1));
             }
         };
@@ -357,7 +356,7 @@ public class PermisosMedicosActivity extends FragmentActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void calcNumDias() {
+    private void calcularNumDias() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String string_fecha_ini = fecha_desde.getText().toString();
         String string_fecha_fin = fecha_hasta.getText().toString();
@@ -375,62 +374,13 @@ public class PermisosMedicosActivity extends FragmentActivity {
         }
     }
 
-/*
-    @Override
-    public void onBackPressed() {
-        if(cargo.equals("Doctor")) {
-            AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
-            if (precedencia.equals("crear")) {
-                //seleccionamos la cadena a mostrar
-                alertbox.setMessage("No se guardara la consulta. Desea salir?");
-                //elegimos un positivo SI
-                alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                    //Funcion llamada cuando se pulsa el boton Si
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        //Elimina la consulta vacía
-                        ConsultaMedica consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.parseLong(idConsultaMedica));
-                        //Elimina en cascada
-                        Diagnostico.deleteAll(Diagnostico.class, "consultamedica = ?", idConsultaMedica);
-                        SignosVitales.deleteAll(SignosVitales.class, "consultamedica = ?", idConsultaMedica);
-                        //Reset el autoincrement
-                        ConsultaMedica.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + NamingHelper.toSQLName(ConsultaMedica.class) + "'");
-                        consultaMedica.delete();
-                        ConsultaMedicaNuevoActivity.super.onBackPressed();
-                    }
-                });
-                //Si editó una consulta
-            } else {
-                //seleccionamos la cadena a mostrar
-                alertbox.setMessage("Los datos que no ha guardado se descartarán. ¿Desea salir?");
-                //elegimos un positivo SI
-                alertbox.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                    //Funcion llamada cuando se pulsa el boton Si
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        ConsultaMedicaNuevoActivity.super.onBackPressed();
-                    }
-                });
-            }
-            //elegimos un positivo NO
-            alertbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                //Funcion llamada cuando se pulsa el boton No
-                public void onClick(DialogInterface arg0, int arg1) {
-                    //Toast.makeText(getApplicationContext(),"Pulsaste NO",Toast.LENGTH_LONG).show();
-                }
-            });
-            //mostramos el alertbox
-            alertbox.show();
-        }
-        else {
-            ConsultaMedicaNuevoActivity.super.onBackPressed();
-        }
-    }
-*/
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onResume() {
         super.onResume();
         if(!fecha_desde.getText().toString().isEmpty() && !fecha_hasta.getText().toString().isEmpty()) {
-            long num = CalculoDias.calcNumDias(fecha_desde, fecha_hasta);
+            long num = calcNumDias(fecha_desde, fecha_hasta);
             numero_dias.setText(Long.toString(num + 1));
         }
     }

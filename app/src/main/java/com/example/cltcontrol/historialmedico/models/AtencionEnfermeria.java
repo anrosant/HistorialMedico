@@ -97,7 +97,10 @@ public class AtencionEnfermeria extends SugarRecord {
         return 2;
     }
 
-    public ArrayList<AtencionEnfermeria> getAtencionEnfermeriaUnsynced(){
+    public ArrayList<AtencionEnfermeria> getAtencionEnfermeriaCreadaUnsynced(){
+        return (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class, "status = ? and idserv = ?", String.valueOf(0),String.valueOf(0));
+    }
+    public ArrayList<AtencionEnfermeria> getAtencionEnfermeriaEditadaUnsynced(){
         return (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class, "status = ?", String.valueOf(0));
     }
 

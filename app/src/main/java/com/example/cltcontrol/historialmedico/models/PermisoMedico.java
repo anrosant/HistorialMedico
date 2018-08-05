@@ -134,9 +134,14 @@ public class PermisoMedico extends SugarRecord{
         this.obsevaciones_permiso = obsevaciones_permiso;
     }
 
-    public ArrayList<PermisoMedico> getPermisoMedicoUnsynced(){
+    public ArrayList<PermisoMedico> getPermisoMedicoCreadoUnsynced(){
+        return (ArrayList<PermisoMedico>) PermisoMedico.find(PermisoMedico.class, "status = ? and idserv = ?", String.valueOf(0) , String.valueOf(0));
+    }
+
+    public ArrayList<PermisoMedico> getPermisoMedicoEditadoUnsynced(){
         return (ArrayList<PermisoMedico>) PermisoMedico.find(PermisoMedico.class, "status = ?", String.valueOf(0));
     }
+
 
     public static JSONObject getJSONPermisoMedico(String id_empleado_servidor, String id_diagnostico, String id_consulta,Date fecha_inicio,
                                                   Date fecha_fin, String dias, String observaciones){

@@ -118,7 +118,11 @@ public class ConsultaMedica extends SugarRecord {
         return 2;
     }
 
-    public ArrayList<ConsultaMedica> getConsultaMedicaUnsynced(){
+    public ArrayList<ConsultaMedica> getConsultaMedicaCreadaUnsynced(){
+        return (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class, "status = ? and idserv = ?", String.valueOf(0), String.valueOf(0));
+    }
+
+    public ArrayList<ConsultaMedica> getConsultaMedicaEditadaUnsynced(){
         return (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class, "status = ?", String.valueOf(0));
     }
 

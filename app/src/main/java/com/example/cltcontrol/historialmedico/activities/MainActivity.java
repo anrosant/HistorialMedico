@@ -2,6 +2,7 @@ package com.example.cltcontrol.historialmedico.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
-
+        //Verifica si ya se encuentra con la sesión activa
         if(SessionManager.getLoggedStatus(getApplicationContext())) {
 
             SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
-
+                    
                 }
             }
 

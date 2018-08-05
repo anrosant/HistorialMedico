@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ListaEnfermedades {
 
-    public static List<Enfermedad> enfermedadList;
+    private static List<Enfermedad> enfermedadList;
 
     /*
     * Guarda las enfermedades que están en la base de datos, en una lista

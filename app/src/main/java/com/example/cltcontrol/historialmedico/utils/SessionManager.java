@@ -19,8 +19,6 @@ public class SessionManager {
     private Context context;
 
     private static final String LOGGED_IN_PREF = "logged_in_status";
-    public static final String PREFS_NAME = "PREFS";
-    private static int PRIVATE_MODE = 0;
     private static final String TOKEN = "token";
     private static final String SESION = "sesion";
     private static final String NOMBRE_USUARIO = "nombre_usuario";
@@ -30,6 +28,7 @@ public class SessionManager {
     @SuppressLint("CommitPrefEdits")
     public SessionManager(Context context) {
         this.context = context;
+        int PRIVATE_MODE = 0;
         sharedPrefer = context.getSharedPreferences(SESION, PRIVATE_MODE);
         editor = sharedPrefer.edit();
     }
@@ -40,7 +39,6 @@ public class SessionManager {
         editor.putString(CARGO, usuario.getEmpleado().getOcupacion());
         editor.putString(TOKEN, token);
         editor.apply();
-        //editor.commit();
         setLoggedIn(context,true);
 
 
@@ -63,7 +61,7 @@ public class SessionManager {
     /**
      * Cambia el status de login
      */
-    public static void setLoggedIn(Context context, boolean loggedIn) {
+    private static void setLoggedIn(Context context, boolean loggedIn) {
         SharedPreferences.Editor editor = getPreferences(context).edit();
         editor.putBoolean(LOGGED_IN_PREF, loggedIn);
         editor.apply();

@@ -1,7 +1,7 @@
 package com.example.cltcontrol.historialmedico.utils;
 
 import android.graphics.Matrix;
-import android.media.ExifInterface;
+import android.support.media.ExifInterface;
 
 /*
     Clase que captura la orientacion de la foto/imagen y

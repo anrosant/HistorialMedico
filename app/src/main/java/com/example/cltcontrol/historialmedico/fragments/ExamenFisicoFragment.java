@@ -57,8 +57,8 @@ public class ExamenFisicoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_examen_fisico, container, false);
 
         //referencia de variables de views
-        etExamenFisico = view.findViewById(R.id.et_examen_fisico);
-        Button btn_guardar_examen = view.findViewById(R.id.btn_guardar_examen);
+        etExamenFisico = view.findViewById(R.id.etExamenFisico);
+        Button btn_guardar_examen = view.findViewById(R.id.btnGuardarExamen);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         assert extras != null;

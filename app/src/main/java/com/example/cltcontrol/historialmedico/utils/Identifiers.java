@@ -13,14 +13,12 @@ public class Identifiers {
 
     public static final String URL_SIGNOS = "http://historialmedico.pythonanywhere.com/api/signosVitales/";
     public static final String URL_USUARIO = "http://historialmedico.pythonanywhere.com/api/usuario/";
-    public static final String URL_EMPLEADO = "http://historialmedico.pythonanywhere.com/api/empleado/";
     public static final String URL_CONSULTA_MEDICA = "http://historialmedico.pythonanywhere.com/api/consultaMedica/";
     public static final String URL_ATENCION_ENFERMERIA = "http://historialmedico.pythonanywhere.com/api/atencionEnfermeria/";
     public static final String URL_DIAGNOSTICO = "http://historialmedico.pythonanywhere.com/api/diagnostico/";
     public static final String URL_PERMISO_MEDICO = "http://historialmedico.pythonanywhere.com/api/permisoMedico/";
     public static final String URL_PATOLOGIAS_PERSONALES = "http://historialmedico.pythonanywhere.com/api/antecedentePatologicoPersonal/";
-    public static final String URL_PATOLOGIAS_FAMILIARES = "http://historialmedico.pythonanywhere.com/api/antecedentePatologicoFamiliar/";
-    public static final String URL_AUTH_JWT = "http://historialmedico.pythonanywhere.com/auth-jwt/";
+
     //1 means data is synced and 0 means data is not synced
     public static final int NAME_SYNCED_WITH_SERVER = 1;
     public static final int NAME_NOT_SYNCED_WITH_SERVER = 0;
@@ -61,7 +59,7 @@ public class Identifiers {
     public static long calcNumDias(TextView fechaDesdeText, TextView fechaHastaText) {
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat =
-                new SimpleDateFormat("dd/MM/yyyy");
+                new SimpleDateFormat("yyyy-dd-mm");
 
         long numDias=0;
 
@@ -78,8 +76,7 @@ public class Identifiers {
             }
             assert fechaFin != null;
             long diasMili = Math.abs(fechaFin.getTime() - fechaIni.getTime());
-            numDias = TimeUnit.DAYS.convert(diasMili
-                    , TimeUnit.MILLISECONDS);
+            numDias = TimeUnit.DAYS.convert(diasMili, TimeUnit.MILLISECONDS);
             //numero_dias.setText(Long.toString(numDias + 1));
         }
         return numDias;

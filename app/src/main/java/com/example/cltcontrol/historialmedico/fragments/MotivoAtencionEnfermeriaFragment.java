@@ -57,8 +57,8 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_motivo_atencion, container, false);
 
         //referencia de variables de views
-        etMotivoAtencion = view.findViewById(R.id.et_motivo_atencion);
-        btnGuardarMotivoAtencion = view.findViewById(R.id.btn_guardar_motivo_atencion);
+        etMotivoAtencion = view.findViewById(R.id.etMotivoAtencion);
+        btnGuardarMotivoAtencion = view.findViewById(R.id.btnGuardarMotivoAtencion);
 
         Bundle bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 

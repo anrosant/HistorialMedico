@@ -85,22 +85,6 @@ public class PatologiasPersonales extends SugarRecord {
         return (ArrayList<PatologiasPersonales>) PatologiasPersonales.find(PatologiasPersonales.class, "status = ?", String.valueOf(0));
     }
 
-    public static JSONObject getJSONPatologiasPersonales(String id_ficha, String id_consulta, String lugar, String detalle){
-        JSONObject sendObj = null;
-        try {
-            sendObj = new JSONObject("{" +
-                    "'ficha': '"+id_ficha+"', " +
-                    "'consulta_medica': '"+id_consulta+"', "+
-                    "'lugar': '"+lugar+"',"+
-                    "'detalle': '"+detalle+"'"+
-                    "}");
-            Log.d("ENDOBJ", String.valueOf(sendObj));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return sendObj;
-
-    }
     public static Map<String,String> getHashMapPatologiasPersonales(String id_ficha, String id_consulta, String lugar, String detalle){
         Map<String, String> params = new HashMap<>();
         params.put("ficha", id_ficha);

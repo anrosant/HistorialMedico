@@ -89,7 +89,7 @@ public class DiagnosticoFragment extends Fragment {
         Button btn_guardar = view.findViewById(R.id.btnGuardarPermiso);
         RadioGroup rg_tipo_enfermedad = view.findViewById(R.id.rgTipoEnfer);
         ListView lvDiagnostico = view.findViewById(R.id.lvDiagnostico);
-        ibMostrarOcultarContendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
+        ibMostrarOcultarContendido = view.findViewById(R.id.ibMostrarOcultarContendido);
         lyDiagnostico = view.findViewById(R.id.ly_diagnostico);
         TextView tvTitulo = view.findViewById(R.id.tvTitulo);
 
@@ -133,17 +133,14 @@ public class DiagnosticoFragment extends Fragment {
             public void afterTextChanged(Editable s) {
 
             }
-
             @Override
             public void beforeTextChanged(CharSequence charSequence, int star,
                                           int count, int after) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int star,
                                       int count, int after) {
-
                 String newTest;
                 if(charSequence.length() != 0){
                     etBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_cancel_grey_24dp,0);
@@ -170,7 +167,7 @@ public class DiagnosticoFragment extends Fragment {
 
                     @Override
                     public void onItemClick(View view, int position) {
-                        Toast.makeText(getContext(), "Se ha escogido " + adaptadorEnfermedades.getListaEnfermedades().get(position).getNombre(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), "Se ha escogido " + adaptadorEnfermedades.getListaEnfermedades().get(position).getNombre(), Toast.LENGTH_SHORT).show();
                         enfermedad = adaptadorEnfermedades.getListaEnfermedades().get(position);
                         etBuscarEnfermedades.setText(enfermedad.getNombre());
                     }
@@ -286,7 +283,6 @@ public class DiagnosticoFragment extends Fragment {
         diagnostico.setStatus(status);
         diagnostico.setConsulta_medica(consultaMedica);
         diagnostico.save();
-
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
         }else {

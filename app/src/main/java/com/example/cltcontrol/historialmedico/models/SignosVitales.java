@@ -159,27 +159,6 @@ public class SignosVitales extends SugarRecord {
         return (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class, "status = ?", String.valueOf(0));
     }
 
-    public static JSONObject getJSONSignosVitales(String id_empleado_servidor, String id_consulta_medica, String id_atencion,
-                                                   String presionSistolicaText, String presionDistolicaText,
-                                                   String pulsoText, String temperaturatext){
-        JSONObject sendObj = null;
-        try {
-            sendObj = new JSONObject("{" +
-                    "'consulta_medica': '"+id_consulta_medica+"', " +
-                    "'atencion_enfermeria': '"+id_atencion+"',"+
-                    "'empleado': '"+id_empleado_servidor+"', " +
-                    "'presion_sistolica': '"+presionSistolicaText+"', " +
-                    "'presion_distolica': '"+presionDistolicaText+"', " +
-                    "'pulso': '"+pulsoText+"', " +
-                    "'temperatura': '" +temperaturatext+"'"+
-                    "}");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return sendObj;
-
-    }
-
     public static Map<String, String> getHashMapSignosVitales(String id_empleado_servidor, String id_consulta_medica, String id_atencion,
                                                               String presionSistolicaText, String presionDistolicaText,
                                                               String pulsoText, String temperaturatext,Date fecha){

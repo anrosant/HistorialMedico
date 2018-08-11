@@ -88,8 +88,8 @@ public class SignosVitalesFragment extends Fragment {
         etPulso = view.findViewById(R.id.etPulso);
         ListView lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
         btnGuardar = view.findViewById(R.id.btnGuardarPermiso);
-        lySignosVitales = view.findViewById(R.id.ly_signos_vitales);
-        tvTitulo = view.findViewById(R.id.tv_titulo);
+        lySignosVitales = view.findViewById(R.id.lySignosVitales);
+        tvTitulo = view.findViewById(R.id.tvTitulo);
         //
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         //Recibe el id de consulta medica desde Historial de consulta medica

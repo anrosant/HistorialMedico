@@ -57,7 +57,7 @@ public class AdapterItemAtencionEnfermeria extends ArrayAdapter<AtencionEnfermer
         }
 
         TextView fechaAtencion = v.findViewById(R.id.tvFechaAtencion);
-        TextView motivoAtencion = v.findViewById(R.id.tvMotivo);
+        TextView motivoAtencion = v.findViewById(R.id.tvMotivoAtencion);
 
         AtencionEnfermeria atencion = atencionEnfermeriaList.get(position);
         @SuppressLint("SimpleDateFormat")

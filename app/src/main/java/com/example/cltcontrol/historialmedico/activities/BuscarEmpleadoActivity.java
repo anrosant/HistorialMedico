@@ -53,7 +53,7 @@ public class BuscarEmpleadoActivity extends AppCompatActivity{
 
         String nombreUsuario = sesion.obtenerInfoUsuario().get("nombre_usuario");
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar myToolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(myToolbar);
 
@@ -171,16 +171,9 @@ public class BuscarEmpleadoActivity extends AppCompatActivity{
     }
 
     /*
-    * Cierra sesión desde el botón
-    * */
-    public void cerrarSesionBoton(View view){
-        cerrarSesion();
-    }
-
-    /*
     * Cierra la sesión
     * */
-    public void cerrarSesion(){
+    private void cerrarSesion(){
         SessionManager sesion = new SessionManager(getApplicationContext());
         sesion.cerrarSesion(getApplicationContext());
         finish();

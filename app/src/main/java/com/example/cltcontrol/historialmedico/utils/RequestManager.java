@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley;
  */
 public class RequestManager {
 
+    @SuppressLint("StaticFieldLeak")
     private static RequestManager mInstance;
     private RequestQueue mRequestQueue;
     @SuppressLint("StaticFieldLeak")

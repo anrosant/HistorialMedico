@@ -12,17 +12,14 @@ public class Usuario extends SugarRecord {
     private int status;
     private String usuario;
     private Empleado empleado;
-    //private String contrasenia;
-    //pensar si se necesita tener atributo tipo de usuario (medico o enfermera)
 
     // CONSTRUCTORES DE CLASE
     public Usuario() {
         super();
     }
 
-    public Usuario(String usuario, Empleado empleado) {
+    public Usuario(String usuario) {
         this.usuario = usuario;
-        //this.contrasenia = contrasenia;
     }
 
     public Empleado getEmpleado() {

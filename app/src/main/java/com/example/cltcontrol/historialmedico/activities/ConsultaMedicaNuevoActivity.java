@@ -43,7 +43,7 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ICo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_consulta_medica);
 
-        tvGuardarConsulta = findViewById(R.id.tv_guardar_consulta);
+        tvGuardarConsulta = findViewById(R.id.tvGuardarConsulta);
 
         misFragmentos = new Fragment[11];
         misFragmentos[0] = new SignosVitalesFragment();

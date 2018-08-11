@@ -42,7 +42,7 @@
                         android:textColor="#FFFFFF" />
 
                     <ImageButton
-                        android:id="@+id/ib_mostrar_ocultar_contendido"
+                        android:id="@+id/ibMostrarOcultarContendido"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.7"

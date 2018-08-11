@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private String usuario;
     private String password;
 
-    IResult mResultCallback = null;
-    RequestService requestService;
+    private IResult mResultCallback = null;
+    private RequestService requestService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     * Inicializar las llamadas a Request
     * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
     * */
-    void initRequestCallback(){
+    private void initRequestCallback(){
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
-                    
+                    e.printStackTrace();
                 }
             }
 
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
      * Autentica si está correcto
      * Retorna una respuesta
      * */
-    public void validarCredenciales(String usuario, String contrasenia){
+    private void validarCredenciales(String usuario, String contrasenia){
         initRequestCallback();
         requestService = new RequestService(mResultCallback, MainActivity.this);
         JSONObject sendObj = null;
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
     /*
      * Función que guarda usuario localmente
      * */
-    public void guardarUsuario(String id_usuario, String id_empelado){
+    private void guardarUsuario(String id_usuario, String id_empelado){
         int idServ;
         Usuario nuevoUsuario = new Usuario();
         Empleado empleado = Empleado.find(Empleado.class, "idserv = ?", id_empelado).get(0);
@@ -405,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             obj = new JSONArray(response);
             for (int i = 0; i < obj.length(); i++) {
-                SignosVitales signosVitales = null;
+                SignosVitales signosVitales;
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
                 presion_sistolica = Integer.parseInt(fields.getString("presion_sistolica"));

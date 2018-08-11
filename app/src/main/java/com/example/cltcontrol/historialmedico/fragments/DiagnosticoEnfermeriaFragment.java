@@ -53,8 +53,8 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate y vinculaciones de las variables globales
         View view = inflater.inflate(R.layout.fragment_diagnotico_enfermeria, container, false);
-        etDiagnosticoEnfermeria = view.findViewById(R.id.et_diagnostico_enfermeria);
-        Button btn_guardar_diagnostico_enfermeria = view.findViewById(R.id.btn_guardar_diagnostico_enfermeria);
+        etDiagnosticoEnfermeria = view.findViewById(R.id.etDiagnosticoEnfermeria);
+        Button btn_guardar_diagnostico_enfermeria = view.findViewById(R.id.btnGuardarDiagnosticoEnfermeria);
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
         Bundle bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();

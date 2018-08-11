@@ -57,8 +57,8 @@ public class RevisionMedicaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_revision_medica, container, false);
 
         //referencia de variables de views
-        etRevisionMedica = view.findViewById(R.id.et_revision_medica);
-        Button btnGuardarRevisionMedica = view.findViewById(R.id.btn_guardar_revision_medica);
+        etRevisionMedica = view.findViewById(R.id.etRevisionMedica);
+        Button btnGuardarRevisionMedica = view.findViewById(R.id.btnGuardarRevisionMedica);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         if (extras != null) {

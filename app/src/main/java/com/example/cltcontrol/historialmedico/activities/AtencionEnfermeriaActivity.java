@@ -29,7 +29,7 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements ICom
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_atencion_enfermeria);
-        Button btnTerminar = findViewById(R.id.btn_ok);
+        Button btnTerminar = findViewById(R.id.btnTerminar);
 
         //Recibe el id de atencion desde el HistorialAtencionEnfermeria
         idAtencion = getIntent().getStringExtra("ID_ATENCION");

@@ -82,9 +82,9 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
         etTemperatura = view.findViewById(R.id.etTemperatura);
         Button btn_guardar = view.findViewById(R.id.btnGuardarPermiso);
         //ib_mostrar_ocultar_contendido =  view.findViewById(R.id.ib_mostrar_ocultar_contendido);
-        LinearLayout ly_signos_vitales = view.findViewById(R.id.ly_signos_vitales);
+        LinearLayout ly_signos_vitales = view.findViewById(R.id.lySignosVitales);
         ListView lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
-        TextView tvTitulo = view.findViewById(R.id.tv_titulo);
+        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity

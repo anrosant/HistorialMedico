@@ -57,8 +57,8 @@ public class PrescripcionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_prescripcion, container, false);
 
         //referencia de variables de views
-        et_prescripcion = view.findViewById(R.id.et_preescripcion);
-        Button btnGuardarPreescripcion = view.findViewById(R.id.btn_guardar_preescripcion);
+        et_prescripcion = view.findViewById(R.id.etPreescripcion);
+        Button btnGuardarPreescripcion = view.findViewById(R.id.btnGuardarPreescripcion);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         //Recibe el datos desde Historial de consulta medica

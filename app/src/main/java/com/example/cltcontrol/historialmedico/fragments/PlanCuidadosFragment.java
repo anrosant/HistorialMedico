@@ -57,8 +57,8 @@ public class PlanCuidadosFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_plan_cuidados, container, false);
 
         //referencia de variables de views
-        etPlanCuidados = view.findViewById(R.id.et_plan_cuidados);
-        Button btnGuardarPlanCuidados = view.findViewById(R.id.btn_guardar_plan_cuidados);
+        etPlanCuidados = view.findViewById(R.id.etPlanCuidados);
+        Button btnGuardarPlanCuidados = view.findViewById(R.id.btnGuardarPlanCuidados);
 
         Bundle bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 

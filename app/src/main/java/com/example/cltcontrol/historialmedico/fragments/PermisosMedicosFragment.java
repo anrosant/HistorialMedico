@@ -94,7 +94,7 @@ public class PermisosMedicosFragment extends Fragment {
         spEnfermedadesDiagnostico.setEnabled(false);
         etFechaDesde = view.findViewById(R.id.etFechaDesde);
         etFechaHasta = view.findViewById(R.id.etFechaHasta);
-        etNumeroDias = view.findViewById(R.id.txt_numero_dias);
+        etNumeroDias = view.findViewById(R.id.etNumeroDias);
         etObservaciones = view.findViewById(R.id.etObservaciones);
         btnGuardar = view.findViewById(R.id.btnGuardarPermiso);
         btnGuardar.setEnabled(false);
@@ -343,9 +343,7 @@ public class PermisosMedicosFragment extends Fragment {
                         String fechaConsulta = response.getString("fecha");
                         Date fecha = convertirFecha(fechaConsulta);
                         String pk = response.getString("pk");
-
                         guardarConsultaMedicaLocal(fecha,Integer.parseInt(pk),NAME_SYNCED_WITH_SERVER);
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

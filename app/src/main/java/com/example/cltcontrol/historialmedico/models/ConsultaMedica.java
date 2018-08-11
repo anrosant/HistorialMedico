@@ -122,28 +122,6 @@ public class ConsultaMedica extends SugarRecord {
         return (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class, "status = ?", String.valueOf(0));
     }
 
-    public static JSONObject getJSONConsultaMedica(String id_empleado_servidor, Date fecha_consulta,
-                                                   String motivo, String prob_actual, String revision_medica,
-                                                   String prescripcion, String examen_fisico){
-        JSONObject sendObj = null;
-        try {
-            sendObj = new JSONObject("{" +
-                    "'empleado': "+String.valueOf(id_empleado_servidor)+", " +
-                    "'fechaConsulta': '"+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta))+"', " +
-                    "'motivo': '"+motivo+"', "+
-                    "'prob_actual': '"+prob_actual+"',"+
-                    "'revision_medica': '"+revision_medica+"', "+
-                    "'prescripcion': '"+prescripcion+"',"+
-                    "'examen_fisico': '"+examen_fisico+"'"+
-                    "}");
-            Log.d("ENDOBJ", String.valueOf(sendObj));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return sendObj;
-
-    }
-
     public static Map<String, String> getHashMapConsultaMedica(String id_empleado_servidor, Date fecha_consulta,
                                                                String motivo, String prob_actual, String revision_medica,
                                                                String prescripcion, String examen_fisico){

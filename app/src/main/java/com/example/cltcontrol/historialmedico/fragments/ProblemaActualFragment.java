@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,8 +56,8 @@ public class ProblemaActualFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_problema_actual, container, false);
 
         //referencia de variables de views
-        etProblemaActual = view.findViewById(R.id.et_problema_actual);
-        Button btnGuardarProblemaActual = view.findViewById(R.id.btn_guardar_problema_actual);
+        etProblemaActual = view.findViewById(R.id.etProblemaActual);
+        Button btnGuardarProblemaActual = view.findViewById(R.id.btnGuardarProblemaActual);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         if (extras != null) {

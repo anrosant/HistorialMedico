@@ -163,13 +163,6 @@
 
                             </LinearLayout>
 
-                            <Button
-                                android:id="@+id/btnGuardarDiagnosticoParticular"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Guardar"/>
-
                         </LinearLayout>
 
                     </LinearLayout>
@@ -192,7 +185,7 @@
                         android:textColor="#FFFFFF" />
 
                     <LinearLayout
-                        android:id="@+id/ly_dias_permiso"
+                        android:id="@+id/lyDiasPermiso"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/my_style_content_white"

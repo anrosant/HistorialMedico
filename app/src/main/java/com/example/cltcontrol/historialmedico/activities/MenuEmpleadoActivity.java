@@ -3,7 +3,6 @@ package com.example.cltcontrol.historialmedico.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -11,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,7 +18,6 @@ import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import java.text.DateFormat;
-import java.util.Objects;
 
 public class MenuEmpleadoActivity extends AppCompatActivity {
 
@@ -35,7 +32,7 @@ public class MenuEmpleadoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_empleado);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar myToolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(myToolbar);
 
@@ -147,7 +144,7 @@ public class MenuEmpleadoActivity extends AppCompatActivity {
     /*
      * Cierra la sesión
      * */
-    public void cerrarSesion(){
+    private void cerrarSesion(){
         SessionManager sesion = new SessionManager(getApplicationContext());
         sesion.cerrarSesion(getApplicationContext());
         Intent home = new Intent(this, MainActivity.class);

@@ -24,14 +24,6 @@ public class PermisoMedico extends SugarRecord{
 
     public PermisoMedico(){}
 
-    public PermisoMedico(Diagnostico diagnostico, Date fecha_inicio, Date fecha_fin, int dias_permiso, String obsevaciones_permiso, ConsultaMedica consulta_medica) {
-        this.consulta_medica = consulta_medica;
-        this.fecha_inicio = fecha_inicio;
-        this.fecha_fin = fecha_fin;
-        this.dias_permiso = dias_permiso;
-        this.obsevaciones_permiso = obsevaciones_permiso;
-    }
-
     public PermisoMedico(Date fecha_inicio, Date fecha_fin, int dias_permiso, String obsevaciones_permiso, String doctor) {
         this.consulta_medica = consulta_medica;
         this.fecha_inicio = fecha_inicio;
@@ -82,6 +74,7 @@ public class PermisoMedico extends SugarRecord{
     public void setId_serv(int id_serv) {
         this.id_serv = id_serv;
     }
+
     public ConsultaMedica getConsulta_medica() {
         return consulta_medica;
     }
@@ -126,28 +119,6 @@ public class PermisoMedico extends SugarRecord{
         return (ArrayList<PermisoMedico>) PermisoMedico.find(PermisoMedico.class, "status = ?", String.valueOf(0));
     }
 
-
-    public static JSONObject getJSONPermisoMedico(String id_empleado_servidor, String id_diagnostico, String id_consulta,Date fecha_inicio,
-                                                  Date fecha_fin, String dias, String observaciones){
-        JSONObject sendObj = null;
-        try {
-            sendObj = new JSONObject("{" +
-                    "'diagnostico': "+id_diagnostico+", " +
-                    "'empleado': '"+id_empleado_servidor+"', " +
-                    "'consulta_medica': '"+id_consulta+"', "+
-                    "'fecha_inicio': '"+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_inicio))+"',"+
-                    "'fecha_fin': '"+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_fin))+"', "+
-                    "'dias': '"+dias+"',"+
-                    "'observaciones': '"+observaciones+"'"+
-                    "}");
-            Log.d("ENDOBJ", String.valueOf(sendObj));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return sendObj;
-
-    }
-
     public static Map<String, String> getHashMapPermisoMedico(String id_empleado_servidor, String id_consulta,Date fecha_inicio,
                                                               Date fecha_fin, String dias, String observaciones, String doctor){
         Map<String, String> params = new HashMap<>();
@@ -165,6 +136,13 @@ public class PermisoMedico extends SugarRecord{
     public int validarPermisoMedico(String enfermedad, String fecha_inicio, String fecha_fin, String numero_dias, String observaciones){
         if (enfermedad.equals("") || fecha_inicio.equals("") || fecha_fin.equals("") ||
                 numero_dias.equals("") || observaciones.equals(""))
+            return 0;
+        return 1;
+    }
+
+    public int validarPermisoMedicoParticular(String enfermedad, String fecha_inicio, String fecha_fin, String numero_dias, String observaciones, String doctor){
+        if (enfermedad.equals("") || fecha_inicio.equals("") || fecha_fin.equals("") ||
+                numero_dias.equals("") || observaciones.equals("") || doctor.equals(""))
             return 0;
         return 1;
     }

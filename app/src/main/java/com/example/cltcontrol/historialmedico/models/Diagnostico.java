@@ -9,12 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Diagnostico extends SugarRecord{
-    private int id_serv;
+    private int id_serv, status;
     private ConsultaMedica consulta_medica;
     private Enfermedad enfermedad;
     private PermisoMedico permiso_medico;
     private String tipo_enfermedad;
-    private int status;
 
     public Diagnostico() {
     }
@@ -77,7 +76,6 @@ public class Diagnostico extends SugarRecord{
         return (ArrayList<Diagnostico>) Diagnostico.find(Diagnostico.class, "status = ?",
                 String.valueOf(0));
     }
-
 
     public static Map<String, String> getHashMapDiagnostico(String idConsulta, String idPermiso,
                                                             String tipoEnfermedad, String idEnfermedad){

@@ -61,7 +61,7 @@ public class Identifiers {
     public static long calcNumDias(TextView fechaDesdeText, TextView fechaHastaText) {
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat =
-                new SimpleDateFormat("dd/MM/yyyy");
+                new SimpleDateFormat("yyyy-dd-mm");
 
         long numDias=0;
 
@@ -78,8 +78,7 @@ public class Identifiers {
             }
             assert fechaFin != null;
             long diasMili = Math.abs(fechaFin.getTime() - fechaIni.getTime());
-            numDias = TimeUnit.DAYS.convert(diasMili
-                    , TimeUnit.MILLISECONDS);
+            numDias = TimeUnit.DAYS.convert(diasMili, TimeUnit.MILLISECONDS);
             //numero_dias.setText(Long.toString(numDias + 1));
         }
         return numDias;

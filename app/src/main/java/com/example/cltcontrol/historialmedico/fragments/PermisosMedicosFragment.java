@@ -341,9 +341,7 @@ public class PermisosMedicosFragment extends Fragment {
                         String fechaConsulta = response.getString("fecha");
                         Date fecha = convertirFecha(fechaConsulta);
                         String pk = response.getString("pk");
-
                         guardarConsultaMedicaLocal(fecha,Integer.parseInt(pk),NAME_SYNCED_WITH_SERVER);
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -400,7 +398,7 @@ public class PermisosMedicosFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Date date = new Date();
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     date = simpleDateFormat.parse("" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                 } catch (ParseException e) {
@@ -421,7 +419,7 @@ public class PermisosMedicosFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void calcNumDias() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String string_fecha_ini = etFechaDesde.getText().toString();
         String string_fecha_fin = etFechaHasta.getText().toString();
         if (!string_fecha_ini.equals("") && !string_fecha_fin.equals("")) {

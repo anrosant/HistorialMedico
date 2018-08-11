@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:weightSum="2"
     android:gravity="center_horizontal">
@@ -14,36 +15,21 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:background="@color/colorPrimary" >
-
-        <RelativeLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="10dp">
-            <TextView
-                android:id="@+id/tv_usuario"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textColor="@color/colorWhite"
-                android:textSize="25sp"
-                android:layout_marginStart="4dp"
-                android:text="@string/usuario"/>
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.Toolbar>
 
-            <ImageButton
-                android:id="@+id/iv_cerrar_sesion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:src="@drawable/icons8_exit_32"
-                android:layout_alignParentRight="true"
-                android:background="@color/colorPrimary"
-                android:onClick="cerrarSesionBoton"
-                tools:ignore="RtlHardcoded" />
-        </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="#FFFFFF">
+
+
 
             <ImageView
                 android:id="@+id/ivFlechaLimpiar"
@@ -57,11 +43,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textCursorDrawable="@drawable/text_color"
-                android:hint="Buscar empleados por apellidos"
+                android:hint="@string/buscar_por_apellido"
                 android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXYZáéíóúÁÉÍÓÚ"
                 android:inputType="text"
                 android:layout_marginRight="15dp"
                 android:textSize="18sp"
+                android:textColor="@color/colorDark"
                 android:singleLine="true" />
 
         </LinearLayout>

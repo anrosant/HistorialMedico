@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item
+    android:id="@+id/item_acerca"
+    android:enabled="true"
+    android:icon="@drawable/icons8_about_50"
+    android:title="Acerca de"
+    app:showAsAction="always"
+    android:visible="true" />
+
+<item android:id="@+id/item_cerrar_sesion"
+    android:icon="@drawable/icons8_exit_32"
+    app:showAsAction="always"
+    android:title="Cerrar sesión"
+    android:actionLayout="@layout/icono_derecha"/>
+</menu>

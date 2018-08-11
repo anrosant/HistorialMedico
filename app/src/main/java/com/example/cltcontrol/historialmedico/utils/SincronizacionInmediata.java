@@ -109,10 +109,10 @@ public class SincronizacionInmediata extends BroadcastReceiver {
                 //Si no existen consultas sin sincronizar
                 if(consultaMedicasUnsynced.size()==0){
                     //Si no existen diagnósticos sin sincronizar
-                    if(diagnosticosUnsynced.size()==0)
-                        recorrerPermisos("no","no");
+                    if(permisoMedicoUnsynced.size()==0)
+                        recorrerDiagnostico("no","no");
                     else
-                        recorrerDiagnostico("no");
+                        recorrerPermisos("no");
 
                     recorrerPatologias("no");
                 }
@@ -193,10 +193,14 @@ public class SincronizacionInmediata extends BroadcastReceiver {
      * o un número tipo string,
      * Si es "no", quiere decir que la consulta ya existe en el servidor, y no fue recorrida,
      * Si es un número quiere decir que primero recorrí la consulta, hice POST y obtuve el id del servidor
+     * @param idPermiso id de el permiso al que pertenece el diagnóstico, puede ser " ", "no"
+     * o un número tipo string,
+     * Si es "no", quiere decir que el permiso ya existe en el servidor, y no fue recorrida,
+     * Si es un número quiere decir que primero recorrí el permiso, hice POST y obtuve el id del servidor
      * @see enviarDiagnosticoAlServidor
      * */
 
-    public void recorrerDiagnostico(String id_consulta){
+    public void recorrerDiagnostico(String idConsulta, String idPermiso){
         for(Diagnostico diagnosticos : diagnosticosUnsynced){
             String idEnfermedad="";
             if(diagnosticos.getEnfermedad()!=null && diagnosticos.getEnfermedad().getId_serv()!=0){
@@ -204,16 +208,25 @@ public class SincronizacionInmediata extends BroadcastReceiver {
             }
 
             //si la consulta ya existe en el servidor
-            if(id_consulta.equals("no")){
-                id_consulta = String.valueOf(diagnosticos.getConsulta_medica().getId_serv());
+            if(idConsulta.equals("no") && diagnosticos.getConsulta_medica()!=null){
+                idConsulta = String.valueOf(diagnosticos.getConsulta_medica().getId_serv());
+            }else{
+                idConsulta="";
+            }
+
+            //si el permiso ya existe en el servidor obtiene el id del servidor
+            if(idPermiso.equals("no") && diagnosticos.getPermiso_medico()!=null){
+                idPermiso = String.valueOf(diagnosticos.getPermiso_medico().getId_serv());
+            }else{
+                idPermiso = "";
             }
 
             if(diagnosticos.getId_serv()==0){
-                enviarDiagnosticoAlServidor(diagnosticos, id_consulta, idEnfermedad,
-                        diagnosticos.getTipoEnfermedad(), "POST");
+                enviarDiagnosticoAlServidor(diagnosticos, idConsulta, idEnfermedad, idPermiso,
+                        diagnosticos.getTipo_enfermedad(), "POST");
             }else{
-                enviarDiagnosticoAlServidor(diagnosticos, id_consulta, idEnfermedad,
-                        diagnosticos.getTipoEnfermedad(), "PUT");
+                enviarDiagnosticoAlServidor(diagnosticos, idConsulta, idEnfermedad, idPermiso,
+                        diagnosticos.getTipo_enfermedad(), "PUT");
             }
 
 
@@ -256,24 +269,23 @@ public class SincronizacionInmediata extends BroadcastReceiver {
      * @see enviarPermisoMedicoAlservidor
      * */
 
-    public void recorrerPermisos(String idConsulta, String idDiagnostico){
+    public void recorrerPermisos(String idConsulta){
         for(PermisoMedico permisosMedico : permisoMedicoUnsynced){
             //si la consulta ya existe en el servidor obtiene el id del servidor
             if(idConsulta.equals("no")){
                 idConsulta = String.valueOf(permisosMedico.getConsulta_medica().getId_serv());
+            }else{
+                idConsulta = "";
             }
-            //si el diagnóstico ya existe en el servidor obtiene el id del servidor
-            if(idDiagnostico.equals("no")){
-                idConsulta = String.valueOf(permisosMedico.getDiagnostico().getId_serv());
-            }
+
             if(permisosMedico.getId_serv()==0){
                 enviarPermisoMedicoAlservidor(permisosMedico, permisosMedico.getEmpleado().getId_serv(),
-                        idDiagnostico, idConsulta, permisosMedico.getFecha_inicio(),
+                        idConsulta, permisosMedico.getFecha_inicio(),
                         permisosMedico.getFecha_fin(), permisosMedico.getDias_permiso(),
                         permisosMedico.getObsevaciones_permiso(), permisosMedico.getDoctor(), "POST");
             }else{
                 enviarPermisoMedicoAlservidor(permisosMedico, permisosMedico.getEmpleado().getId_serv(),
-                        idDiagnostico, idConsulta, permisosMedico.getFecha_inicio(),
+                        idConsulta, permisosMedico.getFecha_inicio(),
                         permisosMedico.getFecha_fin(), permisosMedico.getDias_permiso(),
                         permisosMedico.getObsevaciones_permiso(), permisosMedico.getDoctor(), "PUT");
             }
@@ -297,26 +309,28 @@ public class SincronizacionInmediata extends BroadcastReceiver {
 
     public void recorrerSignos(String idConsulta, String idAtencion){
         for(SignosVitales signos : signosVitalesUnsynced){
-            String id_empleado="";
+            String idEmpleado="";
             if(signos.getEmpleado()!=null && signos.getEmpleado().getId_serv()!=0){
-                id_empleado = String.valueOf(signos.getEmpleado().getId_serv());
+                idEmpleado = String.valueOf(signos.getEmpleado().getId_serv());
             }
-            if(idConsulta.equals("no")){
+            if(idConsulta.equals("no") && signos.getConsultaMedica()!=null){
                 idConsulta = String.valueOf(signos.getConsultaMedica().getId_serv());
+                idAtencion="";
             }
-            if(idAtencion.equals("no")){
+            else if(idAtencion.equals("no") && signos.getAtencion_enfermeria()!=null){
                 idAtencion = String.valueOf(signos.getAtencion_enfermeria().getId_serv());
+                idConsulta = "";
             }
             //Si desea crear un signo el id del servidor es 0
             if(signos.getId_serv()==0){
-                enviarSignosVitalesAlServidor(signos, id_empleado, String.valueOf(signos.getPresion_distolica()),
+                enviarSignosVitalesAlServidor(signos, idEmpleado, String.valueOf(signos.getPresion_distolica()),
                         String.valueOf(signos.getPresion_sistolica()), String.valueOf(signos.getPulso()),
                         String.valueOf(signos.getTemperatura()), idAtencion,
                         idConsulta, signos.getFecha(), "POST");
             }
             //Si desea editar un signo ya tiene un id del servidor
             else{
-                enviarSignosVitalesAlServidor(signos, id_empleado, String.valueOf(signos.getPresion_distolica()),
+                enviarSignosVitalesAlServidor(signos, idEmpleado, String.valueOf(signos.getPresion_distolica()),
                         String.valueOf(signos.getPresion_sistolica()), String.valueOf(signos.getPulso()),
                         String.valueOf(signos.getTemperatura()), idAtencion,
                         idConsulta, signos.getFecha(), "PUT");
@@ -330,8 +344,8 @@ public class SincronizacionInmediata extends BroadcastReceiver {
     /*
      * Método que realiza POST o PUT de las patologías personales al servidor
      * @param patPers la patología personal que recorro de tipo PatologiaPersonal
-     * @param id_ficha id de la ficha actual del empleado de tipo entero
-     * @param id_consulta id de la consulta a la que pertenece la patología personal de tipo entero
+     * @param idFicha id de la ficha actual del empleado de tipo entero
+     * @param idConsulta id de la consulta a la que pertenece la patología personal de tipo entero
      * @param lugar lugar en que tiene la patología de tipo String
      * @param detalle detalle de la patología de tipo String
      * Con esos datos realiza el hashmap para enviarlos en formato JSON al servidor
@@ -340,33 +354,34 @@ public class SincronizacionInmediata extends BroadcastReceiver {
      * @see initRequestCallback la respuesta del servidor la vemos en esta función
      * */
 
-    private void enviarPatologiaPersonalAlServidor(PatologiasPersonales patPers, int id_ficha, int id_consulta,
+    private void enviarPatologiaPersonalAlServidor(PatologiasPersonales patPers, int idFicha, int idConsulta,
                                                    String lugar, String detalle) {
         initRequestCallback(TAGPATOLOGIASPERS, null, null, null,
                 patPers, null, null);
-        String id_ficha_servidor="";
-        String id_consulta_medica = "";
+        String idFichaServidor="";
+        String idConsultaMedica = "";
 
-        if(id_consulta!=0){
-            id_consulta_medica = String.valueOf(id_consulta);
+        if(idConsulta!=0){
+            idConsultaMedica = String.valueOf(idConsulta);
         }
-        if(id_ficha!=0){
-            id_ficha_servidor = String.valueOf(id_ficha);
+        if(idFicha!=0){
+            idFichaServidor = String.valueOf(idFicha);
         }
 
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        Map<String, String> sendObj = PatologiasPersonales.getHashMapPatologiasPersonales(id_ficha_servidor,
-                id_consulta_medica,lugar,detalle);
+        Map<String, String> sendObj = PatologiasPersonales.getHashMapPatologiasPersonales(idFichaServidor,
+                idConsultaMedica,lugar,detalle);
         requestService.postDataRequest("POSTCALL", URL_PATOLOGIAS_PERSONALES, sendObj, token);
     }
 
     /*
      * Método que realiza POST o PUT de los diagnósticos no sincronizados al servidor
      * @param diagnóstico el diagnóstico que recorro de tipo Diagnóstico
-     * @param id_consulta id de la consulta a la que pertenece el diagnóstico de tipo string
-     * @param id_enfermdad id de la enfermedad detectada en el diagnóstico de tipo string
-     * @param tipo_enfermedad tipo de la enfermedad de tipo String
+     * @param idConsulta id de la consulta a la que pertenece el diagnóstico de tipo string
+     * @param idEnfermdad id de la enfermedad detectada en el diagnóstico de tipo string
+     * @param idPermiso id del permiso al que pertenece el diagnóstico de tipo string
+     * @param tipoEnfermedad tipo de la enfermedad de tipo String
      * @param metodo puede ser PUT o POST
      * Con esos datos realiza el hashmap para enviarlos en formato JSON al servidor
      * Inicializa el request con la función initRequestCallback y
@@ -374,16 +389,16 @@ public class SincronizacionInmediata extends BroadcastReceiver {
      * @see initRequestCallback la respuesta del servidor la vemos en esta función
      * */
 
-    public void enviarDiagnosticoAlServidor(Diagnostico diagnostico, String id_consulta,
-                                            String id_enfermedad, String tipo_enfermedad,
+    public void enviarDiagnosticoAlServidor(Diagnostico diagnostico, String idConsulta,
+                                            String idEnfermedad, String idPermiso, String tipoEnfermedad,
                                             String metodo){
         initRequestCallback(TAGDIAGNOSTICO, null, null, diagnostico,
                 null, null, null);
 
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        Map<String, String> sendObj = Diagnostico.getHashMapDiagnostico(id_consulta,
-                tipo_enfermedad, id_enfermedad);
+        Map<String, String> sendObj = Diagnostico.getHashMapDiagnostico(idConsulta, idPermiso,
+                tipoEnfermedad, idEnfermedad);
 
         if(metodo.equalsIgnoreCase("POST"))
             requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj, token);
@@ -523,7 +538,6 @@ public class SincronizacionInmediata extends BroadcastReceiver {
      * Método que realiza POST o PUT de los permisos médicos no sincronizados al servidor
      * @param permisoMed el permiso médico que recorro de tipo PermisoMedico
      * @param idEmpleado el id del empleado al que pertenece el permiso médico de tipo entero
-     * @param idDiagnostico del diagnóstico dado previo al permiso de tipo String
      * @param idConsulta id de la consulta a la que pertenece el permiso médico de tipo string
      * @param fechaInicio fecha desde que inicia el permiso del paciente de tipo Date
      * @param fechaFin fecha en que termina el permiso del paciente de tipo Date
@@ -537,7 +551,7 @@ public class SincronizacionInmediata extends BroadcastReceiver {
      * @see initRequestCallback la respuesta del servidor la vemos en esta función
      * */
     private void enviarPermisoMedicoAlservidor(PermisoMedico permisoMed, int idEmpleado,
-                                               String idDiagnostico, String idConsulta, Date fechaInicio,
+                                               String idConsulta, Date fechaInicio,
                                                Date fechaFin, int dias, String observaciones,
                                                String nombreDoctor, String metodo) {
         initRequestCallback(TAGPERMISO,null, null, null,
@@ -548,7 +562,11 @@ public class SincronizacionInmediata extends BroadcastReceiver {
             id_empleado_servidor = String.valueOf(idEmpleado);
         RequestService requestService = new RequestService(mResultCallback, context);
 
-        Map<String, String> sendObj = PermisoMedico.getHashMapPermisoMedico(id_empleado_servidor, idDiagnostico,
+        if(nombreDoctor==null){
+            nombreDoctor = "";
+        }
+
+        Map<String, String> sendObj = PermisoMedico.getHashMapPermisoMedico(id_empleado_servidor,
                 idConsulta, fechaInicio, fechaFin, String.valueOf(dias), observaciones, nombreDoctor);
         if(metodo.equalsIgnoreCase("POST")) {
             requestService.postDataRequest("POSTCALL", URL_PERMISO_MEDICO, sendObj, token);
@@ -603,18 +621,16 @@ public class SincronizacionInmediata extends BroadcastReceiver {
                                 recorrerAtenciones();
                             }
                             recorrerPatologias(pk);
-                            if(diagnosticosUnsynced.size()==0){
-                                recorrerPermisos(pk, "");
+                            if(permisoMedicoUnsynced.size()==0){
+                                recorrerDiagnostico(pk, "no");
                             }else{
-                                recorrerDiagnostico(pk);
+                                recorrerPermisos(pk);
                             }
 
                         }else if(TAG.equalsIgnoreCase(TAGDIAGNOSTICO)){
                             diagnosticoI.setId_serv(Integer.parseInt(pk));
                             diagnosticoI.setStatus(NAME_SYNCED_WITH_SERVER);
                             diagnosticoI.save();
-
-                            recorrerPermisos(String.valueOf(diagnosticoI.getConsulta_medica().getId()), pk);
 
                         }else if(TAG.equalsIgnoreCase(TAGPATOLOGIASPERS)){
                             patologias.setId_serv(Integer.parseInt(pk));
@@ -624,6 +640,12 @@ public class SincronizacionInmediata extends BroadcastReceiver {
                             permiso.setId_serv(Integer.parseInt(pk));
                             permiso.setStatus(NAME_SYNCED_WITH_SERVER);
                             permiso.save();
+                            String idConsulta = "";
+                            if(permiso.getConsulta_medica()!=null){
+                                idConsulta=String.valueOf(permiso.getConsulta_medica().getId_serv());
+                            }
+                            recorrerDiagnostico(idConsulta, pk);
+
                         }else if(TAG.equalsIgnoreCase(TAGSIGNOS)){
                             signosV.setId_serv(Integer.parseInt(pk));
                             signosV.setStatus(NAME_SYNCED_WITH_SERVER);

@@ -4,6 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,10 +17,12 @@ import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import java.text.DateFormat;
+import java.util.Objects;
 
-public class MenuEmpleadoActivity extends FragmentActivity {
+public class MenuEmpleadoActivity extends AppCompatActivity {
 
     private TextView tvDatosPersonales;
     private LinearLayout lyDatosPersonales;
@@ -27,6 +34,10 @@ public class MenuEmpleadoActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_empleado);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setSupportActionBar(myToolbar);
 
         //Datos del empleado
         lyDatosPersonales = findViewById(R.id.lyDatosPersonales);
@@ -88,6 +99,62 @@ public class MenuEmpleadoActivity extends FragmentActivity {
         });
 
     }
+
+    /*
+    * Crea una instancia del menú
+    * */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+
+        inflater.inflate(R.menu.menu_usuario, menu);
+
+        return true;
+
+    }
+
+    /*
+    * Menú de opciones
+    * Si selecciona el primer item va a la actividad Acerca sino cierra sesión
+    * */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.item_acerca:
+
+                startActivity(new Intent(this, AcercaActivity.class));
+
+                return true;
+
+            case R.id.item_cerrar_sesion:
+
+                cerrarSesion();
+
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+
+        }
+
+
+
+    }
+
+    /*
+     * Cierra la sesión
+     * */
+    public void cerrarSesion(){
+        SessionManager sesion = new SessionManager(getApplicationContext());
+        sesion.cerrarSesion(getApplicationContext());
+        Intent home = new Intent(this, MainActivity.class);
+        startActivity(home);
+        finish();
+    }
+
 
     /*
      * Lleva a la ventana de HistorialConsultaMedica y envia el id del empleado

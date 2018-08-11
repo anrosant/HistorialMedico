@@ -2,7 +2,6 @@ package com.example.cltcontrol.historialmedico.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +22,6 @@ import com.example.cltcontrol.historialmedico.models.PatologiasPersonales;
 import com.example.cltcontrol.historialmedico.models.PermisoMedico;
 import com.example.cltcontrol.historialmedico.models.SignosVitales;
 import com.example.cltcontrol.historialmedico.service.RequestService;
-import com.example.cltcontrol.historialmedico.utils.EmpleadoController;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Usuario;
@@ -44,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText etUsuario;
     private EditText etContrasenia;
-    private EmpleadoController miController;
 
     private String usuario;
     private String password;
@@ -55,36 +52,46 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
         etUsuario = findViewById(R.id.etUsuario);
+
         etContrasenia = findViewById(R.id.etContrasenia);
+
         Button btnIngresoSistema = findViewById(R.id.btnIngresar);
+
         Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
+
         //Verifica si ya se encuentra con la sesión activa
         if(SessionManager.getLoggedStatus(getApplicationContext())) {
 
             SessionManager sessionManager = new SessionManager(getApplicationContext());
+
             Toast.makeText(getApplicationContext(),"usuario" + sessionManager.obtenerInfoUsuario().get("nombre_usuario"),Toast.LENGTH_SHORT).show();
+
             siguienteActivity();
         }
+
         btnIngresoSistema.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 usuario = etUsuario.getText().toString();
                 password = etContrasenia.getText().toString();
 
-                if(!usuario.equals("") && !password.equals("")){
-                    iniciarSesion(usuario, password);
-                }else{
+                if (!usuario.equals("") && !password.equals("")) {
+                    validarCredenciales(usuario, password);
+                } else {
                     Toast.makeText(getApplicationContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         Button btnIngresoGaleria = findViewById(R.id.pruebaImagen);
+
         btnIngresoGaleria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
      * Autentica si está correcto
      * Retorna una respuesta
      * */
-    public void iniciarSesion(String usuario, String contrasenia){
+    public void validarCredenciales(String usuario, String contrasenia){
         initRequestCallback();
         requestService = new RequestService(mResultCallback, MainActivity.this);
         JSONObject sendObj = null;
@@ -470,7 +477,7 @@ public class MainActivity extends AppCompatActivity {
      * Función que guarda Diagnóstico localmente
      * */
     private void guardarDiagnostico(String response) {
-        String tipoEnfermedad;
+        String tipoEnfermedad, permisoIdServidor;
         JSONArray obj;
         try {
             obj = new JSONArray(response);
@@ -478,7 +485,9 @@ public class MainActivity extends AppCompatActivity {
                 Diagnostico diagnostico = new Diagnostico();
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
-                tipoEnfermedad = fields.getString("tipoEnfermedad");
+                tipoEnfermedad = fields.getString("tipo_enfermedad");
+                permisoIdServidor = fields.getString("permiso_medico");
+                List<PermisoMedico>permisoMedicosList = PermisoMedico.find(PermisoMedico.class, "idserv = ?", permisoIdServidor);
                 List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?",fields.getString("consulta_medica"));
                 List<Enfermedad> enfermedadList = Enfermedad.find(Enfermedad.class, "idserv = ?",fields.getString("enfermedad"));
                 if(consultaMedicaList.size()!=0){
@@ -488,7 +497,10 @@ public class MainActivity extends AppCompatActivity {
                 if(enfermedadList.size()!=0){
                     diagnostico.setEnfermedad(enfermedadList.get(0));
                 }
-                diagnostico.setTipoEnfermedad(tipoEnfermedad);
+                if(permisoMedicosList.size()!=0){
+                    diagnostico.setPermiso_medico(permisoMedicosList.get(0));
+                }
+                diagnostico.setTipo_enfermedad(tipoEnfermedad);
                 diagnostico.setId_serv(Integer.parseInt(objectJSON.getString("pk")));
                 diagnostico.setStatus(1);
                 diagnostico.save();
@@ -522,10 +534,6 @@ public class MainActivity extends AppCompatActivity {
                 permisoMedico = new PermisoMedico(fecha_inicio, fecha_fin, dias_permiso, obsevaciones_permiso, doctor);
                 List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?",fields.getString("consulta_medica"));
                 List<Empleado> empleadoList = Empleado.find(Empleado.class, "idserv = ?",fields.getString("empleado"));
-                List<Diagnostico> diagnosticoList = Diagnostico.find(Diagnostico.class, "idserv = ?",fields.getString("diagnostico"));
-                if(diagnosticoList.size()!=0){
-                    permisoMedico.setDiagnostico(diagnosticoList.get(0));
-                }
                 if(consultaMedicaList.size()!=0){
                     permisoMedico.setConsulta_medica(consultaMedicaList.get(0));
                     }

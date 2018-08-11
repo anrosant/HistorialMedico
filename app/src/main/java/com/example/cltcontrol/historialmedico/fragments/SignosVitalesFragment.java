@@ -87,7 +87,7 @@ public class SignosVitalesFragment extends Fragment {
         etTemperatura = view.findViewById(R.id.etTemperatura);
         etPulso = view.findViewById(R.id.etPulso);
         ListView lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
-        btnGuardar = view.findViewById(R.id.btnGuardar);
+        btnGuardar = view.findViewById(R.id.btnGuardarPermiso);
         lySignosVitales = view.findViewById(R.id.ly_signos_vitales);
         tvTitulo = view.findViewById(R.id.tv_titulo);
         //

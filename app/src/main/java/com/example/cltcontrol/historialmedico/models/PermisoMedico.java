@@ -15,7 +15,6 @@ import java.util.Map;
 
 public class PermisoMedico extends SugarRecord{
     private int id_serv;
-    private Diagnostico diagnostico;
     private Date fecha_inicio, fecha_fin;
     private int dias_permiso;
     private String obsevaciones_permiso, doctor;
@@ -27,7 +26,6 @@ public class PermisoMedico extends SugarRecord{
 
     public PermisoMedico(Diagnostico diagnostico, Date fecha_inicio, Date fecha_fin, int dias_permiso, String obsevaciones_permiso, ConsultaMedica consulta_medica) {
         this.consulta_medica = consulta_medica;
-        this.diagnostico = diagnostico;
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.dias_permiso = dias_permiso;
@@ -36,7 +34,6 @@ public class PermisoMedico extends SugarRecord{
 
     public PermisoMedico(Date fecha_inicio, Date fecha_fin, int dias_permiso, String obsevaciones_permiso, String doctor) {
         this.consulta_medica = consulta_medica;
-        this.diagnostico = diagnostico;
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.dias_permiso = dias_permiso;
@@ -45,8 +42,7 @@ public class PermisoMedico extends SugarRecord{
     }
 
     //Usado para un permiso medico otorgado por un Doctor Particular
-    public PermisoMedico(Diagnostico diagnostico, Date fecha_inicio, Date fecha_fin, int dias_permiso, String observaciones_permiso, String doctor, Empleado empleado) {
-        this.diagnostico = diagnostico;
+    public PermisoMedico(Date fecha_inicio, Date fecha_fin, int dias_permiso, String observaciones_permiso, String doctor, Empleado empleado) {
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.dias_permiso = dias_permiso;
@@ -92,14 +88,6 @@ public class PermisoMedico extends SugarRecord{
 
     public void setConsulta_medica(ConsultaMedica consulta_medica) {
         this.consulta_medica = consulta_medica;
-    }
-
-    public Diagnostico getDiagnostico() {
-        return diagnostico;
-    }
-
-    public void setDiagnostico(Diagnostico diagnostico) {
-        this.diagnostico = diagnostico;
     }
 
     public Date getFecha_inicio() {
@@ -160,10 +148,9 @@ public class PermisoMedico extends SugarRecord{
 
     }
 
-    public static Map<String, String> getHashMapPermisoMedico(String id_empleado_servidor, String id_diagnostico, String id_consulta,Date fecha_inicio,
+    public static Map<String, String> getHashMapPermisoMedico(String id_empleado_servidor, String id_consulta,Date fecha_inicio,
                                                               Date fecha_fin, String dias, String observaciones, String doctor){
         Map<String, String> params = new HashMap<>();
-        params.put("diagnostico", id_diagnostico);
         params.put("empleado", id_empleado_servidor);
         params.put("consulta_medica", id_consulta);
         params.put("fecha_inicio", String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_inicio)));

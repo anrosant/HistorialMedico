@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -81,7 +80,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
         etPresionDistolica = view.findViewById(R.id.etPDistolica);
         etPulso = view.findViewById(R.id.etPulso);
         etTemperatura = view.findViewById(R.id.etTemperatura);
-        Button btn_guardar = view.findViewById(R.id.btnGuardar);
+        Button btn_guardar = view.findViewById(R.id.btnGuardarPermiso);
         //ib_mostrar_ocultar_contendido =  view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         LinearLayout ly_signos_vitales = view.findViewById(R.id.ly_signos_vitales);
         ListView lvSignosVitales = view.findViewById(R.id.lvSignosVitales);

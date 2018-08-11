@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -24,15 +25,21 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.adapter.AdapterEnfermedades;
-import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
+import com.example.cltcontrol.historialmedico.interfaces.IResult;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.PermisoMedico;
+import com.example.cltcontrol.historialmedico.service.RequestService;
 import com.example.cltcontrol.historialmedico.utils.ListaEnfermedades;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,30 +47,43 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_DIAGNOSTICO;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_PERMISO_MEDICO;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.calcNumDias;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.quitaDiacriticos;
 
 public class PermisosMedicosActivity extends FragmentActivity {
 
-    private EditText fechaDesde, fechaHasta, txtObservaciones, txtDoctor, txtBuscarEnfermedades;
+    private EditText etFechaDesde, etFechaHasta, etObservaciones, etDoctor, etBuscarEnfermedades;
+    private RecyclerView rvListaEnfermedades;
+    private RadioGroup rgTipoEnfermedad;
     private RadioButton radioButton;
     private Switch swGenerarDiagnosticoParticular;
     private LinearLayout lyEnfermedad;
-    private TextView numeroDias;
+    private TextView tvNombresEmpleado, tvNumeroDias;
+    private Button btnGuardarPermisoParticular, btnGuardaDiagnosticoParticular;
 
     private AdapterEnfermedades adaptadorEnfermedades;
     private static List<Enfermedad> listEnfermedades;
     private List<Enfermedad> newListEnfermedades;
-    private Diagnostico diagnostico;
     private PermisoMedico permisoMedico;
+    private Diagnostico diagnostico;
     private Enfermedad enfermedad;
     private Empleado empleado;
-    private String tipoEnfermedad, idEmpleado;
-    private Date fechaIni, fechaFin;
-    private int dia, mes, anio;
+
+    private String tipoEnfermedad, idEmpleado, enfermedadText, fechaInicioText, fechaFinText,
+            diasPermisoText, observacionesPermisoText, doctorText;
+    private Date fechaInicio, fechaFin;
+    private int dia, mes, anio, idEmpleadoServidor;
+
+    private IResult mResultCallback = null;
+    private RequestService requestService;
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
@@ -71,18 +91,17 @@ public class PermisosMedicosActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permisos_medicos_externos);
 
-        swGenerarDiagnosticoParticular = findViewById(R.id.sw_generar_diagnostico_particular);
-        RadioGroup rg_tipo_enfermedad = findViewById(R.id.rg_tipo_enfermedad);
-        txtObservaciones = findViewById(R.id.txt_observacion);
-        lyEnfermedad = findViewById(R.id.ly_lista_enfermedades);
-        fechaDesde = findViewById(R.id.txt_permiso_fecha_desde);
-        fechaHasta = findViewById(R.id.txt_permiso_fecha_hasta);
-        numeroDias = findViewById(R.id.tv_numero_dias);
-        txtDoctor = findViewById(R.id.txt_doctor);
-        TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
-        Button btn_guardar_diagnostico_permiso = findViewById(R.id.btn_guardar_diagnostico_permiso);
-
-        Button btn_guardar = findViewById(R.id.btn_guardar);
+        tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+        swGenerarDiagnosticoParticular = findViewById(R.id.swGenerarDiagnosticParticular);
+        rgTipoEnfermedad = findViewById(R.id.rgTipoEnfermedad);
+        etObservaciones = findViewById(R.id.etObservaciones);
+        lyEnfermedad = findViewById(R.id.lyListaEnfermedades);
+        etFechaDesde = findViewById(R.id.etPermisoFechaDesde);
+        etFechaHasta = findViewById(R.id.etPermisoFechaHasta);
+        tvNumeroDias = findViewById(R.id.tvNumeroDias);
+        etDoctor = findViewById(R.id.etDoctor);
+        btnGuardarPermisoParticular = findViewById(R.id.btnGuardarPermiso);
+        btnGuardaDiagnosticoParticular = findViewById(R.id.btnGuardarDiagnosticoParticular);
 
         Calendar calendar = Calendar.getInstance();
         dia = calendar.get(Calendar.DAY_OF_MONTH);
@@ -91,10 +110,11 @@ public class PermisosMedicosActivity extends FragmentActivity {
 
         final Bundle extras = Objects.requireNonNull(this).getIntent().getExtras();
 
-        //Recibe el id de consulta medica desde Historial de consulta medica
+        //Recibe el id de empleado
         assert extras != null;
         idEmpleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(idEmpleado));
+        idEmpleadoServidor = empleado.getId_serv();
         tvNombresEmpleado.setText(empleado.getApellido()+" "+empleado.getNombre());
 
         swGenerarDiagnosticoParticular.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -102,28 +122,28 @@ public class PermisosMedicosActivity extends FragmentActivity {
                 if (swGenerarDiagnosticoParticular.isChecked()) {
                     //txt_titulo_permiso_medico.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_check_circle_green_24dp,0);
                     lyEnfermedad.setVisibility(View.VISIBLE);
-                    txtBuscarEnfermedades.setEnabled(true);
+                    etBuscarEnfermedades.setEnabled(true);
                 }else{
                     lyEnfermedad.setVisibility(View.GONE);
-                    txtBuscarEnfermedades.setHint("No refiere enfermedad");
-                    txtBuscarEnfermedades.setEnabled(false);
+                    etBuscarEnfermedades.setHint("No refiere enfermedad");
+                    etBuscarEnfermedades.setEnabled(false);
                 }
             }
         });
 
         listEnfermedades = ListaEnfermedades.readEnfermedadesAll();
 
-        RecyclerView rv_lista_enfermedades = findViewById(R.id.rv_lista_enfermedades);
-        rv_lista_enfermedades.setLayoutManager(new LinearLayoutManager(this));
-        txtBuscarEnfermedades = findViewById(R.id.txt_buscar_enfermedades);
+        rvListaEnfermedades = findViewById(R.id.rvListaEnfermedades);
+        rvListaEnfermedades.setLayoutManager(new LinearLayoutManager(this));
+        etBuscarEnfermedades = findViewById(R.id.etBuscarEnfermedades);
 
-        fechaDesde.setOnClickListener(new View.OnClickListener() {
+        etFechaDesde.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DateDialogInicio();
             }
         });
-        fechaHasta.setOnClickListener(new View.OnClickListener() {
+        etFechaHasta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DateDialogFin();
@@ -132,27 +152,24 @@ public class PermisosMedicosActivity extends FragmentActivity {
 
         //Muestra la lista de enfermedades
         adaptadorEnfermedades = new AdapterEnfermedades(listEnfermedades);
-        rv_lista_enfermedades.setAdapter(adaptadorEnfermedades);
+        rvListaEnfermedades.setAdapter(adaptadorEnfermedades);
 
-        txtBuscarEnfermedades.addTextChangedListener(new TextWatcher() {
-
+        etBuscarEnfermedades.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
 
             }
-
             @Override
             public void beforeTextChanged(CharSequence charSequence, int star,
                                           int count, int after) {
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int star,
                                       int count, int after) {
                 String newTest;
                 if(charSequence.length() != 0){
-                    txtBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_cancel_grey_24dp,0);
-                    newTest = quitaDiacriticos(txtBuscarEnfermedades.getText().toString().toLowerCase());
+                    etBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_cancel_grey_24dp,0);
+                    newTest = quitaDiacriticos(etBuscarEnfermedades.getText().toString().toLowerCase());
                     newListEnfermedades = new ArrayList<>();
                     for (Enfermedad enfermedad:listEnfermedades){
                         String nombre = quitaDiacriticos(enfermedad.getNombre().toLowerCase());
@@ -163,20 +180,20 @@ public class PermisosMedicosActivity extends FragmentActivity {
                     }
                     adaptadorEnfermedades.setFilter(newListEnfermedades);
                 }else{
-                    txtBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                    etBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
                     adaptadorEnfermedades.setFilter(listEnfermedades);
                 }
             }
         });
 
         //Al dar click en un item, este se guarda en la variable enfermedad
-        rv_lista_enfermedades.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, rv_lista_enfermedades, new RecyclerItemClickListener.OnItemClickListener() {
+        rvListaEnfermedades.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, rvListaEnfermedades, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         //Toast.makeText(this, "Se ha escogido " + adaptadorEnfermedades.getListaEnfermedades().get(position).getNombre(), Toast.LENGTH_SHORT).show();
                         enfermedad = adaptadorEnfermedades.getListaEnfermedades().get(position);
-                        txtBuscarEnfermedades.setText(enfermedad.getNombre());
+                        etBuscarEnfermedades.setText(enfermedad.getNombre());
                     }
                     @Override
                     public void onLongItemClick(View view, int position) {
@@ -186,7 +203,7 @@ public class PermisosMedicosActivity extends FragmentActivity {
         );
 
         //Escoge el tipo de enfermedad
-        rg_tipo_enfermedad.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        rgTipoEnfermedad.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 radioButton = findViewById(checkedId);
@@ -194,21 +211,7 @@ public class PermisosMedicosActivity extends FragmentActivity {
             }
         });
 
-        btn_guardar_diagnostico_permiso.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                guardarDiagnostico();
-            }
-        });
-
-        btn_guardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                guardarPermisoMedico();
-            }
-        });
-
-        txtBuscarEnfermedades.setOnTouchListener(new View.OnTouchListener() {
+        etBuscarEnfermedades.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -216,86 +219,216 @@ public class PermisosMedicosActivity extends FragmentActivity {
 
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     try{
-                        if (motionEvent.getX() >= (txtBuscarEnfermedades.getRight() - txtBuscarEnfermedades.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (motionEvent.getX() >= (etBuscarEnfermedades.getRight() - etBuscarEnfermedades.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                             // your action here
-                            txtBuscarEnfermedades.setText("");
-                            txtBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                            etBuscarEnfermedades.setText("");
+                            etBuscarEnfermedades.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         }
                     }catch(NullPointerException e){
-                        txtBuscarEnfermedades.requestFocus();
+                        etBuscarEnfermedades.requestFocus();
                         //Llamada al teclado
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         assert imm != null;
-                        imm.showSoftInput(txtBuscarEnfermedades, InputMethodManager.SHOW_IMPLICIT);
+                        imm.showSoftInput(etBuscarEnfermedades, InputMethodManager.SHOW_IMPLICIT);
                     }
                 }
                 return true;
             }
         });
+
+
+        btnGuardaDiagnosticoParticular.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                diagnostico = new Diagnostico();
+                if (enfermedad == null || tipoEnfermedad == null) {
+                    Toast.makeText(getApplicationContext(), "No ha seleccionado todos los datos", Toast.LENGTH_SHORT).show();
+                    Diagnostico.delete(diagnostico);
+                } else {
+                    postDiagnostico(String.valueOf(idEmpleadoServidor));
+                }
+            }
+        });
+
+        btnGuardarPermisoParticular.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*if(enfermedad == null || tipoEnfermedad ==null){
+                    Toast.makeText(getApplicationContext(),"No ha seleccionado todo los datos de enfemedad",Toast.LENGTH_SHORT).show();
+                }else {
+                    //Se guarda el diagnostico
+                    diagnostico = new Diagnostico(enfermedad, tipoEnfermedad, empleado);
+                    diagnostico.save();
+                    Toast.makeText(getApplicationContext(),"Se han guardado los datos", Toast.LENGTH_SHORT).show();
+                }*/
+            }
+        });
+
     }
 
-    private void guardarDiagnostico() {
-        if(enfermedad == null || tipoEnfermedad ==null){
-            Toast.makeText(this,"No ha seleccionado todo los datos de enfemedad",Toast.LENGTH_SHORT).show();
+    /*private void guardarPermisoMedico(){
+        int res=-1;
+                enfermedadText = etBuscarEnfermedades.getText().toString();
+                fechaInicioText = etFechaDesde.getText().toString();
+                fechaFinText = etFechaHasta.getText().toString();
+                diasPermisoText = tvNumeroDias.getText().toString();
+                observacionesPermisoText = etObservaciones.getText().toString();
+                doctorText = etDoctor.getText().toString();
+
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+                fechaInicio = null;
+                fechaFin = null;
+                try {
+                    fechaInicio = format.parse(fechaInicioText);
+                    fechaFin = format.parse(fechaFinText);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                permisoMedico = new PermisoMedico();
+                if(swGenerarDiagnosticoParticular.isChecked()){
+                    res = permisoMedico.validarPermisoMedicoParticular(enfermedadText,fechaInicioText,fechaFinText,diasPermisoText,observacionesPermisoText,doctorText);
+                }
+
+                if(res == 0) {
+                    Toast.makeText(getApplicationContext(), "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
+                    PermisoMedico.delete(permisoMedico);
+                } else if(res == 1) {
+                    postDiagnostico(String.valueOf(idEmpleadoServidor));
+                    postPermisoMedico(String.valueOf(idEmpleadoServidor));
+                }
+            }
+
+    */
+
+    // ------------------------------------------------------------------------------------------------------------------------------------------
+
+    /*
+     * Envía datos de Diagnostico Medico al servidor
+     * */
+    private void postDiagnostico(String id_empleado) {
+        String id_serv = "";
+        if(enfermedad.getId_serv()!=0){
+            id_serv = String.valueOf(enfermedad.getId_serv());
+        }
+        Log.d("IDSERV", id_serv);
+        mResultCallback = null;
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getApplicationContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
+        String TAGDIAGNOSTICO = "tagdiagnostico";
+        initRequestCallback(TAGDIAGNOSTICO);
+        requestService = new RequestService(mResultCallback, getApplicationContext());
+        Log.i("AAAA",tipoEnfermedad);
+        Log.i("BBBB",id_serv);
+        Log.i("CCCC",id_empleado);
+        Map<String, String> sendObj = Diagnostico.getHashMapDiagnostico("","", tipoEnfermedad, id_serv);
+        requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj, token);
+    }
+
+    /*
+     * Envía datos de Permiso Medico al servidor
+     * */
+    private void postPermisoMedico(String id_empleado){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getApplicationContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
+        String TAGPERMISO = "tagpermiso";
+        initRequestCallback(TAGPERMISO);
+        requestService = new RequestService(mResultCallback, getApplicationContext());
+        Map<String, String> sendObj = PermisoMedico.getHashMapPermisoMedico(id_empleado,"", fechaInicio, fechaFin, diasPermisoText, observacionesPermisoText, doctorText);
+        requestService.postDataRequest("POSTCALL", URL_PERMISO_MEDICO, sendObj, token);
+    }
+
+    /*
+     * Función que guarda un diagnóstico localmente
+     * */
+    private void guardarDiagnosticoLocal(int id_serv, int status) {
+        diagnostico.setId_serv(id_serv);
+        diagnostico.setEnfermedad(enfermedad);
+        diagnostico.setTipo_enfermedad(tipoEnfermedad);
+        diagnostico.setStatus(status);
+        diagnostico.save();
+
+        if(status==NAME_SYNCED_WITH_SERVER) {
+            Toast.makeText(getApplicationContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
         }else {
-            empleado = ConsultaMedica.findById(Empleado.class, Long.valueOf(idEmpleado));
+            Toast.makeText(getApplicationContext(), "Hubo un error de conexión. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
+        }
+        //cargarDiagnosticos(consultaMedica.getId());
+    }
 
-            //Se guarda la consulta medica en diagnostico
-            diagnostico = new Diagnostico(null,enfermedad, tipoEnfermedad);
-            diagnostico.save();
-
-            Toast.makeText(this,"Se han guardado los datos", Toast.LENGTH_SHORT).show();
+    /*
+     * Función que guarda los Permiso Medico localmente
+     * */
+    private void guardarPermisoMedicoLocal(int id_serv, int status){
+        permisoMedico.setId_serv(id_serv);
+        permisoMedico.setEmpleado(empleado);
+        permisoMedico.setConsulta_medica(null);
+        permisoMedico.setFecha_inicio(fechaInicio);
+        permisoMedico.setFecha_fin(fechaFin);
+        permisoMedico.setDias_permiso(Integer.parseInt(diasPermisoText));
+        permisoMedico.setObsevaciones_permiso(observacionesPermisoText);
+        permisoMedico.setDoctor(doctorText);
+        permisoMedico.setStatus(status);
+        permisoMedico.save();
+        if(status==NAME_SYNCED_WITH_SERVER) {
+            Toast.makeText(getApplicationContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getApplicationContext(),"No hay conexión a internet. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void guardarPermisoMedico(){
-        String enfermedadPrincipalText;
-        if(!swGenerarDiagnosticoParticular.isChecked()){
-            enfermedadPrincipalText = txtBuscarEnfermedades.getText().toString();
-        }else{
-            enfermedadPrincipalText = "Sin diagnostico medico ";
-        }
-
-        String fechaInicioText = fechaDesde.getText().toString();
-        String fechaFinText = fechaHasta.getText().toString();
-        String diasPermisoText = numeroDias.getText().toString();
-        String observacionesPermisoText = txtObservaciones.getText().toString();
-        String doctorPermisoText = txtDoctor.getText().toString();
-
-        if (!swGenerarDiagnosticoParticular.isChecked() || enfermedadPrincipalText.equals("") || fechaInicioText.equals("") ||
-                fechaFinText.equals("") || diasPermisoText.equals("") || observacionesPermisoText.equals("") ||
-                doctorPermisoText.equals("")) {
-            Toast.makeText(this, "No ha ingresado todos los datos", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        Date fecha_inicio = null;
-        Date fecha_fin = null;
-        try {
-            fecha_inicio = format.parse(fechaInicioText);
-            fecha_fin = format.parse(fechaFinText);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        int dias_permiso = Integer.parseInt(diasPermisoText);
-
-        if (permisoMedico == null) {
-            PermisoMedico permisoMed = new PermisoMedico(diagnostico, fecha_inicio, fecha_fin, dias_permiso, observacionesPermisoText, doctorPermisoText, empleado);
-            permisoMed.save();
-        } else {
-            permisoMedico.setDiagnostico(diagnostico);
-            permisoMedico.setFecha_inicio(fecha_inicio);
-            permisoMedico.setFecha_fin(fecha_fin);
-            permisoMedico.setDias_permiso(dias_permiso);
-            permisoMedico.setObsevaciones_permiso(observacionesPermisoText);
-            permisoMedico.setDoctor(doctorPermisoText);
-            permisoMedico.setEmpleado(empleado);
-            permisoMedico.save();
-        }
-        Toast.makeText(this, "Se ha guardado con éxito", Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this, "No existen diagnosticos para generar permiso medico", Toast.LENGTH_SHORT).show();
+    /*
+     * Inicializar las llamadas a Request
+     * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
+     * */
+    private void initRequestCallback(final String TAG){
+        mResultCallback = new IResult() {
+            @Override
+            public void notifySuccess(String requestType,JSONObject response) {
+                if(TAG.equalsIgnoreCase("tagdiagnostico")){
+                    try {
+                        //Si ha realizado post en ConsultaMedica
+                        String pk = response.getString("pk");
+                        guardarDiagnosticoLocal(Integer.parseInt(pk),NAME_SYNCED_WITH_SERVER);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    try {
+                        //Si ha realizado post en Permiso Medico
+                        String pk = response.getString("pk");
+                        guardarDiagnosticoLocal(Integer.parseInt(pk),NAME_SYNCED_WITH_SERVER);
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void notifyError(String requestType,VolleyError error) {
+                Log.d("HEREERROR", String.valueOf(error));
+                if(TAG.equalsIgnoreCase("tagdiagnostico")){
+                    guardarDiagnosticoLocal(0,NAME_NOT_SYNCED_WITH_SERVER);
+                }else {
+                    //guardarDiagnosticoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
+                }
+            }
+            @Override
+            public void notifyMsjError(String requestType, String error) {
+                Log.d("HEREMSJERROR", String.valueOf(error));
+                if(TAG.equalsIgnoreCase("tagdiagnostico")){
+                    guardarDiagnosticoLocal(0,NAME_NOT_SYNCED_WITH_SERVER);
+                }else {
+                    //guardarDiagnosticoLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
+                }
+            }
+            @Override
+            public void notifyJSONError(String requestType, JSONException error) {
+            }
+        };
     }
+
+    // ------------------------------------------------------------------------------------------------------------------------------------------
 
     private void DateDialogInicio() {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
@@ -308,15 +441,15 @@ public class PermisosMedicosActivity extends FragmentActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                fechaDesde.setText(simpleDateFormat.format(date));
+                etFechaDesde.setText(simpleDateFormat.format(date));
                 calcularNumDias();
             }
         };
         DatePickerDialog dpDialog = new DatePickerDialog(this, listener, anio, mes, dia);
         //dpDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-        if(!fechaHasta.getText().toString().equals("")){
+        if(!etFechaHasta.getText().toString().equals("")){
             Calendar c = Calendar.getInstance();
-            String fecha[] = fechaHasta.getText().toString().split("/");
+            String fecha[] = etFechaHasta.getText().toString().split("/");
             c.set(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[1]) - 1, Integer.parseInt(fecha[0]));
             //Toast.makeText(getContext(), , Toast.LENGTH_SHORT).show();
             dpDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
@@ -337,15 +470,15 @@ public class PermisosMedicosActivity extends FragmentActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                fechaHasta.setText(simpleDateFormat.format(date));
-                long num = calcNumDias(fechaDesde, fechaHasta);
-                numeroDias.setText(Long.toString(num+1));
+                etFechaHasta.setText(simpleDateFormat.format(date));
+                long num = calcNumDias(etFechaDesde, etFechaHasta);
+                tvNumeroDias.setText(Long.toString(num+1));
             }
         };
         try{
             DatePickerDialog dpDialog = new DatePickerDialog(this, listener, anio, mes, dia);
             Calendar c = Calendar.getInstance();
-            String fecha[] = fechaDesde.getText().toString().split("/");
+            String fecha[] = etFechaDesde.getText().toString().split("/");
             c.set(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[1]) - 1, Integer.parseInt(fecha[0]));
             long milis = c.getTimeInMillis()-1000;
             dpDialog.getDatePicker().setMinDate(milis);
@@ -358,30 +491,29 @@ public class PermisosMedicosActivity extends FragmentActivity {
     @SuppressLint("SetTextI18n")
     private void calcularNumDias() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String string_fecha_ini = fechaDesde.getText().toString();
-        String string_fecha_fin = fechaHasta.getText().toString();
+        String string_fecha_ini = etFechaDesde.getText().toString();
+        String string_fecha_fin = etFechaHasta.getText().toString();
 
         if (!string_fecha_ini.equals("") && !string_fecha_fin.equals("")) {
             try {
-                fechaIni = simpleDateFormat.parse(string_fecha_ini);
+                fechaInicio = simpleDateFormat.parse(string_fecha_ini);
                 fechaFin = simpleDateFormat.parse(string_fecha_fin);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            long dias_mili = Math.abs(fechaFin.getTime() - fechaIni.getTime());
+            long dias_mili = Math.abs(fechaFin.getTime() - fechaInicio.getTime());
             long numDias = TimeUnit.DAYS.convert(dias_mili, TimeUnit.MILLISECONDS);
-            numeroDias.setText(Long.toString(numDias + 1));
+            tvNumeroDias.setText(Long.toString(numDias + 1));
         }
     }
-
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onResume() {
         super.onResume();
-        if(!fechaDesde.getText().toString().isEmpty() && !fechaHasta.getText().toString().isEmpty()) {
-            long num = calcNumDias(fechaDesde, fechaHasta);
-            numeroDias.setText(Long.toString(num + 1));
+        if(!etFechaDesde.getText().toString().isEmpty() && !etFechaHasta.getText().toString().isEmpty()) {
+            long num = calcNumDias(etFechaDesde, etFechaHasta);
+            tvNumeroDias.setText(Long.toString(num + 1));
         }
     }
 }

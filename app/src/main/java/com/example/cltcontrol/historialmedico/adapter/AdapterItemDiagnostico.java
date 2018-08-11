@@ -64,7 +64,7 @@ public class AdapterItemDiagnostico extends ArrayAdapter<Diagnostico> {
         //Muestra los valores
         codigoEnfermedad.setText(String.valueOf(diagnostico.getEnfermedad().getCodigo()));
         nombreEnfermedad.setText(String.valueOf(diagnostico.getEnfermedad().getNombre()));
-        tipoEnfermedad.setText(String.valueOf(diagnostico.getTipoEnfermedad()));
+        tipoEnfermedad.setText(String.valueOf(diagnostico.getTipo_enfermedad()));
 
         return v;
     }

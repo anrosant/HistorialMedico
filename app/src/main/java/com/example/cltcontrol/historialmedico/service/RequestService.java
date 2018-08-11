@@ -3,9 +3,6 @@ package com.example.cltcontrol.historialmedico.service;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -40,7 +37,6 @@ public class RequestService {
     * @param url url a donde se va a realizar el POST, tipo String
     * @param sendObj es el JSON con los datos a enviar al servidor
     * */
-
     public void postDataRequest(final String requestType, String url, JSONObject sendObj){
         if (mContext instanceof Activity){
             dialog=new ProgressDialog(mContext);

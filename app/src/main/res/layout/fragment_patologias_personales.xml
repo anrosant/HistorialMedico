@@ -79,6 +79,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
+                            android:textColor="@color/colorDark"
                             android:inputType="textMultiLine" />
                         <EditText
                             android:id="@+id/etDetalleEnfermedad"
@@ -87,11 +88,11 @@
                             android:layout_margin="10dp"
                             android:inputType="textMultiLine"
                             android:hint="Detalles de Enfermedad"
-                            android:textColor="@android:color/black" />
+                            android:textColor="@color/colorDark" />
                     </LinearLayout>
 
                     <Button
-                        android:id="@+id/btnGuardar"
+                        android:id="@+id/btnGuardarPermiso"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Agregar" />

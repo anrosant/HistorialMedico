@@ -86,7 +86,7 @@ public class DiagnosticoFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_diagnostico, container, false);
 
-        Button btn_guardar = view.findViewById(R.id.btn_guardar);
+        Button btn_guardar = view.findViewById(R.id.btnGuardarPermiso);
         RadioGroup rg_tipo_enfermedad = view.findViewById(R.id.rgTipoEnfer);
         ListView lvDiagnostico = view.findViewById(R.id.lvDiagnostico);
         ibMostrarOcultarContendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
@@ -263,7 +263,7 @@ public class DiagnosticoFragment extends Fragment {
         String TAGDIAGNOSTICO = "tagdiagnostico";
         initRequestCallback(TAGDIAGNOSTICO);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = Diagnostico.getHashMapDiagnostico(id_consulta, tipoEnfermedad, id_serv);
+        Map<String, String> sendObj = Diagnostico.getHashMapDiagnostico(id_consulta, "", tipoEnfermedad, id_serv);
         requestService.postDataRequest("POSTCALL", URL_DIAGNOSTICO, sendObj, token);
     }
 
@@ -281,7 +281,7 @@ public class DiagnosticoFragment extends Fragment {
     * */
     private void guardarDiagnosticoLocal(int id_serv, int status) {
         diagnostico.setEnfermedad(enfermedad);
-        diagnostico.setTipoEnfermedad(tipoEnfermedad);
+        diagnostico.setTipo_enfermedad(tipoEnfermedad);
         diagnostico.setId_serv(id_serv);
         diagnostico.setStatus(status);
         diagnostico.setConsulta_medica(consultaMedica);
@@ -304,7 +304,7 @@ public class DiagnosticoFragment extends Fragment {
         consultaMedica.setFechaConsulta(fechaConsulta);
         consultaMedica.setStatus(status);
         consultaMedica.save();
-        postDiagnostico(String.valueOf(id_servidor));
+        postDiagnostico(String.valueOf(id_servidor) );
     }
 
     /*

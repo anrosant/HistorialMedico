@@ -47,6 +47,7 @@
                     android:layout_marginTop="20sp"
                     android:hint="No refiere plan de cuidados"
                     android:inputType="textMultiLine"
+                    android:textColor="@color/colorDark"
                     android:textSize="16sp" />
 
             </LinearLayout>

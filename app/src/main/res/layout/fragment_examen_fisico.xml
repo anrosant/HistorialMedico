@@ -43,6 +43,7 @@
                 android:layout_marginTop="20sp"
                 android:hint="No refiere examen físico"
                 android:inputType="textMultiLine"
+                android:textColor="@color/colorDark"
                 android:textSize="16sp" />
 
         </LinearLayout>

@@ -77,7 +77,7 @@ public class PatologiasPersonalesFragment extends Fragment {
         ibMostrarOcultarContendido = view.findViewById(R.id.ib_mostrar_ocultar_contendido);
         etDetalleEnfermedad = view.findViewById(R.id.etDetalleEnfermedad);
         ListView lvPatologiasPersonales = view.findViewById(R.id.lvPatologiasPersonales);
-        Button btn_guardar = view.findViewById(R.id.btnGuardar);
+        Button btn_guardar = view.findViewById(R.id.btnGuardarPermiso);
         TextView tvTitulo = view.findViewById(R.id.tv_titulo);
 
         Spinner spPatologias = view.findViewById(R.id.spPatologia);

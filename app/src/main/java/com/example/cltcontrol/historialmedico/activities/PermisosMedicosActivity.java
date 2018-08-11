@@ -29,7 +29,6 @@ import com.android.volley.VolleyError;
 import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.adapter.AdapterEnfermedades;
 import com.example.cltcontrol.historialmedico.interfaces.IResult;
-import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
@@ -50,7 +49,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
@@ -90,7 +88,7 @@ public class PermisosMedicosActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_permisos_medicos_externos);
+        setContentView(R.layout.activity_permisos_medicos_particulares);
 
         tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
         swGenerarDiagnosticoParticular = findViewById(R.id.swGenerarDiagnosticParticular);

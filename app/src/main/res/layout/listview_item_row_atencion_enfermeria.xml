@@ -16,25 +16,19 @@
         android:background="@drawable/my_style">
 
         <TextView
-            android:id="@+id/textViewFecha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Fecha de atención:" />
-
-        <TextView
             android:id="@+id/tvFechaAtencion"
+            android:gravity="right"
+            android:text="Fecha"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="" />
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/textViewMotivo"
+            android:id="@+id/tvMotivoAtencion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Motivo" />
 
         <TextView
-            android:id="@+id/tvMotivo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="" />

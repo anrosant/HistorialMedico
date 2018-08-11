@@ -306,6 +306,8 @@ public class PermisosMedicosFragment extends Fragment {
         }
         else{
             Toast.makeText(getContext(),"No hay conexión a internet. Los datos se guardarán localmente", Toast.LENGTH_LONG).show();
+            diagnostico.setPermiso_medico(permisoMedico);
+            diagnostico.setStatus(0);
         }
     }
 
@@ -360,7 +362,11 @@ public class PermisosMedicosFragment extends Fragment {
                     try {
                         //Si ha realizado put en diagnóstico
                         String idPermisoServidor = response.getString("permiso_medico");
-                        diagnostico.setPermiso_medico(permisoMedico);
+                        List<PermisoMedico> permisoMedicoList = PermisoMedico.find(PermisoMedico.class, "idServ = ?", idPermisoServidor);
+                        if(!permisoMedicoList.isEmpty()){
+                            diagnostico.setPermiso_medico(permisoMedicoList.get(0));
+                        }
+
 
                     } catch (JSONException e1) {
                         e1.printStackTrace();
@@ -400,7 +406,7 @@ public class PermisosMedicosFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Date date = new Date();
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     date = simpleDateFormat.parse("" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                 } catch (ParseException e) {
@@ -421,7 +427,7 @@ public class PermisosMedicosFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void calcNumDias() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String string_fecha_ini = etFechaDesde.getText().toString();
         String string_fecha_fin = etFechaHasta.getText().toString();
         if (!string_fecha_ini.equals("") && !string_fecha_fin.equals("")) {

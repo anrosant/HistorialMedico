@@ -58,7 +58,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/txtTituloPermisoMedico"
+                        android:id="@+id/tvTituloPermisoMedico"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimary"
@@ -86,11 +86,12 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/txtBuscarEnfermedades"
+                            android:id="@+id/etBuscarEnfermedades"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
                             android:hint="No refiere enfermedad"
+                            android:textColor="#000"
                             android:enabled="false"
                             android:singleLine="true" />
 
@@ -319,7 +320,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/btnGuardarPermiso"
+                android:id="@+id/btnGuardarPermisoParticular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

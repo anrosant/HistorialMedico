@@ -208,17 +208,13 @@ public class SincronizacionInmediata extends BroadcastReceiver {
             }
 
             //si la consulta ya existe en el servidor
+            Log.d("HERE", String.valueOf(diagnosticos.getConsulta_medica().getId_serv()));
             if(idConsulta.equals("no") && diagnosticos.getConsulta_medica()!=null){
                 idConsulta = String.valueOf(diagnosticos.getConsulta_medica().getId_serv());
-            }else{
-                idConsulta="";
             }
-
             //si el permiso ya existe en el servidor obtiene el id del servidor
             if(idPermiso.equals("no") && diagnosticos.getPermiso_medico()!=null){
                 idPermiso = String.valueOf(diagnosticos.getPermiso_medico().getId_serv());
-            }else{
-                idPermiso = "";
             }
 
             if(diagnosticos.getId_serv()==0){
@@ -262,20 +258,13 @@ public class SincronizacionInmediata extends BroadcastReceiver {
      * número tipo string,
      * Si es "no", quiere decir que la consulta ya existe en el servidor, y no fue recorrida,
      * Si es un número quiere decir que primero recorrí la consulta, hice POST y obtuve el id del servidor
-     * @param idDiagnostico id del diagnóstico realizado previo al permiso, puede ser " ", "no" o un
-     * número tipo string,
-     * Si es "no", quiere decir que el diagnóstico ya existe en el servidor, y no fue recorrido,
-     * Si es un número quiere decir que primero recorrí el diagnóstico, hice POST y obtuve el id del servidor
-     * @see enviarPermisoMedicoAlservidor
      * */
 
     public void recorrerPermisos(String idConsulta){
         for(PermisoMedico permisosMedico : permisoMedicoUnsynced){
             //si la consulta ya existe en el servidor obtiene el id del servidor
-            if(idConsulta.equals("no")){
+            if(idConsulta.equals("no") && permisosMedico.getConsulta_medica()!=null){
                 idConsulta = String.valueOf(permisosMedico.getConsulta_medica().getId_serv());
-            }else{
-                idConsulta = "";
             }
 
             if(permisosMedico.getId_serv()==0){
@@ -637,12 +626,18 @@ public class SincronizacionInmediata extends BroadcastReceiver {
                             patologias.setStatus(NAME_SYNCED_WITH_SERVER);
                             patologias.save();
                         }else if(TAG.equalsIgnoreCase(TAGPERMISO)){
+                            String idConsultaServidor = response.getString("consulta_medica");
                             permiso.setId_serv(Integer.parseInt(pk));
                             permiso.setStatus(NAME_SYNCED_WITH_SERVER);
                             permiso.save();
                             String idConsulta = "";
-                            if(permiso.getConsulta_medica()!=null){
-                                idConsulta=String.valueOf(permiso.getConsulta_medica().getId_serv());
+                            if(idConsultaServidor!=null){
+                                List<ConsultaMedica> consultaMedica = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?", idConsultaServidor);
+                                if(!consultaMedica.isEmpty()){
+                                    permiso.setConsulta_medica(consultaMedica.get(0));
+                                    idConsulta=String.valueOf(permiso.getConsulta_medica().getId_serv());
+                                }
+
                             }
                             recorrerDiagnostico(idConsulta, pk);
 

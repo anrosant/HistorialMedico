@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,24 +44,23 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertir
 
 public class SignosVitalesEnfermeriaFragment extends Fragment {
 
-    private String id_atencion;
-    private String id_empleado;
+    private String idEmpleado;
     private EditText etPresionSistolica;
     private EditText etPresionDistolica;
     private EditText etPulso;
     private EditText etTemperatura;
+
     private AdapterSignosVitales adapterSignosVitales;
-    private ImageButton ib_mostrar_ocultar_contendido;
     private AtencionEnfermeria atencionEnfermeria;
     private SignosVitales signos;
     private Empleado empleado;
-    private String presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText, cargo;
-    private Date fecha_atencion, fecha_signo;
-
+    private String idAtencion, presionSistolicaText, presionDistolicaText, temperaturatext, pulsoText, cargo;
+    private Date fechaAtencion, fechaSigno;
+    private int idEmpleadoServidor;
     //POST
     private IResult mResultCallback = null;
     private RequestService requestService;
-    private int id_empleado_Servidor;
+
 
     private BroadcastReceiver broadcastReceiver;
 
@@ -76,36 +74,33 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        Objects.requireNonNull(getContext()).registerReceiver(new SincronizacionInmediata(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-
-
         // Inflate y vinculaciones de las variables globales
         View view = inflater.inflate(R.layout.fragment_signos_vitales, container, false);
         etPresionSistolica = view.findViewById(R.id.etPSistolica);
         etPresionDistolica = view.findViewById(R.id.etPDistolica);
         etPulso = view.findViewById(R.id.etPulso);
         etTemperatura = view.findViewById(R.id.etTemperatura);
-        Button btn_guardar = view.findViewById(R.id.btnGuardar);
+        Button btn_guardar = view.findViewById(R.id.btnGuardarPermiso);
         //ib_mostrar_ocultar_contendido =  view.findViewById(R.id.ib_mostrar_ocultar_contendido);
-        LinearLayout ly_signos_vitales = view.findViewById(R.id.ly_signos_vitales);
+        LinearLayout ly_signos_vitales = view.findViewById(R.id.lySignosVitales);
         ListView lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
-        TextView tvTitulo = view.findViewById(R.id.tv_titulo);
+        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
         if (extras != null) {
-            id_atencion = extras.getString("ID_ATENCION");
-            id_empleado = extras.getString("ID_EMPLEADO");
+            idAtencion = extras.getString("ID_ATENCION");
+            idEmpleado = extras.getString("ID_EMPLEADO");
             cargo = extras.getString("CARGO");
-            empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
-            id_empleado_Servidor = empleado.getId_serv();
+            empleado = Empleado.findById(Empleado.class, Long.valueOf(idEmpleado));
+            idEmpleadoServidor = empleado.getId_serv();
         }
 
 
 
         //Ingresa a nueva atención enfermería
         List<SignosVitales> signosVitalesList;
-        if(id_atencion!=null) {
+        if(idAtencion !=null) {
             if(cargo.equals("Doctor")){
                 btn_guardar.setVisibility(View.GONE);
                 //ib_mostrar_ocultar_contendido.setVisibility(View.GONE);
@@ -113,13 +108,13 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
                 tvTitulo.setVisibility(View.GONE);
             }
 
-            atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Long.valueOf(id_atencion));
+            atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Long.valueOf(idAtencion));
             //Historial de Signos vitales
             //Obtiene los signos vitales de un empleado
-            signosVitalesList = SignosVitales.find(SignosVitales.class, "atencionenfermeria = ?", String.valueOf(id_atencion));
+            signosVitalesList = SignosVitales.find(SignosVitales.class, "atencionenfermeria = ?", String.valueOf(idAtencion));
         }else{ //Esta es la parte de signos vitales rapidos
             atencionEnfermeria = null;
-            signosVitalesList = SignosVitales.find(SignosVitales.class, "empleado = ?", String.valueOf(id_empleado));
+            signosVitalesList = SignosVitales.find(SignosVitales.class, "empleado = ?", String.valueOf(idEmpleado));
         }
 
         adapterSignosVitales = new AdapterSignosVitales(getContext(), signosVitalesList);
@@ -148,35 +143,35 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
                         break;
                     default:
                         //Si ingresa externamente sin pasar por atención enfermería
-                        if (id_atencion == null) {
-                            fecha_signo = new Date();
+                        if (idAtencion == null) {
+                            fechaSigno = new Date();
                             postSignosVitales("");
                             cargarSignosVitalesSin();
                         }
                         //Si ingresa desde atención enfermería y es la primera vez que la crea
-                        else if (id_atencion != null && atencionEnfermeria.getEmpleado() == null) {
-                            fecha_atencion = new Date();
-                            Log.d("FECHA", String.valueOf(fecha_atencion));
+                        else if (idAtencion != null && atencionEnfermeria.getEmpleado() == null) {
+                            fechaAtencion = new Date();
+                            Log.d("FECHA", String.valueOf(fechaAtencion));
 
                             //Guarda el id del empleado en la atención y la fecha de atención
-                            postAtencionEnfermeria(fecha_atencion);
+                            postAtencionEnfermeria(fechaAtencion);
                         } else {
                             Log.d("ELSE", "else");
-                            fecha_signo = new Date();
+                            fechaSigno = new Date();
                             postSignosVitales(String.valueOf(atencionEnfermeria.getId_serv()));
                         }
 
                         break;
                 }
-                //cargarSignosVitales(atencionEnfermeria.getId());
                 //Broadcast receiver to know the sync status
                 broadcastReceiver = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-
                         //Confirmar que se ha guardado
-                        Toast.makeText(getContext(),"Datos enviados al servidor ",Toast.LENGTH_SHORT).show();
-                        //cargarSignosVitales(atencionEnfermeria.getId());
+                        if(idAtencion ==null)
+                            cargarSignosVitalesSin();
+                        else
+                            cargarSignosVitales(atencionEnfermeria.getId());
                     }
                 };
 
@@ -188,6 +183,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
     }
     /*
      * Función que carga los signos vitales en la lista
+     * @param id id de la atención de enfermería en la que se encuentra, tipo long
      * */
     private void cargarSignosVitales(Long id){
         ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
@@ -199,15 +195,17 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
     * */
     private void cargarSignosVitalesSin(){
         ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
-                "empleado = ?", String.valueOf(id_empleado));
+                "empleado = ?", String.valueOf(idEmpleado));
         adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
     }
 
     /*
      * Función que guarda los signos vitales localmente
+     * @param idServidor id del signo vital en el servidor, tipo entero
+     * @param status si los datos se enviaron al servidor (1) o no (0) tipo entero
      * */
-    private void guardarSignosVitalesLocal(int id_serv, int status){
-        signos.setId_serv(id_serv);
+    private void guardarSignosVitalesLocal(int idServidor, int status){
+        signos.setId_serv(idServidor);
         signos.setPresion_sistolica(Integer.parseInt(presionSistolicaText));
         signos.setPresion_distolica(Integer.parseInt(presionDistolicaText));
         signos.setPulso(Integer.parseInt(pulsoText));
@@ -235,17 +233,20 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
     
     /*
     * Función que guarda una atencion enfermeria localmente
+    * @param fechaAtencion fecha en la que se realizó la atención, tipo Date
+    * @param idServidor id de la atención en el servidor, tipo entero
+    * @param status si los datos se enviaron al servidor (1) o no (0)
     * */
 
-    private void guardarAtencionEnfermeriaLocal(Date fecha_Atencion, int id_servidor, int status){
-        atencionEnfermeria.setId_serv(id_servidor);
+    private void guardarAtencionEnfermeriaLocal(Date fechaAtencion, int idServidor, int status){
+        atencionEnfermeria.setId_serv(idServidor);
         atencionEnfermeria.setEmpleado(empleado);
-        atencionEnfermeria.setFecha_atencion(fecha_Atencion);
+        atencionEnfermeria.setFecha_atencion(fechaAtencion);
         atencionEnfermeria.setStatus(status);
         atencionEnfermeria.save();
 
-        fecha_signo = new Date();
-        postSignosVitales(String.valueOf(id_servidor));
+        fechaSigno = new Date();
+        postSignosVitales(String.valueOf(idServidor));
     }
     
     /*
@@ -262,6 +263,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
     /*
      * Inicializar las llamadas a Request
      * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
+     * @param TAG me indica a qué clase pertenece el request hecho, tipo String
      * */
     private void initRequestCallback(final String TAG){
         mResultCallback = new IResult() {
@@ -292,7 +294,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
             public void notifyError(String requestType,VolleyError error) {
                 Log.d("HEREERROR", String.valueOf(error));
                 if(TAG.equalsIgnoreCase("tagatencion")){
-                    guardarAtencionEnfermeriaLocal(fecha_atencion, 0,NAME_NOT_SYNCED_WITH_SERVER);
+                    guardarAtencionEnfermeriaLocal(fechaAtencion, 0,NAME_NOT_SYNCED_WITH_SERVER);
                 }else {
                     guardarSignosVitalesLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
@@ -302,7 +304,7 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
             public void notifyMsjError(String requestType, String error) {
                 Log.d("HEREMSJERROR", String.valueOf(error));
                 if(TAG.equalsIgnoreCase("tagatencion")){
-                    guardarAtencionEnfermeriaLocal(fecha_atencion, 0,NAME_NOT_SYNCED_WITH_SERVER);
+                    guardarAtencionEnfermeriaLocal(fechaAtencion, 0,NAME_NOT_SYNCED_WITH_SERVER);
                 }else {
                     guardarSignosVitalesLocal(0, NAME_NOT_SYNCED_WITH_SERVER);
                 }
@@ -316,28 +318,36 @@ public class SignosVitalesEnfermeriaFragment extends Fragment {
     }
 
     /*
-     * Envía datos de Consulta médica al servidor
+     * Obtiene el token
+     * Inicia un requerimiento
+     * Obtiene un hashmap con los datos enviados por parámetros
+     * Envía datos de Atención enfermería al servidor
+     * @param fechaAtencion fecha en la que el paciente fue a la atención tipo Date
      * */
-    private void postAtencionEnfermeria(final Date fecha_atencion){
+    private void postAtencionEnfermeria(final Date fechaAtencion){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
         String TAGATENCION = "tagatencion";
         initRequestCallback(TAGATENCION);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(String.valueOf(id_empleado_Servidor), fecha_atencion,"","","");
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(String.valueOf(idEmpleadoServidor), fechaAtencion,"","","");
         requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj, token);
     }
 
     /*
+     * Obtiene el token
+     * Inicia un requerimiento
+     * Obtiene un hashmap con los datos enviados por parámetros
      * Envía datos de Signos vitales al servidor
+     * @param idAtencionEnfermeria id de la atención enfermería del servidor tipo string
      * */
-    private void postSignosVitales(String id_atencion_enfermeria){
+    private void postSignosVitales(String idAtencionEnfermeria){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
         String TAGSIGNOS = "tagsignos";
         initRequestCallback(TAGSIGNOS);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(String.valueOf(id_empleado_Servidor),"",id_atencion_enfermeria,presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext, fecha_signo);
+        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(String.valueOf(idEmpleadoServidor),"",idAtencionEnfermeria,presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext, fechaSigno);
         requestService.postDataRequest("POSTCALL", URL_SIGNOS, sendObj, token);
     }
 

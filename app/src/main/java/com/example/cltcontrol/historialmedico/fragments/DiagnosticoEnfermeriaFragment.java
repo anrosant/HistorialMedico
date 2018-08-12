@@ -37,14 +37,12 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
     //Interface
     private IResult mResultCallback;
     //Variables de view
-    private EditText et_diagnostico_enfermeria;
-    private Button btn_guardar_diagnostico_enfermeria;
+    private EditText etDiagnosticoEnfermeria;
     //Variables de Clases
     private AtencionEnfermeria atencionEnfermeria;
     private Empleado empleado;
 
-    private String descripcion_diagnostico_enfermeria, id_empleado_servidor; //1) Declarar id_empelado_servidor y mResultCallback
-    private String precedencia;
+    private String descripcionDiagnosticoEnfermeria, idEmpleadoServidor;
 
     //constructor por defecto
     public DiagnosticoEnfermeriaFragment() {}
@@ -55,28 +53,28 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate y vinculaciones de las variables globales
         View view = inflater.inflate(R.layout.fragment_diagnotico_enfermeria, container, false);
-        et_diagnostico_enfermeria = view.findViewById(R.id.et_diagnostico_enfermeria);
-        btn_guardar_diagnostico_enfermeria = view.findViewById(R.id.btn_guardar_diagnostico_enfermeria);
+        etDiagnosticoEnfermeria = view.findViewById(R.id.etDiagnosticoEnfermeria);
+        Button btn_guardar_diagnostico_enfermeria = view.findViewById(R.id.btnGuardarDiagnosticoEnfermeria);
 
         //Obtencion de parametros de ventana contenedora AtencionEnfermeriaActivity
         Bundle bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         if (bun != null) {
-            precedencia = bun.getString("PRECEDENCIA");
+            String precedencia = bun.getString("PRECEDENCIA");
             String id_atencion_enfemeria = bun.getString("ID_ATENCION");
             atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class,Long.valueOf(id_atencion_enfemeria));
             String id_empleado = bun.getString("ID_EMPLEADO");
             empleado = Empleado.findById(Empleado.class, Long.parseLong(id_empleado));
 
-            id_empleado_servidor = String.valueOf(empleado.getId_serv());
+            idEmpleadoServidor = String.valueOf(empleado.getId_serv());
 
             String cargo = bun.getString("CARGO");
-            if(cargo.equals("Doctor")){
+            if (cargo != null && cargo.equals("Doctor")) {
                 btn_guardar_diagnostico_enfermeria.setVisibility(View.GONE);
-                et_diagnostico_enfermeria.setEnabled(false);
+                etDiagnosticoEnfermeria.setEnabled(false);
             }
             //Si va a consultar, muestra los datos
-            if(precedencia.equals("consultar")) {
-                et_diagnostico_enfermeria.setText(atencionEnfermeria.getDiagnosticoEnfermeria());
+            if (precedencia != null && precedencia.equals("consultar")) {
+                etDiagnosticoEnfermeria.setText(atencionEnfermeria.getDiagnosticoEnfermeria());
                 btn_guardar_diagnostico_enfermeria.setText("Editar");
             }
         }
@@ -97,8 +95,8 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
      **/
     private void guardarAtencionEnfermeria() {
         //Valida lo que se ingresa  (2 lineas)
-        descripcion_diagnostico_enfermeria = et_diagnostico_enfermeria.getText().toString();
-        int res = atencionEnfermeria.validarCampoTexto(descripcion_diagnostico_enfermeria);
+        descripcionDiagnosticoEnfermeria = etDiagnosticoEnfermeria.getText().toString();
+        int res = atencionEnfermeria.validarCampoTexto(descripcionDiagnosticoEnfermeria);
         switch (res) {
             case 0:
                 Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
@@ -127,7 +125,7 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
         atencionEnfermeria.setId_serv(id_serv);
         atencionEnfermeria.setFecha_atencion(fecha);
         atencionEnfermeria.setStatus(status);
-        atencionEnfermeria.setDiagnosticoEnfermeria(descripcion_diagnostico_enfermeria); //setea lo que quieres
+        atencionEnfermeria.setDiagnosticoEnfermeria(descripcionDiagnosticoEnfermeria); //setea lo que quieres
         atencionEnfermeria.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
@@ -142,7 +140,7 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
      * */
     private void actualizarAtencionLocal(int status){
         atencionEnfermeria.setStatus(status);
-        atencionEnfermeria.setDiagnosticoEnfermeria(descripcion_diagnostico_enfermeria);
+        atencionEnfermeria.setDiagnosticoEnfermeria(descripcionDiagnosticoEnfermeria);
         atencionEnfermeria.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han editado los datos", Toast.LENGTH_SHORT).show();
@@ -162,7 +160,7 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
         String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback("POST");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(id_empleado_servidor,fechaConsulta, "", descripcion_diagnostico_enfermeria,"");
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(idEmpleadoServidor,fechaConsulta, "", descripcionDiagnosticoEnfermeria,"");
         requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj, token);
     }
 
@@ -177,7 +175,7 @@ public class DiagnosticoEnfermeriaFragment extends Fragment {
         initRequestCallback("PUT");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(idEmpleadoServidor,
-                new Date(),atencionEnfermeria.getMotivoAtencion(), descripcion_diagnostico_enfermeria, atencionEnfermeria.getPlanCuidados());
+                new Date(),atencionEnfermeria.getMotivoAtencion(), descripcionDiagnosticoEnfermeria, atencionEnfermeria.getPlanCuidados());
         requestService.putDataRequest("PUTCALL", URL_ATENCION_ENFERMERIA+idConsultaServidor+"/", sendObj, token);
     }
 

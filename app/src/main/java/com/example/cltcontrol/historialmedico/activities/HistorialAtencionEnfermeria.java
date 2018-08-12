@@ -20,7 +20,7 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
     private String idEmpleado,cargo, idAtencion;
     private List<AtencionEnfermeria> atencionEnfermeriaList;
     @SuppressLint("StaticFieldLeak")
-    public static AdapterItemAtencionEnfermeria adapter;
+    public static AdapterItemAtencionEnfermeria adapterItemAtencionEnfermeria;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -43,9 +43,9 @@ public class HistorialAtencionEnfermeria extends FragmentActivity {
         //Obtiene las atenciones de enfermeria de un empleado
         atencionEnfermeriaList = AtencionEnfermeria.find(AtencionEnfermeria.class, "empleado = ?", idEmpleado);
 
-        //Crea un adapter de dicha lista y la muestra en un listview
-        adapter = new AdapterItemAtencionEnfermeria(this, atencionEnfermeriaList);
-        lvAtencionEnf.setAdapter(adapter);
+        //Crea un adapterItemAtencionEnfermeria de dicha lista y la muestra en un listview
+        adapterItemAtencionEnfermeria = new AdapterItemAtencionEnfermeria(this, atencionEnfermeriaList);
+        lvAtencionEnf.setAdapter(adapterItemAtencionEnfermeria);
 
         //Busca al empleado con el id y muestra la informacion en el frgagment de informacion
         Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));

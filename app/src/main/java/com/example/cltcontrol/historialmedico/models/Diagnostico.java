@@ -3,30 +3,33 @@ package com.example.cltcontrol.historialmedico.models;
 import android.util.Log;
 
 import com.orm.SugarRecord;
-import com.orm.dsl.Unique;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Diagnostico extends SugarRecord{
-    private int id_serv;
+    private int id_serv, status;
     private ConsultaMedica consulta_medica;
     private Enfermedad enfermedad;
-    private String tipoEnfermedad;
-    private int status;
+    private PermisoMedico permiso_medico;
+    private String tipo_enfermedad;
 
     public Diagnostico() {
     }
 
-    public Diagnostico(ConsultaMedica consultaMedica, Enfermedad enfermedad, String tipoEnfermedad) {
+    public Diagnostico(ConsultaMedica consultaMedica, Enfermedad enfermedad, String tipo_enfermedad) {
         this.consulta_medica = consultaMedica;
         this.enfermedad = enfermedad;
-        this.tipoEnfermedad = tipoEnfermedad;
+        this.tipo_enfermedad = tipo_enfermedad;
+    }
+
+    public PermisoMedico getPermiso_medico() {
+        return permiso_medico;
+    }
+
+    public void setPermiso_medico(PermisoMedico permiso_medico) {
+        this.permiso_medico = permiso_medico;
     }
 
     public int getStatus() {
@@ -61,43 +64,27 @@ public class Diagnostico extends SugarRecord{
         this.enfermedad = enfermedad;
     }
 
-    public String getTipoEnfermedad() {
-        return tipoEnfermedad;
+    public String getTipo_enfermedad() {
+        return tipo_enfermedad;
     }
 
-    public void setTipoEnfermedad(String tipoEnfermedad) {
-        this.tipoEnfermedad = tipoEnfermedad;
+    public void setTipo_enfermedad(String tipo_enfermedad) {
+        this.tipo_enfermedad = tipo_enfermedad;
     }
 
-    public ArrayList<Diagnostico> getDiagnosticoCreadoUnsynced(){
-        return (ArrayList<Diagnostico>) Diagnostico.find(Diagnostico.class, "status = ? and idserv = ?", String.valueOf(0), String.valueOf(0));
+    public ArrayList<Diagnostico> getDiagnosticoUnsynced(){
+        return (ArrayList<Diagnostico>) Diagnostico.find(Diagnostico.class, "status = ?",
+                String.valueOf(0));
     }
 
-    public ArrayList<Diagnostico> getDiagnosticoEditadoUnsynced(){
-        return (ArrayList<Diagnostico>) Diagnostico.find(Diagnostico.class, "status = ?", String.valueOf(0));
-    }
-
-    public static JSONObject getJSONDiagnostico(String id_consulta, String tipo_enfermedad, String id_enfermedad){
-        JSONObject sendObj = null;
-        try {
-            sendObj = new JSONObject("{" +
-                    "'consulta_medica': "+id_consulta+", " +
-                    "'enfermedad': '"+id_enfermedad+"', "+
-                    "'tipoEnfermedad': '"+tipo_enfermedad+"'"+
-                    "}");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return sendObj;
-
-    }
-
-    public static Map<String, String> getHashMapDiagnostico(String id_consulta, String tipo_enfermedad, String id_enfermedad){
+    public static Map<String, String> getHashMapDiagnostico(String idConsulta, String idPermiso,
+                                                            String tipoEnfermedad, String idEnfermedad){
 
         Map<String, String> params = new HashMap<>();
-        params.put("consulta_medica", id_consulta);
-        params.put("enfermedad", id_enfermedad);
-        params.put("tipoEnfermedad", tipo_enfermedad);
+        params.put("consulta_medica", idConsulta);
+        params.put("enfermedad", idEnfermedad);
+        params.put("tipo_enfermedad", tipoEnfermedad);
+        params.put("permiso_medico", idPermiso);
 
         Log.d("PARAMSDIAGNOSTICO", String.valueOf(params));
         return params;

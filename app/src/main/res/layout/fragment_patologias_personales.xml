@@ -30,7 +30,7 @@
                     android:weightSum="2">
 
                     <TextView
-                        android:id="@+id/tv_titulo"
+                        android:id="@+id/tvTitulo"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.3"
@@ -42,7 +42,7 @@
                         android:textColor="#FFFFFF" />
 
                     <ImageButton
-                        android:id="@+id/ib_mostrar_ocultar_contendido"
+                        android:id="@+id/ibMostrarOcultarContendido"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimary"
@@ -51,7 +51,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ly_patologias_personales"
+                    android:id="@+id/lyPatologiasPersonales"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -74,11 +74,12 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <EditText
-                            android:id="@+id/editText"
+                            android:id="@+id/etEnfermedad"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
+                            android:textColor="@color/colorDark"
                             android:inputType="textMultiLine" />
                         <EditText
                             android:id="@+id/etDetalleEnfermedad"
@@ -87,11 +88,11 @@
                             android:layout_margin="10dp"
                             android:inputType="textMultiLine"
                             android:hint="Detalles de Enfermedad"
-                            android:textColor="@android:color/black" />
+                            android:textColor="@color/colorDark" />
                     </LinearLayout>
 
                     <Button
-                        android:id="@+id/btnGuardar"
+                        android:id="@+id/btnGuardarPermiso"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Agregar" />

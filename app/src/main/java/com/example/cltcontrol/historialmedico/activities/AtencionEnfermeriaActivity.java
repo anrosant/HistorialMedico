@@ -29,7 +29,7 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements ICom
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_atencion_enfermeria);
-        Button btn_ok = findViewById(R.id.btn_ok);
+        Button btnTerminar = findViewById(R.id.btnTerminar);
 
         //Recibe el id de atencion desde el HistorialAtencionEnfermeria
         idAtencion = getIntent().getStringExtra("ID_ATENCION");
@@ -38,14 +38,14 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements ICom
         cargo = getIntent().getStringExtra("CARGO");
 
         if(cargo.equalsIgnoreCase("Doctor")){
-            btn_ok.setVisibility(View.GONE);
+            btnTerminar.setVisibility(View.GONE);
         }
         //Coloca los datos del empleado en el fragment de informacion
         TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
         Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+ empleado.getNombre());
 
-        btn_ok.setOnClickListener(new View.OnClickListener() {
+        btnTerminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AtencionEnfermeria atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Integer.parseInt(idAtencion));
@@ -55,7 +55,7 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements ICom
 
                 ArrayList<AtencionEnfermeria> atencionEnfermerias = (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class,
                         "empleado = ?", idEmpleado);
-                HistorialAtencionEnfermeria.adapter.actualizarAtencionEnfermeriaList(atencionEnfermerias);
+                HistorialAtencionEnfermeria.adapterItemAtencionEnfermeria.actualizarAtencionEnfermeriaList(atencionEnfermerias);
                 AtencionEnfermeriaActivity.super.onBackPressed();
             }
         });

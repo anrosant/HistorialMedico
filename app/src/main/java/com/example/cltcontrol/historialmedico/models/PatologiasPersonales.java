@@ -81,30 +81,10 @@ public class PatologiasPersonales extends SugarRecord {
         this.detalle = detalle;
     }
 
-    public ArrayList<PatologiasPersonales> getPatologiasPersonalesCreadosUnsynced(){
-        return (ArrayList<PatologiasPersonales>) PatologiasPersonales.find(PatologiasPersonales.class, "status = ? and idserv = ?", String.valueOf(0), String.valueOf(0));
-    }
-
-    public ArrayList<PatologiasPersonales> getPatologiasPersonalesEditadosUnsynced(){
+    public ArrayList<PatologiasPersonales> getPatologiasPersonalesUnsynced(){
         return (ArrayList<PatologiasPersonales>) PatologiasPersonales.find(PatologiasPersonales.class, "status = ?", String.valueOf(0));
     }
 
-    public static JSONObject getJSONPatologiasPersonales(String id_ficha, String id_consulta, String lugar, String detalle){
-        JSONObject sendObj = null;
-        try {
-            sendObj = new JSONObject("{" +
-                    "'ficha': '"+id_ficha+"', " +
-                    "'consulta_medica': '"+id_consulta+"', "+
-                    "'lugar': '"+lugar+"',"+
-                    "'detalle': '"+detalle+"'"+
-                    "}");
-            Log.d("ENDOBJ", String.valueOf(sendObj));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return sendObj;
-
-    }
     public static Map<String,String> getHashMapPatologiasPersonales(String id_ficha, String id_consulta, String lugar, String detalle){
         Map<String, String> params = new HashMap<>();
         params.put("ficha", id_ficha);

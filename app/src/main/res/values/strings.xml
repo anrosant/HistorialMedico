@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Sistema Médico Ocupacional
     </string>
+    <string name="info">Información
+    </string>
     <string name="buscar_empleado">Buscar empleado
     </string>
     <string name="historial_consulta_medica">Historial de consulta médica
@@ -13,11 +15,88 @@
     </string>
     <string name="consulta_medica" tools:keep="@string/consultaMedica">Consulta médica
     </string>
-    <string name="inicio_sesion">Inicio de sesión</string>
-    <string name="contrasenia">CONTRASEÑA</string>
-    <string name="usuario">USUARIO</string>
-    <string name="ingresar">INGRESAR</string>
+    <string name="inicio_sesion">Inicio de sesión
+    </string>
+    <string name="contrasenia">CONTRASEÑA
+    </string>
+    <string name="usuario">USUARIO
+    </string>
+    <string name="ingresar">INGRESAR
+    </string>
+    <string name="consulta">Consulta Médica
+    </string>
+    <string name="atencion">Atención enfermería
+    </string>
+    <string name="signos">Signos vitales
+    </string>
+    <string name="permiso">Permiso médico particular
+    </string>
+    <string name="buscar_por_apellido">Buscar por apellido
+    </string>
+    <string name="nav_header_title">Sistema Médico Ocupacional
+    </string>
+    <string name="nav_header_subtitle">nombre de usuario
+    </string>
+    <string name="action_settings">Configuraciones
+    </string>
+    <string name="info_inicial">
+        Esta aplicación fue desarrollada con la finalidad de llevar un control médico de los
+        empleados de la empresa Pinturas Ecuatorianas S.A. Pintuco.
+        Los usuarios son el doctor y enfermera encargados.\n
+    </string>
+    <string name="consulta_info">
+        Las consultas médicas son realizadas por el/la doctor/a y contiene:\n
+                \t\t > Signos vitales: Pulso, presión \n\t\t sistólica, presión distólica \n\t\t
+                        y temperatura\n
+                \t\t > Motivo de la consulta\n
+                \t\t > Patologías personales\n
+                \t\t > Patologías familiares: Lista de las \n\t\tpatologías\n
+                \t\t > Problema actual\n
+                \t\t > Revisión médica\n
+                \t\t > Examen físico\n
+                \t\t > Anexar exámenes: En esta sección el \n\t\tusuario puede seleccionar una
+                        imagen\n\t\t de la galería o tomar foto.\n
+                \t\t > Diagnóstico\n
+                \t\t > Permiso médico\n
+                \t\t > Preescripción\n
+        \nEste módulo permite al usuario ver la lista de consultas realizadas a un empleado.
+        También permite crear una nueva consulta.\n
+    </string>
+    <string name="atencion_info">
+        Las atenciones de enfermería son realizadas por el/la enfermero/a y contiene:\n
+                \t\t > Signos vitales: Pulso, presión \n\t\t sistólica, presión distólica \n\t\t
+                        y temperatura\n
+                \t\t distólica y temperatura\n
+                \t\t > Motivo de atención\n
+                \t\t > Diagnóstico: Inicial\n
+                \t\t > Plan de cuidados\n
+        \nEste módulo permite al usuario ver la lista de atenciones realizadas a un empleado.
+        También permite crear una nueva atención de enfermería.\n
+    </string>
 
+    <string name="signos_info">
+        Los signos vitales pueden ser realizadas por enfermera/o o doctor/a y contiene:\n
+                \t\t > Pulso\n
+                \t\t > Presión sistólica\n
+                \t\t > Presión distólica\n
+                \t\t > Temperatura\n
+        \nEste módulo permite al usuario ver la lista de signos realizados a un empleado.
+        También permite añadir signos sin tener que crear una atención o consulta.\n
+    </string>
+
+    <string name="permiso_info">
+        Los permisos médicos particulares son realizadas por un/a doctor/a ajeno a la empresa y contiene:\n
+                \t\t > Diagnóstico: Puede tener o no\n
+                \t\t > Días de permiso médico\n
+                \t\t > Observaciones\n
+                \t\t > Médico/ Institución\n
+        \nEste módulo permite al usuario añadir un permiso médico personal o externo de un empleado.\n
+    </string>
+    <string name="info_extra">
+        Estos datos son enviados al servidor y guardados localmente, en caso de que no disponga de
+        conexión a internet, se guardan localmente hasta ser sincronizadas al servidor cuando
+        se conecte a una red.\n\n
+    </string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

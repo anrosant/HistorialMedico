@@ -36,13 +36,13 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
     //Interface
     private IResult mResultCallback;
     //Variables de view
-    private EditText et_motivo_atencion;
-    private Button btn_guardar_motivo_atencion;
+    private EditText etMotivoAtencion;
+    private Button btnGuardarMotivoAtencion;
     //Variables de Clases
     private AtencionEnfermeria atencionEnfermeria;
     private Empleado empleado;
 
-    private String descripcion_motivo_atencion, id_empleado_servidor;
+    private String descripcionMotivoAtencion, idEmpleadoServidor;
 
     //constructor por defecto
     public MotivoAtencionEnfermeriaFragment() {
@@ -57,8 +57,8 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_motivo_atencion, container, false);
 
         //referencia de variables de views
-        et_motivo_atencion = view.findViewById(R.id.et_motivo_atencion);
-        btn_guardar_motivo_atencion = view.findViewById(R.id.btn_guardar_motivo_atencion);
+        etMotivoAtencion = view.findViewById(R.id.etMotivoAtencion);
+        btnGuardarMotivoAtencion = view.findViewById(R.id.btnGuardarMotivoAtencion);
 
         Bundle bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
@@ -70,24 +70,24 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
             String id_empleado = bun.getString("ID_EMPLEADO");
             empleado = Empleado.findById(Empleado.class, Long.parseLong(id_empleado));
 
-            id_empleado_servidor = String.valueOf(empleado.getId_serv());
+            idEmpleadoServidor = String.valueOf(empleado.getId_serv());
 
             String cargo = bun.getString("CARGO");
             if (cargo != null && cargo.equals("Doctor")) {
-                btn_guardar_motivo_atencion.setVisibility(View.GONE);
-                et_motivo_atencion.setEnabled(false);
+                btnGuardarMotivoAtencion.setVisibility(View.GONE);
+                etMotivoAtencion.setEnabled(false);
             }
             if (precedencia != null && precedencia.equals("consultar")) {
                 ////funcionalidad para cargar un signo vital con el id de Atencion
-                et_motivo_atencion.setText(atencionEnfermeria.getMotivoAtencion());
-                btn_guardar_motivo_atencion.setText("Editar");
+                etMotivoAtencion.setText(atencionEnfermeria.getMotivoAtencion());
+                btnGuardarMotivoAtencion.setText("Editar");
             }
         }
 
         /*
          * Guarda los datos de un motivo atención
          * */
-        btn_guardar_motivo_atencion.setOnClickListener(new View.OnClickListener() {
+        btnGuardarMotivoAtencion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 guardarAtencionEnfermeria();
@@ -101,8 +101,8 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
      **/
     private void guardarAtencionEnfermeria() {
         //Valida lo que se ingresa  (2 lineas)
-        descripcion_motivo_atencion = et_motivo_atencion.getText().toString();
-        int res = atencionEnfermeria.validarCampoTexto(descripcion_motivo_atencion);
+        descripcionMotivoAtencion = etMotivoAtencion.getText().toString();
+        int res = atencionEnfermeria.validarCampoTexto(descripcionMotivoAtencion);
         switch (res) {
             case 0:
                 Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
@@ -130,7 +130,7 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
         atencionEnfermeria.setId_serv(id_serv);
         atencionEnfermeria.setFecha_atencion(fecha);
         atencionEnfermeria.setStatus(status);
-        atencionEnfermeria.setMotivoAtencion(descripcion_motivo_atencion);
+        atencionEnfermeria.setMotivoAtencion(descripcionMotivoAtencion);
         atencionEnfermeria.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
@@ -145,7 +145,7 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
      * */
     private void actualizarAtencionLocal(int status){
         atencionEnfermeria.setStatus(status);
-        atencionEnfermeria.setMotivoAtencion(descripcion_motivo_atencion);
+        atencionEnfermeria.setMotivoAtencion(descripcionMotivoAtencion);
         atencionEnfermeria.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han editado los datos", Toast.LENGTH_SHORT).show();
@@ -164,7 +164,7 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
         String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback("POST");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(id_empleado_servidor,fechaConsulta, descripcion_motivo_atencion,"","");
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(idEmpleadoServidor,fechaConsulta, descripcionMotivoAtencion,"","");
         requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj, token);
     }
 
@@ -179,7 +179,7 @@ public class MotivoAtencionEnfermeriaFragment extends Fragment {
         initRequestCallback("PUT");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         Map<String, String> sendObj = atencionEnfermeria.getHashMapAtencionEnfermeria(idEmpleadoServidor,
-                new Date(), descripcion_motivo_atencion,atencionEnfermeria.getDiagnosticoEnfermeria(), atencionEnfermeria.getPlanCuidados());
+                new Date(), descripcionMotivoAtencion,atencionEnfermeria.getDiagnosticoEnfermeria(), atencionEnfermeria.getPlanCuidados());
         requestService.putDataRequest("PUTCALL", URL_ATENCION_ENFERMERIA+idConsultaServidor+"/", sendObj, token);
     }
 

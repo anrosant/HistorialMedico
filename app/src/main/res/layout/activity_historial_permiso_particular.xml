@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.HistorialConsultaMedica">
+
+    <fragment
+        android:id="@+id/frDatosEmpleado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.example.cltcontrol.historialmedico.fragments.DatosEmpleadoFragment"
+        tools:layout="@layout/fragment_datos_empleado">
+    </fragment>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/my_style_title"
+        android:padding="10dp"
+        android:text="Historial Permisos Particulares"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-3dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/my_style_content">
+
+        <ListView
+            android:id="@+id/lvPermisosParticulares"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:divider="@null">
+        </ListView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnAgregarPermisoParticular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:onClick="aperturaPermisoMedicoParticular"
+            android:src="@drawable/ic_add_white"
+            />
+
+    </FrameLayout>
+
+</LinearLayout>

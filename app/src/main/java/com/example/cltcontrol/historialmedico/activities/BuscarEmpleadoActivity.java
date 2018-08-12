@@ -5,15 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+
 import com.example.cltcontrol.historialmedico.adapter.AdapterItemEmpleado;
 import com.example.cltcontrol.historialmedico.adapter.RecyclerItemClickListener;
 import com.example.cltcontrol.historialmedico.R;
@@ -22,11 +28,12 @@ import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.quitaDiacriticos;
 
-public class BuscarEmpleadoActivity extends FragmentActivity {
-    private static List<Empleado> empleadosList;
+public class BuscarEmpleadoActivity extends AppCompatActivity{
+    private static List<Empleado> empleadoList;
     private AdapterItemEmpleado adaptadorEmpleados;
     private EditText etBuscar;
 
@@ -39,13 +46,19 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
         ImageView ivFlechaLimpiar = findViewById(R.id.ivFlechaLimpiar);
         RecyclerView recyclerEmpleados = findViewById(R.id.rvlistaempleados);
         recyclerEmpleados.setLayoutManager(new LinearLayoutManager(this));
-        TextView etNombreUsuario = findViewById(R.id.tv_usuario);
 
 
         //Obtener el nombre del usuario que inició sesión
         SessionManager sesion = new SessionManager(getApplicationContext());
+
         String nombreUsuario = sesion.obtenerInfoUsuario().get("nombre_usuario");
-        etNombreUsuario.setText(nombreUsuario);
+
+        Toolbar myToolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(myToolbar);
+
+        Objects.requireNonNull(getSupportActionBar()).setTitle(nombreUsuario);
+
 
         readEmpleadosAll();
 
@@ -69,7 +82,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                 String newText = quitaDiacriticos(etBuscar.getText().toString().toLowerCase());
                 if(newText.length() != 0 && adaptadorEmpleados.validarBusqueda(newText)){
                     List<Empleado> newList = new ArrayList<>();
-                    for(Empleado empleado:empleadosList){
+                    for(Empleado empleado: empleadoList){
                         String nombre = empleado.getNombre().toLowerCase();
                         String apellido = empleado.getApellido().toLowerCase();
                         if(nombre.contains(newText) || apellido.contains(newText)){
@@ -78,12 +91,12 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
                     }
                     adaptadorEmpleados.setFilter(newList);
                 } else {
-                    adaptadorEmpleados.setFilter(empleadosList);
+                    adaptadorEmpleados.setFilter(empleadoList);
                 }
             }
         });
 
-        adaptadorEmpleados = new AdapterItemEmpleado(empleadosList);
+        adaptadorEmpleados = new AdapterItemEmpleado(empleadoList);
         recyclerEmpleados.setAdapter(adaptadorEmpleados);
 
         recyclerEmpleados.addOnItemTouchListener(
@@ -103,27 +116,64 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
     }
 
     /*
+     * Crea una instancia del menú
+     * */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+
+        inflater.inflate(R.menu.menu_usuario, menu);
+
+        return true;
+
+    }
+
+    /*
+     * Menú de opciones
+     * Si selecciona el primer item va a la actividad Acerca sino cierra sesión
+     * */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.item_acerca:
+
+                startActivity(new Intent(this, AcercaActivity.class));
+
+                return true;
+
+            case R.id.item_cerrar_sesion:
+
+                cerrarSesion();
+
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+
+        }
+
+
+
+    }
+
+    /*
      * Guada todos los empleados que se encuentran en la base de datos en una lista
      * */
     private void readEmpleadosAll(){
         try{
-            empleadosList = Empleado.listAll(Empleado.class);
+            empleadoList = Empleado.listAll(Empleado.class);
         }catch (Exception e){
             Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
         }
     }
 
     /*
-    * Cierra sesión desde el botón
-    * */
-    public void cerrarSesionBoton(View view){
-        cerrarSesion();
-    }
-
-    /*
     * Cierra la sesión
     * */
-    public void cerrarSesion(){
+    private void cerrarSesion(){
         SessionManager sesion = new SessionManager(getApplicationContext());
         sesion.cerrarSesion(getApplicationContext());
         finish();
@@ -134,7 +184,7 @@ public class BuscarEmpleadoActivity extends FragmentActivity {
      * */
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+        android.app.AlertDialog.Builder alertbox = new android.app.AlertDialog.Builder(this);
         //seleccionamos la cadena a mostrar
         alertbox.setMessage("¿Desea cerrar sesión?");
         //elegimos un positivo SI

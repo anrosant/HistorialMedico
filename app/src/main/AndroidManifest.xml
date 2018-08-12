@@ -6,8 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
@@ -18,7 +18,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="DATABASE"
             android:value="historialmedico" />
@@ -35,47 +34,55 @@
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.AcercaActivity"
+            android:label="@string/info" />
+        <activity
             android:name=".activities.BuscarEmpleadoActivity"
-            android:label="@string/buscar_empleado"/>
+            android:label="@string/buscar_empleado"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.HistorialConsultaMedica"
-            android:label="@string/historial_consulta_medica"/>
+            android:label="@string/historial_consulta_medica" />
         <activity
             android:name=".activities.HistorialAtencionEnfermeria"
-            android:label="@string/historial_atencion_enfermeria"/>
+            android:label="@string/historial_atencion_enfermeria" />
         <activity
             android:name=".activities.MenuEmpleadoActivity"
-            android:label="@string/menu_empleado"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/menu_empleado" />
         <activity
             android:name=".activities.SigVitalRapidoActivity"
-            android:label="Signos vitales"/>
+            android:label="Signos vitales" />
         <activity
             android:name=".activities.PermisosMedicosActivity"
-            android:label="Permisos Medicos"
-            android:configChanges="screenSize|orientation" />
+            android:configChanges="screenSize|orientation"
+            android:label="Permisos Medicos" />
         <activity
             android:name=".activities.GaleriaFragmentActivity"
-            android:label="Galeria"/>
+            android:label="Galeria" />
         <activity
             android:name=".activities.ConsultaMedicaNuevoActivity"
-            android:label="@string/consulta_medica_nuevo"
             android:configChanges="screenSize|orientation"
-            android:windowSoftInputMode="stateHidden"/>
+            android:label="@string/consulta_medica_nuevo"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.AtencionEnfermeriaActivity"
-            android:label="@string/consulta_medica_nuevo"
-            android:configChanges="screenSize|orientation" />
+            android:configChanges="screenSize|orientation"
+            android:label="@string/consulta_medica_nuevo" />
 
         <receiver android:name=".utils.SincronizacionInmediata">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
                     tools:ignore="BatteryLife" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

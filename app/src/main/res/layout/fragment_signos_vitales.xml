@@ -29,7 +29,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tv_titulo"
+                        android:id="@+id/tvTitulo"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/colorPrimary"
@@ -44,7 +44,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ly_signos_vitales"
+                    android:id="@+id/lySignosVitales"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -167,7 +167,7 @@
 
 
                     <Button
-                        android:id="@+id/btnGuardar"
+                        android:id="@+id/btnGuardarPermiso"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

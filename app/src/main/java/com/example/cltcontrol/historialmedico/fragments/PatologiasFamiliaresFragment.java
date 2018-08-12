@@ -13,18 +13,13 @@ import com.example.cltcontrol.historialmedico.adapter.AdapterPatologiasFamiliare
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.PatologiasFamiliares;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class PatologiasFamiliaresFragment extends Fragment {
 
-    private AdapterPatologiasFamiliares adapterPatologiaFamiliares;
-    private Empleado empleado;
-
-    public PatologiasFamiliaresFragment() {
-        // Required empty public constructor
-    }
+    //Constructor vacío requerido
+    public PatologiasFamiliaresFragment() { }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -37,25 +32,17 @@ public class PatologiasFamiliaresFragment extends Fragment {
         final Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         if (extras != null) {
             String id_empleado = extras.getString("ID_EMPLEADO");
-            empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+            Empleado empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
             //Obtenemos la lista de patologias personales que existan
             List<PatologiasFamiliares> patologiasFamiliaresList = PatologiasFamiliares.find(PatologiasFamiliares.class, "idficha = ?", String.valueOf(empleado.getFicha_actual()));
 
-            //Crea un adapter de dicha lista y la muestra en un listview
-            adapterPatologiaFamiliares = new AdapterPatologiasFamiliares(getContext(), patologiasFamiliaresList);
+            //Crea un adapterItemAtencionEnfermeria de dicha lista y la muestra en un listview
+            AdapterPatologiasFamiliares adapterPatologiaFamiliares = new AdapterPatologiasFamiliares(getContext(), patologiasFamiliaresList);
             lvPatologiasFamiliares.setAdapter(adapterPatologiaFamiliares);
         }
         return view;
 
     }
 
-    /*
-     * Función que actualiza la lista de las patologías personales
-     * */
-    private void actualizarPatologiasPersonales(){
-        ArrayList<PatologiasFamiliares> patFamList = (ArrayList<PatologiasFamiliares>) PatologiasFamiliares.find(PatologiasFamiliares.class,
-                "idficha = ?", String.valueOf(empleado.getFicha_actual()));
-        adapterPatologiaFamiliares.actualizarPatologiasFamiliaresList(patFamList);
-    }
 
 }

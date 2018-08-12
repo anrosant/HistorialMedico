@@ -65,9 +65,9 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
         try {
-            Date fecha_consulta = simpleDateFormat.parse(consultaMedica.getFechaConsulta().toString());
+            Date fechaConsulta = simpleDateFormat.parse(consultaMedica.getFechaConsulta().toString());
             simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            tvfechaConsulta.setText(simpleDateFormat.format(fecha_consulta));
+            tvfechaConsulta.setText(simpleDateFormat.format(fechaConsulta));
             tvfechaConsulta.setEnabled(false);
         } catch (ParseException e) {
             e.printStackTrace();

@@ -146,8 +146,8 @@ public class SignosVitales extends SugarRecord {
             int presionDistolica = Integer.parseInt(presion_distolica);
             float temp = Float.parseFloat(temperatura);
             int pul = Integer.parseInt(pulso);
-            if(presionSistolica < 100 || presionSistolica > 135 || presionDistolica < 70 || presionDistolica > 90 ||
-                    pul < 60 || pul > 100 || temp < 34 || temp > 43)
+            if(presionSistolica < 0 || presionSistolica > 200 || presionDistolica < 0 || presionDistolica > 200 ||
+                    pul < 0 || pul > 200 || temp < 0 || temp > 200)
                 return 1;
         } catch(Exception e){
             return 2;
@@ -155,32 +155,8 @@ public class SignosVitales extends SugarRecord {
         return 3;
     }
 
-    public ArrayList<SignosVitales> getSignosVitalesCreadosUnsynced(){
-        return (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class, "status = ? and idserv = ?", String.valueOf(0), String.valueOf(0));
-    }
-    public ArrayList<SignosVitales> getSignosVitalesEditadosUnsynced(){
+    public ArrayList<SignosVitales> getSignosVitalesUnsynced(){
         return (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class, "status = ?", String.valueOf(0));
-    }
-
-    public static JSONObject getJSONSignosVitales(String id_empleado_servidor, String id_consulta_medica, String id_atencion,
-                                                   String presionSistolicaText, String presionDistolicaText,
-                                                   String pulsoText, String temperaturatext){
-        JSONObject sendObj = null;
-        try {
-            sendObj = new JSONObject("{" +
-                    "'consulta_medica': '"+id_consulta_medica+"', " +
-                    "'atencion_enfermeria': '"+id_atencion+"',"+
-                    "'empleado': '"+id_empleado_servidor+"', " +
-                    "'presion_sistolica': '"+presionSistolicaText+"', " +
-                    "'presion_distolica': '"+presionDistolicaText+"', " +
-                    "'pulso': '"+pulsoText+"', " +
-                    "'temperatura': '" +temperaturatext+"'"+
-                    "}");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return sendObj;
-
     }
 
     public static Map<String, String> getHashMapSignosVitales(String id_empleado_servidor, String id_consulta_medica, String id_atencion,

@@ -97,30 +97,8 @@ public class AtencionEnfermeria extends SugarRecord {
         return 2;
     }
 
-    public ArrayList<AtencionEnfermeria> getAtencionEnfermeriaCreadaUnsynced(){
-        return (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class, "status = ? and idserv = ?", String.valueOf(0),String.valueOf(0));
-    }
-    public ArrayList<AtencionEnfermeria> getAtencionEnfermeriaEditadaUnsynced(){
+    public ArrayList<AtencionEnfermeria> getAtencionEnfermeriaUnsynced(){
         return (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class, "status = ?", String.valueOf(0));
-    }
-
-    public static JSONObject getJSONAtencionEnfermeria(String id_empleado_servidor, Date fecha_consulta,
-                                                       String motivo, String diagnostico, String plan){
-        JSONObject sendObj = null;
-        try {
-            sendObj = new JSONObject("{" +
-                    "'empleado': "+String.valueOf(id_empleado_servidor)+", " +
-                    "'fecha': '"+String.valueOf(android.text.format.DateFormat.format("yyyy-MM-dd", fecha_consulta))+"', " +
-                    "'motivoAtencion': '"+motivo+"', "+
-                    "'diagnosticoEnfermeria': '"+diagnostico+"',"+
-                    "'planCuidados': '"+plan+"'"+
-                    "}");
-            Log.d("ENDOBJ", String.valueOf(sendObj));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return sendObj;
-
     }
 
     public static Map<String, String> getHashMapAtencionEnfermeria(String id_empleado_servidor, Date fecha_consulta,

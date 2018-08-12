@@ -51,24 +51,20 @@ public class SignosVitalesFragment extends Fragment {
     private TextView tvTitulo;
     private Button btnGuardar;
 
-    private String idConsultaMedica;
-    private String cargo;
     private AdapterSignosVitales adapterSignosVitales;
     private List<SignosVitales> signosVitalesList;
     private ConsultaMedica consultaMedica;
     private SignosVitales signos;
     private Empleado empleado;
+    private Date fechaConsulta, fechaSigno;
+    private String idConsultaMedica, cargo,presionDistolicaText, presionSistolicaText,
+            temperaturatext, pulsoText ;
+    private int idEmpleadoServidor;
 
     //POST
     private IResult mResultCallback = null;
     private RequestService requestService;
-    private int idEmpleadoServidor;
 
-    private String presionSistolicaText;
-    private String presionDistolicaText;
-    private String temperaturatext;
-    private String pulsoText;
-    private Date fechaConsulta, fechaSigno;
 
     public SignosVitalesFragment() {
         // Required empty public constructor
@@ -91,9 +87,9 @@ public class SignosVitalesFragment extends Fragment {
         etTemperatura = view.findViewById(R.id.etTemperatura);
         etPulso = view.findViewById(R.id.etPulso);
         ListView lvSignosVitales = view.findViewById(R.id.lvSignosVitales);
-        btnGuardar = view.findViewById(R.id.btnGuardar);
-        lySignosVitales = view.findViewById(R.id.ly_signos_vitales);
-        tvTitulo = view.findViewById(R.id.tv_titulo);
+        btnGuardar = view.findViewById(R.id.btnGuardarPermiso);
+        lySignosVitales = view.findViewById(R.id.lySignosVitales);
+        tvTitulo = view.findViewById(R.id.tvTitulo);
         //
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         //Recibe el id de consulta medica desde Historial de consulta medica
@@ -122,7 +118,7 @@ public class SignosVitalesFragment extends Fragment {
 
         }
 
-        //Crea un adapter de dicha lista y la muestra en un listview
+        //Crea un adapterItemAtencionEnfermeria de dicha lista y la muestra en un listview
         adapterSignosVitales = new AdapterSignosVitales(getContext(), signosVitalesList);
         lvSignosVitales.setAdapter(adapterSignosVitales);
 
@@ -171,10 +167,8 @@ public class SignosVitalesFragment extends Fragment {
         tvTitulo.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                final int DRAWABLE_LEFT = 0;
-                final int DRAWABLE_TOP = 1;
+
                 final int DRAWABLE_RIGHT = 2;
-                final int DRAWABLE_BOTTOM = 3;
 
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     if(motionEvent.getRawX() >= (tvTitulo.getRight() - tvTitulo.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
@@ -195,18 +189,22 @@ public class SignosVitalesFragment extends Fragment {
         return view;
     }
     /*
-    * Función que carga los signos vitales en la lista
-    * */
+     * Función que carga los signos vitales en la lista
+     * @param id id de la consulta médica en la que se encuentra, tipo long
+     * */
     private void cargarSignosVitales(Long id){
         ArrayList<SignosVitales> signosVitalesList = (ArrayList<SignosVitales>) SignosVitales.find(SignosVitales.class,
                 "consultamedica = ?", String.valueOf(id));
         adapterSignosVitales.actualizarSignosVitalesList(signosVitalesList);
     }
+
     /*
-    * Función que guarda los signos vitales localmente
-    * */
-    private void guardarSignosVitalesLocal(int id_serv, int status){
-        signos.setId_serv(id_serv);
+     * Función que guarda los signos vitales localmente
+     * @param idServidor id del signo vital en el servidor, tipo entero
+     * @param status si los datos se enviaron al servidor (1) o no (0) tipo entero
+     * */
+    private void guardarSignosVitalesLocal(int idServidor, int status){
+        signos.setId_serv(idServidor);
         signos.setPresion_sistolica(Integer.parseInt(presionSistolicaText));
         signos.setPresion_distolica(Integer.parseInt(presionDistolicaText));
         signos.setPulso(Integer.parseInt(pulsoText));
@@ -229,16 +227,19 @@ public class SignosVitalesFragment extends Fragment {
 
     /*
     * Función que guarda una consulta médica localmente
+    * @param fechaConsulta fecha en la que se realizó la consulta médica, tipo Date
+    * @param idServidor id de la atención en el servidor, tipo entero
+    * @param status si los datos se enviaron al servidor (1) o no (0)
     * */
-    private void guardarConsultaMedicaLocal(Date fechaConsulta, int id_servidor, int status){
-        consultaMedica.setId_serv(id_servidor);
+    private void guardarConsultaMedicaLocal(Date fechaConsulta, int idServidor, int status){
+        consultaMedica.setId_serv(idServidor);
         consultaMedica.setEmpleado(empleado);
         consultaMedica.setFechaConsulta(fechaConsulta);
         consultaMedica.setStatus(status);
         consultaMedica.save();
 
         fechaSigno = new Date();
-        postSignosVitales(String.valueOf(id_servidor));
+        postSignosVitales(String.valueOf(idServidor));
     }
     /*
      * Limpia los campos luego de haber ingresado los signos vitales
@@ -254,6 +255,7 @@ public class SignosVitalesFragment extends Fragment {
     /*
      * Inicializar las llamadas a Request
      * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
+     * @param TAG me indica a qué clase pertenece el request hecho, tipo String
      * */
     private void initRequestCallback(final String TAG){
         Log.d("HEREEE", "3");
@@ -313,15 +315,16 @@ public class SignosVitalesFragment extends Fragment {
      * Inicia un requerimiento
      * Obtiene un hashmap con los datos enviados por parámetros
      * Envía datos de Consulta médica al servidor
+     * @param fechaConsulta fecha en la que el paciente fue a la consulta médica tipo Date
      * */
-    private void postConsultaMedica(final Date fecha_consulta){
+    private void postConsultaMedica(final Date fechaConsulta){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
         Log.d("HERE", "2");
         String TAGCONSULTA = "tagconsulta";
         initRequestCallback(TAGCONSULTA);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(idEmpleadoServidor), fecha_consulta,"","","","","");
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(String.valueOf(idEmpleadoServidor), fechaConsulta,"","","","","");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 
@@ -330,14 +333,16 @@ public class SignosVitalesFragment extends Fragment {
      * Inicia un requerimiento
      * Obtiene un hashmap con los datos enviados por parámetros
      * Envía datos de Signos vitales al servidor
+     * @param idConsultaMedica id de la consulta médica del servidor en la que se registró
+     * el signo vital, tipo String
      * */
-    private void postSignosVitales(String id_consulta_medica){
+    private void postSignosVitales(String idConsultaMedica){
         SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
         String token = sesion.obtenerInfoUsuario().get("token");
         String TAGSIGNOS = "tagsignos";
         initRequestCallback(TAGSIGNOS);
         requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(String.valueOf(idEmpleadoServidor),id_consulta_medica,"",presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext, fechaSigno);
+        Map<String, String> sendObj = SignosVitales.getHashMapSignosVitales(String.valueOf(idEmpleadoServidor),idConsultaMedica,"",presionSistolicaText,presionDistolicaText,pulsoText,temperaturatext, fechaSigno);
         requestService.postDataRequest("POSTCALL", URL_SIGNOS, sendObj, token);
     }
 

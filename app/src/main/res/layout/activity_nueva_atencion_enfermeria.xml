@@ -42,13 +42,13 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/btn_ok"
+            android:id="@+id/btnTerminar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TERMINAR" />
     </LinearLayout>
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/contenedor_detalle_item"
+        android:id="@+id/contenedorDetalleItem"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

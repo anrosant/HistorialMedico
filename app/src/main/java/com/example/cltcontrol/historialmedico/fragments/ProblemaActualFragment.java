@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,13 +36,12 @@ public class ProblemaActualFragment extends Fragment {
     //Interface
     private IResult mResultCallback;
     //Variables de view
-    private EditText et_problema_actual;
-    private Button btn_guardar_problema_actual;
+    private EditText etProblemaActual;
     //Variables de Clases
     private ConsultaMedica consultaMedica;
     private Empleado empleado;
 
-    private String descripcion_problema_actual, id_empleado_servidor;
+    private String descripcionProblemaActual, idEmpleadoServidor;
 
     //constructor por defecto
     public ProblemaActualFragment() {
@@ -58,8 +56,8 @@ public class ProblemaActualFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_problema_actual, container, false);
 
         //referencia de variables de views
-        et_problema_actual = view.findViewById(R.id.et_problema_actual);
-        btn_guardar_problema_actual = view.findViewById(R.id.btn_guardar_problema_actual);
+        etProblemaActual = view.findViewById(R.id.etProblemaActual);
+        Button btnGuardarProblemaActual = view.findViewById(R.id.btnGuardarProblemaActual);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         if (extras != null) {
@@ -70,19 +68,19 @@ public class ProblemaActualFragment extends Fragment {
             String id_empleado = extras.getString("ID_EMPLEADO");
             empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
-            id_empleado_servidor = String.valueOf(empleado.getId_serv());
+            idEmpleadoServidor = String.valueOf(empleado.getId_serv());
 
             String cargo = extras.getString("CARGO");
             if(Objects.equals(cargo, "Enfermera")){
-                btn_guardar_problema_actual.setVisibility(View.GONE);
-                et_problema_actual.setEnabled(false);
+                btnGuardarProblemaActual.setVisibility(View.GONE);
+                etProblemaActual.setEnabled(false);
             }
-            if(precedencia.equals("consultar")){
-                et_problema_actual.setText(consultaMedica.getProb_actual());
-                btn_guardar_problema_actual.setText("Editar");
+            if (precedencia != null && precedencia.equals("consultar")) {
+                etProblemaActual.setText(consultaMedica.getProb_actual());
+                btnGuardarProblemaActual.setText("Editar");
             }
         }
-        btn_guardar_problema_actual.setOnClickListener(new View.OnClickListener() {
+        btnGuardarProblemaActual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 guardarConsulta();
@@ -96,8 +94,8 @@ public class ProblemaActualFragment extends Fragment {
      **/
     private void guardarConsulta() {
         //Valida lo que se ingresa  (2 lineas)
-        descripcion_problema_actual = et_problema_actual.getText().toString();
-        int res = consultaMedica.validarCampoTexto(descripcion_problema_actual);
+        descripcionProblemaActual = etProblemaActual.getText().toString();
+        int res = consultaMedica.validarCampoTexto(descripcionProblemaActual);
         switch (res) {
             case 0:
                 Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
@@ -125,7 +123,7 @@ public class ProblemaActualFragment extends Fragment {
         consultaMedica.setId_serv(id_serv);
         consultaMedica.setFechaConsulta(fecha);
         consultaMedica.setStatus(status);
-        consultaMedica.setProb_actual(descripcion_problema_actual); //setea lo que quieres
+        consultaMedica.setProb_actual(descripcionProblemaActual); //setea lo que quieres
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
@@ -143,7 +141,7 @@ public class ProblemaActualFragment extends Fragment {
         String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback("POST");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado_servidor,fechaConsulta, "",descripcion_problema_actual,"","","");
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleadoServidor,fechaConsulta, "", descripcionProblemaActual,"","","");
         requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
     }
 
@@ -158,7 +156,7 @@ public class ProblemaActualFragment extends Fragment {
         initRequestCallback("PUT");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(idEmpleadoServidor,
-                new Date(),consultaMedica.getMotivo(),descripcion_problema_actual, consultaMedica.getRevision_medica(),
+                new Date(),consultaMedica.getMotivo(), descripcionProblemaActual, consultaMedica.getRevision_medica(),
                 consultaMedica.getPrescripcion(), consultaMedica.getExamen_fisico());
         requestService.putDataRequest("PUTCALL", URL_CONSULTA_MEDICA+idConsultaServidor+"/", sendObj, token);
     }
@@ -168,7 +166,7 @@ public class ProblemaActualFragment extends Fragment {
      * */
     private void actualizarConsultaLocal(int status){
         consultaMedica.setStatus(status);
-        consultaMedica.setProb_actual(descripcion_problema_actual);
+        consultaMedica.setProb_actual(descripcionProblemaActual);
         consultaMedica.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han editado los datos", Toast.LENGTH_SHORT).show();
@@ -204,7 +202,6 @@ public class ProblemaActualFragment extends Fragment {
 
             @Override
             public void notifyError(String requestType, VolleyError error) {
-                Log.d("HEREERROR", String.valueOf(error));
                 if (metodo_request.equalsIgnoreCase("POST"))
                     guardarConsultaLocal(new Date(), NAME_NOT_SYNCED_WITH_SERVER, 0);
                 else
@@ -212,7 +209,6 @@ public class ProblemaActualFragment extends Fragment {
             }
             @Override
             public void notifyMsjError(String requestType, String error) {
-                Log.d("HEREMSJERROR", String.valueOf(error));
                 if (metodo_request.equalsIgnoreCase("POST"))
                     guardarConsultaLocal(new Date(), NAME_NOT_SYNCED_WITH_SERVER, 0);
                 else

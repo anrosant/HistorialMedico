@@ -41,12 +41,13 @@
                 android:background="#FFFFFF">
 
                 <EditText
-                    android:id="@+id/et_plan_cuidados"
+                    android:id="@+id/etPlanCuidados"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
                     android:hint="No refiere plan de cuidados"
                     android:inputType="textMultiLine"
+                    android:textColor="@color/colorDark"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -58,7 +59,7 @@
                 android:gravity="center">
 
                 <Button
-                    android:id="@+id/btn_guardar_plan_cuidados"
+                    android:id="@+id/btnGuardarPlanCuidados"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Guardar" />

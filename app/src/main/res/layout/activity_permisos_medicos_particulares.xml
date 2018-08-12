@@ -42,7 +42,7 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:id="@+id/ly_contenedor_permiso_medico_particular"
+                android:id="@+id/lyContenedorPermisoMedicoParticular"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="-2dp"
@@ -58,7 +58,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/txt_titulo_permiso_medico"
+                        android:id="@+id/tvTituloPermisoMedico"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimary"
@@ -68,7 +68,7 @@
                         android:textColor="#FFFFFF" />
 
                     <Switch
-                        android:id="@+id/sw_generar_diagnostico_particular"
+                        android:id="@+id/swGenerarDiagnosticParticular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
@@ -78,7 +78,7 @@
                         android:textOn="Yes" />
 
                     <LinearLayout
-                        android:id="@+id/ly_enfermedad"
+                        android:id="@+id/lyEnfermedad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-2dp"
@@ -86,16 +86,17 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/txt_buscar_enfermedades"
+                            android:id="@+id/etBuscarEnfermedades"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
                             android:hint="No refiere enfermedad"
+                            android:textColor="#000"
                             android:enabled="false"
                             android:singleLine="true" />
 
                         <LinearLayout
-                            android:id="@+id/ly_lista_enfermedades"
+                            android:id="@+id/lyListaEnfermedades"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:visibility="gone"
@@ -121,7 +122,7 @@
                                         android:orientation="vertical">
 
                                         <android.support.v7.widget.RecyclerView
-                                            android:id="@+id/rv_lista_enfermedades"
+                                            android:id="@+id/rvListaEnfermedades"
                                             android:layout_width="match_parent"
                                             android:layout_height="180dp"
                                             android:background="#FFFFFF">
@@ -140,20 +141,20 @@
                                 android:orientation="horizontal">
 
                                 <RadioGroup
-                                    android:id="@+id/rg_tipo_enfermedad"
+                                    android:id="@+id/rgTipoEnfermedad"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal">
 
                                     <RadioButton
-                                        android:id="@+id/rb_presuntorio"
+                                        android:id="@+id/rbPresuntorio"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginHorizontal="10sp"
                                         android:text="Presuntorio" />
 
                                     <RadioButton
-                                        android:id="@+id/rb_definitorio"
+                                        android:id="@+id/rbDefinitorio"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Definitorio" />
@@ -161,13 +162,6 @@
                                 </RadioGroup>
 
                             </LinearLayout>
-
-                            <Button
-                                android:id="@+id/btn_guardar_diagnostico_permiso"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Guardar"/>
 
                         </LinearLayout>
 
@@ -191,14 +185,14 @@
                         android:textColor="#FFFFFF" />
 
                     <LinearLayout
-                        android:id="@+id/ly_dias_permiso"
+                        android:id="@+id/lyDiasPermiso"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/my_style_content_white"
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/txt_permiso_fecha_desde"
+                            android:id="@+id/etPermisoFechaDesde"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="true"
@@ -206,10 +200,11 @@
                             android:focusable="false"
                             android:hint="Fecha de inicio"
                             android:inputType="date"
+                            android:textColor="@color/colorDark"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse" />
 
                         <EditText
-                            android:id="@+id/txt_permiso_fecha_hasta"
+                            android:id="@+id/etPermisoFechaHasta"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="true"
@@ -217,6 +212,7 @@
                             android:focusable="false"
                             android:hint="Fecha de fin"
                             android:inputType="date"
+                            android:textColor="@color/colorDark"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse" />
 
                         <LinearLayout
@@ -233,7 +229,7 @@
                                 android:text="Dias de permiso: " />
 
                             <TextView
-                                android:id="@+id/tv_numero_dias"
+                                android:id="@+id/tvNumeroDias"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
 
@@ -260,18 +256,19 @@
                         android:textColor="#FFFFFF" />
 
                     <LinearLayout
-                        android:id="@+id/ly_observacion"
+                        android:id="@+id/lyObservacion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/my_style_content_white"
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/txt_observacion"
+                            android:id="@+id/etObservaciones"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Agregar observación"
                             android:inputType="textMultiLine"
+                            android:textColor="@color/colorDark"
                             android:singleLine="false" />
 
                     </LinearLayout>
@@ -294,18 +291,19 @@
                         android:textColor="#FFFFFF" />
 
                     <LinearLayout
-                        android:id="@+id/ly_doctor"
+                        android:id="@+id/lyDoctor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/my_style_content_white"
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/txt_doctor"
+                            android:id="@+id/etDoctor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Medico/Institucion que emite el certificado"
                             android:inputType="textMultiLine"
+                            android:textColor="@color/colorDark"
                             android:singleLine="false" />
 
                     </LinearLayout>
@@ -315,7 +313,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/btn_guardar"
+                android:id="@+id/btnGuardarPermisoParticular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

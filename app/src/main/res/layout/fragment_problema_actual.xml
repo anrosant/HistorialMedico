@@ -38,12 +38,13 @@
             android:background="#FFFFFF">
 
             <EditText
-                android:id="@+id/et_problema_actual"
+                android:id="@+id/etProblemaActual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
                 android:hint="No refiere problema actual"
                 android:inputType="textMultiLine"
+                android:textColor="@color/colorDark"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -55,7 +56,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/btn_guardar_problema_actual"
+                android:id="@+id/btnGuardarProblemaActual"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Guardar" />

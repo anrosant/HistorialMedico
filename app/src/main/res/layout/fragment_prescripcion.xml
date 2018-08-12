@@ -37,12 +37,13 @@
             android:background="#FFFFFF">
 
             <EditText
-                android:id="@+id/et_preescripcion"
+                android:id="@+id/etPreescripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
                 android:hint="No refiere prescripción"
                 android:inputType="textMultiLine"
+                android:textColor="@color/colorDark"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -54,7 +55,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/btn_guardar_preescripcion"
+                android:id="@+id/btnGuardarPreescripcion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Guardar" />

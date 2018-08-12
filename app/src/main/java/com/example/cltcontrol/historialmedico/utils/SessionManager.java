@@ -32,7 +32,11 @@ public class SessionManager {
         sharedPrefer = context.getSharedPreferences(SESION, PRIVATE_MODE);
         editor = sharedPrefer.edit();
     }
-
+    /*
+     * Guarda el usuario y su token
+     * @param usu_id id del usuario tipo Long
+     * @param token es el token que recibe del servidor cuando ingresa a la app
+     * */
     public void crearSesion(Long usu_id, String token) {
         Usuario usuario = Usuario.findById(Usuario.class, usu_id);
         editor.putString(NOMBRE_USUARIO, usuario.getUsuario());
@@ -60,6 +64,8 @@ public class SessionManager {
 
     /**
      * Cambia el status de login
+     * @param context contexto desde donde es llamado
+     * @param loggedIn indica si está logueado o no, tipo boolean
      */
     private static void setLoggedIn(Context context, boolean loggedIn) {
         SharedPreferences.Editor editor = getPreferences(context).edit();
@@ -69,12 +75,15 @@ public class SessionManager {
 
     /**
      * Obtiene el status de login
+     * @param context contexto desde donde es llamado
      */
     public static boolean getLoggedStatus(Context context) {
         return getPreferences(context).getBoolean(LOGGED_IN_PREF, false);
     }
+
     /*
     * Elimina la preferencia
+    * @param context contexto desde donde es llamado
     * */
     public void cerrarSesion(Context context) {
         setLoggedIn(context, false);

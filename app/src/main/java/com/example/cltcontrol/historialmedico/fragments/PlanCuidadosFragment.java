@@ -37,13 +37,12 @@ public class PlanCuidadosFragment extends Fragment {
     //Interface
     private IResult mResultCallback;
     //Variables de view
-    private EditText et_plan_cuidados;
-    private Button btn_guardar_plan_cuidados;
+    private EditText etPlanCuidados;
     //Variables de Clases
     private AtencionEnfermeria atencionEnfermeria;
     private Empleado empleado;
 
-    private String descripcion_plan_cuidados, id_empleado_servidor;
+    private String descripcionPlanCuidados, idEmpleadoServidor;
 
     //constructor por defecto
     public PlanCuidadosFragment() {
@@ -58,8 +57,8 @@ public class PlanCuidadosFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_plan_cuidados, container, false);
 
         //referencia de variables de views
-        et_plan_cuidados = view.findViewById(R.id.et_plan_cuidados);
-        btn_guardar_plan_cuidados = view.findViewById(R.id.btn_guardar_plan_cuidados);
+        etPlanCuidados = view.findViewById(R.id.etPlanCuidados);
+        Button btnGuardarPlanCuidados = view.findViewById(R.id.btnGuardarPlanCuidados);
 
         Bundle bun = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
@@ -71,20 +70,20 @@ public class PlanCuidadosFragment extends Fragment {
             String id_empleado = bun.getString("ID_EMPLEADO");
             empleado = Empleado.findById(Empleado.class, Long.parseLong(id_empleado));
 
-            id_empleado_servidor = String.valueOf(empleado.getId_serv());
+            idEmpleadoServidor = String.valueOf(empleado.getId_serv());
 
             String cargo = bun.getString("CARGO");
             if("Doctor".equals(cargo)){
-                btn_guardar_plan_cuidados.setVisibility(View.GONE);
-                et_plan_cuidados.setEnabled(false);
+                btnGuardarPlanCuidados.setVisibility(View.GONE);
+                etPlanCuidados.setEnabled(false);
             }
             //Si va a consultar, muestra los datos
-            if(precedencia.equals("consultar")) {
-                et_plan_cuidados.setText(atencionEnfermeria.getPlanCuidados());
-                btn_guardar_plan_cuidados.setText("Editar");
+            if (precedencia != null && precedencia.equalsIgnoreCase("consultar")) {
+                etPlanCuidados.setText(atencionEnfermeria.getPlanCuidados());
+                btnGuardarPlanCuidados.setText("Editar");
             }
         }
-        btn_guardar_plan_cuidados.setOnClickListener(new View.OnClickListener() {
+        btnGuardarPlanCuidados.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {guardarAtencionEnfermeria();}
         });
@@ -96,8 +95,8 @@ public class PlanCuidadosFragment extends Fragment {
      **/
     private void guardarAtencionEnfermeria() {
         //Valida lo que se ingresa  (2 lineas)
-        descripcion_plan_cuidados = et_plan_cuidados.getText().toString();
-        int res = atencionEnfermeria.validarCampoTexto(descripcion_plan_cuidados);
+        descripcionPlanCuidados = etPlanCuidados.getText().toString();
+        int res = atencionEnfermeria.validarCampoTexto(descripcionPlanCuidados);
         switch (res) {
             case 0:
                 Toast.makeText(getContext(), "No ha ingresado nada", Toast.LENGTH_SHORT).show();
@@ -127,7 +126,7 @@ public class PlanCuidadosFragment extends Fragment {
         atencionEnfermeria.setId_serv(id_serv);
         atencionEnfermeria.setFecha_atencion(fecha);
         atencionEnfermeria.setStatus(status);
-        atencionEnfermeria.setPlanCuidados(descripcion_plan_cuidados); //setea lo que quieres
+        atencionEnfermeria.setPlanCuidados(descripcionPlanCuidados); //setea lo que quieres
         atencionEnfermeria.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han guardado los datos", Toast.LENGTH_SHORT).show();
@@ -142,7 +141,7 @@ public class PlanCuidadosFragment extends Fragment {
      * */
     private void actualizarAtencionLocal(int status){
         atencionEnfermeria.setStatus(status);
-        atencionEnfermeria.setPlanCuidados(descripcion_plan_cuidados);
+        atencionEnfermeria.setPlanCuidados(descripcionPlanCuidados);
         atencionEnfermeria.save();
         if(status==NAME_SYNCED_WITH_SERVER) {
             Toast.makeText(getContext(), "Se han editado los datos", Toast.LENGTH_SHORT).show();
@@ -162,7 +161,7 @@ public class PlanCuidadosFragment extends Fragment {
         initRequestCallback("POST");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
         // 5) PASAR LOS DATOS A LA FUNCIÓN
-        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(id_empleado_servidor,fechaConsulta, "","",descripcion_plan_cuidados);
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(idEmpleadoServidor,fechaConsulta, "","", descripcionPlanCuidados);
         requestService.postDataRequest("POSTCALL", URL_ATENCION_ENFERMERIA, sendObj, token);
     }
 
@@ -177,8 +176,8 @@ public class PlanCuidadosFragment extends Fragment {
         String token = sesion.obtenerInfoUsuario().get("token");
         initRequestCallback("PUT");
         RequestService requestService = new RequestService(mResultCallback, getActivity());
-        Map<String, String> sendObj = atencionEnfermeria.getHashMapAtencionEnfermeria(idEmpleadoServidor,
-                new Date(), atencionEnfermeria.getMotivoAtencion(),atencionEnfermeria.getDiagnosticoEnfermeria(), descripcion_plan_cuidados);
+        Map<String, String> sendObj = AtencionEnfermeria.getHashMapAtencionEnfermeria(idEmpleadoServidor,
+                new Date(), atencionEnfermeria.getMotivoAtencion(),atencionEnfermeria.getDiagnosticoEnfermeria(), descripcionPlanCuidados);
         requestService.putDataRequest("PUTCALL", URL_ATENCION_ENFERMERIA+idConsultaServidor+"/", sendObj, token);
     }
 

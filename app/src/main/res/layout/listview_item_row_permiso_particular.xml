@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -13,33 +12,35 @@
         android:orientation="vertical"
         android:layout_marginHorizontal="5sp"
         android:layout_marginVertical="3sp"
-        android:padding="10dp"
         android:background="@drawable/my_style"
-        tools:targetApi="o">
+        android:padding="10dp">
 
         <TextView
-            android:id="@+id/textViewFecha"
+            android:id="@+id/tvFechaPermiso"
+            android:gravity="right"
+            android:text="Fecha"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Fecha de atención:" />
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/tvFechaAtencion"
+            android:id="@+id/tvEnfermedad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:text="Enfermedad"/>
 
         <TextView
-            android:id="@+id/textViewMotivo"
+            android:id="@+id/tvFechasPermiso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Motivo" />
+            android:text="Fechas de Permiso"/>
 
         <TextView
-            android:id="@+id/tvMotivo"
+            android:id="@+id/tvDiasPermiso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:text="Dias de Permiso"/>
+
+
 
     </LinearLayout>
 

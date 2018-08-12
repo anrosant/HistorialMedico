@@ -29,25 +29,44 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.adapter.ImageAdapter;
+import com.example.cltcontrol.historialmedico.interfaces.IResult;
+import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
+import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.ExamenImagen;
+import com.example.cltcontrol.historialmedico.service.RequestService;
 import com.example.cltcontrol.historialmedico.utils.ImageOrientation;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.github.chrisbanes.photoview.PhotoView;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_EXAMEN_IMAGEN;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertirFecha;
 
 public class AnexarExamenesFragment extends Fragment {
+
+    //Interface
+    private IResult mResultCallback;
 
     private ImageView idImage;
     private Button btnCargarImagen;
@@ -66,6 +85,13 @@ public class AnexarExamenesFragment extends Fragment {
 
     private GridView gridView;
     private List<Bitmap> misFotosBitmap;
+    private Empleado empleado;
+    private ConsultaMedica consultaMedica;
+    private String id_empleado_servidor;
+
+    private String id_consulta_servidor;
+
+    private boolean yaRespondio=false;
 
     public AnexarExamenesFragment() {
         // Required empty public constructor
@@ -87,6 +113,17 @@ public class AnexarExamenesFragment extends Fragment {
         }else{
             btnCargarImagen.setEnabled(false);
         }
+
+        Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
+
+        String id_empleado = extras.getString("ID_EMPLEADO");
+        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+
+        String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+
+        id_empleado_servidor = String.valueOf(empleado.getId_serv());
+
 
         btnCargarImagen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,6 +284,8 @@ public class AnexarExamenesFragment extends Fragment {
                     Toast.makeText(getContext(),"ruta: " + ruta,Toast.LENGTH_LONG).show();
                     idImage.setImageURI(miPath);
 
+                    guardarImagen();
+
                 }catch (Exception e){
                     //
                 }
@@ -289,20 +328,31 @@ public class AnexarExamenesFragment extends Fragment {
     }
 
 
-    //Guarda la foto en la base de datos
+    //Guarda la foto en la base de datos del servidor y localmente
     public void guardarImagen(){
         String rutaCargar = path;
         try{
-            String imagenBase64 = toStringBase64(rutaCargar); //Se manda a transformar la imagen a un String codificado en base 64
+            //1: Se manda a transformar la imagen a un String codificado en base 64
+            String imagenBase64 = toStringBase64(rutaCargar);
+
+            //2: se verifica si aun no se ha creado la consulta
+            if (consultaMedica.getEmpleado() == null) {
+                //Se guarda la consulta
+                postConsultaMedica(new Date());
+                //Se guarda la imagen
+                while(!yaRespondio){
+                    //while usado para hacer que espere a que se guarde la consulta en el servidor
+                }
+                postExamenImagen(imagenBase64);
+                yaRespondio=false;
+            }else{//Si la consulta ya fue creada simplemente guarda la imagen
+                postExamenImagen(imagenBase64);
+            }
         }catch (Exception e){
             String error = e.getMessage();
         }
 
 
-
-        //GUARDA LA RUTA EN LA BD LOCAL
-        ExamenImagen examenImagen = new ExamenImagen(0, path);
-        examenImagen.save();
     }
 
 
@@ -340,6 +390,130 @@ public class AnexarExamenesFragment extends Fragment {
         is.close();
         return bytes;
     }
+
+
+    private void guardarConsultaLocal(Date fecha, int status, int id_serv, String porDondeEntre){
+        consultaMedica.setEmpleado(empleado);
+        consultaMedica.setId_serv(id_serv);
+        consultaMedica.setFechaConsulta(fecha);
+        consultaMedica.setStatus(status);
+        consultaMedica.save();
+        String por= new String();
+        por= porDondeEntre;
+
+        if(status==NAME_SYNCED_WITH_SERVER) {
+            Toast.makeText(getContext(), "Se han guardado los datos de consulta "+por, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getContext(),"Hubo un error de conexión. Los datos de consulta se guardarán localmente "+por, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*
+     * Envía datos de Consulta médica al servidor (Solo se usa si todavia no se ha guardado la consuta medica)
+     * */
+    private void postConsultaMedica(final Date fechaConsulta){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
+        initRequestCallback("tagconsulta");
+        RequestService requestService = new RequestService(mResultCallback, getActivity());
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado_servidor,fechaConsulta, "","","","","");
+        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
+    }
+
+    private void postExamenImagen(String imagenBase64){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
+        initRequestCallback("tagImagen");
+        RequestService requestService = new RequestService(mResultCallback, getActivity());
+        Map<String, String> sendObj = ExamenImagen.getHashMapExamenImagen(id_consulta_servidor,imagenBase64);
+        requestService.postDataRequest("POSTCALL", URL_EXAMEN_IMAGEN, sendObj, token);
+    }
+
+    //Guarda la imagen en la base de datos local
+    private void guardarImagenLocalmente(String ruta, int status, int id_imagen_servidor, String porDondeEntre){
+        ExamenImagen imagenExamen = new ExamenImagen();
+        imagenExamen.setId_serv(id_imagen_servidor);
+        imagenExamen.setConsulta(consultaMedica);
+        imagenExamen.setRuta_movil(ruta);
+        imagenExamen.setStatus(status);
+
+
+        String por= new String();
+        por= porDondeEntre;
+
+        //imagenExamen.save();
+
+        if(status==NAME_SYNCED_WITH_SERVER) {
+            Toast.makeText(getContext(), "Se han guardado los datos de la imagen "+por, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getContext(),"Hubo un error de conexión. Los datos de la imagen se guardarán localmente "+por, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*
+     * Inicializar las llamadas a Request
+     * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
+     * */
+    private void initRequestCallback(final String TAG){
+        mResultCallback = new IResult() {
+            @Override
+            public void notifySuccess(String requestType,JSONObject response) {
+                //Si ha realizado post en ConsultaMedica
+                if(TAG.equalsIgnoreCase("tagconsulta")){
+                    try {
+                        String fechaConsulta = response.getString("fechaConsulta");
+                        Date fecha = convertirFecha(fechaConsulta);
+                        //Seteamos el id de la consulta del servidor para luego usar ese id para guardar la imagen
+                        id_consulta_servidor = response.getString("pk");
+                        guardarConsultaLocal(fecha,NAME_SYNCED_WITH_SERVER,Integer.parseInt(id_consulta_servidor), "tagconsulta Success");
+                        yaRespondio=true;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }else{ //Si ha realizado post para guardar la imagen
+                    try {
+                        String pk = response.getString("pk");
+                        guardarImagenLocalmente(path,NAME_SYNCED_WITH_SERVER,Integer.valueOf(pk),"imagen Success" );
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void notifyError(String requestType,VolleyError error) {
+                if(TAG.equalsIgnoreCase("tagconsulta")){
+                    guardarConsultaLocal(new Date(), NAME_NOT_SYNCED_WITH_SERVER,0,"tagconsulta NotifyError");
+                    yaRespondio=true;
+                }else {
+                    guardarImagenLocalmente(path,NAME_NOT_SYNCED_WITH_SERVER,0, "imagen Notifyerror");
+                }
+            }
+
+            @Override
+            public void notifyMsjError(String requestType, String error) {
+                if(TAG.equalsIgnoreCase("tagconsulta")){
+                    guardarConsultaLocal(new Date(), 0,NAME_NOT_SYNCED_WITH_SERVER, "tagconsulta NotifyMsjError");
+                    yaRespondio=true;
+                }else {
+                    guardarImagenLocalmente(path,NAME_NOT_SYNCED_WITH_SERVER,0, "imagen requestType"+ requestType+" msj error = "+error);
+                }
+            }
+
+            @Override
+            public void notifyJSONError(String requestType, JSONException error) {
+                if(TAG.equalsIgnoreCase("tagconsulta")){
+                    guardarConsultaLocal(new Date(), 0,NAME_NOT_SYNCED_WITH_SERVER, "tagconsulta json error");
+                    yaRespondio=true;
+                }else {
+                    guardarImagenLocalmente(path,NAME_NOT_SYNCED_WITH_SERVER,0, "imagen json error");
+                }
+            }
+        };
+
+    }
+
 
 
 }

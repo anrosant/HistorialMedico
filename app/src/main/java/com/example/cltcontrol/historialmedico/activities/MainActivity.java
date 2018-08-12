@@ -18,6 +18,7 @@ import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
+import com.example.cltcontrol.historialmedico.models.ExamenImagen;
 import com.example.cltcontrol.historialmedico.models.PatologiasFamiliares;
 import com.example.cltcontrol.historialmedico.models.PatologiasPersonales;
 import com.example.cltcontrol.historialmedico.models.PermisoMedico;
@@ -133,10 +134,13 @@ public class MainActivity extends AppCompatActivity {
                         guardarSignosVitales(signosVitales);
 
                         String diagnostico = response.getString("diagnostico");
-                        guardarDiagnostico(diagnostico);
+                        //guardarDiagnostico(diagnostico);
 
                         String permisoMedico = response.getString("permisoMedico");
                         guardarPermisoMedico(permisoMedico);
+
+                        //String examenes = response.getString("consulta_medica");
+                        //guardarExamenes(examenes);
 
                         crearSesion(token);
                         siguienteActivity();
@@ -166,6 +170,35 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+    }
+
+    private void guardarExamenes(String response) {
+        int idServ;
+        String idConsulta;
+        String rutaMovil, urlServidor;
+        int status;
+        JSONArray obj;
+        try {
+            obj = new JSONArray(response);
+            for (int i = 0; i < obj.length(); i++) {
+                ExamenImagen examenImagen = new ExamenImagen();
+                JSONObject objectJSON = obj.getJSONObject(i);
+                JSONObject fields = (JSONObject) objectJSON.get("fields");
+                idServ = Integer.parseInt(objectJSON.getString("pk"));
+                idConsulta = fields.getString("consulta_medica");
+                urlServidor = fields.getString("imagen");
+                List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?", idConsulta);
+                if(consultaMedicaList.size()!=0){
+                    examenImagen.setConsulta(consultaMedicaList.get(0));
+                }
+
+                //GUARDAR EN RUTA_MOVIL LA IMAGEN OBTENIDA DEL SERVIDOR
+                examenImagen.setStatus(1);
+                examenImagen.save();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     /*

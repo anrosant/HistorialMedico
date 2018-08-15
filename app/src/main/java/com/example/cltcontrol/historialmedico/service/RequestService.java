@@ -87,7 +87,7 @@ public class RequestService {
 
     public void postDataRequest(final String requestType, String url, Map<String, String> sendObj, final String token){
         if (mContext instanceof Activity){
-            dialog=new ProgressDialog(mContext);
+            dialog = new ProgressDialog(mContext);
             dialog.setMessage("Cargando...");
             dialog.show();
         }
@@ -97,7 +97,6 @@ public class RequestService {
             JSONObject cuerpo = new JSONObject(sendObj);
 
             String jsonString= cuerpo.toString();
-
             jsonString = jsonString.replaceAll("\\\\n", "");
             jsonString = jsonString.replaceAll("\\\\", "");
 

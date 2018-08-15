@@ -141,13 +141,13 @@ public class MainActivity extends AppCompatActivity {
                         guardarSignosVitales(signosVitales);
 
                         String diagnostico = response.getString("diagnostico");
-                        //guardarDiagnostico(diagnostico);
+                        guardarDiagnostico(diagnostico);
 
                         String permisoMedico = response.getString("permisoMedico");
                         guardarPermisoMedico(permisoMedico);
 
-                        //String examenes = response.getString("consulta_medica");
-                        //guardarExamenes(examenes);
+                        String examenes = response.getString("examenesConsulta");
+                        guardarExamenes(examenes);
 
                         crearSesion(token);
                         siguienteActivity();
@@ -185,21 +185,29 @@ public class MainActivity extends AppCompatActivity {
         String rutaMovil, urlServidor;
         int status;
         JSONArray obj;
+        String ok = "entre";
         try {
             obj = new JSONArray(response);
             for (int i = 0; i < obj.length(); i++) {
+                //Se obtienen los datos del servidor
                 ExamenImagen examenImagen = new ExamenImagen();
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
                 idServ = Integer.parseInt(objectJSON.getString("pk"));
                 idConsulta = fields.getString("consulta_medica");
                 urlServidor = fields.getString("imagen");
+                urlServidor = "http://historialmedico.pythonanywhere.com/media/"+urlServidor;
+
+                //Se setea el id de la consulta
                 List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?", idConsulta);
                 if(consultaMedicaList.size()!=0){
                     examenImagen.setConsulta(consultaMedicaList.get(0));
                 }
 
-                //GUARDAR EN RUTA_MOVIL LA IMAGEN OBTENIDA DEL SERVIDOR
+                //Se setean los demas datos del examen
+                examenImagen.setId_serv(idServ);
+                examenImagen.setUrl(urlServidor);
+                examenImagen.setDescargada(0);
                 examenImagen.setStatus(1);
                 examenImagen.save();
             }
@@ -207,6 +215,8 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
 
     /*
      * Envía datos de usuario y contraseña al servidor

@@ -13,6 +13,8 @@ public class ExamenImagen extends SugarRecord {
     private int id_serv;
     private ConsultaMedica consulta;
     private String ruta_movil;
+    private String url;
+    private int descargada; //0 false, 1 true
     private int status;
 
     public ExamenImagen() {
@@ -51,13 +53,28 @@ public class ExamenImagen extends SugarRecord {
         this.status = status;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public int getDescargada() {
+        return descargada;
+    }
+
+    public void setDescargada(int descargada) {
+        this.descargada = descargada;
+    }
+
     public static Map<String, String> getHashMapExamenImagen(String id_consulta_servidor,
-                                                               String imagenBase64){
+                                                             String imagenBase64){
 
         Map<String, String> params = new HashMap<>();
         params.put("imagen", imagenBase64);
         params.put("consulta_medica", id_consulta_servidor);
-
 
         return params;
 

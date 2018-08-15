@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,15 +22,17 @@ import com.orm.util.NamingHelper;
 import java.util.ArrayList;
 
 public class AtencionEnfermeriaActivity extends FragmentActivity implements IComunicadorMenu {
+    private TextView tvGuardarAtencion, tvNombresEmpleado, tvOcupacion;
     private Fragment[] misFragmentos;
     private String idAtencion, idEmpleado, precedencia, cargo;
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_atencion_enfermeria);
-        Button btnTerminar = findViewById(R.id.btnTerminar);
+        tvGuardarAtencion = findViewById(R.id.tvGuardarAtencion);
+        tvOcupacion = findViewById(R.id.tvOcupacion);
 
         //Recibe el id de atencion desde el HistorialAtencionEnfermeria
         idAtencion = getIntent().getStringExtra("ID_ATENCION");
@@ -38,25 +41,33 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements ICom
         cargo = getIntent().getStringExtra("CARGO");
 
         if(cargo.equalsIgnoreCase("Doctor")){
-            btnTerminar.setVisibility(View.GONE);
+            tvGuardarAtencion.setVisibility(View.GONE);
         }
         //Coloca los datos del empleado en el fragment de informacion
-        TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
-        Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
+        tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+        final Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
         tvNombresEmpleado.setText(empleado.getApellido()+" "+ empleado.getNombre());
+        tvOcupacion.setText(empleado.getOcupacion());
 
-        btnTerminar.setOnClickListener(new View.OnClickListener() {
+        tvGuardarAtencion.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                AtencionEnfermeria atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Integer.parseInt(idAtencion));
-                if(atencionEnfermeria.getFecha_atencion()==null){
-                    atencionEnfermeria.delete();
-                }
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int DRAWABLE_RIGHT = 2;
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if(motionEvent.getRawX() >= (tvGuardarAtencion.getRight() - tvGuardarAtencion.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        AtencionEnfermeria atencionEnfermeria = AtencionEnfermeria.findById(AtencionEnfermeria.class, Integer.parseInt(idAtencion));
+                        if(atencionEnfermeria.getFecha_atencion()==null){
+                            atencionEnfermeria.delete();
+                        }
+                        ArrayList<AtencionEnfermeria> atencionEnfermerias = (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class,
+                                "empleado = ?", String.valueOf(empleado.getId()));
+                        HistorialAtencionEnfermeria.adapterItemAtencionEnfermeria.actualizarAtencionEnfermeriaList(atencionEnfermerias);
 
-                ArrayList<AtencionEnfermeria> atencionEnfermerias = (ArrayList<AtencionEnfermeria>) AtencionEnfermeria.find(AtencionEnfermeria.class,
-                        "empleado = ?", idEmpleado);
-                HistorialAtencionEnfermeria.adapterItemAtencionEnfermeria.actualizarAtencionEnfermeriaList(atencionEnfermerias);
-                AtencionEnfermeriaActivity.super.onBackPressed();
+                        AtencionEnfermeriaActivity.super.onBackPressed();
+                    }
+                }
+                return true;
             }
         });
 
@@ -75,8 +86,8 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements ICom
     }
 
     /*
-    * si presiona el botón de ir atrás valida si desea salir sin guardar datos o permanecer
-    * */
+     * si presiona el botón de ir atrás valida si desea salir sin guardar datos o permanecer
+     * */
     @Override
     public void onBackPressed(){
         if(cargo.equals("Enfermera")) {
@@ -119,8 +130,6 @@ public class AtencionEnfermeriaActivity extends FragmentActivity implements ICom
                 public void onClick(DialogInterface arg0, int arg1) {
                 }
             });
-
-
             //mostramos el alertbox
             alertbox.show();
         } else {

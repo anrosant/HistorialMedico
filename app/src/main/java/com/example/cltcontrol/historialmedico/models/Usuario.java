@@ -3,6 +3,9 @@ package com.example.cltcontrol.historialmedico.models;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Usuario extends SugarRecord {
 
     // ATRIBUTOS DE CLASE
@@ -52,6 +55,19 @@ public class Usuario extends SugarRecord {
 
     public void setId_serv(int id_serv) {
         this.id_serv = id_serv;
+    }
+
+    public static JSONObject getJSONUsuario(String usuario, String contrasenia){
+        JSONObject sendObj = null;
+        try {
+            sendObj = new JSONObject("{" +
+                    "'usuario': "+usuario+", " +
+                    "'password': "+contrasenia+
+                    "}");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return sendObj;
     }
 
 }

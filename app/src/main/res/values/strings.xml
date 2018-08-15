@@ -31,6 +31,8 @@
     </string>
     <string name="permiso">Permiso médico particular
     </string>
+    <string name="enfermedad">Enfermedad
+    </string>
     <string name="buscar_por_apellido">Buscar por apellido
     </string>
     <string name="nav_header_title">Sistema Médico Ocupacional
@@ -38,6 +40,8 @@
     <string name="nav_header_subtitle">nombre de usuario
     </string>
     <string name="action_settings">Configuraciones
+    </string>
+    <string name="fecha">Fecha
     </string>
     <string name="info_inicial">
         Esta aplicación fue desarrollada con la finalidad de llevar un control médico de los

@@ -1,7 +1,11 @@
 package com.example.cltcontrol.historialmedico.utils;
 
 import android.annotation.SuppressLint;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.TextView;
+
+import com.example.cltcontrol.historialmedico.R;
 
 import java.text.Normalizer;
 import java.text.ParseException;
@@ -26,6 +30,7 @@ public class Identifiers {
     //Sesion
     public static final String CARGO = "cargo";
 
+
     /*
      * Convierte la fecha(String) en Date
      * */
@@ -42,8 +47,8 @@ public class Identifiers {
     }
 
     /*
-    * Funcion para quitar las tildes y ñ
-    * */
+     * Funcion para quitar las tildes y ñ
+     * */
     public static String quitaDiacriticos(String s) {
         s = Normalizer.normalize(s, Normalizer.Form.NFD);
         s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
@@ -51,11 +56,11 @@ public class Identifiers {
     }
 
     /*
-    * Calcula el número de días que hay entre una fecha
-    * @params fechaDesdeText fecha de tipo TextView desde donde inicia la fecha
-    * @params fechaHastaText fecha de tipo TextView hasta donde termina la fecha
-    * @return numDias (long) retorna el número de días transcurridos entre esas fechas
-    * */
+     * Calcula el número de días que hay entre una fecha
+     * @params fechaDesdeText fecha de tipo TextView desde donde inicia la fecha
+     * @params fechaHastaText fecha de tipo TextView hasta donde termina la fecha
+     * @return numDias (long) retorna el número de días transcurridos entre esas fechas
+     * */
     public static long calcNumDias(TextView fechaDesdeText, TextView fechaHastaText) {
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat =
@@ -80,6 +85,32 @@ public class Identifiers {
             //numero_dias.setText(Long.toString(numDias + 1));
         }
         return numDias;
+    }
+
+    /*
+     * Evento para mostrar/ocultar contenedores de vista
+     * */
+    @SuppressLint("ClickableViewAccessibility")
+    public static void mostrarOcultarTabsMenu(final TextView miTextViewTitle, final View miViewContainer){
+        miTextViewTitle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int DRAWABLE_RIGHT = 2;
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if(motionEvent.getRawX() >= (miTextViewTitle.getRight() - miTextViewTitle.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        if (!miViewContainer.isShown()){
+                            miViewContainer.setVisibility(View.VISIBLE);
+                            miTextViewTitle.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_keyboard_arrow_up_cyan_24dp,0);
+                        }else {
+                            miViewContainer.setVisibility(View.GONE);
+                            miTextViewTitle.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_down_cyan_24dp,0);
+                        }
+                    }
+                }
+                return true;
+            }
+        });
     }
 
 }

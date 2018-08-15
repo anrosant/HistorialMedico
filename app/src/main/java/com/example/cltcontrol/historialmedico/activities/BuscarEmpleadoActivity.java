@@ -1,5 +1,6 @@
 package com.example.cltcontrol.historialmedico.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +15,9 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -33,7 +36,9 @@ import java.util.Objects;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.quitaDiacriticos;
 
 public class BuscarEmpleadoActivity extends AppCompatActivity{
+
     private static List<Empleado> empleadoList;
+
     private AdapterItemEmpleado adaptadorEmpleados;
     private EditText etBuscar;
 
@@ -43,31 +48,17 @@ public class BuscarEmpleadoActivity extends AppCompatActivity{
         setContentView(R.layout.activity_buscar_empleados);
 
         etBuscar = findViewById(R.id.etBusquedaUsuario);
-        ImageView ivFlechaLimpiar = findViewById(R.id.ivFlechaLimpiar);
         RecyclerView recyclerEmpleados = findViewById(R.id.rvlistaempleados);
         recyclerEmpleados.setLayoutManager(new LinearLayoutManager(this));
 
-
         //Obtener el nombre del usuario que inició sesión
         SessionManager sesion = new SessionManager(getApplicationContext());
-
         String nombreUsuario = sesion.obtenerInfoUsuario().get("nombre_usuario");
-
-        Toolbar myToolbar = findViewById(R.id.toolbar);
-
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-
         Objects.requireNonNull(getSupportActionBar()).setTitle(nombreUsuario);
 
-
         readEmpleadosAll();
-
-        ivFlechaLimpiar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                etBuscar.setText("");
-            }
-        });
 
         etBuscar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -81,16 +72,18 @@ public class BuscarEmpleadoActivity extends AppCompatActivity{
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String newText = quitaDiacriticos(etBuscar.getText().toString().toLowerCase());
                 if(newText.length() != 0 && adaptadorEmpleados.validarBusqueda(newText)){
+                    etBuscar.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_cancel_grey_24dp,0);
                     List<Empleado> newList = new ArrayList<>();
                     for(Empleado empleado: empleadoList){
-                        String nombre = empleado.getNombre().toLowerCase();
-                        String apellido = empleado.getApellido().toLowerCase();
+                        String nombre = quitaDiacriticos(empleado.getNombre().toLowerCase());
+                        String apellido = quitaDiacriticos(empleado.getApellido().toLowerCase());
                         if(nombre.contains(newText) || apellido.contains(newText)){
                             newList.add(empleado);
                         }
                     }
                     adaptadorEmpleados.setFilter(newList);
                 } else {
+                    etBuscar.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
                     adaptadorEmpleados.setFilter(empleadoList);
                 }
             }
@@ -113,6 +106,29 @@ public class BuscarEmpleadoActivity extends AppCompatActivity{
                     }
                 })
         );
+
+        etBuscar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int DRAWABLE_RIGHT = 2;
+
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    try{
+                        if (motionEvent.getX() >= (etBuscar.getRight() - etBuscar.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            // your action here
+                            etBuscar.setText("");
+                            etBuscar.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                        }
+                    }catch(NullPointerException e){
+                        etBuscar.requestFocus();
+                        //Llamada al teclado
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        Objects.requireNonNull(imm).showSoftInput(etBuscar, InputMethodManager.SHOW_IMPLICIT);
+                    }
+                }
+                return true;
+            }
+        });
     }
 
     /*
@@ -120,13 +136,9 @@ public class BuscarEmpleadoActivity extends AppCompatActivity{
      * */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
-
         inflater.inflate(R.menu.menu_usuario, menu);
-
         return true;
-
     }
 
     /*
@@ -136,27 +148,15 @@ public class BuscarEmpleadoActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
             case R.id.item_acerca:
-
                 startActivity(new Intent(this, AcercaActivity.class));
-
                 return true;
-
             case R.id.item_cerrar_sesion:
-
                 cerrarSesion();
-
                 return true;
-
             default:
-
                 return super.onOptionsItemSelected(item);
-
         }
-
-
-
     }
 
     /*
@@ -171,9 +171,16 @@ public class BuscarEmpleadoActivity extends AppCompatActivity{
     }
 
     /*
-    * Cierra la sesión
-    * */
-    private void cerrarSesion(){
+     * Cierra sesión desde el botón
+     * */
+    public void cerrarSesionBoton(View view){
+        cerrarSesion();
+    }
+
+    /*
+     * Cierra la sesión
+     * */
+    public void cerrarSesion(){
         SessionManager sesion = new SessionManager(getApplicationContext());
         sesion.cerrarSesion(getApplicationContext());
         finish();

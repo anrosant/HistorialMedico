@@ -18,15 +18,15 @@
         <TextView
             android:id="@+id/tvFechaPermiso"
             android:gravity="right"
-            android:text="Fecha"
+            android:text="@string/fecha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/tvEnfermedad"
+            android:id="@+id/tvEnfermedadPermiso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enfermedad"/>
+            android:text="@string/enfermedad"/>
 
         <TextView
             android:id="@+id/tvFechasPermiso"

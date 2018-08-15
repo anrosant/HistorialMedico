@@ -14,27 +14,30 @@ import java.util.List;
 public class EmpleadoController {
 
     //Constructores
-    public EmpleadoController(){ }
+    public EmpleadoController(){
+        /*Usuario usuario = new Usuario("cgarcia");
+        usuario.save();*/
+    }
 
     /*
      * Valida el ingreso al sistema
      * */
-    public Boolean ingresoSistema(String etUsuario, String etContrasenia){
-        return validarIngreso(etUsuario, etContrasenia);
+    public Boolean ingresoSistema(String etUsuario){
+        return validarIngreso(etUsuario);
     }
 
     /*
      * funcionalidad ingreso
      * */
-    private Boolean validarIngreso(String etUsuario, String etContrasenia){
-        return obtenerUsuario(etUsuario, etContrasenia).size() != 0;
+    private Boolean validarIngreso(String etUsuario){
+        return obtenerUsuario(etUsuario).size() != 0;
     }
 
     /*
      * Busqueda de un Usuario
      * */
-    private List<Usuario> obtenerUsuario(String etUsuario, String etContrasenia){
-        return Usuario.find(Usuario.class, "usuario = ? and contrasenia = ?", etUsuario, etContrasenia);
+    private List<Usuario> obtenerUsuario(String etUsuario){
+        return Usuario.find(Usuario.class, "usuario = ? ", etUsuario);
     }
 
 }

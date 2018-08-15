@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.example.cltcontrol.historialmedico.Threads.EnfermedadThread;
 import com.example.cltcontrol.historialmedico.interfaces.IResult;
 import com.example.cltcontrol.historialmedico.models.AtencionEnfermeria;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
@@ -46,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private String usuario;
     private String password;
 
-    private IResult mResultCallback = null;
-    private RequestService requestService;
+    IResult mResultCallback = null;
+    RequestService requestService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     * Inicializar las llamadas a Request
     * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
     * */
-    private void initRequestCallback(){
+    void initRequestCallback(){
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
@@ -117,12 +118,9 @@ public class MainActivity extends AppCompatActivity {
                         String empleados = response.getString("empleado");
                         guardarEmpleado(empleados);
 
-                        String usuario = response.getString("usuarioId");
-                        String id_empleado = response.getString("empleadoId");
-                        guardarUsuario(usuario, id_empleado);
-
-                        String enfermedad = response.getString("enfermedad");
-                        guardarEnfermedad(enfermedad);
+                        String usuarioId = response.getString("usuarioId");
+                        String empleadoId = response.getString("empleadoId");
+                        guardarUsuario(usuarioId, empleadoId);
 
                         String atencionEnf = response.getString("atencionEnfermeria");
                         guardarAtencionEnfermeria(atencionEnf);
@@ -145,6 +143,14 @@ public class MainActivity extends AppCompatActivity {
                         String permisoMedico = response.getString("permisoMedico");
                         guardarPermisoMedico(permisoMedico);
 
+                        //Si el usuario es Doctor, obtiene todas las enfermedades
+                        try{
+                            String enfermedad = response.getString("enfermedad");
+                            guardarEnfermedadesLocal(enfermedad);
+                        }catch (JSONException e1){
+                            e1.printStackTrace();
+                        }
+
                         crearSesion(token);
                         siguienteActivity();
 
@@ -153,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    
                 }
             }
 
@@ -180,32 +186,28 @@ public class MainActivity extends AppCompatActivity {
      * Autentica si está correcto
      * Retorna una respuesta
      * */
-    private void validarCredenciales(String usuario, String contrasenia){
+    public void validarCredenciales(String usuario, String contrasenia){
         initRequestCallback();
         requestService = new RequestService(mResultCallback, MainActivity.this);
-        JSONObject sendObj = null;
-        try {
-            sendObj = new JSONObject("{" +
-                    "'usuario': "+usuario+", " +
-                    "'password': "+contrasenia+
-                    "}");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject sendObj = Usuario.getJSONUsuario(usuario, contrasenia);
         requestService.postDataRequest("POSTCALL", URL_USUARIO, sendObj);
     }
 
     /*
      * Función que guarda usuario localmente
+     * @param idUsuario id del usuario que ingresa sesión
+     * @param idEmpleado id del empleado que ingresó sesión
      * */
-    private void guardarUsuario(String id_usuario, String id_empelado){
+    private void guardarUsuario(String idUsuario, String idEmpelado){
+
         int idServ;
         Usuario nuevoUsuario = new Usuario();
-        Empleado empleado = Empleado.find(Empleado.class, "idserv = ?", id_empelado).get(0);
-        idServ = Integer.parseInt(id_usuario);
+        Empleado empleado = Empleado.find(Empleado.class, "idserv = ?", idEmpelado).get(0);
+        idServ = Integer.parseInt(idUsuario);
         nuevoUsuario.setUsuario(usuario);
         nuevoUsuario.setStatus(1);
         nuevoUsuario.setEmpleado(empleado);
+        Log.d("EMPLEADOOO", empleado.getOcupacion());
         nuevoUsuario.setId_serv(idServ);
         nuevoUsuario.save();
     }
@@ -405,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             obj = new JSONArray(response);
             for (int i = 0; i < obj.length(); i++) {
-                SignosVitales signosVitales;
+                SignosVitales signosVitales = null;
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
                 presion_sistolica = Integer.parseInt(fields.getString("presion_sistolica"));
@@ -553,7 +555,6 @@ public class MainActivity extends AppCompatActivity {
     * Crea una sesión y guarda el usuario
     * */
     private void crearSesion(String token){
-        Log.d("TOKEEN", token);
         SessionManager sesion = new SessionManager(getApplicationContext());
         Long id = Usuario.find(Usuario.class, "usuario = ? ",
                 usuario).get(0).getId();
@@ -581,5 +582,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return fechaNueva;
+    }
+
+    /*
+    * Guardar enfermedades en la base de datos local en segundo plano
+    * */
+    private void guardarEnfermedadesLocal(final String response){
+        EnfermedadThread thread = new EnfermedadThread(response);
+        thread.start();
     }
 }

@@ -83,7 +83,7 @@ public class Diagnostico extends SugarRecord{
         Map<String, String> params = new HashMap<>();
         params.put("consulta_medica", idConsulta);
         params.put("enfermedad", idEnfermedad);
-        params.put("tipo_enfermedad", tipoEnfermedad);
+        params.put("tipoEnfermedad", tipoEnfermedad);
         params.put("permiso_medico", idPermiso);
 
         Log.d("PARAMSDIAGNOSTICO", String.valueOf(params));

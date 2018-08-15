@@ -15,14 +15,14 @@ import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.Empleado;
+import com.example.cltcontrol.historialmedico.utils.Identifiers;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 
 import java.text.DateFormat;
 
 public class MenuEmpleadoActivity extends AppCompatActivity {
 
-    private TextView tvDatosPersonales;
-    private LinearLayout lyDatosPersonales;
+    private TextView tvIdEmpleado;
 
     private String idEmpleado;
 
@@ -32,13 +32,15 @@ public class MenuEmpleadoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_empleado);
 
-        Toolbar myToolbar = findViewById(R.id.toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(myToolbar);
 
         //Datos del empleado
-        lyDatosPersonales = findViewById(R.id.lyDatosPersonales);
-        tvDatosPersonales = findViewById(R.id.tvDatosPersonales);
+        LinearLayout lyDatosPersonales = findViewById(R.id.lyDatosPersonales);
+        TextView tvDatosPersonales = findViewById(R.id.tvDatosPersonales);
+        LinearLayout lyDatosEmpresa = findViewById(R.id.lyDatosDeEmpresa);
+        TextView tvDatosDeEmpresa = findViewById(R.id.tvDatosDeEmpresa);
         TextView tvCi = findViewById(R.id.tvCi);
         TextView tvApellidosNombre = findViewById(R.id.tvApellidosNombre);
         TextView tvSexo = findViewById(R.id.tvSexo);
@@ -48,7 +50,6 @@ public class MenuEmpleadoActivity extends AppCompatActivity {
         TextView tvEstadoCivil = findViewById(R.id.tvEstadoCivil);
 
         //Datos usados para la empresa
-        TextView tvIdEmpleado = findViewById(R.id.tvIdEmpleado);
         TextView tvFechaIngreso = findViewById(R.id.tvFechaIngreso);
         TextView tvOcupacion = findViewById(R.id.tvOcupacion);
 
@@ -69,76 +70,42 @@ public class MenuEmpleadoActivity extends AppCompatActivity {
         tvEdad.setText(empleado.getEdad()+" años");
         tvProfesion.setText(empleado.getProfesion());
         tvEstadoCivil.setText(empleado.getEstadoCivil());
-        tvIdEmpleado.setText(empleado.getId().toString());
+        //tvIdEmpleado.setText(empleado.getId().toString());
         String fechaRegisto = DateFormat.getDateInstance().format(empleado.getFechaRegistro());
         tvFechaIngreso.setText(fechaRegisto);
         //tvCargo.setText(empleado.getCargo);
         tvOcupacion.setText(empleado.getOcupacion());
 
-        tvDatosPersonales.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                final int DRAWABLE_RIGHT = 2;
-                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    if(motionEvent.getRawX() >= (tvDatosPersonales.getRight() - tvDatosPersonales.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        // your action here
-                        if (!lyDatosPersonales.isShown()){
-                            lyDatosPersonales.setVisibility(View.VISIBLE);
-                            tvDatosPersonales.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_up_cyan_24dp,0);
-                        }else {
-                            lyDatosPersonales.setVisibility(View.GONE);
-                            tvDatosPersonales.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_keyboard_arrow_down_cyan_24dp,0);
-                        }
-                    }
-                }
-                return true;
-            }
-        });
-
+        Identifiers.mostrarOcultarTabsMenu(tvDatosPersonales, lyDatosPersonales);
+        Identifiers.mostrarOcultarTabsMenu(tvDatosDeEmpresa, lyDatosEmpresa);
     }
 
     /*
-    * Crea una instancia del menú
-    * */
+     * Crea una instancia del menú
+     * */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
-
         inflater.inflate(R.menu.menu_usuario, menu);
-
         return true;
-
     }
 
     /*
-    * Menú de opciones
-    * Si selecciona el primer item va a la actividad Acerca sino cierra sesión
-    * */
+     * Menú de opciones
+     * Si selecciona el primer item va a la actividad Acerca sino cierra sesión
+     * */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
             case R.id.item_acerca:
-
                 startActivity(new Intent(this, AcercaActivity.class));
-
                 return true;
-
             case R.id.item_cerrar_sesion:
-
                 cerrarSesion();
-
                 return true;
-
             default:
-
                 return super.onOptionsItemSelected(item);
-
         }
-
-
-
     }
 
     /*
@@ -152,12 +119,11 @@ public class MenuEmpleadoActivity extends AppCompatActivity {
         finish();
     }
 
-
     /*
-     * Lleva a la ventana de HistorialConsultaMedica y envia el id del empleado
+     * Lleva a la ventana de HistorialConsultaMedicaActivity y envia el id del empleado
      * */
     public void aperturaHistorialConsultaMedica(View v) {
-        //Envia el id del empleado a HistorialConsultaMedica
+        //Envia el id del empleado a HistorialConsultaMedicaActivity
         Intent inHistorialConsultaMedica = new Intent(getApplicationContext(), HistorialConsultaMedica.class);
         //inHistorialConsultaMedica.putExtra("CEDULA", cedulaEmpleado);
         inHistorialConsultaMedica.putExtra("ID_EMPLEADO", idEmpleado);
@@ -178,19 +144,18 @@ public class MenuEmpleadoActivity extends AppCompatActivity {
     public void aperturaSignos(View v){
         //Envia el id del empleado a Signos Vitales
         Intent inSignos = new Intent(getApplicationContext(), SigVitalRapidoActivity.class);
-        //inHistorialAtencionEnfermeria.putExtra("CEDULA", cedulaEmpleado);
         inSignos.putExtra("ID_EMPLEADO", idEmpleado);
         startActivity(inSignos);
     }
 
     /*
-     * Lleva a la ventana de PermisoMedicosParticulares y envia el id del empleado
-     */
-    public void aperturaPermisosMedicos(View v){
+     * Lleva a la ventana de HistorialPermisosMedicosParticulares y envia el id del empleado
+     * */
+    public void aperturaHistorialPermisosParticulares(View v){
         //Envia el id del empleado a HistorialAtencionEnfermeria
-        Intent inPermisosMedicos = new Intent(getApplicationContext(), PermisosMedicosActivity.class);
-        //inHistorialAtencionEnfermeria.putExtra("CEDULA", cedulaEmpleado);
+        Intent inPermisosMedicos = new Intent(getApplicationContext(), HistorialPermisoParticularActivity.class);
         inPermisosMedicos.putExtra("ID_EMPLEADO", idEmpleado);
         startActivity(inPermisosMedicos);
     }
+
 }

@@ -28,27 +28,27 @@ public class MainActivityTest {
 
     @Test
     public void testCredenciales_correctas(){
-        assertTrue(ec.ingresoSistema("jgarcia", "jgarcia"));
+        assertTrue(ec.ingresoSistema("cgarcia"));
     }
 
     @Test
     public void testUsuario_incorrecto1(){
-        assertFalse(ec.ingresoSistema("jorgeg", "jgarcia"));
+        assertFalse(ec.ingresoSistema("jorgeg"));
     }
 
     @Test
     public void testUsuario_incorrecto2(){
-        assertFalse(ec.ingresoSistema("", "jgarcia"));
+        assertFalse(ec.ingresoSistema(""));
     }
 
     @Test
     public void testContrasenia_incorrecta1(){
-        assertFalse(ec.ingresoSistema("jgarcia", "jor"));
+        assertFalse(ec.ingresoSistema("jgarcia"));
     }
 
     @Test
     public void testContrasenia_incorrecta2(){
-        assertFalse(ec.ingresoSistema("jgarcia", ""));
+        assertFalse(ec.ingresoSistema("jgarcia"));
     }
 
 }

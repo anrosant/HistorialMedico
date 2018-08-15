@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
+import com.example.cltcontrol.historialmedico.models.Diagnostico;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,10 +21,12 @@ import java.util.Locale;
 
 public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
     private final List<ConsultaMedica> consultaMedicasList;
+    private final List<Diagnostico> diagnosticoList;
 
-    public AdapterItemConsultaMedica(Context context, List<ConsultaMedica> consultaMedicaList) {
+    public AdapterItemConsultaMedica(Context context, List<ConsultaMedica> consultaMedicaList, List<Diagnostico> diagnosticoList) {
         super(context, 0, consultaMedicaList);
         this.consultaMedicasList = consultaMedicaList;
+        this.diagnosticoList = diagnosticoList;
     }
 
     /*
@@ -62,13 +65,20 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
 
         ConsultaMedica consultaMedica = consultaMedicasList.get(position);
         TextView tvfechaConsulta = v.findViewById(R.id.tvFechaConsulta);
+        TextView tvEnfermedad = v.findViewById(R.id.tvEnfermedad);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
         try {
             Date fechaConsulta = simpleDateFormat.parse(consultaMedica.getFechaConsulta().toString());
-            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            simpleDateFormat = new SimpleDateFormat("yyyy-dd-mm");
             tvfechaConsulta.setText(simpleDateFormat.format(fechaConsulta));
             tvfechaConsulta.setEnabled(false);
+            for(int i=0 ; i< diagnosticoList.size() ; i++){
+                if(consultaMedica.getId().equals(diagnosticoList.get(i).getConsulta_medica().getId())){
+                    tvEnfermedad.setText(diagnosticoList.get(i).getEnfermedad().getNombre());
+                    break;
+                }
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -80,6 +90,12 @@ public class AdapterItemConsultaMedica extends ArrayAdapter<ConsultaMedica> {
     public void actualizarConsultaMedicaList(List<ConsultaMedica> consultaMedicaListNuevo) {
         this.consultaMedicasList.clear();
         this.consultaMedicasList.addAll(consultaMedicaListNuevo);
+        notifyDataSetChanged();
+    }
+
+    public void actualizarDiagnosticoList(List<Diagnostico> diagnosticoListNuevo) {
+        this.diagnosticoList.clear();
+        this.diagnosticoList.addAll(diagnosticoListNuevo);
         notifyDataSetChanged();
     }
 }

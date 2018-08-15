@@ -46,6 +46,9 @@
             android:label="@string/buscar_empleado"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
+            android:name=".activities.HistorialPermisoParticularActivity"
+            android:label="Permisos médicos particulares"/>
+        <activity
             android:name=".activities.HistorialConsultaMedica"
             android:label="@string/historial_consulta_medica" />
         <activity

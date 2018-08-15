@@ -91,7 +91,6 @@ public class ConsultaMedicaNuevoActivity extends FragmentActivity implements ICo
                         if(consultaMedica.getFechaConsulta()==null){
                             consultaMedica.delete();
                         }
-
                         ArrayList<ConsultaMedica> consultaMedicas = (ArrayList<ConsultaMedica>) ConsultaMedica.find(ConsultaMedica.class,
                                 "empleado = ?", String.valueOf(empleado.getId()));
                         HistorialConsultaMedica.adapterItemConsultaMedica.actualizarConsultaMedicaList(consultaMedicas);

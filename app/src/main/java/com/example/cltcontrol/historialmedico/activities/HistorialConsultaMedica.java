@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.adapter.AdapterItemConsultaMedica;
+import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.interfaces.IComunicadorMenu;
@@ -22,10 +23,12 @@ import java.util.List;
 
 public class HistorialConsultaMedica extends FragmentActivity implements IComunicadorMenu {
 
-    private String idEmpleado, idConsultaMedica, cargo;
-    private List<ConsultaMedica> consultaMedicaList;
     @SuppressLint("StaticFieldLeak")
     public static AdapterItemConsultaMedica adapterItemConsultaMedica;
+
+    private String idEmpleado, idConsultaMedica, cargo;
+    private List<ConsultaMedica> consultaMedicaList;
+    private List<Diagnostico> diagnosticoList;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -34,6 +37,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements IComuni
         setContentView(R.layout.activity_historial_consulta_medica);
 
         TextView tvNombresEmpleado = findViewById(R.id.tvNombresEmpleado);
+        TextView tvOcupacion = findViewById(R.id.tvOcupacion);
         ListView lvConsultasMedicas = findViewById(R.id.lvConsultasMedicas);
         FloatingActionButton btnAgregarConsultaMedica = findViewById(R.id.btnAgregarConsultaMedica);
 
@@ -46,15 +50,23 @@ public class HistorialConsultaMedica extends FragmentActivity implements IComuni
         //Recibe el id del empleado desde MenuEmpleadoActivity
         Intent inMenuEmpleado = getIntent();
         idEmpleado = inMenuEmpleado.getStringExtra("ID_EMPLEADO");
+        Log.d("IDEMPLEADO", idEmpleado);
 
         //Busca las consultas medica de un empleado
         consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "empleado = ?", idEmpleado);
+        for(int i=0; i < consultaMedicaList.size() ; i++ ){
+            diagnosticoList = Diagnostico.find(Diagnostico.class,"consultamedica");
+        }
+
         //Muestra los datos de las consultas medica en el listview
-        adapterItemConsultaMedica = new AdapterItemConsultaMedica(this, consultaMedicaList);
+        adapterItemConsultaMedica = new AdapterItemConsultaMedica(this, consultaMedicaList,diagnosticoList);
         lvConsultasMedicas.setAdapter(adapterItemConsultaMedica);
 
         Empleado empleado = Empleado.findById(Empleado.class, Long.parseLong(idEmpleado));
+
         tvNombresEmpleado.setText(empleado.getApellido()+" "+ empleado.getNombre());
+        Log.d("OCUPACION", empleado.getOcupacion());
+        tvOcupacion.setText(empleado.getOcupacion());
 
         lvConsultasMedicas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

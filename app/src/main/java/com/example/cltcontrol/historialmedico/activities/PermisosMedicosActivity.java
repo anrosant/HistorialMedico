@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -108,6 +109,17 @@ public class PermisosMedicosActivity extends FragmentActivity {
         dia = calendar.get(Calendar.DAY_OF_MONTH);
         mes = calendar.get(Calendar.MONTH);
         anio = calendar.get(Calendar.YEAR);
+
+        Date hoy = new Date();
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+            Date fecha_actual = simpleDateFormat.parse(hoy.toString());
+            simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            etFechaDesde.setText(simpleDateFormat.format(fecha_actual));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
         final Bundle extras = Objects.requireNonNull(this).getIntent().getExtras();
 

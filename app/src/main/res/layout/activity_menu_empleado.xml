@@ -285,7 +285,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12dp"
-                    android:text="Ocupacion"/>
+                    android:text="Ocupación"/>
 
                 <TextView
                     android:id="@+id/tvOcupacion"
@@ -295,7 +295,7 @@
                     android:layout_marginBottom="5dp"
                     android:textColor="#000"
                     android:textSize="14dp"
-                    android:text="Ocupacion"/>
+                    android:text="Ocupación"/>
 
             </LinearLayout>
 
@@ -331,7 +331,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Consulta Médica"
+                android:text="@string/consulta"
                 android:textColor="@color/colorPrimary"
                 android:gravity="center" />
         </LinearLayout>
@@ -355,7 +355,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Atención Enfermería"
+                android:text="@string/atencion"
                 android:textColor="@color/colorPrimary"
                 android:gravity="center" />
         </LinearLayout>
@@ -378,7 +378,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" Signos  Vitales "
+                android:text="@string/signos"
                 android:textColor="@color/colorPrimary"
                 android:gravity="center"/>
         </LinearLayout>
@@ -388,7 +388,7 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
-            android:onClick="aperturaPermisosMedicos"
+            android:onClick="aperturaHistorialPermisosParticulares"
             android:background="#eff7fc"
             android:layout_weight="1"
             android:weightSum="2" >
@@ -397,12 +397,12 @@
                 android:layout_height="0dp"
                 android:background="#eff7fc"
                 android:layout_weight="2"
-                android:onClick="aperturaPermisosMedicos"
+                android:onClick="aperturaHistorialPermisosParticulares"
                 android:src="@drawable/permiso"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Permisos Médicos"
+                android:text="@string/permiso"
                 android:textColor="@color/colorPrimary"
                 android:gravity="center"/>
         </LinearLayout>

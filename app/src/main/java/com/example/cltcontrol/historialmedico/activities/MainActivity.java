@@ -18,6 +18,7 @@ import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
 import com.example.cltcontrol.historialmedico.models.Diagnostico;
 import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.Enfermedad;
+import com.example.cltcontrol.historialmedico.models.ExamenImagen;
 import com.example.cltcontrol.historialmedico.models.PatologiasFamiliares;
 import com.example.cltcontrol.historialmedico.models.PatologiasPersonales;
 import com.example.cltcontrol.historialmedico.models.PermisoMedico;
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private String usuario;
     private String password;
 
-    IResult mResultCallback = null;
-    RequestService requestService;
+    private IResult mResultCallback = null;
+    private RequestService requestService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     * Inicializar las llamadas a Request
     * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
     * */
-    void initRequestCallback(){
+    private void initRequestCallback(){
         mResultCallback = new IResult() {
             @Override
             public void notifySuccess(String requestType,JSONObject response) {
@@ -144,12 +145,11 @@ public class MainActivity extends AppCompatActivity {
                         guardarPermisoMedico(permisoMedico);
 
                         //Si el usuario es Doctor, obtiene todas las enfermedades
-                        try{
-                            String enfermedad = response.getString("enfermedad");
-                            guardarEnfermedadesLocal(enfermedad);
-                        }catch (JSONException e1){
-                            e1.printStackTrace();
-                        }
+                        String enfermedad = response.getString("enfermedad");
+                        guardarEnfermedadesLocal(enfermedad);
+
+                        String examenes = response.getString("examenesConsulta");
+                        guardarExamenes(examenes);
 
                         crearSesion(token);
                         siguienteActivity();
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
-                    
+                    e.printStackTrace();
                 }
             }
 
@@ -180,6 +180,45 @@ public class MainActivity extends AppCompatActivity {
         };
 
     }
+
+    private void guardarExamenes(String response) {
+        int idServ;
+        String idConsulta;
+        String rutaMovil, urlServidor;
+        int status;
+        JSONArray obj;
+        String ok = "entre";
+        try {
+            obj = new JSONArray(response);
+            for (int i = 0; i < obj.length(); i++) {
+                //Se obtienen los datos del servidor
+                ExamenImagen examenImagen = new ExamenImagen();
+                JSONObject objectJSON = obj.getJSONObject(i);
+                JSONObject fields = (JSONObject) objectJSON.get("fields");
+                idServ = Integer.parseInt(objectJSON.getString("pk"));
+                idConsulta = fields.getString("consulta_medica");
+                urlServidor = fields.getString("imagen");
+                urlServidor = "http://historialmedico.pythonanywhere.com/media/"+urlServidor;
+
+                //Se setea el id de la consulta
+                List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?", idConsulta);
+                if(consultaMedicaList.size()!=0){
+                    examenImagen.setConsulta(consultaMedicaList.get(0));
+                }
+
+                //Se setean los demas datos del examen
+                examenImagen.setId_serv(idServ);
+                examenImagen.setUrl(urlServidor);
+                examenImagen.setDescargada(0);
+                examenImagen.setStatus(1);
+                examenImagen.save();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     /*
      * Envía datos de usuario y contraseña al servidor
@@ -407,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             obj = new JSONArray(response);
             for (int i = 0; i < obj.length(); i++) {
-                SignosVitales signosVitales = null;
+                SignosVitales signosVitales;
                 JSONObject objectJSON = obj.getJSONObject(i);
                 JSONObject fields = (JSONObject) objectJSON.get("fields");
                 presion_sistolica = Integer.parseInt(fields.getString("presion_sistolica"));
@@ -555,6 +594,7 @@ public class MainActivity extends AppCompatActivity {
     * Crea una sesión y guarda el usuario
     * */
     private void crearSesion(String token){
+        Log.d("TOKEEN", token);
         SessionManager sesion = new SessionManager(getApplicationContext());
         Long id = Usuario.find(Usuario.class, "usuario = ? ",
                 usuario).get(0).getId();

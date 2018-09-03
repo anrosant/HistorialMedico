@@ -87,14 +87,22 @@ public class RequestService {
 
     public void postDataRequest(final String requestType, String url, Map<String, String> sendObj, final String token){
         if (mContext instanceof Activity){
-            dialog=new ProgressDialog(mContext);
+            dialog = new ProgressDialog(mContext);
             dialog.setMessage("Cargando...");
             dialog.show();
         }
         try {
             final RequestQueue queue = Volley.newRequestQueue(mContext);
 
-            final JsonObjectRequest jsonObj = new JsonObjectRequest(url,new JSONObject(sendObj), new Response.Listener<JSONObject>() {
+            JSONObject cuerpo = new JSONObject(sendObj);
+
+            String jsonString= cuerpo.toString();
+            jsonString = jsonString.replaceAll("\\\\n", "");
+            jsonString = jsonString.replaceAll("\\\\", "");
+
+            JSONObject cuerpoLimpio = new JSONObject(jsonString);
+
+            final JsonObjectRequest jsonObj = new JsonObjectRequest(url,cuerpoLimpio, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     if(mResultCallback != null){

@@ -3,12 +3,14 @@ package com.example.cltcontrol.historialmedico.fragments;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.support.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -19,7 +21,9 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PointerIconCompat;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,25 +33,50 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.example.cltcontrol.historialmedico.R;
 import com.example.cltcontrol.historialmedico.adapter.ImageAdapter;
+import com.example.cltcontrol.historialmedico.interfaces.IResult;
+import com.example.cltcontrol.historialmedico.models.ConsultaMedica;
+import com.example.cltcontrol.historialmedico.models.Empleado;
 import com.example.cltcontrol.historialmedico.models.ExamenImagen;
+import com.example.cltcontrol.historialmedico.service.RequestService;
+import com.example.cltcontrol.historialmedico.utils.DescargarImagen;
 import com.example.cltcontrol.historialmedico.utils.ImageOrientation;
+import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_EXAMEN_IMAGEN;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertirFecha;
 
-public class AnexarExamenesFragment extends Fragment {
+public class AnexarExamenesFragment extends Fragment{
+
+    //Interface
+    private IResult mResultCallback;
 
     private ImageView idImage;
     private Button btnCargarImagen;
@@ -60,12 +89,24 @@ public class AnexarExamenesFragment extends Fragment {
     //Se define la carpeta donde se guardaran las imagenes de examenes
     private static final String CARPETA_IMAGENES = "examenes";
     //Se define la ruta donde se guardan la fotos
-    private static final String DIRECTORIO = CARPETA_RAIZ + CARPETA_IMAGENES;
+    public static final String DIRECTORIO = CARPETA_RAIZ + CARPETA_IMAGENES;
     private static final int COD_SELECCION = 10;
     private static final int COD_CAMARA = 20;
 
     private GridView gridView;
     private List<Bitmap> misFotosBitmap;
+    private Empleado empleado;
+    private ConsultaMedica consultaMedica;
+    private String id_empleado_servidor;
+
+    private String id_consulta_servidor;
+
+    String imagenBase64;
+    private final String DIRECTORIO_DESCARGA= "Medicos/examenes/";
+    private List<String> urlList;
+    private int cantidad;
+    private int cont = 0;
+
 
     public AnexarExamenesFragment() {
         // Required empty public constructor
@@ -88,6 +129,30 @@ public class AnexarExamenesFragment extends Fragment {
             btnCargarImagen.setEnabled(false);
         }
 
+        Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
+
+        String id_empleado = extras.getString("ID_EMPLEADO");
+        empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
+
+        String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
+
+        id_empleado_servidor = String.valueOf(empleado.getId_serv());
+
+        List<ExamenImagen> listaExamenesIMG = ExamenImagen.find(ExamenImagen.class, "consulta = ?", id_consulta_medica);
+
+        urlList = new ArrayList<>();
+        for(ExamenImagen actual : listaExamenesIMG){
+            if(actual.getDescargada()==0){
+                urlList.add(actual.getUrl());
+            }
+        }
+
+        for(String actual: urlList){
+            DescargarImagen nuevaTarea = new DescargarImagen();
+            nuevaTarea.execute(actual);
+        }
+
         btnCargarImagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,35 +165,44 @@ public class AnexarExamenesFragment extends Fragment {
         /////////////////////////////Empieza galeria de fotos///////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////
 
-        //Obtener todas las rutas desde la base (Modificar)
+        //Obtener todas las rutas desde la base
+
+        List<ExamenImagen> listaExamenesIMGStored = ExamenImagen.find(ExamenImagen.class, "consulta = ?", id_consulta_medica);
         List<String> rutas = new ArrayList<>();
-        rutas.add("/storage/emulated/0/Medicos/examenes/dado1.jpg");
-        rutas.add("/storage/emulated/0/Medicos/examenes/capitan.jpg");
-        rutas.add("/storage/emulated/0/Medicos/examenes/spider.jpg");
-        rutas.add("/storage/emulated/0/Medicos/examenes/civil.jpg");
 
-        //Se inicializa el adaptador enviandole el context y la lista de rutas
-        gridView.setAdapter(new ImageAdapter(getContext(), rutas));
-
-
-        //Funcionalidad de zoom cuando se le da click a alguna imagen de la galeria
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Se trae del adapter la lista de fotos
-                misFotosBitmap=((ImageAdapter)gridView.getAdapter()).getMisFotosBitmap();
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
-                @SuppressLint("InflateParams") View mView = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
-                PhotoView photoView = mView.findViewById(R.id.imageView);
-
-                //Se setea la imagen a la que se dio click en el photo view que se abre
-                photoView.setImageBitmap(misFotosBitmap.get(position));
-
-                mBuilder.setView(mView);
-                AlertDialog mDialog = mBuilder.create();
-                mDialog.show();
+        //Se las setea a la lista de String
+        for(ExamenImagen actual : listaExamenesIMGStored){
+            if(actual.getDescargada()==1){
+                rutas.add(actual.getRuta_movil());
             }
-        });
+        }
+
+        //Si la lista de rutas no esta vacia se carga la galeria
+        if(!rutas.isEmpty()){
+            //Se inicializa el adaptador enviandole el context y la lista de rutas
+            gridView.setAdapter(new ImageAdapter(getContext(), rutas));
+
+
+            //Funcionalidad de zoom cuando se le da click a alguna imagen de la galeria
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    //Se trae del adapter la lista de fotos
+                    misFotosBitmap=((ImageAdapter)gridView.getAdapter()).getMisFotosBitmap();
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+                    @SuppressLint("InflateParams") View mView = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+                    PhotoView photoView = mView.findViewById(R.id.imageView);
+
+                    //Se setea la imagen a la que se dio click en el photo view que se abre
+                    photoView.setImageBitmap(misFotosBitmap.get(position));
+
+                    mBuilder.setView(mView);
+                    AlertDialog mDialog = mBuilder.create();
+                    mDialog.show();
+                }
+            });
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////Termina galeria de fotos///////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -289,20 +363,23 @@ public class AnexarExamenesFragment extends Fragment {
     }
 
 
-    //Guarda la foto en la base de datos
+    //Guarda la foto en la base de datos del servidor y localmente
     public void guardarImagen(){
         String rutaCargar = path;
         try{
-            String imagenBase64 = toStringBase64(rutaCargar); //Se manda a transformar la imagen a un String codificado en base 64
+            //1: Se manda a transformar la imagen a un String codificado en base 64
+            imagenBase64 = toStringBase64(rutaCargar);
+
+            //2: se verifica si aun no se ha creado la consulta
+            if (consultaMedica.getEmpleado() == null) {
+                //Se guarda la consulta
+                postConsultaMedica(new Date());
+            }else{//Si la consulta ya fue creada simplemente guarda la imagen
+                postExamenImagen(imagenBase64);
+            }
         }catch (Exception e){
             String error = e.getMessage();
         }
-
-
-
-        //GUARDA LA RUTA EN LA BD LOCAL
-        ExamenImagen examenImagen = new ExamenImagen(0, path);
-        examenImagen.save();
     }
 
 
@@ -341,5 +418,193 @@ public class AnexarExamenesFragment extends Fragment {
         return bytes;
     }
 
+
+    private void guardarConsultaLocal(Date fecha, int status, int id_serv, String porDondeEntre){
+        consultaMedica.setEmpleado(empleado);
+        consultaMedica.setId_serv(id_serv);
+        consultaMedica.setFechaConsulta(fecha);
+        consultaMedica.setStatus(status);
+        consultaMedica.save();
+        String por= new String();
+        por= porDondeEntre;
+
+        if(status==NAME_SYNCED_WITH_SERVER) {
+            Toast.makeText(getContext(), "Se han guardado los datos de consulta "+por, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getContext(),"Hubo un error de conexión. Los datos de consulta se guardarán localmente "+por, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*
+     * Envía datos de Consulta médica al servidor (Solo se usa si todavia no se ha guardado la consuta medica)
+     * */
+    private void postConsultaMedica(final Date fechaConsulta){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
+        initRequestCallback("tagconsulta");
+        RequestService requestService = new RequestService(mResultCallback, getActivity());
+        Map<String, String> sendObj = ConsultaMedica.getHashMapConsultaMedica(id_empleado_servidor,fechaConsulta, "","","","","");
+        requestService.postDataRequest("POSTCALL", URL_CONSULTA_MEDICA, sendObj, token);
+    }
+
+    private void postExamenImagen(String imagenBase64){
+        SessionManager sesion = new SessionManager(Objects.requireNonNull(getContext()));
+        String token = sesion.obtenerInfoUsuario().get("token");
+        initRequestCallback("tagImagen");
+        RequestService requestService = new RequestService(mResultCallback, getActivity());
+        Map<String, String> sendObj = ExamenImagen.getHashMapExamenImagen(id_consulta_servidor,imagenBase64);
+        requestService.postDataRequest("POSTCALL", URL_EXAMEN_IMAGEN, sendObj, token);
+    }
+
+    //Guarda la imagen en la base de datos local
+    private void guardarImagenLocalmente(String ruta, int status, int id_imagen_servidor, String porDondeEntre){
+        ExamenImagen imagenExamen = new ExamenImagen();
+        imagenExamen.setId_serv(id_imagen_servidor);
+        imagenExamen.setConsulta(consultaMedica);
+        imagenExamen.setRuta_movil(ruta);
+        imagenExamen.setStatus(status);
+        imagenExamen.setDescargada(1);
+
+        String por= new String();
+        por= porDondeEntre;
+
+        imagenExamen.save();
+
+        if(status==NAME_SYNCED_WITH_SERVER) {
+            Toast.makeText(getContext(), "Se han guardado los datos de la imagen "+por, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getContext(),"Hubo un error de conexión. Los datos de la imagen se guardarán localmente "+por, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*
+     * Inicializar las llamadas a Request
+     * Dependiendo de las respuestas, ejecuta una de las siguientes funciones
+     * */
+    private void initRequestCallback(final String TAG){
+        mResultCallback = new IResult() {
+            @Override
+            public void notifySuccess(String requestType,JSONObject response) {
+                //Si ha realizado post en ConsultaMedica
+                if(TAG.equalsIgnoreCase("tagconsulta")){
+                    try {
+                        String fechaConsulta = response.getString("fechaConsulta");
+                        Date fecha = convertirFecha(fechaConsulta);
+                        //Seteamos el id de la consulta del servidor para luego usar ese id para guardar la imagen
+                        id_consulta_servidor = response.getString("pk");
+                        guardarConsultaLocal(fecha,NAME_SYNCED_WITH_SERVER,Integer.parseInt(id_consulta_servidor), "tagconsulta Success");
+                        postExamenImagen(imagenBase64);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }else{ //Si ha realizado post para guardar la imagen
+                    try {
+                        String pk = response.getString("pk");
+                        guardarImagenLocalmente(path,NAME_SYNCED_WITH_SERVER,Integer.valueOf(pk),"imagen Success" );
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void notifyError(String requestType,VolleyError error) {
+                if(TAG.equalsIgnoreCase("tagconsulta")){
+                    guardarConsultaLocal(new Date(), NAME_NOT_SYNCED_WITH_SERVER,0,"tagconsulta NotifyError");
+
+                }else {
+                    guardarImagenLocalmente(path,NAME_NOT_SYNCED_WITH_SERVER,0, "imagen Notifyerror");
+                }
+            }
+
+            @Override
+            public void notifyMsjError(String requestType, String error) {
+                if(TAG.equalsIgnoreCase("tagconsulta")){
+                    guardarConsultaLocal(new Date(), 0,NAME_NOT_SYNCED_WITH_SERVER, "tagconsulta NotifyMsjError");
+
+                }else {
+                    guardarImagenLocalmente(path,NAME_NOT_SYNCED_WITH_SERVER,0, "imagen requestType"+ requestType+" msj error = "+error);
+                }
+            }
+
+            @Override
+            public void notifyJSONError(String requestType, JSONException error) {
+                if(TAG.equalsIgnoreCase("tagconsulta")){
+                    guardarConsultaLocal(new Date(), 0,NAME_NOT_SYNCED_WITH_SERVER, "tagconsulta json error");
+
+                }else {
+                    guardarImagenLocalmente(path,NAME_NOT_SYNCED_WITH_SERVER,0, "imagen json error");
+                }
+            }
+        };
+
+    }
+
+    //Para descargar la imagen
+
+    private void descargar(){
+        if( cont < cantidad && !urlList.isEmpty()){
+            imageDownload(urlList.get(cont));
+            cont++;
+        }else{
+            if(!urlList.isEmpty()){
+                Toast.makeText(getContext(),"No existen imagenes para esta consulta",Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getContext(),"Ya se descargaron todas las imagenes de la consulta",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    public void imageDownload(String url){
+        Picasso.with(getContext())
+                .load(url)
+                .into(getTarget(DIRECTORIO_DESCARGA));
+    }
+
+    private Target getTarget(final String url){
+        Target target = new Target(){
+
+            @Override
+            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        Long consecutivo = (System.currentTimeMillis() / 1000);
+                        String nombreImagen = consecutivo.toString() + ".jpg";
+
+                        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/" + url + nombreImagen);
+                        String ruta = file.getAbsolutePath().toString();
+                        Log.d("Ruta de Almacenamiento","Path: "+ruta);
+
+                        try {
+                            file.createNewFile();
+                            FileOutputStream ostream = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
+                            ostream.flush();
+                            ostream.close();
+                        } catch (IOException e) {
+                            Log.e("IOException", e.getLocalizedMessage());
+                        }
+                    }
+                }).start();
+
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+        return target;
+    }
 
 }

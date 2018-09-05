@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="4"
@@ -9,7 +8,6 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:minHeight="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -19,7 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="4">
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -309,11 +306,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
+        android:background="#eff7fc"
         android:baselineAligned="false"
         android:layout_weight="1"
         android:weightSum="4">
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
@@ -323,20 +321,22 @@
             android:layout_weight="1"
             android:weightSum="2">
             <ImageButton
-                android:layout_height="0dp"
-                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
                 android:onClick="aperturaHistorialConsultaMedica"
                 android:layout_weight="2"
+                android:background="#eff7fc"
                 android:src="@drawable/doctor"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="10dp"
                 android:text="@string/consulta"
                 android:textColor="@color/colorPrimary"
                 android:gravity="center" />
         </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
@@ -346,7 +346,7 @@
             android:layout_weight="1"
             android:weightSum="2">
             <ImageButton
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#eff7fc"
                 android:layout_weight="2"
@@ -356,11 +356,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/atencion"
+                android:textSize="10dp"
                 android:textColor="@color/colorPrimary"
                 android:gravity="center" />
         </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
@@ -369,8 +370,8 @@
             android:background="#eff7fc"
             android:layout_weight="1">
             <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:background="#eff7fc"
                 android:onClick="aperturaSignos"
@@ -379,11 +380,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/signos"
+                android:textSize="10dp"
                 android:textColor="@color/colorPrimary"
                 android:gravity="center"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
@@ -394,15 +396,16 @@
             android:weightSum="2" >
             <ImageButton
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:background="#eff7fc"
                 android:layout_weight="2"
                 android:onClick="aperturaHistorialPermisosParticulares"
                 android:src="@drawable/permiso"/>
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/permiso"
+                android:textSize="10dp"
                 android:textColor="@color/colorPrimary"
                 android:gravity="center"/>
         </LinearLayout>

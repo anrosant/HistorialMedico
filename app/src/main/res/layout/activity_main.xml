@@ -94,11 +94,6 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/pruebaImagen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Prueba Galeria" />
     </LinearLayout>
 
 </ScrollView>

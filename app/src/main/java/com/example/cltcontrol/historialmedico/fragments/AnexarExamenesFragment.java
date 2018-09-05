@@ -3,14 +3,12 @@ package com.example.cltcontrol.historialmedico.fragments;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
 import android.support.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -21,9 +19,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PointerIconCompat;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,20 +41,15 @@ import com.example.cltcontrol.historialmedico.utils.DescargarImagen;
 import com.example.cltcontrol.historialmedico.utils.ImageOrientation;
 import com.example.cltcontrol.historialmedico.utils.SessionManager;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -102,10 +93,6 @@ public class AnexarExamenesFragment extends Fragment{
     private String id_consulta_servidor;
 
     String imagenBase64;
-    private final String DIRECTORIO_DESCARGA= "Medicos/examenes/";
-    private List<String> urlList;
-    private int cantidad;
-    private int cont = 0;
 
 
     public AnexarExamenesFragment() {
@@ -141,7 +128,7 @@ public class AnexarExamenesFragment extends Fragment{
 
         List<ExamenImagen> listaExamenesIMG = ExamenImagen.find(ExamenImagen.class, "consulta = ?", id_consulta_medica);
 
-        urlList = new ArrayList<>();
+        List<String> urlList = new ArrayList<>();
         for(ExamenImagen actual : listaExamenesIMG){
             if(actual.getDescargada()==0){
                 urlList.add(actual.getUrl());
@@ -378,7 +365,7 @@ public class AnexarExamenesFragment extends Fragment{
                 postExamenImagen(imagenBase64);
             }
         }catch (Exception e){
-            String error = e.getMessage();
+            e.printStackTrace();
         }
     }
 
@@ -388,7 +375,7 @@ public class AnexarExamenesFragment extends Fragment{
 
         File file = new File(rutaArchivo);
         byte[] bytes = transformaArchivo(file);
-        String encodedString = Base64.encodeToString(bytes, Base64.DEFAULT);;
+        String encodedString = Base64.encodeToString(bytes, Base64.DEFAULT);
 
         return encodedString;
     }
@@ -539,72 +526,6 @@ public class AnexarExamenesFragment extends Fragment{
             }
         };
 
-    }
-
-    //Para descargar la imagen
-
-    private void descargar(){
-        if( cont < cantidad && !urlList.isEmpty()){
-            imageDownload(urlList.get(cont));
-            cont++;
-        }else{
-            if(!urlList.isEmpty()){
-                Toast.makeText(getContext(),"No existen imagenes para esta consulta",Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(getContext(),"Ya se descargaron todas las imagenes de la consulta",Toast.LENGTH_SHORT).show();
-            }
-
-        }
-    }
-
-    public void imageDownload(String url){
-        Picasso.with(getContext())
-                .load(url)
-                .into(getTarget(DIRECTORIO_DESCARGA));
-    }
-
-    private Target getTarget(final String url){
-        Target target = new Target(){
-
-            @Override
-            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-                new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-
-                        Long consecutivo = (System.currentTimeMillis() / 1000);
-                        String nombreImagen = consecutivo.toString() + ".jpg";
-
-                        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/" + url + nombreImagen);
-                        String ruta = file.getAbsolutePath().toString();
-                        Log.d("Ruta de Almacenamiento","Path: "+ruta);
-
-                        try {
-                            file.createNewFile();
-                            FileOutputStream ostream = new FileOutputStream(file);
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
-                            ostream.flush();
-                            ostream.close();
-                        } catch (IOException e) {
-                            Log.e("IOException", e.getLocalizedMessage());
-                        }
-                    }
-                }).start();
-
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-            }
-        };
-        return target;
     }
 
 }

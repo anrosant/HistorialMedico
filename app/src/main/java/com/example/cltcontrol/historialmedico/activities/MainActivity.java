@@ -91,16 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        Button btnIngresoGaleria = findViewById(R.id.pruebaImagen);
-
-        btnIngresoGaleria.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                abrirPruebaGaleria();
-            }
-        });
-
+        
     }
 
     /*

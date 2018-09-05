@@ -50,8 +50,8 @@ public class DescargarImagen extends AsyncTask<String,Void,Bitmap> {
         String nombreImagen = consecutivo.toString() + ".jpg";
 
         File file = new File(Environment.getExternalStorageDirectory().getPath() + "/" + DIRECTORIO +random+ nombreImagen);
-        String ruta = file.getAbsolutePath().toString();
-        Log.d("Ruta","Path: "+ruta);
+        //String ruta = file.getAbsolutePath().toString();
+        //Log.d("Ruta","Path: "+ruta);
 
         try {
             file.createNewFile();

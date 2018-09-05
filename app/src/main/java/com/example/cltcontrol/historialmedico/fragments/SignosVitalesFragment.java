@@ -1,9 +1,15 @@
 package com.example.cltcontrol.historialmedico.fragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -35,6 +41,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
@@ -93,6 +101,8 @@ public class SignosVitalesFragment extends Fragment {
         //
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
         //Recibe el id de consulta medica desde Historial de consulta medica
+
+        validaPermisos();
 
         if (extras != null) {
             idConsultaMedica = extras.getString("ID_CONSULTA_MEDICA");
@@ -188,6 +198,54 @@ public class SignosVitalesFragment extends Fragment {
 
         return view;
     }
+
+    private boolean validaPermisos() {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            return true;
+        }
+
+        if((ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) &&
+                (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+            return true;
+        }
+
+        if((shouldShowRequestPermissionRationale(CAMERA))||
+                (shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE))){
+            cargarDialogoRecomendacion();
+        }else{
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,CAMERA},100);
+        }
+
+        return false;
+    }
+
+    private void cargarDialogoRecomendacion() {
+        AlertDialog.Builder dialogo = new AlertDialog.Builder(getContext());
+        dialogo.setTitle("Permisos Desactivados");
+        dialogo.setMessage("Debe aceptar permiso en la App");
+
+        dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,CAMERA},100);
+            }
+        });
+        dialogo.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode==100){
+            if (grantResults.length==2 && grantResults[0]==PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1]==PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Permisos otorgados");
+            }
+        }
+    }
+
+
     /*
      * Función que carga los signos vitales en la lista
      * @param id id de la consulta médica en la que se encuentra, tipo long

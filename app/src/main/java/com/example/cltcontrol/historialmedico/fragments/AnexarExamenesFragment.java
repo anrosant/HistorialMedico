@@ -110,12 +110,6 @@ public class AnexarExamenesFragment extends Fragment{
         btnCargarImagen = view.findViewById(R.id.btnCargarImagen);
         gridView = view.findViewById(R.id.gridImagenes);
 
-        if(validaPermisos()){
-            btnCargarImagen.setEnabled(true);
-        }else{
-            btnCargarImagen.setEnabled(false);
-        }
-
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
 
         String id_empleado = extras.getString("ID_EMPLEADO");
@@ -195,52 +189,6 @@ public class AnexarExamenesFragment extends Fragment{
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         return view;
-    }
-
-    private boolean validaPermisos() {
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
-            return true;
-        }
-
-        if((ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()),Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) &&
-                (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
-            return true;
-        }
-
-        if((shouldShowRequestPermissionRationale(CAMERA))||
-                (shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE))){
-            cargarDialogoRecomendacion();
-        }else{
-            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,CAMERA},100);
-        }
-
-        return false;
-    }
-
-    private void cargarDialogoRecomendacion() {
-        AlertDialog.Builder dialogo = new AlertDialog.Builder(getContext());
-        dialogo.setTitle("Permisos Desactivados");
-        dialogo.setMessage("Debe aceptar permiso en la App");
-
-        dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,CAMERA},100);
-            }
-        });
-        dialogo.show();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if(requestCode==100){
-            if (grantResults.length==2 && grantResults[0]==PackageManager.PERMISSION_GRANTED &&
-                    grantResults[1]==PackageManager.PERMISSION_GRANTED) {
-                btnCargarImagen.setEnabled(true);
-            }
-        }
     }
 
     //Funcion para seleccionar las opciones de tomar foto, cargar imagen o cerrar

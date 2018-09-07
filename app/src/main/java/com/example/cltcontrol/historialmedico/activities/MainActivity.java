@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        
+
     }
 
     /*
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 idServ = Integer.parseInt(objectJSON.getString("pk"));
                 idConsulta = fields.getString("consulta_medica");
                 urlServidor = fields.getString("imagen");
-                urlServidor = "http://historialmedico.pythonanywhere.com/media/"+urlServidor;
+                urlServidor = "http://www.sistemamedicoda.com/media/"+urlServidor;
 
                 //Se setea el id de la consulta
                 List<ConsultaMedica> consultaMedicaList = ConsultaMedica.find(ConsultaMedica.class, "idserv = ?", idConsulta);

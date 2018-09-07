@@ -14,22 +14,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginBottom="5dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvCodigoEnfermedad"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="codigo_enfermedad"/>
 
             <TextView
                 android:id="@+id/tvNombreEnfermedad"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="nombre_enfermedad"/>
 
             <TextView
                 android:id="@+id/tvTipoEnfermedad"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="tipo_enfermedad"/>
         </LinearLayout>
 
     </ScrollView>

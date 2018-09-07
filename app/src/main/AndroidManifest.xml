@@ -74,6 +74,10 @@
             android:label="@string/consulta_medica_nuevo"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name=".activities.InformacionConsultaMedicaActivity"
+            android:configChanges="screenSize|orientation"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
             android:name=".activities.AtencionEnfermeriaActivity"
             android:configChanges="screenSize|orientation"
             android:label="@string/consulta_medica_nuevo" />

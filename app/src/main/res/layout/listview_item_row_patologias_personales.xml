@@ -14,15 +14,17 @@
         android:id="@+id/tvLugar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="20dp"
+        android:text="titulo"
+        android:layout_margin="5dp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvDetalle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="5dp"
-        android:textSize="18dp"/>
+        android:text="Texto"/>
 
     <TextView
         android:layout_width="match_parent"

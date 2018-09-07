@@ -113,7 +113,7 @@ public class PermisosMedicosFragment extends Fragment {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
             Date fecha_actual = simpleDateFormat.parse(hoy.toString());
-            simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            simpleDateFormat = new SimpleDateFormat("yyyy-dd-MM");
             etFechaDesde.setText(simpleDateFormat.format(fecha_actual));
         } catch (ParseException e) {
             e.printStackTrace();
@@ -204,7 +204,7 @@ public class PermisosMedicosFragment extends Fragment {
                     diasPermisoText = etNumeroDias.getText().toString();
                     observacionesPermisoText = etObservaciones.getText().toString();
 
-                    @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("yyyy-dd-MM");
                     fechaInicio = null;
                     fechaFin = null;
                     try {
@@ -404,9 +404,9 @@ public class PermisosMedicosFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Date date = new Date();
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-dd-MM");
                 try {
-                    date = simpleDateFormat.parse("" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                    date = simpleDateFormat.parse("" + year + "-" + dayOfMonth + "-" + (monthOfYear + 1));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -425,7 +425,7 @@ public class PermisosMedicosFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void calcNumDias() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-dd-MM");
         String string_fecha_ini = etFechaDesde.getText().toString();
         String string_fecha_fin = etFechaHasta.getText().toString();
         if (!string_fecha_ini.equals("") && !string_fecha_fin.equals("")) {

@@ -78,6 +78,7 @@ public class HistorialConsultaMedica extends FragmentActivity implements IComuni
                 Log.d("IDCARGO",cargo);
 
                 Intent inConsultaMedica = new Intent(getApplicationContext(),ConsultaMedicaNuevoActivity.class);
+                //Intent inConsultaMedica = new Intent(getApplicationContext(),InformacionConsultaMedicaActivity.class);
                 inConsultaMedica.putExtra("ID_CONSULTA_MEDICA",idConsultaMedica);
                 inConsultaMedica.putExtra("PRECEDENCIA","consultar");
                 inConsultaMedica.putExtra("ID_EMPLEADO",idEmpleado);

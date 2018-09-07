@@ -14,17 +14,16 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Identifiers {
-
-    public static final String URL_SIGNOS = "http://historialmedico.pythonanywhere.com/api/signosVitales/";
-    public static final String URL_USUARIO = "http://historialmedico.pythonanywhere.com/api/usuario/";
-    public static final String URL_CONSULTA_MEDICA = "http://historialmedico.pythonanywhere.com/api/consultaMedica/";
-    public static final String URL_ATENCION_ENFERMERIA = "http://historialmedico.pythonanywhere.com/api/atencionEnfermeria/";
-    public static final String URL_DIAGNOSTICO = "http://historialmedico.pythonanywhere.com/api/diagnostico/";
-    public static final String URL_PERMISO_MEDICO = "http://historialmedico.pythonanywhere.com/api/permisoMedico/";
-    public static final String URL_PATOLOGIAS_PERSONALES = "http://historialmedico.pythonanywhere.com/api/antecedentePatologicoPersonal/";
-    public static final String URL_PATOLOGIAS_FAMILIARES = "http://historialmedico.pythonanywhere.com/api/antecedentePatologicoFamiliar/";
-    public static final String URL_AUTH_JWT = "http://historialmedico.pythonanywhere.com/auth-jwt/";
-    public static final String URL_EXAMEN_IMAGEN= "http://historialmedico.pythonanywhere.com/api/examenConsulta/";
+    public static final String URL_SIGNOS = "http://www.sistemamedicoda.com/api/signosVitales/";
+    public static final String URL_USUARIO = "http://www.sistemamedicoda.com/api/usuario/";
+    public static final String URL_CONSULTA_MEDICA = "http://www.sistemamedicoda.com/api/consultaMedica/";
+    public static final String URL_ATENCION_ENFERMERIA = "http://www.sistemamedicoda.com/api/atencionEnfermeria/";
+    public static final String URL_DIAGNOSTICO = "http://www.sistemamedicoda.com/api/diagnostico/";
+    public static final String URL_PERMISO_MEDICO = "http://www.sistemamedicoda.com/api/permisoMedico/";
+    public static final String URL_PATOLOGIAS_PERSONALES = "http://www.sistemamedicoda.com/api/antecedentePatologicoPersonal/";
+    public static final String URL_PATOLOGIAS_FAMILIARES = "http://www.sistemamedicoda.com/api/antecedentePatologicoFamiliar/";
+    public static final String URL_AUTH_JWT = "http://www.sistemamedicoda.com/auth-jwt/";
+    public static final String URL_EXAMEN_IMAGEN= "http://www.sistemamedicoda.com/api/examenConsulta/";
     //1 means data is synced and 0 means data is not synced
     public static final int NAME_SYNCED_WITH_SERVER = 1;
     public static final int NAME_NOT_SYNCED_WITH_SERVER = 0;

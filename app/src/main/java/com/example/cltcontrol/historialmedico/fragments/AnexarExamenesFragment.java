@@ -71,6 +71,7 @@ public class AnexarExamenesFragment extends Fragment{
 
     private ImageView idImage;
     private Button btnCargarImagen;
+    private Button btnCargarGaleria;
 
     private String path;
 
@@ -93,7 +94,7 @@ public class AnexarExamenesFragment extends Fragment{
     private String id_consulta_servidor;
 
     String imagenBase64;
-
+    List<String> rutas; //Lista de las rutas del movil donde estan las imagenes
 
     public AnexarExamenesFragment() {
         // Required empty public constructor
@@ -106,8 +107,8 @@ public class AnexarExamenesFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_anexar_examenes, container, false);
 
         //referencia hacia los views
-        idImage = view.findViewById(R.id.idImage);
         btnCargarImagen = view.findViewById(R.id.btnCargarImagen);
+        btnCargarGaleria = view.findViewById(R.id.btnCargarGaleria);
         gridView = view.findViewById(R.id.gridImagenes);
 
         Bundle extras = Objects.requireNonNull(getActivity()).getIntent().getExtras();
@@ -115,24 +116,22 @@ public class AnexarExamenesFragment extends Fragment{
         String id_empleado = extras.getString("ID_EMPLEADO");
         empleado = Empleado.findById(Empleado.class, Long.valueOf(id_empleado));
 
-        String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
+        final String id_consulta_medica = extras.getString("ID_CONSULTA_MEDICA");
         consultaMedica = ConsultaMedica.findById(ConsultaMedica.class, Long.valueOf(id_consulta_medica));
 
         id_empleado_servidor = String.valueOf(empleado.getId_serv());
 
+        //Se obtiene la lista de los examenes desde la base
         List<ExamenImagen> listaExamenesIMG = ExamenImagen.find(ExamenImagen.class, "consulta = ?", id_consulta_medica);
 
-        List<String> urlList = new ArrayList<>();
+        //Se obtiene la lista de examenes para descargar la imagen si es que esta no ha sido descargada previamente al dispositivo
         for(ExamenImagen actual : listaExamenesIMG){
             if(actual.getDescargada()==0){
-                urlList.add(actual.getUrl());
+                DescargarImagen nuevaTarea = new DescargarImagen();
+                nuevaTarea.execute(actual.getUrl(),actual.getId().toString());
             }
         }
 
-        for(String actual: urlList){
-            DescargarImagen nuevaTarea = new DescargarImagen();
-            nuevaTarea.execute(actual);
-        }
 
         btnCargarImagen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +148,7 @@ public class AnexarExamenesFragment extends Fragment{
         //Obtener todas las rutas desde la base
 
         List<ExamenImagen> listaExamenesIMGStored = ExamenImagen.find(ExamenImagen.class, "consulta = ?", id_consulta_medica);
-        List<String> rutas = new ArrayList<>();
+        rutas = new ArrayList<>();
 
         //Se las setea a la lista de String
         for(ExamenImagen actual : listaExamenesIMGStored){
@@ -162,7 +161,6 @@ public class AnexarExamenesFragment extends Fragment{
         if(!rutas.isEmpty()){
             //Se inicializa el adaptador enviandole el context y la lista de rutas
             gridView.setAdapter(new ImageAdapter(getContext(), rutas));
-
 
             //Funcionalidad de zoom cuando se le da click a alguna imagen de la galeria
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -187,6 +185,48 @@ public class AnexarExamenesFragment extends Fragment{
         ////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////Termina galeria de fotos///////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        btnCargarGaleria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<ExamenImagen> listaExamenesIMGStored = ExamenImagen.find(ExamenImagen.class, "consulta = ?", id_consulta_medica);
+                rutas = new ArrayList<>();
+
+                //Se las setea a la lista de String
+                for(ExamenImagen actual : listaExamenesIMGStored){
+                    if(actual.getDescargada()==1){
+                        rutas.add(actual.getRuta_movil());
+                    }
+                }
+
+                //Si la lista de rutas no esta vacia se carga la galeria
+                if(!rutas.isEmpty()){
+                    //Se inicializa el adaptador enviandole el context y la lista de rutas
+                    gridView.setAdapter(new ImageAdapter(getContext(), rutas));
+
+                    //Funcionalidad de zoom cuando se le da click a alguna imagen de la galeria
+                    gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            //Se trae del adapter la lista de fotos
+                            misFotosBitmap=((ImageAdapter)gridView.getAdapter()).getMisFotosBitmap();
+                            AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+                            @SuppressLint("InflateParams") View mView = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+                            PhotoView photoView = mView.findViewById(R.id.imageView);
+
+                            //Se setea la imagen a la que se dio click en el photo view que se abre
+                            photoView.setImageBitmap(misFotosBitmap.get(position));
+
+                            mBuilder.setView(mView);
+                            AlertDialog mDialog = mBuilder.create();
+                            mDialog.show();
+                        }
+                    });
+                }
+            }
+        });
+
 
         return view;
     }
@@ -312,6 +352,32 @@ public class AnexarExamenesFragment extends Fragment{
             }else{//Si la consulta ya fue creada simplemente guarda la imagen
                 postExamenImagen(imagenBase64);
             }
+
+            rutas.add(rutaCargar);
+
+            gridView.setAdapter(new ImageAdapter(getContext(), rutas));
+
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    //Se trae del adapter la lista de fotos
+                    misFotosBitmap=((ImageAdapter)gridView.getAdapter()).getMisFotosBitmap();
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+                    @SuppressLint("InflateParams") View mView = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+                    PhotoView photoView = mView.findViewById(R.id.imageView);
+
+                    //Se setea la imagen a la que se dio click en el photo view que se abre
+                    photoView.setImageBitmap(misFotosBitmap.get(position));
+
+                    mBuilder.setView(mView);
+                    AlertDialog mDialog = mBuilder.create();
+                    mDialog.show();
+                }
+            });
+            /*
+            adaptadorEmpleados = new AdapterItemEmpleado(empleadoList);
+            recyclerEmpleados.setAdapter(adaptadorEmpleados);*/
+
         }catch (Exception e){
             e.printStackTrace();
         }

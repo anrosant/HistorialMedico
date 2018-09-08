@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
+import com.example.cltcontrol.historialmedico.models.ExamenImagen;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,10 +21,15 @@ public class DescargarImagen extends AsyncTask<String,Void,Bitmap> {
     final int min = 10;
     final int max = 250188;
     final int random = new Random().nextInt((max - min) + 1) + min;
+    private ExamenImagen examenImagen;
+
+
 
     @Override
     protected Bitmap doInBackground(String... params) {
         String url = params[0];
+        examenImagen = ExamenImagen.findById(ExamenImagen.class,Long.valueOf(params[1]));
+
         Bitmap imagen = descargarImagen(url);
         return imagen;
     }
@@ -50,7 +57,10 @@ public class DescargarImagen extends AsyncTask<String,Void,Bitmap> {
         String nombreImagen = consecutivo.toString() + ".jpg";
 
         File file = new File(Environment.getExternalStorageDirectory().getPath() + "/" + DIRECTORIO +random+ nombreImagen);
-        //String ruta = file.getAbsolutePath().toString();
+        String ruta = file.getAbsolutePath().toString();
+        examenImagen.setRuta_movil(ruta);
+        examenImagen.setDescargada(1);
+        examenImagen.save();
         //Log.d("Ruta","Path: "+ruta);
 
         try {

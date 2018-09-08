@@ -52,6 +52,7 @@ import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_NOT_
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.NAME_SYNCED_WITH_SERVER;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_CONSULTA_MEDICA;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.URL_DIAGNOSTICO;
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.ENFERMEDADES_LIST;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.convertirFecha;
 import static com.example.cltcontrol.historialmedico.utils.Identifiers.quitaDiacriticos;
 
@@ -61,7 +62,8 @@ public class DiagnosticoFragment extends Fragment {
     private LinearLayout lyDiagnostico;
     private ImageButton ibMostrarOcultarContendido;
 
-    private static List<Enfermedad> ENFERMEDADES_LIST;
+
+
     private List<Enfermedad> newList;
     private AdapterItemDiagnostico adapterItemDiagnostico;
     private AdapterEnfermedades adaptadorEnfermedades;

@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.example.cltcontrol.historialmedico.utils.Identifiers.ENFERMEDADES_LIST;
+
 public class EnfermedadThread extends Thread {
     private String response;
 
@@ -39,6 +41,7 @@ public class EnfermedadThread extends Thread {
                 enfermedad.setId_serv(Integer.parseInt(objectJSON.getString("pk")));
                 enfermedad.setStatus(1);
                 enfermedad.save();
+                ENFERMEDADES_LIST.add(enfermedad);
             }
         }catch (JSONException e) {
             e.printStackTrace();

@@ -6,14 +6,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.cltcontrol.historialmedico.R;
+import com.example.cltcontrol.historialmedico.models.Enfermedad;
 
 import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Identifiers {
+
+    public static List<Enfermedad> ENFERMEDADES_LIST = new ArrayList<Enfermedad>();
     public static final String URL_SIGNOS = "http://www.sistemamedicoda.com/api/signosVitales/";
     public static final String URL_USUARIO = "http://www.sistemamedicoda.com/api/usuario/";
     public static final String URL_CONSULTA_MEDICA = "http://www.sistemamedicoda.com/api/consultaMedica/";
